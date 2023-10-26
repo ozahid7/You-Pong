@@ -1,5 +1,6 @@
 import React from "react";
 import "../dist/input.css";
+import { CustomButton } from ".";
 
 const MyContainer = () => {
     return (
@@ -7,18 +8,15 @@ const MyContainer = () => {
             {/* <!--content container(the div in center) --> */}
             <div className="h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {/* <!-- my card  --> */}
-                <div className="my_card w-[70%] min-w-[200px] min-h-[100px] h-[30%] flex justify-center items-center m-auto">
-                    <div className="center fold:w-[96%] fold:h-[97%]  h-[95%] s:w-[97%] sm:w-[97%] md:w-[98%] w-[92%] xl:h-[94%] xl:w-[98%] 2xl:[99%]"></div>
+                <div className="my_card w-[70%] min-w-[300px] min-h-[100px] max-w-[600px] h-[30%] flex justify-center items-center m-auto">
+                    <div className="center fold:w-[96%] fold:h-[97%]  h-[95%] s:w-[97%] sm:w-[97%] md:w-[98%]  w-[92%] xl:h-[96%] xl:w-[98%] 2xl:[99%]"></div>
                 </div>
 
                 {/* <!-- button--> */}
-                <div className="my_button max-w-[400px]  w-[60%] min-w-[120px] max-h-[55px] sm:max-h-[70px]   min-h-[45px] h-[12%] flex justify-center items-center m-auto">
-                    <div className="center  fold:w-[95%]  h-[90%] s:w-[96%] sm:w-[97%] md:w-[98%] w-[92%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden">
-                        <text className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-2xl md:text-3xl lg:text-4xl ">
-                            GET STARTED
-                        </text>
-                    </div>
-                </div>
+                <CustomButton 
+                    color='orange'
+                    text='GET STARTED'
+                />
                 {/* <!-- intra login --> */}
                 <div className="intra_login max-w-[400px]  w-[60%] min-w-[120px] max-h-[55px] sm:max-h-[70px]   min-h-[45px] h-[12%] flex justify-center items-center mt-10 m-auto">
                     <div className="center fold:w-[95%]  h-[90%] s:w-[96%] sm:w-[97%] md:w-[98%] w-[92%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden">
@@ -49,7 +47,7 @@ const MyContainer = () => {
                     <input
                         type="text"
                         placeholder="Email"
-                        className="center placeholder-placeh pl-5 outline-none  fold:w-[95%]  h-[86%] s:w-[96%] sm:w-[97%] md:w-[98%] w-[92%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden"
+                        className="center placeholder-placeholdercolor pl-5 outline-none  fold:w-[95%]  h-[86%] s:w-[96%] sm:w-[97%] md:w-[98%] w-[92%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden"
                     />
                 </div>
 

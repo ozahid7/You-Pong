@@ -17,12 +17,14 @@ const config: Config = {
             },
             colors: {
                 palette: {
-                    green: "#537073",
+                    green: "#497174",
                     orange: "#EB6440",
                     white: "F0F5F5",
                     grey: "#D9E4E5",
                 },
-                placeh: "#A0A0A0",
+                placeholdercolor: "#A0A0A0",
+                orangeborder: "#D46345",
+                greenborder: "#46686A",
             },
             fontFamily: {
                 body: ["Chakra Petch"],
