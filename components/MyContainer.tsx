@@ -1,6 +1,6 @@
 import React from "react";
 import "../dist/input.css";
-import { CustomButton } from ".";
+import { CustomButton, IntraButton, MyCard } from ".";
 
 const MyContainer = () => {
     return (
@@ -8,38 +8,19 @@ const MyContainer = () => {
             {/* <!--content container(the div in center) --> */}
             <div className="h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {/* <!-- my card  --> */}
-                <div className="my_card w-[70%] min-w-[300px] min-h-[100px] max-w-[600px] h-[30%] flex justify-center items-center m-auto">
-                    <div className="center fold:w-[96%] fold:h-[97%]  h-[95%] s:w-[97%] sm:w-[97%] md:w-[98%]  w-[92%] xl:h-[96%] xl:w-[98%] 2xl:[99%]"></div>
-                </div>
+                <MyCard
+                    
+                />
 
                 {/* <!-- button--> */}
-                <CustomButton 
-                    color='green'
-                    text='GET STARTED'
-                />
+                <CustomButton color="green" text="GET STARTED" />
                 {/* <!-- intra login --> */}
+
+                <IntraButton type="login" />
+
                 
 
-                {/* <!-- input box --> */}
-                <div className="my_input max-w-[400px]  w-[60%] min-w-[120px] max-h-[50px] sm:max-h-[60px]   min-h-[45px] h-[12%] flex justify-center items-center mt-10 m-auto ">
-                    <input
-                        type="text"
-                        placeholder="Email"
-                        className="center placeholder-placeholdercolor pl-5 outline-none  fold:w-[95%]  h-[86%] s:w-[96%] sm:w-[97%] md:w-[98%] w-[92%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden"
-                    />
-                </div>
-
-                {/* <!-- banner --> */}
-
-                <div className="dblue w-[60%] h-[12%] max-w-[500px] mt-10 mx-auto flex justify-center items-center overflow-hidden">
-                    <div className="w-[18%] pb-[18%] min-w-[50px] min-h-[50px] bg-purple-300 relative">
-                        <img
-                            className="h-[100%] w-[100%] absolute"
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/RedCat_8727.jpg/1200px-RedCat_8727.jpg"
-                            alt=""
-                        />
-                    </div>
-                </div>
+                
             </div>
 
             {/* <!-- top bar orange --> */}

@@ -110,7 +110,6 @@
 
  /* #################################My card################################# */
 
-
  .my_card{
     background:
     linear-gradient(0deg, transparent 0, #F0F5F5 0) top right,
@@ -126,6 +125,29 @@
     background:
     linear-gradient(0deg, transparent 0, #D9E4E5 0) top right,
     linear-gradient(315deg, transparent 6%, #D9E4E5 0)bottom right,
+    linear-gradient(135deg, transparent 6%, #D9E4E5 0)top left,
+    linear-gradient(0deg, transparent 0%, #D9E4E5 0) bottom left;
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+}
+
+ /* ################################# My card one corner ################################# */
+
+ .my_card_one_corner{
+    background:
+    linear-gradient(0deg, transparent 0, #F0F5F5 0) top right,
+    linear-gradient(315deg, transparent 0%, #F0F5F5 0)bottom right,
+    linear-gradient(135deg, transparent 7%, #F0F5F5 0)top left,
+        linear-gradient(0deg, transparent 0%, #F0F5F5 0) bottom left;
+    background-size: 55% 55%;
+    background-repeat: no-repeat;
+}
+
+
+.my_card_one_corner .center{
+    background:
+    linear-gradient(0deg, transparent 0, #D9E4E5 0) top right,
+    linear-gradient(315deg, transparent 0%, #D9E4E5 0)bottom right,
     linear-gradient(135deg, transparent 6%, #D9E4E5 0)top left,
     linear-gradient(0deg, transparent 0%, #D9E4E5 0) bottom left;
     background-size: 60% 60%;
