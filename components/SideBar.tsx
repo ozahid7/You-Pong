@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const SideBar = () => {
-  return (
-    <div className='w-[20%] bg-green-950 min-h-screen'>SideBar</div>
-  )
-}
+    return (
+        <div className="text-white px-4 bg-[#537073] min-h-screen">
+            SideBar
+        </div>
+    );
+};
 
-export default SideBar
+export default SideBar;

@@ -1,10 +1,11 @@
-import {MyContainer} from '@/components'
-import Image from 'next/image'
+import { MyContainer } from "@/components";
+import Image from "next/image";
+import "./globals.css";
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-24">
-        <MyContainer/>
-    </main>
-  )
+    return (
+        <div className="">
+            <MyContainer />
+        </div>
+    );
 }

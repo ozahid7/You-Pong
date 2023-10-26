@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { SideBar, NavBar } from "@/components";
-
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,12 +15,14 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                    <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </head>
-            <body className="flex">
+            <body className="flex flex-col">
                 <NavBar />
-                <SideBar />
-                {children}
+                <main className="flex">
+                    <SideBar />
+                    {children}
+                </main>
             </body>
         </html>
     );
