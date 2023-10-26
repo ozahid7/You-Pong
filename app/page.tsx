@@ -4,7 +4,7 @@ import "./globals.css";
 
 export default function Home() {
     return (
-        <div className="make_center w-full">
+        <div className="flex justify-center mt-20  w-full">
             <MyContainer />
         </div>
     );
