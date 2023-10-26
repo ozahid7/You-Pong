@@ -4,7 +4,7 @@ import "./globals.css";
 
 export default function Home() {
     return (
-        <div className="">
+        <div className="make_center w-full">
             <MyContainer />
         </div>
     );

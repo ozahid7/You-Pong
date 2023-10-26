@@ -28,3 +28,7 @@
 .make_center{
   @apply flex justify-center items-center;
 }
+
+.background{
+  @apply bg-background bg-no-repeat bg-origin-content bg-cover;
+}
