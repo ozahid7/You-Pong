@@ -19,7 +19,7 @@ export default function RootLayout({
             </head>
             <body className="flex overflow-hidden background">
                     <SideBar />
-                <main className="flex flex-col w-full">
+                <main className="flex flex-col items-center w-full">
                      <NavBar />
                     {children}
                 </main>
