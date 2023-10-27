@@ -6,13 +6,13 @@ interface AnimatedTextProps{
 }
 
 const AnimatedText = ({name , size}: AnimatedTextProps) => {
-    const isMorethan:boolean = name.length > 5 ;
+    const isMorethan:boolean = name.length > 7 ? true : false ;
+    const customClass = `py-12  animate-${isMorethan ? "marquee" : "m"} whitespace-nowrap`;
 
-    const customClass = `py-12 animate-marquee whitespace-nowrap`;
   return (
-      <div className={`relative w-[${size}] flex overflow-x-hidden`}>
+      <div className={`relative w-[${size}] flex overflow-x-hidden px-2`}>
           <div className={customClass}>
-              <span className="text-white hidden  md:flex dred overflow-hidden font-bold text-4xl drop-shadow-lg">
+              <span className="text-white hidden  md:flex dred overflow-hidden font-bold md:text-2xl lg:text-4xl drop-shadow-lg">
                   {name}
               </span>
           </div>

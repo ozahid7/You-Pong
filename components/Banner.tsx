@@ -9,12 +9,12 @@ const Banner = ({ isGreen }: { isGreen: boolean }) => {
     }`;
 
     return (
-        <div className=" flex overflow-clip rounded-sm h-[12%] w-[60%] min-w-[240px]">
+        <div className=" flex overflow-clip rounded-sm h-[12%] w-[60%] min-w-[260px]">
             <div className={customClass}></div>
             <div
                 className={`w-full max-w-[600px] max-h-[100px] sm:min-h-full  bg-gradient-to-r from-[#508286] to-[#9DBBBD] pl-6 flex items-center justify-between pr-6`}
             >
-                <div className="w-[18%] pb-[18%] min-w-[80px] min-h-[80px]  relative">
+                <div className="w-[18%] pb-[18%]  min-w-[70px] min-h-[70px]  relative">
                     <img
                         className=" h-[100%] w-[100%] absolute rounded-md"
                         src="/ozahid-.jpeg"
@@ -22,7 +22,7 @@ const Banner = ({ isGreen }: { isGreen: boolean }) => {
                     />
                 </div>
                     <AnimatedText name="OZAHID-" size='120px'/>
-                <span className="text-white text-4xl sm:flex font-bold sm:text-4xl drop-shadow-lg">
+                <span className="text-white text-5xl md:text-4xl sm:flex font-bold drop-shadow-lg">
                     7 : 0
                 </span>
             </div>
