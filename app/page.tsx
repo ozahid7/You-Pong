@@ -10,7 +10,7 @@ export default function Home() {
             <MyContainer>
                 <div className="dred make_center h-[100%]">
                     <Banner
-                        isGreen={true}
+                        isGreen={false}
                     />
                 </div>
             </MyContainer>
