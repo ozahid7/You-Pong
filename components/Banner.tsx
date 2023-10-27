@@ -7,7 +7,7 @@ const Banner = () => {
       <div className=" flex overflow-clip rounded-sm h-[12%] w-[60%] min-w-[240px]">
           <div className="w-[6%] sm:w-[3%] max-w-[600px] max-h-[100px] sm:min-h-full bg-palette-green"></div>
           <div
-              className={`w-full max-w-[600px] max-h-[100px] sm:min-h-full  bg-gradient-to-r from-[#508286] to-[#9DBBBD] pl-6 flex items-center justify-between pr-6`}
+              className={`w-full max-w-[600px] max-h-[100px] sm:min-h-full  bg-gradient-to-r from-[${from}] to-[${to}] pl-6 flex items-center justify-between pr-6`}
           >
               <div className="w-[18%] pb-[18%] min-w-[80px] min-h-[80px]  relative">
                   <img
