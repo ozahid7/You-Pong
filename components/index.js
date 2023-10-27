@@ -5,6 +5,7 @@ import CustomButton from "./CustomButton";
 import SideBar from "./SideBar";
 import MyCard from "./MyCard";
 import IntraButton from "./IntraButton";
+import Banner from "./Banner";
 
 export {
     NavBar,
@@ -13,4 +14,5 @@ export {
     CustomButton,
     IntraButton,
     MyCard,
+    Banner,
 }

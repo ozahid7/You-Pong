@@ -1,5 +1,4 @@
 import React from "react";
-import "../dist/input.css";
 import { CustomButton, IntraButton, MyCard } from ".";
 
 export function MyContainer({
