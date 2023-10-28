@@ -9,6 +9,7 @@ export default function Home() {
         <div className="flex justify-center mt-16  w-[90%] h-[80vh]">
             <MyContainer>
                 <div className="dred make_center h-[100%]">
+                    <Banner isGreen={true} userName="OZAHID-"/>
                 </div>
             </MyContainer>
         </div>

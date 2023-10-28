@@ -2,17 +2,17 @@ import React from 'react'
 
 interface AnimatedTextProps{
     name: string
-    size: string
+    size?: string
 }
 
 const AnimatedText = ({name , size}: AnimatedTextProps) => {
     const isMorethan:boolean = name.length > 7 ? true : false ;
-    const customClass = `py-12  ${isMorethan  ? "animate-marquee" : "animate-m"} whitespace-nowrap`;
+    const childcustomClass = `${isMorethan  ? "animate-marquee" : "animate-m"} whitespace-nowrap`;
 
   return (
-      <div className={`relative w-[${size}] flex overflow-x-hidden px-2`}>
-          <div className={customClass}>
-              <span className="text-white hidden  md:flex overflow-hidden font-bold md:text-2xl lg:text-4xl drop-shadow-lg">
+      <div className={`relative w-[40%] dred lg:flex justify-center hidden overflow-x-hidden px-2`}>
+          <div className={childcustomClass}>
+              <span className="text-white overflow-hidden font-bold md:text-2xl sm:text-xl lg:text-3xl drop-shadow-lg">
                   {name}
               </span>
           </div>
