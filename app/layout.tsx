@@ -17,7 +17,7 @@ export default function RootLayout({
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
-            <body className="flex overflow-auto background">
+            <body className="flex min-h-screen max-h-screen background">
                     <SideBar />
                 <main className="flex flex-col items-center w-full">
                      <NavBar />
