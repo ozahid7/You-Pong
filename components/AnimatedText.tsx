@@ -12,7 +12,7 @@ const AnimatedText = ({name , size}: AnimatedTextProps) => {
   return (
       <div className={`relative w-[${size}] flex overflow-x-hidden px-2`}>
           <div className={customClass}>
-              <span className="text-white hidden  md:flex dred overflow-hidden font-bold md:text-2xl lg:text-4xl drop-shadow-lg">
+              <span className="text-white hidden  md:flex overflow-hidden font-bold md:text-2xl lg:text-4xl drop-shadow-lg">
                   {name}
               </span>
           </div>
