@@ -10,7 +10,7 @@ const AnimatedText = ({name , size}: AnimatedTextProps) => {
     const childcustomClass = `${isMorethan  ? "animate-marquee" : "animate-m"} whitespace-nowrap`;
 
   return (
-      <div className={`relative w-[40%] dred lg:flex justify-center hidden overflow-x-hidden px-2`}>
+      <div className={`relative w-[42%] lg:flex justify-center hidden overflow-x-hidden`}>
           <div className={childcustomClass}>
               <span className="text-white overflow-hidden font-bold md:text-2xl sm:text-xl lg:text-3xl drop-shadow-lg">
                   {name}

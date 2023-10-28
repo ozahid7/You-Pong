@@ -7,7 +7,7 @@ export function MyContainer({
     children: React.ReactNode;
 }) {
     return (
-        <div className="bg-white w-full  h-[100%] flex rounded-sm relative overflow-auto">
+        <div className="bg-white w-full h-[100%] flex rounded-sm relative overflow-auto">
             {/* <!--content container(the div in center) --> */}
             <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {children}

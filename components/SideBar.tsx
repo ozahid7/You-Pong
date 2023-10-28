@@ -89,7 +89,7 @@ const SideBar = () => {
                                         alt=""
                                     />
                                 </div>
-                                <span className="text-gray-500 hidden  md:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
+                                <span className="text-gray-500 flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
                                     Ozahid-
                                 </span>
                             </div>
