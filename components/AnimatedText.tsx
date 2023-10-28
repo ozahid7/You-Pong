@@ -7,7 +7,7 @@ interface AnimatedTextProps{
 
 const AnimatedText = ({name , size}: AnimatedTextProps) => {
     const isMorethan:boolean = name.length > 7 ? true : false ;
-    const customClass = `py-12  animate-${isMorethan ? "marquee" : "m"} whitespace-nowrap`;
+    const customClass = `py-12  ${isMorethan  ? "animate-marquee" : "animate-m"} whitespace-nowrap`;
 
   return (
       <div className={`relative w-[${size}] flex overflow-x-hidden px-2`}>

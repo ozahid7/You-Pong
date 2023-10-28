@@ -34,7 +34,7 @@ const SideBar = () => {
 
             {/* middle part */}
 
-            <div className=" w-[94%] h-[86%] px-1 py-6 bg-[#4F777A] overflow-auto shadow-xl rounded-sm dblue flex flex-col justify-evenly">
+            <div className=" w-[94%] h-[86%] px-1 py-6 bg-[#4F777A] overflow-auto shadow-xl rounded-sm flex flex-col justify-evenly">
                 <Link href="/">
                     <div className="flex px-5 items-center hover:bg-greenborder text-white h-auto w-full">
                         <LuLayoutDashboard size="54" />
@@ -75,10 +75,29 @@ const SideBar = () => {
                         </span>
                     </div>
                 </Link>
-                <div className="h-[50%] w-full dred flex flex-col justify-end items-center px-2">
-                    <div className="w-full h-[50%] dblue flex flex-col justify-between pt-4">
-                        <div className="w-full h-[40%] dblue bg-palette-grey rounded-md flex justify-between items-center">
-                        </div>
+
+                {/* bottom part */}
+
+                <div className="h-[50%] w-full  flex flex-col justify-end items-center px-2">
+                    <div className="w-full h-[50%]  flex flex-col items-center justify-between pt-4">
+                        <Link className="h-[34%] w-[92%]" href="/">
+                            <div className="w-full h-full  bg-palette-grey rounded-md flex justify-around items-center px-2">
+                                <div className="border border-palette-green w-[18%] pb-[18%]  min-w-[70px] min-h-[70px] rounded-md  relative">
+                                    <img
+                                        className=" h-[100%] w-[100%] absolute rounded-md"
+                                        src="/ozahid-.jpeg"
+                                        alt=""
+                                    />
+                                </div>
+                                <span className="text-gray-500 hidden  md:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
+                                    Ozahid-
+                                </span>
+                            </div>
+                        </Link>
+
+
+                            <hr className="w-[80%]"/>
+
                         <Link href="/login" className="w-full">
                             <div className="w-full h-16 border-4 rounded-md border-palette-white flex justify-around items-center">
                                 <LuLogOut size="40" />
@@ -87,12 +106,9 @@ const SideBar = () => {
                                 </span>
                             </div>
                         </Link>
-
                     </div>
                 </div>
             </div>
-
-            {/* bottom part */}
         </aside>
     );
 };
