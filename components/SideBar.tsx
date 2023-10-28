@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
     LuLayoutDashboard,
     LuUsers,
@@ -9,34 +13,36 @@ import {
     LuLogOut,
 } from "react-icons/lu";
 
-function RenderSideBarElements (index: number, link: string) {
+const RenderSideBarElements = (index: number, link: string, name: string) => {
+    const path = usePathname();
+
     const Elements = [
         <LuLayoutDashboard size="58" />,
         <LuUsers size="58" />,
         <LuMessageSquare size="58" />,
         <LuBell size="58" />,
         <LuSettings size="58" />,
-    ]
+    ];
 
     const elm = Elements[index];
 
     return (
-        <Link href="/">
-            <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
+        <Link href={link}>
+            <div
+                className={`flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full ${
+                    path === link ? "text-palette-orange bg-palette-green" : ''
+                } `}
+            >
                 {elm}
-                <span className="text-white font-body w-full font-bold text-2xl">
-                    Dashboard
+                <span className={`text-white font-body w-full font-bold text-2xl ${path === link ? "text-palette-orange" : ''} `}>
+                    {name}
                 </span>
             </div>
         </Link>
     );
-
-
-}
+};
 
 const SideBar = () => {
-    RenderSideBarElements(0, 'hhh');
-
     return (
         <aside className="text-white pb-6 min-w-[280px] bg-[#537073] min-h-screen flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]">
             {/* top part */}
@@ -59,43 +65,17 @@ const SideBar = () => {
                 </div>
             </div>
 
-            {/* middle part */}
-
             <div className=" w-[94%] h-[86%] px-1 py-6 bg-[#4F777A] overflow-auto shadow-xl rounded-sm flex flex-col justify-evenly">
-                {RenderSideBarElements(0, 'hhh')}
-                <Link href="/friends">
-                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 h-auto text-white  w-full">
-                        <LuUsers size="58" />
-                        <span className="text-white font-body w-full  font-bold text-2xl">
-                            Friends
-                        </span>
-                    </div>
-                </Link>
-                <Link href="/messages">
-                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
-                        <LuMessageSquare size="58" />
-                        <span className="text-white font-body w-full  font-bold text-2xl">
-                            Messages
-                        </span>
-                    </div>
-                </Link>
-                <Link href="/notifications">
-                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
-                        <LuBell size="58" />
-                        <span className="text-white font-body w-full  font-bold text-2xl">
-                            Notifications
-                        </span>
-                    </div>
-                </Link>
-                <Link href="/settings">
-                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
-                        <LuSettings size="58" />
-                        <span className="text-white font-body w-full  font-bold text-2xl">
-                            Settings
-                        </span>
-                    </div>
-                </Link>
+                {/* middle part */}
+
+                {RenderSideBarElements(0, "/", "Dashboard")}
+                {RenderSideBarElements(1, "/friends", "Friends")}
+                {RenderSideBarElements(2, "/messages", "Messages")}
+                {RenderSideBarElements(3, "/notifications", "Notifications")}
+                {RenderSideBarElements(4, "/settings", "Settings")}
+
                 {/* bottom part */}
+
                 <div className="h-[50%] w-full  flex flex-col justify-end items-center px-2">
                     <div className="w-full h-[50%]  flex flex-col items-center justify-between pt-4">
                         <Link className="h-[34%] w-[92%]" href="/">
