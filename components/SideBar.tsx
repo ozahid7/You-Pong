@@ -36,41 +36,41 @@ const SideBar = () => {
 
             <div className=" w-[94%] h-[86%] px-1 py-6 bg-[#4F777A] overflow-auto shadow-xl rounded-sm flex flex-col justify-evenly">
                 <Link href="/">
-                    <div className="flex px-5 items-center hover:bg-greenborder text-white h-auto w-full">
-                        <LuLayoutDashboard size="54" />
-                        <span className="text-white font-body w-full pl-7 font-bold text-2xl">
+                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
+                        <LuLayoutDashboard size="58" />
+                        <span className="text-white font-body w-full font-bold text-2xl">
                             Dashboard
                         </span>
                     </div>
                 </Link>
                 <Link href="/friends">
-                    <div className="flex px-5 items-center hover:bg-greenborder h-auto text-white  w-full">
-                        <LuUsers size="54" />
-                        <span className="text-white font-body w-full pl-7 font-bold text-2xl">
+                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 h-auto text-white  w-full">
+                        <LuUsers size="58" />
+                        <span className="text-white font-body w-full  font-bold text-2xl">
                             Friends
                         </span>
                     </div>
                 </Link>
                 <Link href="/messages">
-                    <div className="flex px-5 items-center hover:bg-greenborder text-white h-auto w-full">
-                        <LuMessageSquare size="54" />
-                        <span className="text-white font-body w-full pl-7 font-bold text-2xl">
+                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
+                        <LuMessageSquare size="58" />
+                        <span className="text-white font-body w-full  font-bold text-2xl">
                             Messages
                         </span>
                     </div>
                 </Link>
                 <Link href="/notifications">
-                    <div className="flex px-5 items-center hover:bg-greenborder text-white h-auto w-full">
-                        <LuBell size="54" />
-                        <span className="text-white font-body w-full pl-6 font-bold text-2xl">
+                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
+                        <LuBell size="58" />
+                        <span className="text-white font-body w-full  font-bold text-2xl">
                             Notifications
                         </span>
                     </div>
                 </Link>
                 <Link href="/settings">
-                    <div className="flex px-5 items-center hover:bg-greenborder text-white h-auto w-full">
-                        <LuSettings size="54" />
-                        <span className="text-white font-body w-full pl-7 font-bold text-2xl">
+                    <div className="flex px-5 items-center hover:bg-greenborder space-x-7 text-white h-auto w-full">
+                        <LuSettings size="58" />
+                        <span className="text-white font-body w-full  font-bold text-2xl">
                             Settings
                         </span>
                     </div>
@@ -95,8 +95,7 @@ const SideBar = () => {
                             </div>
                         </Link>
 
-
-                            <hr className="w-[80%]"/>
+                        <hr className="w-[80%]" />
 
                         <Link href="/login" className="w-full">
                             <div className="w-full h-16 border-4 rounded-md border-palette-white flex justify-around items-center">
