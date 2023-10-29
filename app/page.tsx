@@ -6,7 +6,7 @@ import "./input.css";
 export default function Home() {
    
     return (
-        <div className="flex justify-center mt-16  w-[90%] h-[80vh]">
+        <div className="flex justify-center py-20 w-[90%] h-[83vh]">
             <MyContainer>
                 <div className="dred make_center h-[100%] overflow-hidden">
                 </div>

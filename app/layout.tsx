@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SideBar, NavBar } from "@/components";
+import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,11 +17,12 @@ export default function RootLayout({
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
-            <body className="flex min-h-screen max-h-screen background">
+            <body className="flex min-h-screen  max-h-screen background">
                     <SideBar />
-                <main className="flex flex-col items-center w-full">
+                <main className="flex flex-col h-full items-center w-full">
                      <NavBar />
                     {children}
+                    <MobileSideBar/>
                 </main>
             </body>
         </html>
