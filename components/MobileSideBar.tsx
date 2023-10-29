@@ -15,7 +15,7 @@ import {
 
 const RenderMobileSidBarElement = (index: number, link: string) => {
     const path = usePathname();
-    const customclass = "h-[30px] xs:h-[40px]";
+    const customclass = "h-[30px] sm:h-[40px]";
 
     const Elements = [
         <LuLayoutDashboard size="40" className={customclass} />,
