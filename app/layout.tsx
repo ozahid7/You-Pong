@@ -17,12 +17,12 @@ export default function RootLayout({
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
-            <body className="flex min-h-screen  max-h-screen background">
-                    <SideBar />
-                <main className="flex flex-col h-full items-center w-full">
-                     <NavBar />
+            <body className="flex min-h-screen  max-h-screen  background">
+                <SideBar />
+                <main className="flex flex-col h-full overflow-auto items-center w-full">
+                    <NavBar />
                     {children}
-                    <MobileSideBar/>
+                    <MobileSideBar />
                 </main>
             </body>
         </html>
