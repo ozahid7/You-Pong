@@ -50,7 +50,9 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
 const SideBar = () => {
     return (
-        <aside className={` text-white pb-6 xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}>
+        <aside
+            className={` text-white pb-6 xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5] overflow-auto`}
+        >
             {/* top part */}
 
             <div className=" h-[12%] w-full flex justify-around items-center">
@@ -71,7 +73,7 @@ const SideBar = () => {
                 </div>
             </div>
 
-            <div className=" xl:w-[94%] w-[88%] h-[86%] px-1 py-6 bg-[#4F777A] overflow-hidden shadow-xl rounded-sm flex flex-col justify-evenly">
+            <div className=" xl:w-[94%] w-[88%] h-[86%] px-1 py-6 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-evenly overflow-auto">
                 {/* middle part */}
 
                 {RenderSideBarElements(0, "/", "Dashboard")}
@@ -82,36 +84,33 @@ const SideBar = () => {
 
                 {/* bottom part */}
 
-                <div className="h-[50%] w-full  flex flex-col justify-end items-center px-2">
-                    <div className="w-full h-[50%]  flex flex-col items-center justify-between pt-4">
-                        <Link className="h-[34%] w-[92%]" href="/">
-                            <div className="w-full h-full  xl:bg-palette-grey rounded-md flex justify-around items-center px-2">
-                                <div className="border border-palette-green w-[18%] pb-[18%]  min-w-[70px] min-h-[70px] rounded-md  relative">
-                                    <img
-                                        className=" h-[100%] w-[100%] absolute rounded-md"
-                                        src="/ozahid-.jpeg"
-                                        alt=""
-                                    />
-                                </div>
-                                <span className="text-gray-500 hidden xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
-                                    Ozahid-
-                                </span>
-                            </div>
-                        </Link>
+                <div className="h-[50%] w-full  flex flex-col justify-end space-y-10 items-center px-2 overflow-auto">
+                    <Link className="h-auto  w-[92%] " href="/">
+                        <div className="w-full py-2 h-auto xl:bg-palette-grey rounded-md flex justify-around items-center">
+                            <Image
+                                className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
+                                src="/ozahid-.jpeg"
+                                alt=""
+                                width={100}
+                                height={100}
+                            />
+                            <span className="text-gray-500 hidden xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
+                                Ozahid-
+                            </span>
+                        </div>
+                    </Link>
 
-                        <hr className="w-[80%]" />
+                    <hr className="w-[80%]" />
 
-                        <Link href="/login" className="w-full">
-                            <div className="w-full h-16 border-4 rounded-md border-palette-white flex justify-around items-center">
-                                
-                                <LuLogOut size="40" />
+                    <Link href="/login" className="w-full ">
+                        <div className="w-full h-12 border-2 rounded-md border-palette-white flex justify-around items-center">
+                            <LuLogOut size="30" />
 
-                                <span className="text-2xl hidden xl:flex font-body font-bold ">
-                                    Log out
-                                </span>
-                            </div>
-                        </Link>
-                    </div>
+                            <span className="text-2xl hidden xl:flex font-body font-bold ">
+                                Log out
+                            </span>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </aside>

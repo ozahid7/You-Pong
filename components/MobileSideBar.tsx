@@ -32,7 +32,7 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
             <div
                 className={`flex px-[1px] py-[3px] s:px-2 s:py-2  items-center hover:bg-greenborder  h-auto w-full ${
                     path === link
-                        ? "text-palette-orange bg-palette-green rounded-xl"
+                        ? "text-palette-orange rounded-xl"
                         : "text-white"
                 } `}
             >
