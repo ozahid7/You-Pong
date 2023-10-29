@@ -30,8 +30,10 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
     return (
         <Link href={link}>
             <div
-                className={`flex px-1 py-1 items-center hover:bg-greenborder text-white h-auto w-full ${
-                    path === link ? "text-orange-600 bg-palette-green rounded-sm" : ""
+                className={`flex px-[1px] py-[3px] s:px-2 s:py-2  items-center hover:bg-greenborder  h-auto w-full ${
+                    path === link
+                        ? "text-palette-orange bg-palette-green rounded-xl"
+                        : "text-white"
                 } `}
             >
                 {elm}
@@ -43,7 +45,7 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
 const MobileSideBar = () => {
     return (
         <aside className=" w-full h-[7vh] flex sm:hidden items-end overflow-hidden">
-            <div className=" s:px-6 w-full h-[100%]  bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-3xl  justify-between">
+            <div className=" s:px-6 w-full h-[100%]  bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
                 {RenderMobileSidBarElement(0, "/")}
                 {RenderMobileSidBarElement(1, "/freinds")}
                 {RenderMobileSidBarElement(2, "/messages")}

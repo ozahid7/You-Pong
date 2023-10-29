@@ -29,14 +29,16 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
     return (
         <Link href={link}>
             <div
-                className={`flex px-5 items-center hover:bg-greenborder xl:space-x-7 text-white h-auto w-full ${
-                    path === link ? "text-orange-600 bg-palette-green rounded-sm" : ""
+                className={`flex px-5 items-center hover:bg-greenborder xl:space-x-7 h-auto w-full ${
+                    path === link
+                        ? "bg-palette-green text-palette-orange  rounded-md"
+                        : "text-white"
                 } `}
             >
                 {elm}
                 <span
-                    className={`text-white font-body w-full hidden xl:flex font-bold text-2xl ${
-                        path === link ? "text-orange-600" : ""
+                    className={` font-body w-full hidden xl:flex font-bold text-2xl ${
+                        path === link ? "text-palette-orange" : "text-white"
                     } `}
                 >
                     {name}
