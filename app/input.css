@@ -6,19 +6,23 @@
 @tailwind utilities;
 
 
-.dred {
-    border: solid red 1px
-}
-
 .debug {
-    border: solid red 1px
+    border: 0.1px solid red;
 }
-.dblue {
-    border: solid blue 1px
+.debug > *{
+    border: 0.1px solid blue;
 }
-
-.dgreen {
-    border: solid green 1px
+.debug > * > *{
+    border: 0.1px solid green;
+}
+.debug > * > * > *{
+    border: 0.1px solid yellow;
+} 
+.debug > * > * > * > *{
+    border: 0.1px solid purple;
+}
+.debug > * > * > * > * > *{
+    border: 0.1px solid orange;
 }
 
 
@@ -183,7 +187,7 @@
 /* ######################################green button######################## */
 .green_button{
     background:
-    linear-gradient(0deg, transparent 0, #46686A 0) top right,
+    linear-gradient(0deg, transparent 0%, #46686A 0) top right,
     linear-gradient(315deg, transparent 7%, #46686A 0)bottom right,
     linear-gradient(135deg, transparent 7%, #46686A 0)top left,
     linear-gradient(0deg, transparent 0%, #46686A 0) bottom left;

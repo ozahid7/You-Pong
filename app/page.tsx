@@ -1,4 +1,4 @@
-import { Banner, MyContainer } from "@/components";
+import { Banner, CustomButton, MyCard, MyContainer } from "@/components";
 import Image from "next/image";
 import "./globals.css";
 import "./input.css";
@@ -6,12 +6,6 @@ import "./input.css";
 export default function Home() {
    
     return (
-        <div className="flex justify-center mt-16  w-full h-[80vh]">
-            <MyContainer>
-                <div className="dred make_center h-[100%]">
-                    <Banner/>
-                </div>
-            </MyContainer>
-        </div>
+        <></>
     );
 }
