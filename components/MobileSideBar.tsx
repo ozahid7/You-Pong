@@ -18,7 +18,7 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
     const customclass = "h-[30px] sm:h-[40px]";
 
     const Elements = [
-        <LuLayoutDashboard size="40" ç />,
+        <LuLayoutDashboard size="40" className={customclass}/>,
         <LuUsers size="40" className={customclass} />,
         <LuMessageSquare size="40" className={customclass} />,
         <LuBell size="40" className={customclass} />,
@@ -44,8 +44,8 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
 
 const MobileSideBar = () => {
     return (
-        <aside className=" w-full h-[7vh] flex sm:hidden items-end overflow-auto">
-            <div className=" s:px-6 w-full h-[100%]  bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
+        <aside className=" w-full  flex sm:hidden items-end">
+            <div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
                 {RenderMobileSidBarElement(0, "/")}
                 {RenderMobileSidBarElement(1, "/freinds")}
                 {RenderMobileSidBarElement(2, "/messages")}
