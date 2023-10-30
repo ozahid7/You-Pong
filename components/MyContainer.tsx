@@ -1,11 +1,7 @@
 import React from "react";
 import { CustomButton, IntraButton, MyCard } from ".";
 
-export function MyContainer({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export function MyContainer({ children }: { children: React.ReactNode }) {
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
             {/* <!--content container(the div in center) --> */}
@@ -46,14 +42,13 @@ export function MyContainer({
             {/* <!-- top left corner --> */}
 
             <div className="hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden relative">
-                {/* <!-- left --> */}
-                <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute">
+                {/* left side */}
+                <div className="h-[100%] w-[18%] sm:max-w-[14px] min-w-[10px] absolute">
                     <div className="w-[100%] h-[100%]">
                         <div className="ctleft w-[100%] h-[100%]"></div>
                     </div>
                 </div>
-
-                {/* <!-- top --> */}
+                {/* top side */}
                 <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
                     <div className=" w-[100%] h-[100%]">
                         <div className="flex w-[100%] h-[100%]">
@@ -128,6 +123,6 @@ export function MyContainer({
             </div>
         </div>
     );
-};
+}
 
 export default MyContainer;
