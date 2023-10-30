@@ -2,7 +2,12 @@
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
 
-function MyToggle() {
+interface MyToggleProps {
+    Default: string
+    enable: string
+}
+
+function MyToggle({Default, enable}: MyToggleProps) {
     const [enabled, setEnabled] = useState(false);
 
     return (
@@ -22,7 +27,7 @@ function MyToggle() {
                         enabled ? "flex " : "hidden"
                     }`}
                 >
-                    Unblock
+                    {Default}
                 </span>
                 <span
                     aria-hidden="true"
@@ -36,7 +41,7 @@ function MyToggle() {
                         enabled ? "hidden" : "flex"
                     } font-body font-bold text-white text-lg`}
                 >
-                    Block
+                    {enable}
                 </span>
             </Switch>
         </div>

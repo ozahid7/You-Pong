@@ -11,7 +11,8 @@ export default function Home() {
                 <MyContainer>
                     <div className=" make_center h-[100%] overflow-auto">
                         <MyToggle
-                            
+                            Default="Unblock"
+                            enable="Block"
                         />
                     </div>
                 </MyContainer>
