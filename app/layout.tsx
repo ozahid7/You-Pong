@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "./globals.css";
+import "./input.css";
+
 
 export const metadata: Metadata = {
     title: "You Pong",
