@@ -15,7 +15,7 @@ const NavBar = () => {
         <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
             <div className="flex justify-end s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex overflow-auto items-center">
                 {/* input search */}
-                <div className="my_input  w-[60%] max-h-[50px] max-w-[220px] min-w-[140px] sm:max-h-[60px]   min-h-[40px] h-[10%] flex justify-center items-center">
+                <div className="search_input  w-[60%] max-h-[50px] max-w-[220px] min-w-[140px] sm:max-h-[60px]   min-h-[40px] h-[10%] flex justify-center items-center">
                     <div className="center pl-3 outline-none   fold:w-[95%]  h-[88%] s:w-[97%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden">
                         <LuSearch className="h-7 w-7 text-white" />
                         <input
