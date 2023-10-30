@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { SideBar, NavBar } from "@/components";
+import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "./globals.css";
+import "./input.css";
+
 
 export const metadata: Metadata = {
     title: "You Pong",
@@ -17,11 +19,12 @@ export default function RootLayout({
             <head>
                 <link rel="icon" href="/favicon.ico" />
             </head>
-            <body className="flex overflow-hidden background">
-                    <SideBar />
-                <main className="flex flex-col w-full">
-                     <NavBar />
+            <body className="flex h-screen min-w-[280px] min-body max-h-screen  background">
+                <SideBar />
+                <main className="flex relative flex-col h-full overflow-auto items-center justify-between w-full">
+                    <NavBar />
                     {children}
+                    <MobileSideBar />
                 </main>
             </body>
         </html>

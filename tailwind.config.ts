@@ -8,6 +8,15 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            animation: {
+                marquee: "marquee 4s linear infinite",
+            },
+            keyframes: {
+                marquee: {
+                    "100%": { transform: "translateX(100%)" },
+                    "0%": { transform: "translateX(-100%)" },
+                },
+            },
             screens: {
                 xs: "300px",
                 xxs: "200px",
