@@ -2,7 +2,7 @@
 import { AnimatedText, Banner, MyContainer } from "@/components";
 import Image from "next/image";
 import "./globals.css";
-import MyToggle from "@/components/MyToggle";
+import MyToggle from "@/components/tools/MyToggle";
 
 export default function Home() {
     return (

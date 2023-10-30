@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomButton, IntraButton, MyCard } from ".";
+import { CustomButton, IntraButton, MyCard } from "..";
 
 export function MyContainer({ children }: { children: React.ReactNode }) {
     return (

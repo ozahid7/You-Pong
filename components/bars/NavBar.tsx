@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
-import { AnimatedText } from ".";
+import { AnimatedText } from "..";
 
 const NavBar = () => {
     const name = "oussama zahid";

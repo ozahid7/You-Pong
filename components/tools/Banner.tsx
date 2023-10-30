@@ -1,12 +1,12 @@
 import React from "react";
-import { AnimatedText } from ".";
+import { AnimatedText } from "..";
 
 interface BannerProps {
     isGreen: boolean;
-    userName: string
+    userName: string;
 }
 
-const Banner = ({isGreen, userName}: BannerProps) => {
+const Banner = ({ isGreen, userName }: BannerProps) => {
     const start = isGreen ? "from-[#508286]" : "from-[#E97152]";
     const end = isGreen ? "to-[#9DBBBD]" : "to-[#F3947B]";
     const customClass = `w-[6%] sm:w-[3%] max-w-[20px] min-w-[14px] max-h-[100px] sm:min-h-full   ${
