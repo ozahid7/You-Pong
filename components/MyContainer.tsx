@@ -20,7 +20,7 @@ export function MyContainer({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* <!-- green bar center in left --> */}
-            <div className="hide overflow-hidden max-w-[px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]">
+            <div className="hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]">
                 <div className="w-[100%] h-[50%] absolute">
                     <div className="ltop w-[100%] h-[100%]"></div>
                 </div>
