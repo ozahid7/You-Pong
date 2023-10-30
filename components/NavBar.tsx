@@ -12,7 +12,7 @@ const NavBar = () => {
     } whitespace-nowrap`;
 
     return (
-        <nav className="flex  justify-end w-full items-center px-2 sm:px-14 py-6">
+        <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
             <div className="flex justify-end s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex overflow-auto items-center">
                 {/* input search */}
                 <div className="my_input  w-[60%] max-h-[50px] max-w-[220px] min-w-[140px] sm:max-h-[60px]   min-h-[40px] h-[10%] flex justify-center items-center">

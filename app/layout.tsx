@@ -21,7 +21,7 @@ export default function RootLayout({
             </head>
             <body className="flex h-screen min-w-[280px] min-body max-h-screen  background">
                 <SideBar />
-                <main className="flex flex-col h-full overflow-auto items-center w-full">
+                <main className="flex relative flex-col h-full overflow-auto items-center justify-between w-full">
                     <NavBar />
                     {children}
                     <MobileSideBar />
