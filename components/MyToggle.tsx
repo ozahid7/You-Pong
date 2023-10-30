@@ -11,7 +11,7 @@ function MyToggle({Default, enable}: MyToggleProps) {
     const [enabled, setEnabled] = useState(false);
 
     return (
-        <div className="p-2 dred">
+        <div className="p-2">
             <Switch
                 checked={enabled}
                 onChange={setEnabled}

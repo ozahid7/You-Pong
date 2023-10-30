@@ -10,10 +10,6 @@ export default function Home() {
             <div className="flex justify-center w-[90%] h-[80%]">
                 <MyContainer>
                     <div className=" make_center h-[100%] overflow-auto">
-                        <MyToggle
-                            Default="Unblock"
-                            enable="Block"
-                        />
                     </div>
                 </MyContainer>
             </div>
