@@ -1,9 +1,9 @@
 import { CustomButtonProps } from "@/types";
 import React from "react";
 
-const CustomButton = ({ color, text, handleclick }: CustomButtonProps) => {
+const CustomButton = ({ color, text, handleclick, bordercolor }: CustomButtonProps) => {
 
-    const customclass = color === 'orange' ? 'orange_button' : 'green_button';
+    const customclass = color === 'orange' ? 'orange_button' : (color === 'green' ? "green_button" : 'transparent_button') ;
     
     return (
         <button onClick={handleclick} className={`${customclass} max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] sm:max-h-[70px]   min-h-[45px] h-[100%] flex justify-center items-center`}>
