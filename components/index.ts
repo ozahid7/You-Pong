@@ -8,6 +8,7 @@ import MobileSideBar from "./bars/MobileSideBar";
 import IntraButton from "./buttons/IntraButton";
 import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
+import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
 
 export {
@@ -22,4 +23,5 @@ export {
     MobileSideBar,
     Acheivement,
     MyInput,
+    MyDropdown,
 };
