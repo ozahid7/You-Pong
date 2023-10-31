@@ -16,9 +16,7 @@ export default function Home() {
             <div className="flex justify-center w-[90%] h-[80%]">
                 <MyContainer>
                     <div className=" make_center h-[100%] overflow-auto">
-                        <div className="w-[40%] aspect-square">
-                            <Acheivement isOpened={true} text='play more than three games with friends' />
-                        </div>
+                        
                     </div>
                 </MyContainer>
             </div>

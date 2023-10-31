@@ -6,7 +6,7 @@ import { AcheivementProps } from "@/types";
 
 const Acheivement = ({isOpened, text}: AcheivementProps) => {
     return (
-        <main className="w-full h-full overflow-hidden">
+        <main className="w-full h-full  overflow-hidden">
             <section className="h-[74%] make_center w-full bg-palette-green rounded-t-md relative">
                 <div className="h-auto  w-auto absolute top-0 h:top-2 right-2 md:top-3 md:right-3">
                     <LuUnlock
