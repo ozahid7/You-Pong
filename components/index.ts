@@ -8,6 +8,7 @@ import MobileSideBar from "./bars/MobileSideBar";
 import IntraButton from "./buttons/IntraButton";
 import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
+import Acheivement from "./containers/Acheivement";
 
 export {
     NavBar,
@@ -19,5 +20,6 @@ export {
     AnimatedText,
     Banner,
     MobileSideBar,
+    Acheivement,
     MyInput,
 };

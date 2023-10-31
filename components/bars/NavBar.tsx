@@ -47,7 +47,7 @@ const NavBar = () => {
                                 </span>
                             </div>
                         </div>
-                        <span className="text-white font-light">Lvl: 69</span>
+                        <span className="text-palette-grey font-light">Lvl: 69</span>
                     </div>
                     <FiChevronDown className="text-white ml-1 h-6 w-6" />
                 </div>

@@ -9,12 +9,16 @@ const config: Config = {
     theme: {
         extend: {
             animation: {
-                marquee: "marquee 4s linear infinite",
+                marquee: "marquee 8s linear infinite",
             },
             keyframes: {
                 marquee: {
-                    "100%": { transform: "translateX(100%)" },
-                    "0%": { transform: "translateX(-100%)" },
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(-100%)" },
+                },
+                marquee2: {
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(-100%)" },
                 },
             },
             screens: {

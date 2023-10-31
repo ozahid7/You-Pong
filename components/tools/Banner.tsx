@@ -27,7 +27,7 @@ const Banner = ({ isGreen, userName }: BannerProps) => {
                     />
                 </div>
                 <div className="h-full px-2 w-full flex flex-col items-center justify-center md:justify-around  md:flex-row">
-                    <AnimatedText name={userName} customclass="hidden h:flex"/>
+                    <AnimatedText text={userName} customclass="hidden h:flex" limit={7} maxwidth="max-w-[130px]" color='text-white'/>
                     <span className="text-white text-4xl s:text-3xl lg:text-4xl xl:text-5xl sm:flex font-bold drop-shadow-lg">
                         7 : 0
                     </span>
