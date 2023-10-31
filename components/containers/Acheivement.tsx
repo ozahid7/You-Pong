@@ -6,13 +6,13 @@ import { AcheivementProps } from "@/types";
 
 const Acheivement = ({isOpened, text}: AcheivementProps) => {
     return (
-        <main className="w-full h-full dblue overflow-hidden">
-            <section className="h-[74%] make_center w-full dred bg-palette-green rounded-t-md relative">
+        <main className="w-full h-full overflow-hidden">
+            <section className="h-[74%] make_center w-full bg-palette-green rounded-t-md relative">
                 <div className="h-auto  w-auto absolute top-0 h:top-2 right-2 md:top-3 md:right-3">
                     <LuUnlock
                         size={25}
                         className={`${
-                            isOpened ? "w-2 xs:w-3 h:w-8 text-white" : "hidden"
+                            isOpened ? "w-2 xs:w-3 h:w-6 sm:w-10 text-white" : "hidden"
                         }`}
                     />
                 </div>
