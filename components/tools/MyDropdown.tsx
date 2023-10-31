@@ -19,17 +19,17 @@ const MyDropdown = (icon: {icon: any, style: string, size: number}) => {
                 </Menu.Button>
                 <Menu.Items
                     as="div"
-                    className="flex flex-col h-auto outline-none w-auto rounded-md drop-shadow-lg top-full right-0 absolute z-10"
+                    className="flex flex-col h-auto outline-none w-auto rounded-sm drop-shadow-lg bg-palette-white overflow-hidden top-full right-0 absolute z-10"
                 >
                     {menuElements.map((elm) => (
                         <Menu.Item key={elm.href} as={Fragment}>
                             {({ active }) => (
                                 <a
                                     href={elm.href}
-                                    className={`py-2 px-4 min-w-[150px] border-b border-palette-grey font-body font-bold flex items-center space-x-4 rounded-sm ${
+                                    className={`py-2 px-4 min-w-[150px] border-b border-palette-grey font-body font-bold flex items-center space-x-4  ${
                                         active
                                             ? "bg-palette-orange text-white"
-                                            : "bg-palette-white text-palette-green"
+                                            : " text-palette-green"
                                     }`}
                                 >
                                     <div className="h-auto flex">
