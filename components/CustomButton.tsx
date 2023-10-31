@@ -1,7 +1,7 @@
 import { CustomButtonProps } from "@/types";
 import React from "react";
 
-const CustomButton = ({ color, text, handleclick }: CustomButtonProps) => {
+const CustomButton = ({ color, text }: CustomButtonProps) => {
 
     const customclass = color === 'orange' ? 'orange_button' : 'green_button';
     
