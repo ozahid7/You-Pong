@@ -6,3 +6,16 @@ export interface CustomButtonProps {
     bordercolor?: string;
     handleclick?: MouseEventHandler<HTMLButtonElement>;
 }
+
+export interface AcheivementProps{
+    text: string
+    isOpened: boolean
+}
+
+export interface AnimatedTextProps {
+    text: string;
+    customclass?: string;
+    limit: number;
+    maxwidth: string;
+    color: string;
+}
