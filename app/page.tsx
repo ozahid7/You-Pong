@@ -20,7 +20,7 @@ export default function Home() {
 
                         <Banner 
                             isGreen={true}
-                            userName="Ozahid-"
+                            userName="ozahiggd-"
                         />
                     </div>
                 </MyContainer>
