@@ -13,8 +13,8 @@ const NotFound = () => {
     }
 
     return (
-        <div className="h-full w-full make_center dred">
-            <div className="h-[55%] max-w-[800px] w-[55%] dred">
+        <div className="h-full w-full make_center">
+            <div className="h-[55%] max-w-[800px] w-[55%]">
                 <MyContainer>
                     <div className="h-full w-full  flex flex-col justify-center items-center pt-8">
                         <span className="text-4xl lg:text-8xl md:text-6xl font-body text-palette-green drop-shadow-md font-extrabold">
