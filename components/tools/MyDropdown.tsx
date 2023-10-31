@@ -1,32 +1,31 @@
 "use client";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { LuMenu, LuLogOut, LuSettings } from "react-icons/lu";
+import React from "react";
+import { LuMenu } from "react-icons/lu";
+import { FiChevronDown } from "react-icons/fi";
+import { MyDropdownProps } from "@/types";
+import { menuElements } from "@/const"
+import { renderIcon } from "@/utils";
 
-const links = [
-    { href: "/login", label: "Logout", icon: <LuLogOut /> },
-    { href: "/setting", label: "Setting", icon: <LuSettings /> },
-];
+const MyDropdown = (icon: {icon: any, style: string, size: number}) => {
 
-const MyDropdown = () => {
+    // const  icon = icontype  === 'menu' ? menu : downarrow;
     return (
         <div className="flex flex-col justify-center relative">
             <Menu>
                 <Menu.Button as="div" className="">
-                    <LuMenu
-                        size={30}
-                        className="border border-palette-green rounded-sm text-palette-green mb-2"
-                    />
+                    {renderIcon(icon.icon, icon.style, icon.size)}
                 </Menu.Button>
                 <Menu.Items
                     as="div"
                     className="flex flex-col h-auto outline-none w-auto rounded-md drop-shadow-lg top-full right-0 absolute z-10"
                 >
-                    {links.map((link) => (
-                        <Menu.Item key={link.href} as={Fragment}>
+                    {menuElements.map((elm) => (
+                        <Menu.Item key={elm.href} as={Fragment}>
                             {({ active }) => (
                                 <a
-                                    href={link.href}
+                                    href={elm.href}
                                     className={`py-2 px-4 min-w-[150px] border-b border-palette-grey font-body font-bold flex items-center space-x-4 rounded-sm ${
                                         active
                                             ? "bg-palette-orange text-white"
@@ -34,10 +33,10 @@ const MyDropdown = () => {
                                     }`}
                                 >
                                     <div className="h-auto flex">
-                                        {link.icon}
+                                        {elm.icon}
                                     </div>
                                     <div className="h-auto flex">
-                                        {link.label}
+                                        {elm.label}
                                     </div>
                                 </a>
                             )}

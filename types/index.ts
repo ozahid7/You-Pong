@@ -19,3 +19,8 @@ export interface AnimatedTextProps {
     maxwidth: string;
     color: string;
 }
+
+export interface MyDropdownProps {
+    icontype: string
+    items: object
+}
