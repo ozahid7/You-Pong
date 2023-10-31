@@ -7,22 +7,22 @@
 
 
 .debug {
-    border: 0.1px solid red;
+    border: 1px solid red;
 }
 .debug > *{
-    border: 0.1px solid blue;
+    border: 1px solid blue;
 }
 .debug > * > *{
-    border: 0.1px solid green;
+    border: 1px solid green;
 }
 .debug > * > * > *{
-    border: 0.1px solid yellow;
+    border: 1px solid purple;
 } 
 .debug > * > * > * > *{
-    border: 0.1px solid purple;
+    border: 1px solid black;
 }
 .debug > * > * > * > * > *{
-    border: 0.1px solid orange;
+    border: 1px solid yellow;
 }
 
 

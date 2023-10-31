@@ -23,4 +23,5 @@ export {
   MobileSideBar,
   Background,
   Map,
+  Mode,
 };

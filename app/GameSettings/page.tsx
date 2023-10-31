@@ -1,4 +1,4 @@
-import { Background, MyContainer, Map, CustomButton } from "@/components";
+import { Background, MyContainer, Map, CustomButton, Mode } from "@/components";
 import Image from "next/image";
 import arrow from "./img/Arrow_back.svg";
 import "../globals.css";
@@ -6,19 +6,18 @@ import "../input.css";
 
 export default function GameSettings() {
   return (
-    <div className="flex w-full h-full justify-center items-center">
-      <div className="flex w-[90%] h-[85%]">
+    <div className="flex w-full h-[90%] justify-center items-center">
+      <div className="flex w-[88%] h-[90%]">
         <MyContainer>
-          <div className="w-[100%] h-[5%]"></div>
-          <div className="flex w-[100%] h-[96%]">
+          <div className="flex w-full h-full min-h-[900px] flex-col  ">
             <Background>
-              <h1 className="text-[#424242] font-['Chakra_Petch'] font-[700] w-fit h-fit xxs:text-[100%]">
+              <h1 className="text-[#424242] font-['Chakra_Petch'] font-[700] w-fit h-fit text-[20px] s:text-[25px] md:text-[38px] xl:text-[45px]">
                 Game Settings
               </h1>
-              <h2 className="text-[#686868] font-['Cairo'] font-[500] w-fit h-fit xxs:text-[70%]">
+              <h2 className="text-[#686868] font-['Cairo'] font-[600] w-fit h-fit text-[15px] s:text-[20px] md:text-[26px] xl:text-[30px]">
                 Choose a map
               </h2>
-              <div className="flex flex-col w-[70%] gap-3">
+              <div className="flex flex-col justify-evenly md:flex-row w-[70%] s:w-[85%] sm:w-[50%] md:w-[100%] 2xl:w-[95%] md:gap-1 xl:gap-0 gap-3">
                 <Map
                   elements="#497174"
                   border="#D6E4E5"
@@ -35,39 +34,18 @@ export default function GameSettings() {
                   background="white"
                 ></Map>
               </div>
-              <h2 className="text-[#686868] font-['Cairo'] font-[500] w-fit h-fit xxs:text-[70%]">
+              <h2 className="text-[#686868] font-['Cairo'] font-[600] w-fit h-fit text-[15px] s:text-[20px] md:text-[26px] xl:text-[30px]">
                 Choose a mode
               </h2>
-              <div className="flex w-[80%] h-[40%] justify-evenly">
-                <div className="flex w-[45%] h-fit border-[2px] border-palette-green justify-evenly items-center">
-                  <label
-                    htmlFor="easy"
-                    className="font-['Chakra_Petch'] text-[#497174] font-[700] text-[20px]"
-                  >
-                    Easy
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="difficulty"
-                    id="easy"
-                  />
-                </div>
-                <div className="flex w-[45%] h-fit border-[2px] border-palette-green justify-evenly items-center">
-                  <label
-                    htmlFor="hard"
-                    className="font-['Chakra_Petch'] text-[#497174] font-[700] text-[20px]"
-                  >
-                    Hard
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="difficulty"
-                    id="hard"
-                  />
-                </div>
+              <div className="flex w-[90%] h-fit justify-evenly">
+                <Mode text="Easy" />
+                <Mode text="Hard" />
               </div>
-              <div className="w-[65%]">
-                <CustomButton color="orange" text="PLAY"/>
+              <div className="w-full xxs:w-[70%] xl:h-[7%]">
+                <CustomButton
+                  color="orange"
+                  text="PLAY"
+                />
               </div>
             </Background>
           </div>
