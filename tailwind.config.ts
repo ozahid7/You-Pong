@@ -44,6 +44,7 @@ const config: Config = {
                 audio: ["Audiowide"],
                 nunito: ["Nunito"],
                 roboto: ["Roboto"],
+                teko: ["Teko"],
             },
             backgroundImage: {
                 background: "url('/background.png')",
