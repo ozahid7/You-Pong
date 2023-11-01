@@ -54,7 +54,7 @@ const NavBar = () => {
                     </div>
                     <MyDropdown
                         icon={FiChevronDown}
-                        style="text-white"
+                        style="text-white cursor-pointer"
                         size={25}
                     />
                 </div>

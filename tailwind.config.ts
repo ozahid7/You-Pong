@@ -41,6 +41,9 @@ const config: Config = {
             },
             fontFamily: {
                 body: ["Chakra Petch"],
+                audio: ["Audiowide"],
+                nunito: ["Nunito"],
+                roboto: ["Roboto"],
             },
             backgroundImage: {
                 background: "url('/background.png')",
