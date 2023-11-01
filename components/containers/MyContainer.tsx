@@ -1,11 +1,11 @@
 import React from "react";
-import { CustomButton, IntraButton, MyCard } from ".";
+import { CustomButton, IntraButton, MyCard } from "..";
 
 export function MyContainer({ children }: { children: React.ReactNode }) {
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
             {/* <!--content container(the div in center) --> */}
-            <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]">
+            <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] overflow-auto translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {children}
             </div>
 
@@ -20,7 +20,7 @@ export function MyContainer({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* <!-- green bar center in left --> */}
-            <div className="hide overflow-hidden max-w-[px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]">
+            <div className="hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]">
                 <div className="w-[100%] h-[50%] absolute">
                     <div className="ltop w-[100%] h-[100%]"></div>
                 </div>

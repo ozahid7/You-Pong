@@ -9,12 +9,16 @@ const config: Config = {
     theme: {
         extend: {
             animation: {
-                marquee: "marquee 4s linear infinite",
+                marquee: "marquee 8s linear infinite",
             },
             keyframes: {
                 marquee: {
-                    "100%": { transform: "translateX(100%)" },
-                    "0%": { transform: "translateX(-100%)" },
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(-100%)" },
+                },
+                marquee2: {
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(-100%)" },
                 },
             },
             screens: {
@@ -28,7 +32,7 @@ const config: Config = {
                 palette: {
                     green: "#497174",
                     orange: "#EB6440",
-                    white: "F0F5F5",
+                    white: "#F0F5F5",
                     grey: "#D9E4E5",
                 },
                 placeholdercolor: "#A0A0A0",
@@ -37,6 +41,10 @@ const config: Config = {
             },
             fontFamily: {
                 body: ["Chakra Petch"],
+                audio: ["Audiowide"],
+                nunito: ["Nunito"],
+                roboto: ["Roboto"],
+                teko: ["Teko"],
             },
             backgroundImage: {
                 background: "url('/background.png')",

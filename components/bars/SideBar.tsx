@@ -96,9 +96,9 @@ const SideBar = () => {
                                 width={100}
                                 height={100}
                             />
-                            <span className="text-gray-500 hidden xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
+                            <p className="text-gray-500 break-all text-center hidden xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
                                 Ozahid-
-                            </span>
+                            </p>
                         </div>
                     </Link>
 

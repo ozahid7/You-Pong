@@ -20,11 +20,9 @@ export default function RootLayout({
                 <link rel="icon" href="/favicon.ico" />
             </head>
             <body className="flex h-screen min-w-[280px] min-body max-h-screen  background">
-                <SideBar />
+                
                 <main className="flex relative flex-col h-full overflow-auto items-center justify-between w-full">
-                    <NavBar />
                     {children}
-                    <MobileSideBar />
                 </main>
             </body>
         </html>
