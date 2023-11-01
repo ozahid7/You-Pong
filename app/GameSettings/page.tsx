@@ -44,7 +44,7 @@ export default function GameSettings() {
               <div className="w-full xxs:w-[70%] xl:h-[7%]">
                 <CustomButton
                   color="orange"
-                  text="PLAY"
+                  text="Play"
                 />
               </div>
             </Background>

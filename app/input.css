@@ -25,6 +25,10 @@
     border: 1px solid brown;
 }
 
+.checkbox:checked{
+    background-color: #497174;
+}
+
 
 /* .debug >* {
     border: solid green 1px

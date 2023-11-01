@@ -13,11 +13,19 @@ export function Map({ elements, border, background, name }: Props) {
   else name = "Classic";
   return (
     <div className="flex w-full s:h-[11rem] h-[6.5rem] md:h-[12rem] xl:h-[13rem] justify-center flex-col items-center">
-      <div className={`flex bg-[${background}] w-[85%] h-full shadow-md justify-center items-center flex-col rounded-sm`}>
-        <button className={`flex border-[6px] border-[${border}] shadow-lg rounded-sm w-[90%] h-[90%] border-[2px] items-center justify-center hover:scale-110 hover:duration-300 hover:shadow-gray-500`}>
+      <div
+        className={`flex bg-[${background}] w-[85%] h-full shadow-md justify-center items-center flex-col rounded-sm`}
+      >
+        <button
+          className={`flex border-[6px] border-[${border}] shadow-lg rounded-sm w-[90%] h-[90%] border-[2px] items-center justify-center hover:scale-110 transform-gpu btn btn-outline btn-accent`}
+        >
           <div className="flex w-[95%] h-[95%] justify-between flex-col items-center ">
-            <div className={`flex bg-[${elements}] w-[35%] h-[3%] 2xl:w-[32%]`}></div>
-            <div className={`flex bg-[${elements}] rounded-full w-[6px] h-[6px] sm:w-[6px] sm:h-[6px] md:w-[7px] md:h-[7px] lg:w-[8px] lg:h-[8px] 2xl:w-[10px] 2xl:h-[10px] 3xl:w-[11px] 3xl:h-[11px]`}></div>
+            <div
+              className={`flex bg-[${elements}] w-[35%] h-[3%] 2xl:w-[32%]`}
+            ></div>
+            <div
+              className={`flex bg-[${elements}] rounded-full w-[6px] h-[6px] sm:w-[6px] sm:h-[6px] md:w-[7px] md:h-[7px] lg:w-[8px] lg:h-[8px] 2xl:w-[10px] 2xl:h-[10px] 3xl:w-[11px] 3xl:h-[11px]`}
+            ></div>
             <div className={`flex bg-[${elements}] w-[35%] h-[3%]`}></div>
           </div>
         </button>
