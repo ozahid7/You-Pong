@@ -20,25 +20,25 @@ export default function Home() {
                 <div className=" sm:w-[60%] max-w-[540px] sm:h-[60%] w-full flex items-left justify-evenly items-center">
                     <Link
                         href="signin"
-                        className="text-white mt-1 sm:mt-2  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
+                        className="text-white mt-1 sm:mt-2 hover:scale-110  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign In
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </Link>
                     <Link
                         href="signup"
-                        className="text-white sm:hidden text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
+                        className="text-white sm:hidden hover:scale-110  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </Link>
-                    <div className="w-[40%] h:w-[50%] hidden h-[60%] lg:h-full sm:flex items-center">
+                    <div className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center">
                         <CustomButton text="Sign Up" color="transparent" />
                     </div>
                 </div>
             </section>
             <section className="flex flex-col xl:flex-row relative mx-auto">
-                <div className="flex flex-col xl:w-[50%]   pt-20 xl:pt-36 pl-3 h:px-6 sm:px-14">
+                <div className="flex flex-col xl:w-[50%]   pt-20 xl:pt-36 2xl:mt-10 pl-3 h:px-6 sm:px-14">
                     <h1 className="font-extrabold s:text-3xl text-white font-audio drop-shadow-lg md:text-6xl lg:text-7xl text-2xl h:text-4xl sm:text-5xl">
                         TRANSCENDENCE
                     </h1>
@@ -56,7 +56,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-36 2xl:mt-20">
+                <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-60 2xl:mt-24">
                     <div className="relative w-[100%] 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] sm:h-[500px] h:h-[400px] h-[360px] flex justify-center">
                         <Image
                             alt="machine"
