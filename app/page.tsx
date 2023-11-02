@@ -7,9 +7,9 @@ import { landing_page_description } from "@/const";
 
 export default function Home() {
     return (
-        <div className="h-full w-full relative max-w-[1800px] xl:w-[90%]">
+        <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
             {/* top part */}
-            <section className="w-ful   z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
+            <section className="w-ful z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
                 <Image
                     src="/youponglogo.png"
                     alt="logo"
@@ -37,7 +37,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-            <section className="flex dred flex-col xl:flex-row relative z-0 mx-auto">
+            <section className="flex flex-col xl:flex-row relative z-0 mx-auto">
                 <div className="flex flex-col xl:w-[50%]  pt-20 xl:pt-36 pl-3 h:px-6 sm:px-14">
                     <h1 className="font-extrabold s:text-3xl text-white font-audio drop-shadow-lg md:text-6xl lg:text-7xl text-2xl h:text-4xl sm:text-5xl">
                         TRANSCENDENCE
@@ -56,13 +56,13 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="flex dgreen justify-end items-center xl:h-[74vh] w-full xl:w-[50%] mt-10 xl:mt-36 2xl:mt-20">
+                <div className="flex justify-end items-center xl:h-[74vh] w-full xl:w-[50%] mt-10 xl:mt-36 2xl:mt-20">
                     <div className="relative w-[100%] 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] sm:h-[500px] h:h-[400px] h-[360px] flex justify-center z-0">
                         <Image
                             alt="machine"
                             src="/sidelogo.png"
                             fill
-                            className="object-contain aspect-square dblue "
+                            className="object-contain aspect-square"
                         />
                     </div>
                 </div>
