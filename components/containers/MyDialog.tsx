@@ -4,8 +4,14 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MyContainer } from "..";
 
-function MyDialog({children}: {children: React.ReactNode}) {
-    let [isOpen, setIsOpen] = useState(true);
+interface MyDialogProps{
+    isOpen: boolean
+    closemodal: () => void
+    children?: React.ReactNode;
+}
+
+function MyDialog({isOpen, closemodal, children}: MyDialogProps) {
+    
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -13,7 +19,7 @@ function MyDialog({children}: {children: React.ReactNode}) {
                 as="div"
                 className="relative z-10"
                 open={isOpen}
-                onClose={() => setIsOpen(false)}
+                onClose={closemodal}
             >
                 <Transition.Child
                     as={Fragment}
@@ -24,7 +30,7 @@ function MyDialog({children}: {children: React.ReactNode}) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black/30" />
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-[10px]" />
                 </Transition.Child>
                 <div className="fixed h-full w-full flex justify-center items-center inset-0 overflow-auto">
                     <div className="flex justify-center w-[90%] h-[80%]">
@@ -39,12 +45,8 @@ function MyDialog({children}: {children: React.ReactNode}) {
                                     leaveFrom="opacity-100 scale-100"
                                     leaveTo="opacity-0 scale-95"
                                 >
-                                    <Dialog.Panel>
-                                        <button
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            Cancel
-                                        </button>
+                                    <Dialog.Panel className="w-full h-full">
+                                        {children}
                                     </Dialog.Panel>
                                 </Transition.Child>
                             </div>

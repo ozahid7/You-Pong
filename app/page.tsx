@@ -1,11 +1,15 @@
 "use client";
-import { CustomButton, MyContainer } from "@/components";
+import { CustomButton, MyContainer, SignUp } from "@/components";
 import Image from "next/image";
 import "./globals.css";
 import Link from "next/link";
 import { landing_page_description } from "@/const";
+import { useState } from "react";
 
 export default function Home() {
+
+    const [isOpen , setIsOpen] = useState(false);
+
     return (
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
             {/* top part */}
@@ -25,19 +29,19 @@ export default function Home() {
                         Sign In
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </Link>
-                    <button
-                        onClick={}
+                    <div
+                        onClick={() => setIsOpen(true)}
                         className="text-white sm:hidden hover:scale-110  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
-                    </button>
-                    <Link
-                        href="signup"
+                    </div>
+                    <div
+                        onClick={() => setIsOpen(true)}
                         className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center"
                     >
                         <CustomButton text="Sign Up" color="transparent" />
-                    </Link>
+                    </div>
                 </div>
             </section>
             {/* middle part */}
@@ -83,6 +87,7 @@ export default function Home() {
                     </Link>
                 </div>
             </section>
+            <SignUp isOpen={isOpen} closemodal={() =>{setIsOpen(false)}} />
         </div>
     );
 }

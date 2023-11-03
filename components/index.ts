@@ -11,6 +11,7 @@ import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
 import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
+import SignUp from "./auth/SignUp";
 
 export {
     NavBar,
@@ -25,5 +26,6 @@ export {
     Acheivement,
     MyInput,
     MyDropdown,
-    MyDialog
+    MyDialog,
+    SignUp,
 };
