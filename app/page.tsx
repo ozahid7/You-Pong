@@ -7,8 +7,7 @@ import { landing_page_description } from "@/const";
 import { useState } from "react";
 
 export default function Home() {
-
-    const [isOpen , setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
@@ -36,11 +35,13 @@ export default function Home() {
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </div>
-                    <div
-                        onClick={() => setIsOpen(true)}
-                        className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center"
-                    >
-                        <CustomButton text="Sign Up" color="transparent" />
+                    <div className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center">
+                        <CustomButton
+                            text="Sign Up"
+                            color="transparent"
+                            otherclass=""
+                            handleclick={() => setIsOpen(true)}
+                        />
                     </div>
                 </div>
             </section>
@@ -87,7 +88,12 @@ export default function Home() {
                     </Link>
                 </div>
             </section>
-            <SignUp isOpen={isOpen} closemodal={() =>{setIsOpen(false)}} />
+            <SignUp
+                isOpen={isOpen}
+                closemodal={() => {
+                    setIsOpen(false);
+                }}
+            />
         </div>
     );
 }

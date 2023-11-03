@@ -4,15 +4,15 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MyContainer } from "..";
 
-interface MyDialogProps{
-    isOpen: boolean
-    closemodal: () => void
+interface MyDialogProps {
+    isOpen: boolean;
+    closemodal: () => void;
     children?: React.ReactNode;
+    isActive?: boolean;
+    customClass?: string;
 }
 
-function MyDialog({isOpen, closemodal, children}: MyDialogProps) {
-    
-
+function MyDialog({ isOpen, closemodal, children, isActive, customClass }: MyDialogProps) {
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -32,9 +32,9 @@ function MyDialog({isOpen, closemodal, children}: MyDialogProps) {
                 >
                     <div className="fixed inset-0 bg-black/30 backdrop-blur-[10px]" />
                 </Transition.Child>
-                <div className="fixed h-full w-full flex justify-center items-center inset-0 overflow-auto">
-                    <div className="flex justify-center w-[90%] h-[80%]">
-                        <MyContainer isActive={true}>
+                <div className="fixed h-full w-full max-h-screen flex justify-center items-center inset-0 overflow-auto">
+                    <div className={`${customClass} flex justify-center`}>
+                        <MyContainer isActive={isActive}>
                             <div className=" make_center h-[100%] overflow-auto">
                                 <Transition.Child
                                     as={Fragment}
