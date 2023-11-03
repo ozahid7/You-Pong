@@ -216,9 +216,30 @@
     background-repeat: no-repeat;
 }
 
-/* ######################################my_input######################## */
+/* ######################################transparent button######################## */
+.transparent_button{
+    background:
+    linear-gradient(0deg, transparent 0, #fff 0) top right,
+    linear-gradient(315deg, transparent 7%, #fff 0)bottom right,
+    linear-gradient(135deg, transparent 7%, #fff 0)top left,
+    linear-gradient(0deg, transparent 0%, #fff 0) bottom left;
+    background-size: 55% 55%;
+    background-repeat: no-repeat; 
+}
 
-.my_input{
+.transparent_button .center{
+    background:
+    linear-gradient(0deg, transparent 0, #4a7473 0) top right,
+    linear-gradient(315deg, transparent 5.5%, #4a7473 0)bottom right,
+    linear-gradient(135deg, transparent 5.5%, #4a7473 0)top left,
+    linear-gradient(0deg, transparent 0%, #4a7473 0) bottom left;
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+}
+
+/* ######################################search_input######################## */
+
+.search_input{
     background:
     linear-gradient(0deg, transparent 0, #fff 0) top right,
     linear-gradient(315deg, transparent 7%, #fff 0)bottom right,
@@ -228,12 +249,34 @@
     background-repeat: no-repeat;
 }
 
-.my_input .center{
+.search_input .center{
     background:
     linear-gradient(0deg, transparent 0, #4a7473 0) top right,
     linear-gradient(315deg, transparent 6%, #4a7473 0)bottom right,
     linear-gradient(135deg, transparent 6%, #4a7473 0)top left,
     linear-gradient(0deg, transparent 0%, #4a7473 0) bottom left;
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+}
+
+/* ######################################my_input######################## */
+
+.my_input{
+    background:
+    linear-gradient(0deg, transparent 0, #CDCDCD 0) top right,
+    linear-gradient(315deg, transparent 7%, #CDCDCD 0)bottom right,
+    linear-gradient(135deg, transparent 7%, #CDCDCD 0)top left,
+    linear-gradient(0deg, transparent 0%, #CDCDCD 0) bottom left;
+    background-size: 55% 55%;
+    background-repeat: no-repeat;
+}
+
+.my_input .center{
+    background:
+    linear-gradient(0deg, transparent 0, #fff 0) top right,
+    linear-gradient(315deg, transparent 6%, #fff 0)bottom right,
+    linear-gradient(135deg, transparent 6%, #fff 0)top left,
+    linear-gradient(0deg, transparent 0%, #fff 0) bottom left;
     background-size: 60% 60%;
     background-repeat: no-repeat;
 }
