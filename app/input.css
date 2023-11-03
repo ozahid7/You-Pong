@@ -310,3 +310,11 @@
     background-size: 60% 60%;
     background-repeat: no-repeat;
 }
+
+
+@media (max-height: 600px) {
+
+    .title{
+        @apply pt-2 bg-black dgreen;
+    }
+ }

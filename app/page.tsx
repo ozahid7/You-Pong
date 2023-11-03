@@ -32,13 +32,17 @@ export default function Home() {
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </Link>
-                    <div className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center">
+                    <Link
+                        href="signup"
+                        className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center"
+                    >
                         <CustomButton text="Sign Up" color="transparent" />
-                    </div>
+                    </Link>
                 </div>
             </section>
+            {/* middle part */}
             <section className="flex flex-col xl:flex-row relative mx-auto">
-                <div className="flex flex-col xl:w-[50%]   pt-20 xl:pt-36 2xl:mt-10 pl-3 h:px-6 sm:px-14">
+                <div className="flex flex-col xl:w-[50%] pt-20 xl:pt-36 2xl:mt-10 pl-3 h:px-6 sm:px-14">
                     <h1 className="font-extrabold s:text-3xl text-white font-audio drop-shadow-lg md:text-6xl lg:text-7xl text-2xl h:text-4xl sm:text-5xl">
                         TRANSCENDENCE
                     </h1>
@@ -51,13 +55,16 @@ export default function Home() {
                     <p className="max-w-[600px] text-palette-grey font-light pr-2">
                         {landing_page_description}
                     </p>
-                    <div className="min-h-[76px] hidden xl:flex items-center w-[64%] h-1 mt-6 xl:mt-10">
+                    <Link
+                        href="signin"
+                        className="min-h-[76px] hidden xl:flex  items-center w-[64%] h-1 mt-6 xl:mt-10"
+                    >
                         <CustomButton text="GET STARTED" color="orange" />
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-60 2xl:mt-24">
-                    <div className="relative w-[100%] 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] sm:h-[500px] h:h-[400px] h-[360px] flex justify-center">
+                    <div className="relative w-[100%] 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] h:h-[400px] h-[360px] flex justify-center">
                         <Image
                             alt="machine"
                             src="/sidelogo.png"
@@ -68,9 +75,12 @@ export default function Home() {
                 </div>
 
                 <div className="min-h-[40px] h:min-h-[76px] xl:hidden flex items-center justify-center w-[100%] h-1 mt-20 mb-20">
-                    <div className="sm:w-full w-[60%] h-full  flex justify-center max-w-[300px] items-center">
+                    <Link
+                        href="signin"
+                        className="sm:w-full w-[60%] h-full hover:scale-110  flex justify-center max-w-[300px] items-center"
+                    >
                         <CustomButton text="GET STARTED" color="orange" />
-                    </div>
+                    </Link>
                 </div>
             </section>
         </div>

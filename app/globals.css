@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  @apply select-none;
+}
+
 .dblue{
   @apply border-blue-700;
 }

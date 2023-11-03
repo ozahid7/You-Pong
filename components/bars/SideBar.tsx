@@ -77,7 +77,7 @@ const SideBar = () => {
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
 
-                {RenderSideBarElements(0, "/", "Dashboard")}
+                {RenderSideBarElements(0, "/dashboard", "Dashboard")}
                 {RenderSideBarElements(1, "/friends", "Friends")}
                 {RenderSideBarElements(2, "/messages", "Messages")}
                 {RenderSideBarElements(3, "/notifications", "Notifications")}
