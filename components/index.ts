@@ -5,6 +5,7 @@ import SideBar from "./bars/SideBar";
 import MyCard from "./containers/MyCard";
 import AnimatedText from "./tools/AnimatedText";
 import MobileSideBar from "./bars/MobileSideBar";
+import MyDialog from "./containers/MyDialog";
 import IntraButton from "./buttons/IntraButton";
 import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
@@ -24,4 +25,5 @@ export {
     Acheivement,
     MyInput,
     MyDropdown,
+    MyDialog
 };
