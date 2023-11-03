@@ -25,13 +25,13 @@ export default function Home() {
                         Sign In
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </Link>
-                    <Link
-                        href="signup"
+                    <button
+                        onClick={}
                         className="text-white sm:hidden hover:scale-110  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
-                    </Link>
+                    </button>
                     <Link
                         href="signup"
                         className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center"

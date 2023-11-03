@@ -4,7 +4,7 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MyContainer } from "..";
 
-function MyDialog() {
+function MyDialog({children}: {children: React.ReactNode}) {
     let [isOpen, setIsOpen] = useState(true);
 
     return (
@@ -28,14 +28,25 @@ function MyDialog() {
                 </Transition.Child>
                 <div className="fixed h-full w-full flex justify-center items-center inset-0 overflow-auto">
                     <div className="flex justify-center w-[90%] h-[80%]">
-                        <MyContainer>
+                        <MyContainer isActive={true}>
                             <div className=" make_center h-[100%] overflow-auto">
-                                <Dialog.Panel>
-
-                                    <button onClick={() => setIsOpen(false)}>
-                                        Cancel
-                                    </button>
-                                </Dialog.Panel>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel>
+                                        <button
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </Dialog.Panel>
+                                </Transition.Child>
                             </div>
                         </MyContainer>
                     </div>
