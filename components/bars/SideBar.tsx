@@ -76,13 +76,15 @@ const SideBar = () => {
             <div className=" xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
-
-                {RenderSideBarElements(0, "/dashboard", "Dashboard")}
-                {RenderSideBarElements(1, "/friends", "Friends")}
-                {RenderSideBarElements(2, "/messages", "Messages")}
-                {RenderSideBarElements(3, "/notifications", "Notifications")}
-                {RenderSideBarElements(4, "/settings", "Settings")}
-
+                    {RenderSideBarElements(0, "/dashboard", "Dashboard")}
+                    {RenderSideBarElements(1, "/dashboard/friends", "Friends")}
+                    {RenderSideBarElements(2, "/messages", "Messages")}
+                    {RenderSideBarElements(
+                        3,
+                        "/notifications",
+                        "Notifications"
+                    )}
+                    {RenderSideBarElements(4, "/settings", "Settings")}
                 </div>
                 {/* bottom part */}
 
