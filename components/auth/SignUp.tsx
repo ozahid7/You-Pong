@@ -16,7 +16,7 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
         <MyDialog
             isOpen={props.isOpen}
             closemodal={props.closemodal}
-            isActive={false}
+            withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[700px] max-w-[540px] h-[40%] md:w-[50%] w-[90%] s:w-[70%] h:min-h-[540px] min-h-[440px]"
         >
             <div className="flex items-center flex-col h-full overflow-auto">
@@ -41,11 +41,13 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
+                            isPassword={true}
                         />
                         <MyInput
                             text="Confirm Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
+                            isPassword={true}
                         />
                     </div>
                     <Link

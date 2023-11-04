@@ -8,11 +8,11 @@ interface MyDialogProps {
     isOpen: boolean;
     closemodal: () => void;
     children?: React.ReactNode;
-    isActive?: boolean;
+    withCorner?: boolean;
     customClass?: string;
 }
 
-function MyDialog({ isOpen, closemodal, children, isActive, customClass }: MyDialogProps) {
+function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyDialogProps) {
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -34,7 +34,7 @@ function MyDialog({ isOpen, closemodal, children, isActive, customClass }: MyDia
                 </Transition.Child>
                 <div className="fixed h-full w-full max-h-screen flex justify-center items-center inset-0 overflow-auto">
                     <div className={`${customClass} flex justify-center`}>
-                        <MyContainer isActive={isActive}>
+                        <MyContainer withCorners={withCorner} closeModal={closemodal}>
                             <div className=" make_center h-[100%] overflow-auto">
                                 <Transition.Child
                                     as={Fragment}

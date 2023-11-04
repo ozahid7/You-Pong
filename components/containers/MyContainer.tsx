@@ -1,21 +1,28 @@
+"use client"
 import React from "react";
 import { CustomButton, IntraButton, MyCard } from "..";
 import { MdCancelPresentation } from "react-icons/md";
 
+interface MyContainerProps {
+    children: React.ReactNode;
+    withCorners?: boolean;
+    closeModal: () => void
+}
 
-export function MyContainer(props: { children: React.ReactNode, isActive?: boolean }) {
+export function MyContainer({children, withCorners,  closeModal}: MyContainerProps) {
 
-    const customclass = props.isActive ? "hidden" : "";
-    const otherclass = props.isActive ? "s:hidden" : "";
+    const customclass = withCorners ? "hidden" : "";
+    const otherclass = withCorners ? "s:hidden" : "";
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
             {/* <!--content container(the div in center) --> */}
             <MdCancelPresentation
+                onClick={closeModal}
                 size={25}
                 className="absolute text-gray-400 h:top-6 h:left-8 top-4 left-4  rounded-sm"
             />
             <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] overflow-auto translate-y-[-50%] left-[50%] translate-x-[-50%]">
-                {props.children}
+                {children}
             </div>
 
             {/* <!-- top bar orange --> */}
