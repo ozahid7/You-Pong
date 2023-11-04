@@ -23,7 +23,7 @@ export default function Home() {
                 <div className=" sm:w-[60%] max-w-[540px] sm:h-[60%] w-full flex items-left justify-evenly items-center">
                     <Link
                         href="signin"
-                        className="text-white mt-1 sm:mt-2 hover:scale-110  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
+                        className="text-white mt-1 sm:mt-2 hover:scale-110 sm:hidden  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign In
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
@@ -35,7 +35,15 @@ export default function Home() {
                         Sign Up
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
                     </div>
-                    <div className="w-[40%] h:w-[50%] hidden h-[50%] lg:h-full sm:flex items-center">
+                    <div className="w-[40%] h:w-[40%] hidden h-[50%] lg:h-full sm:flex items-center">
+                        <CustomButton
+                            text="Sign In"
+                            color="signin_button"
+                            otherclass=""
+                            handleclick={() => setIsOpen(true)}
+                        />
+                    </div>
+                    <div className="w-[40%] h:w-[40%] hidden h-[50%] lg:h-full sm:flex items-center">
                         <CustomButton
                             text="Sign Up"
                             color="transparent"
@@ -62,30 +70,25 @@ export default function Home() {
                     </p>
                     <Link
                         href="signin"
-                        className="min-h-[76px] hidden xl:flex  items-center w-[64%] h-1 mt-6 xl:mt-10"
+                        className="min-h-[76px]  flex justify-center md:justify-start  items-center w-full h-1 mt-6 xl:mt-10"
                     >
-                        <CustomButton text="GET STARTED" color="orange" />
+                        <CustomButton
+                            text="GET STARTED"
+                            color="orange"
+                            otherclass="w-[40%] lg:w-full"
+                        />
                     </Link>
                 </div>
 
                 <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-60 2xl:mt-24">
-                    <div className="relative w-[100%] 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] h:h-[400px] h-[360px] flex justify-center">
+                    <div className="relative w-full 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] h:h-[400px] h-[360px] flex justify-center">
                         <Image
                             alt="machine"
                             src="/sidelogo.png"
                             fill
-                            className="object-contain  aspect-square"
+                            className="object-contain"
                         />
                     </div>
-                </div>
-
-                <div className="min-h-[40px] h:min-h-[76px] xl:hidden flex items-center justify-center w-[100%] h-1 mt-20 mb-20">
-                    <Link
-                        href="signin"
-                        className="sm:w-full w-[60%] h-full hover:scale-110  flex justify-center max-w-[300px] items-center"
-                    >
-                        <CustomButton text="GET STARTED" color="orange" />
-                    </Link>
                 </div>
             </section>
             <SignUp

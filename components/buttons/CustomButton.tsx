@@ -15,7 +15,10 @@ const CustomButton = ({
             ? "orange_button"
             : color === "green"
             ? "green_button"
-            : "transparent_button";
+            : color === "transparent"
+            ? "transparent_button"
+            : "signin_button";
+            
 
     return (
         <button

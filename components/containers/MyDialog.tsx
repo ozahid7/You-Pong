@@ -47,6 +47,7 @@ function MyDialog({ isOpen, closemodal, children, isActive, customClass }: MyDia
                                 >
                                     <Dialog.Panel className="w-full h-full">
                                         {children}
+                                        
                                     </Dialog.Panel>
                                 </Transition.Child>
                             </div>

@@ -1,5 +1,7 @@
 import React from "react";
 import { CustomButton, IntraButton, MyCard } from "..";
+import { MdCancelPresentation } from "react-icons/md";
+
 
 export function MyContainer(props: { children: React.ReactNode, isActive?: boolean }) {
 
@@ -8,6 +10,10 @@ export function MyContainer(props: { children: React.ReactNode, isActive?: boole
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
             {/* <!--content container(the div in center) --> */}
+            <MdCancelPresentation
+                size={25}
+                className="absolute text-gray-400 h:top-6 h:left-8 top-4 left-4  rounded-sm"
+            />
             <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] overflow-auto translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {props.children}
             </div>
@@ -50,7 +56,9 @@ export function MyContainer(props: { children: React.ReactNode, isActive?: boole
 
             {/* <!-- top left corner --> */}
 
-            <div className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden relative`}>
+            <div
+                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden relative`}
+            >
                 {/* left side */}
                 <div className="h-[100%] w-[18%] sm:max-w-[14px] min-w-[10px] absolute">
                     <div className="w-[100%] h-[100%]">
@@ -71,7 +79,9 @@ export function MyContainer(props: { children: React.ReactNode, isActive?: boole
 
             {/* <!-- right top corner --> */}
 
-            <div className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute top-0 right-0`}>
+            <div
+                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute top-0 right-0`}
+            >
                 {/* <!-- top --> */}
                 <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
                     <div className=" w-[100%] h-[100%]">
@@ -91,7 +101,9 @@ export function MyContainer(props: { children: React.ReactNode, isActive?: boole
             </div>
 
             {/* <!-- bottom right corner --> */}
-            <div className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 right-0`}>
+            <div
+                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 right-0`}
+            >
                 {/* <!-- top --> */}
                 <div className="w-[100%] h-[15%] min-h-[10px] absolute bottom-0">
                     <div className=" w-[100%] h-[100%]">
@@ -111,7 +123,9 @@ export function MyContainer(props: { children: React.ReactNode, isActive?: boole
             </div>
 
             {/* <!-- bottom left corner --> */}
-            <div className={` ${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 left-0  scale-y-[-1]`}>
+            <div
+                className={` ${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 left-0  scale-y-[-1]`}
+            >
                 {/* <!-- left --> */}
                 <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute">
                     <div className="w-[100%] h-[100%]">
