@@ -20,7 +20,7 @@ export default function Home() {
                     width={120}
                     className="object-contain aspect-square h-[40%] sm:h-[60%] lg:h-[100%] w-[20%] max-w-[120px] drop-shadow-lg"
                 />
-                <div className=" sm:w-[60%] max-w-[540px] sm:h-[60%] w-full flex items-left justify-evenly items-center">
+                <div className=" sm:w-[60%] dred max-w-[540px] sm:h-[60%] w-full flex items-left justify-evenly items-center">
                     <Link
                         href="signin"
                         className="text-white mt-1 sm:mt-2 hover:scale-110 sm:hidden  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"

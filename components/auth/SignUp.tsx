@@ -8,9 +8,10 @@ import {
 } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+
 
 const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
+
     return (
         <MyDialog
             isOpen={props.isOpen}
@@ -31,14 +32,20 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
                 >
                     <div className="w-[80%] flex flex-col items-center justify-around h-[44%]">
-                        <MyInput text="Email" customclass="sm:min-h-[50px]" />
+                        <MyInput
+                            text="Email"
+                            customclass="sm:min-h-[50px] min-w-[210px]"
+                            type="email"
+                        />
                         <MyInput
                             text="Password"
-                            customclass="sm:min-h-[50px]"
+                            customclass="sm:min-h-[50px] min-w-[210px]"
+                            type="password"
                         />
                         <MyInput
                             text="Confirm Password"
-                            customclass="sm:min-h-[50px]"
+                            customclass="sm:min-h-[50px] min-w-[210px]"
+                            type="password"
                         />
                     </div>
                     <Link
@@ -67,7 +74,9 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                 </form>
                 <span className="text-sm md:text-md lg:text-xl text-gray-600">
                     Don’t have an account ?{" "}
-                    <a className="text-blue-600 text-sm md:text-md lg:text-xl">Sign In</a>{" "}
+                    <a className="text-blue-600 text-sm md:text-md lg:text-xl">
+                        Sign In
+                    </a>{" "}
                 </span>
             </div>
         </MyDialog>
