@@ -36,6 +36,7 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                             text="Email"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="email"
+                            isPassword={false}
                         />
                         <MyInput
                             text="Password"
@@ -71,7 +72,7 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                         href="/dashboard"
                         className="md:w-[70%] w-[80%] xl:w-full max-w-[340px]  sm:h-[60px] mt-2 flex justify-center items-center"
                     >
-                        <IntraButton type="login" />
+                        <IntraButton type="" />
                     </Link>
                 </form>
                 <span className="text-sm md:text-md lg:text-xl text-gray-600">

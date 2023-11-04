@@ -16,7 +16,8 @@ const MyInput = ({ text, customclass, inputclass, type, isPassword }: MyInputPro
     const hideIcon = () => {
         setIcon(Icon = !Icon)
     };
-    type = Icon ? 'text' : 'password';
+    if (isPassword)
+        type =  Icon ? 'text' : 'password';
     return (
         <div
             className={` ${customclass} my_input max-w-[400px] overflow-hidden relative w-full min-w-[120px] max-h-[50px] sm:max-h-[60px]  min-h-[45px] h-[12%] flex justify-center items-center`}
