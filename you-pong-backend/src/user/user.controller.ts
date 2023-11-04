@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Get, ConflictException, HttpException, HttpStatus, Delete } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from './user.service';
 import { userDto } from './dto/user.create.dto';
 
