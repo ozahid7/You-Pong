@@ -62,4 +62,8 @@ export class AuthService
         const payload = { sub: user.id_user };
         return {access_token: await this.jwt.signAsync(payload, { expiresIn: '10s' })};
     }
+    
+    ftCallBack(){
+        return "allo?"
+    }
 }
