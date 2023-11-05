@@ -11,6 +11,7 @@ import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
 import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
+import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 
 export {
@@ -28,4 +29,5 @@ export {
     MyDropdown,
     MyDialog,
     SignUp,
+    SignIn,
 };

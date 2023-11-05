@@ -36,13 +36,13 @@ const MyInput = ({ text, customclass, inputclass, type, isPassword }: MyInputPro
                     <BiShowAlt
                         onClick={hideIcon}
                         size={20}
-                        className="absolute text-placeholdercolor right-5 color"
+                        className="absolute text-placeholdercolor cursor-pointer right-5 color"
                     />
                 ) : (
                     <BiHide
                         onClick={hideIcon}
                         size={20}
-                        className="absolute text-placeholdercolor right-5 color"
+                        className="absolute text-placeholdercolor cursor-pointer right-5 color"
                     />
                 ))}
         </div>

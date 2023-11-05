@@ -1,5 +1,5 @@
 "use client";
-import { CustomButton, MyContainer, SignUp } from "@/components";
+import { CustomButton, MyContainer, SignIn, SignUp } from "@/components";
 import Image from "next/image";
 import "./globals.css";
 import Link from "next/link";
@@ -7,7 +7,8 @@ import { landing_page_description } from "@/const";
 import { useState } from "react";
 
 export default function Home() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [showSignup, setSignUp] = useState(false);
+    const [showSingIn, setSingIn] = useState(false);
 
     return (
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
@@ -21,15 +22,15 @@ export default function Home() {
                     className="object-contain aspect-square h-[40%] sm:h-[60%] lg:h-[100%] w-[20%] max-w-[120px] drop-shadow-lg"
                 />
                 <div className=" sm:w-[60%] max-w-[540px] sm:h-[60%] w-full flex items-left justify-evenly items-center">
-                    <Link
-                        href="signin"
+                    <div
+                        onClick={() => setSingIn(true)}
                         className="text-white mt-1 sm:mt-2 hover:scale-110 sm:hidden  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign In
                         <hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
-                    </Link>
+                    </div>
                     <div
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => setSignUp(true)}
                         className="text-white sm:hidden hover:scale-110  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
                     >
                         Sign Up
@@ -40,7 +41,7 @@ export default function Home() {
                             text="Sign In"
                             color="signin_button"
                             otherclass=""
-                            handleclick={() => setIsOpen(true)}
+                            handleclick={() => setSingIn(true)}
                         />
                     </div>
                     <div className="w-[40%] h:w-[40%] hidden h-[50%] lg:h-full sm:flex items-center">
@@ -48,7 +49,7 @@ export default function Home() {
                             text="Sign Up"
                             color="transparent"
                             otherclass=""
-                            handleclick={() => setIsOpen(true)}
+                            handleclick={() => setSignUp(true)}
                         />
                     </div>
                 </div>
@@ -92,10 +93,18 @@ export default function Home() {
                 </div>
             </section>
             <SignUp
-                isOpen={isOpen}
+                isOpen={showSignup}
                 closemodal={() => {
-                    setIsOpen(false);
+                    setSignUp(!showSignup);
                 }}
+                showSignIn={() => setSingIn(!showSingIn)}
+            />
+            <SignIn
+                isOpen={showSingIn}
+                closemodal={() => {
+                    setSingIn(!showSingIn);
+                }}
+                showSignUp={() => setSignUp(!showSignup)}
             />
         </div>
     );

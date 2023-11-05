@@ -48,7 +48,7 @@ const config: Config = {
             },
             backgroundImage: {
                 background: "url('/background.png')",
-                circle: "url('/blob-scene-haikei.svg')",
+                circle: "url('/wave.svg')",
             },
         },
     },
