@@ -7,7 +7,6 @@ export class AuthController {
     constructor(private authservice: AuthService){}
     @Post('/local/signup')
     localSignUp(@Body() dto:AuthDto) {
-        console.log(dto);
         return this.authservice.localSignUp(dto)
     }
 }

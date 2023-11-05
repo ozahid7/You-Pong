@@ -33,10 +33,10 @@ export class AuthService
                     hash
                 }
             })
-            return {new_user: newUser};
+            return true;
         } catch (error) {
             if (error.code === 'P2002') {
-                throw new ForbiddenException('Email is already in use');
+                throw new ForbiddenException('credentials already in use');
             }
             throw(error)
         }
