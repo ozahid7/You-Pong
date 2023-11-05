@@ -12,12 +12,16 @@ interface MyInputProps {
 
 const MyInput = ({ text, customclass, inputclass, type, isPassword }: MyInputProps) => {
     let [Icon, setIcon] = useState(false);
-    let passType = type;
+
     const hideIcon = () => {
         setIcon(Icon = !Icon)
     };
-    if (isPassword)
+
+    if (isPassword){
         type =  Icon ? 'text' : 'password';
+        
+    }
+
     return (
         <div
             className={` ${customclass} my_input max-w-[400px] overflow-hidden relative w-full min-w-[120px] max-h-[50px] sm:max-h-[60px]  min-h-[45px] h-[12%] flex justify-center items-center`}

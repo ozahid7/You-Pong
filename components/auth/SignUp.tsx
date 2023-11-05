@@ -41,6 +41,7 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                         <MyInput
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
+                            inputclass="pr-12"
                             type="password"
                             isPassword={true}
                         />
@@ -48,6 +49,7 @@ const SignUp = (props: { isOpen: boolean; closemodal: () => void }) => {
                             text="Confirm Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
+                            inputclass="pr-12"
                             isPassword={true}
                         />
                     </div>
