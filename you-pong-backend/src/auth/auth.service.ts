@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt'
@@ -34,11 +34,29 @@ export class AuthService
                 }
             })
             return true;
+        // if any sHiT occurs
         } catch (error) {
             if (error.code === 'P2002') {
                 throw new ForbiddenException('credentials already in use');
             }
             throw(error)
         }
+    }
+    
+    async localSignIn(dto: AuthDto){
+        // check if user exists
+        const user = await this.prisma.user.findUnique({
+            where:{
+                email:dto.email
+            }
+        })
+        if (!user)
+            throw new ForbiddenException('Email not found in database');
+        // check for password
+        const cmp = await bcrypt.compare(dto.password, user.hash);
+        if (!cmp)
+            throw new UnauthorizedException('Uncorrect password');
+        // create a jwt;
+        return user
     }
 }
