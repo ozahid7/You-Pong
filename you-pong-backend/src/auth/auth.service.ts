@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/c
 import { AuthDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService 
@@ -18,7 +19,8 @@ export class AuthService
         return result;
     }
 
-    constructor(private prisma: PrismaService){}
+    constructor(private prisma: PrismaService, private jwt:JwtService){}
+
     async localSignUp(dto: AuthDto){
         // create hashed password;
         const   salt = await bcrypt.genSalt();
@@ -57,6 +59,7 @@ export class AuthService
         if (!cmp)
             throw new UnauthorizedException('Uncorrect password');
         // create a jwt;
-        return user
+        const payload = { sub: user.id_user };
+        return {access_token: await this.jwt.signAsync(payload, { expiresIn: '10s' })};
     }
 }
