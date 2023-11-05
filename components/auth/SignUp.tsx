@@ -50,7 +50,6 @@ const SignUp = (props: {
                         <MyInput
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
-                            inputclass="pr-12"
                             type="password"
                             isPassword={true}
                         />
@@ -58,7 +57,6 @@ const SignUp = (props: {
                             text="Confirm Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
-                            inputclass="pr-12"
                             isPassword={true}
                         />
                     </div>
@@ -90,7 +88,7 @@ const SignUp = (props: {
                     Don’t have an account ?{" "}
                     <span
                         onClick={handleShowSignIn}
-                        className="text-blue-500 text-sm md:text-md lg:text-xl"
+                        className="text-blue-500 cursor-pointer text-sm md:text-md lg:text-xl"
                     >
                         Sign In
                     </span>{" "}

@@ -21,9 +21,9 @@ const IntraButton = ({type}: { type: string }) => {
                     </svg>
                 </div>
                 <div className="h-[100%] w-[78%] hidden h:flex items-center justify-center">
-                    <text className="text-white drop-shadow-lg font-bold font-body fold:text-lg h:text-lg sm:text-2xl lg:text-3xl ">
+                    <span className="text-white drop-shadow-lg font-bold font-body fold:text-lg h:text-lg sm:text-2xl lg:text-3xl ">
                         {buttoncontent}
-                    </text>
+                    </span>
                 </div>
             </div>
         </div>

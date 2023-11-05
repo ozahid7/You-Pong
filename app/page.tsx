@@ -14,7 +14,7 @@ export default function Home() {
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
             {/* top part */}
             <section className="w-ful z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
-                <Image
+                <img
                     src="/youponglogo.png"
                     alt="logo"
                     height={120}
@@ -69,24 +69,22 @@ export default function Home() {
                     <p className="max-w-[600px] text-palette-grey font-light pr-2">
                         {landing_page_description}
                     </p>
-                    <Link
-                        href="signin"
-                        className="min-h-[76px]  flex justify-center md:justify-start  items-center w-full h-1 mt-6 xl:mt-10"
-                    >
+                    <div className="min-h-[76px]  flex justify-center md:justify-start  items-center w-full h-1 mt-6 xl:mt-10">
                         <CustomButton
                             text="GET STARTED"
                             color="orange"
                             otherclass="w-[40%] lg:w-full"
+                            handleclick={() => setSingIn(true)}
                         />
-                    </Link>
+                    </div>
                 </div>
 
                 <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-60 2xl:mt-24">
                     <div className="relative w-full 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] h:h-[400px] h-[360px] flex justify-center">
-                        <Image
+                        <img
                             alt="machine"
                             src="/sidelogo.png"
-                            fill
+                            
                             className="object-contain"
                         />
                     </div>

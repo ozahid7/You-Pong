@@ -28,9 +28,9 @@ const CustomButton = ({
             <div
                 className={` ${styleclass} center fold:w-[95%]  h-[90%] s:w-[97%] sm:w-[97%] md:w-[98%] w-[94%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}
             >
-                <text className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-2xl md:text-3xl lg:text-4xl ">
+                <span className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-2xl md:text-3xl lg:text-4xl ">
                     {text}
-                </text>
+                </span>
             </div>
         </button>
     );

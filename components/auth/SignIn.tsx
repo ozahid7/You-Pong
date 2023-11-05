@@ -47,7 +47,6 @@ const SignIn = (props: {
                         <MyInput
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
-                            inputclass="pr-12"
                             type="password"
                             isPassword={true}
                         />
