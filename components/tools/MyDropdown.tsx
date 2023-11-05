@@ -10,7 +10,6 @@ import { renderIcon } from "@/utils";
 
 const MyDropdown = (icon: {icon: any, style: string, size: number}) => {
 
-    // const  icon = icontype  === 'menu' ? menu : downarrow;
     return (
         <div className="flex flex-col justify-center relative">
             <Menu>

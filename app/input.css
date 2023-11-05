@@ -186,6 +186,28 @@
     background-repeat: no-repeat;
 }
 
+/* ######################################signin button######################## */
+
+.signin_button{
+    background:
+    linear-gradient(0deg, transparent 0, #ff5f32 0) top right,
+    linear-gradient(315deg, transparent 7%, #ff5f32 0)bottom right,
+    linear-gradient(135deg, transparent 7%, #ff5f32 0)top left,
+    linear-gradient(0deg, transparent 0%, #ff5f32 0) bottom left;
+    background-size: 55% 55%;
+    background-repeat: no-repeat;
+}
+
+.signin_button .center{
+    background:
+    linear-gradient(0deg, transparent 0, #4a7473 0) top right,
+    linear-gradient(315deg, transparent 5.5%, #4a7473 0)bottom right,
+    linear-gradient(135deg, transparent 5.5%, #4a7473 0)top left,
+    linear-gradient(0deg, transparent 0%, #4a7473 0) bottom left;
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+}
+
 
 /* ######################################green button######################## */
 .green_button{
@@ -225,6 +247,22 @@
     linear-gradient(315deg, transparent 5.5%, #4a7473 0)bottom right,
     linear-gradient(135deg, transparent 5.5%, #4a7473 0)top left,
     linear-gradient(0deg, transparent 0%, #4a7473 0) bottom left;
+    background-size: 60% 60%;
+    background-repeat: no-repeat;
+
+}
+
+:hover.transparent_button{
+    
+    transform: scale(1.1);
+}
+
+:hover.transparent_button .center{
+    background:
+    linear-gradient(0deg, transparent 0, #EB6440 0) top right,
+    linear-gradient(315deg, transparent 5.5%, #EB6440 0)bottom right,
+    linear-gradient(135deg, transparent 5.5%, #EB6440 0)top left,
+    linear-gradient(0deg, transparent 0%, #EB6440 0) bottom left;
     background-size: 60% 60%;
     background-repeat: no-repeat;
 }
@@ -294,3 +332,11 @@
     background-size: 60% 60%;
     background-repeat: no-repeat;
 }
+
+
+@media (max-height: 600px) {
+
+    .title{
+        @apply pt-2 bg-black dgreen;
+    }
+ }

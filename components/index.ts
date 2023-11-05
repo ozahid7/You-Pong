@@ -5,11 +5,14 @@ import SideBar from "./bars/SideBar";
 import MyCard from "./containers/MyCard";
 import AnimatedText from "./tools/AnimatedText";
 import MobileSideBar from "./bars/MobileSideBar";
+import MyDialog from "./containers/MyDialog";
 import IntraButton from "./buttons/IntraButton";
 import Banner from "./tools/Banner";
 import MyInput from "./tools/MyInput";
 import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
+import SignIn from "./auth/SignIn";
+import SignUp from "./auth/SignUp";
 
 export {
     NavBar,
@@ -24,4 +27,7 @@ export {
     Acheivement,
     MyInput,
     MyDropdown,
+    MyDialog,
+    SignUp,
+    SignIn,
 };
