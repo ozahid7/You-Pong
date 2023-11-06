@@ -1,47 +1,16 @@
-import { Body, Controller, Post, Get, ConflictException, HttpException, HttpStatus, Delete } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from './user.service';
-import { userDto } from './dto/user.create.dto';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { authenticate } from 'passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
-    constructor(private prisma: PrismaService, private userService: UserService) {}
-
-    //POST
-    @Post()
-    async postUser(@Body() user: userDto){
-        try {
-            const result = await this.userService.postUser(user);
-            return result;
-        } catch (error) {
-            throw new HttpException('Failed to create user', 503);
-        }
-    };
-
-    //DELETE
-    @Delete()
-    async deleteUsers(){
-        try{
-            const result = await this.userService.deleteUsers();
-            return result;
-        }
-        catch(error)
-        {
-            throw new HttpException('Failed to delete users', 209)
-        }
+    @Post('me')
+    itme(){
+        return "hello"
     }
-   
-    //GET
-    @Get()
-    async getUsers(){
-        try{
-            const result = await this.userService.getUsers();
-            return result;
-        }
-        catch(error)
-        {
-            throw new HttpException('Failed to get users', 209)
-        }
+    @Get('ous')
+    iii(){
+        return 'hello'
     }
-
 }
