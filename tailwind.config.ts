@@ -56,7 +56,7 @@ const config: Config = {
         palette: {
           green: "#497174",
           orange: "#EB6440",
-          white: "F0F5F5",
+          white: "#F0F5F5",
           grey: "#D9E4E5",
         },
         placeholdercolor: "#A0A0A0",
@@ -72,6 +72,7 @@ const config: Config = {
       },
       backgroundImage: {
         background: "url('/background.png')",
+        circle: "url('/wave.svg')",
       },
     },
   },

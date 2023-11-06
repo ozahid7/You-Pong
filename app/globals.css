@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  @apply select-none;
+}
+
 .dblue{
   @apply border-blue-700;
 }
@@ -32,4 +36,8 @@
 
 .background{
   @apply bg-background bg-no-repeat bg-origin-content bg-cover;
+}
+
+.circle{
+  @apply bg-circle bg-no-repeat bg-origin-content bg-cover;
 }

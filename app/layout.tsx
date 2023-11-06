@@ -21,7 +21,7 @@ export default function RootLayout({
           href="/favicon.ico"
         />
       </head>
-      <body className="flex h-screen min-w-[280px] min-body max-h-screen  background">
+      <body className="flex h-screen min-w-[280px] min-body max-h-screen background">
         <main className="flex relative flex-col h-full overflow-auto items-center justify-between w-full">
           {children}
         </main>

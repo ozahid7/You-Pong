@@ -148,10 +148,11 @@ export default function game() {
     <div className="flex w-full h-[90%] justify-center items-center">
       <div className="flex w-[88%] h-[90%] ">
         <MyContainer>
-          <div
-            className="flex w-full h-full justify-center items-center"
-            ref={gameRef}
-          ></div>
+          <div className="flex w-full h-full">
+            <script>
+              console.log("Hello World!")
+            </script>
+          </div>
         </MyContainer>
       </div>
     </div>
