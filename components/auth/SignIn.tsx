@@ -7,12 +7,16 @@ import {
     MyInput,
 } from "@/components";
 import Link from "next/link";
+import { useState } from "react";
 
 const SignIn = (props: {
     isOpen: boolean;
     closemodal: () => void;
     showSignUp: () => void;
 }) => {
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
     const handleShowSignup = () => {
         props.closemodal();
         props.showSignUp();
@@ -43,12 +47,14 @@ const SignIn = (props: {
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="email"
                             isPassword={false}
+                            setInput={setEmail}
                         />
                         <MyInput
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
                             isPassword={true}
+                            setInput={setPass}
                         />
                     </div>
                     <Link
