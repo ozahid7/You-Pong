@@ -14,7 +14,7 @@ export class userDto {
   @IsString()
   @IsNotEmpty()
   @Validate(IsUnique, [{ table: 'user', column: 'id_user' }])
-  id_user: String;
+  id_user: string;
   @IsNotEmpty()
   @IsString()
   @Validate(IsUnique, [{ table: 'user', column: 'username' }])
@@ -56,7 +56,7 @@ export class userDto {
   status: 'ONLINE' | 'OFFLINE' | 'INGAME';
   created_at: Date;
   updated_at: Date;
-  // rooms?: roomDto[];
-  // blocked: roomDto[];
-  // channels: channelDto[];
+  rooms?: roomDto[];
+  blocked?: roomDto[];
+  channels?: channelDto[];
 }

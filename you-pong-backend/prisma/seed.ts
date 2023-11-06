@@ -1,6 +1,62 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+
+/*
+[
+  {
+    "username": "ajafy",
+    "firstname": "Abdelhamid",
+    "lastname": "Jafy",
+    "hash": "password",
+    "email": "ajafy@student.1337.ma"
+  },
+  {
+    "username": "ayassir",
+    "firstname": "Abderrachid",
+    "lastname": "Yassir",
+    "hash": "password",
+    "email": "ayassir@student.1337.ma"
+  },
+
+  {
+    "username": "ygbouri",
+    "firstname": "Youssef",
+    "lastname": "Gbouri",
+    "hash": "password123",
+    "email": "ygbouri@student.1337.ma"
+  },
+  {
+    "username": "ozahid-",
+    "firstname": "Oussama",
+    "lastname": "Zahid",
+    "hash": "password",
+    "email": "ozahid-@student.1337.ma"
+  },
+  {
+    "username": "akharraz",
+    "firstname": "Adam",
+    "lastname": "Kharraz",
+    "hash": "password",
+    "email": "akharraz@student.1337.ma"
+  },
+  {
+    "username": "abazerou",
+    "firstname": "Abdellah",
+    "lastname": "Azeroual",
+    "hash": "password123",
+    "email": "abazerou@student.1337.ma"
+  },
+  {
+    "username": "momayaz",
+    "firstname": "Mohammed",
+    "lastname": "Mayaz",
+    "hash": "password123",
+    "email": "momayaz@student.1337.ma"
+  }
+]
+*/
+
 //USERS DATA
 const users = [
   {
