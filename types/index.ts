@@ -5,8 +5,8 @@ export interface CustomButtonProps {
     text: string;
     otherclass?: string;
     styleclass?: string;
-    bordercolor?: string;
     handleclick?: MouseEventHandler<HTMLButtonElement>;
+    btnType?: "button" | "submit";
 }
 
 export interface AcheivementProps{

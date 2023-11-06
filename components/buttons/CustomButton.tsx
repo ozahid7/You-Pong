@@ -8,7 +8,7 @@ const CustomButton = ({
     otherclass,
     styleclass,
     handleclick,
-    bordercolor,
+    btnType,
 }: CustomButtonProps) => {
     const customclass =
         color === "orange"
@@ -22,7 +22,9 @@ const CustomButton = ({
 
     return (
         <button
+            type={btnType}
             onClick={handleclick}
+            onSubmit={handleclick}
             className={`${customclass} ${otherclass}  max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] sm:max-h-[70px]  min-h-[45px] h-[100%] flex justify-center items-center`}
         >
             <div

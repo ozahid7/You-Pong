@@ -8,6 +8,7 @@ import {
 } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 
 const SignUp = (props: {
@@ -15,6 +16,12 @@ const SignUp = (props: {
     closemodal: () => void;
     showSignIn: () => void;
 }) => {
+
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState("");
+
+    
 
     const handleShowSignIn = () => {
         props.closemodal();
@@ -46,18 +53,21 @@ const SignUp = (props: {
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="email"
                             isPassword={false}
+                            setInput={setEmail}
                         />
                         <MyInput
                             text="Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
                             isPassword={true}
+                            setInput={setPass}
                         />
                         <MyInput
                             text="Confirm Password"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="password"
                             isPassword={true}
+                            setInput={setConfirmPass}
                         />
                     </div>
                     <Link

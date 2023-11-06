@@ -16,6 +16,17 @@ const SignIn = (props: {
 }) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [Error, setError] = useState(false);
+
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+
+    const handleSubmit = (e: any) => {
+         e.preventDefault();
+         console.log('hello')
+         !emailRegex ? setError(false) : setError(true)
+    }
+
 
     const handleShowSignup = () => {
         props.closemodal();
@@ -23,6 +34,7 @@ const SignIn = (props: {
     };
 
     return (
+
         <MyDialog
             isOpen={props.isOpen}
             closemodal={props.closemodal}
@@ -48,6 +60,9 @@ const SignIn = (props: {
                             type="email"
                             isPassword={false}
                             setInput={setEmail}
+                            Error={Error}
+                            setError={() => setError(false)}
+                            inputclass=""
                         />
                         <MyInput
                             text="Password"
@@ -55,6 +70,7 @@ const SignIn = (props: {
                             type="password"
                             isPassword={true}
                             setInput={setPass}
+                            Error={Error}
                         />
                     </div>
                     <Link
@@ -65,6 +81,8 @@ const SignIn = (props: {
                             text="Sign In"
                             color="orange"
                             otherclass=""
+                            btnType="submit"
+                            handleclick={handleSubmit}
                         />
                     </Link>
                     <div className="w-full flex justify-evenly items-end">
