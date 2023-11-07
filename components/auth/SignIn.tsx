@@ -7,7 +7,7 @@ import {
     MyInput,
 } from "@/components";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignIn = (props: {
     isOpen: boolean;
@@ -16,15 +16,20 @@ const SignIn = (props: {
 }) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
-    const [Error, setError] = useState(false);
+    let [isInvalidEmail, setIsInvalidEmail] = useState<boolean>(false);
+    let [isvalidPass, setIsValidPass] = useState<boolean>(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
 
+
     const handleSubmit = (e: any) => {
          e.preventDefault();
-         console.log('hello')
-         !emailRegex ? setError(false) : setError(true)
+         console.log(email);
+         console.log(pass);
+         !emailRegex.test(email) ? setIsInvalidEmail(true) : setIsInvalidEmail(false)
+         !passRegex.test(pass) ? setIsValidPass(true) : setIsValidPass(false)
+        
     }
 
 
@@ -33,8 +38,11 @@ const SignIn = (props: {
         props.showSignUp();
     };
 
+    useEffect(() => {
+        console.log("email: ", isInvalidEmail);
+        console.log("pass: ", isvalidPass);
+    }, [isInvalidEmail, isvalidPass]);
     return (
-
         <MyDialog
             isOpen={props.isOpen}
             closemodal={props.closemodal}
@@ -52,6 +60,7 @@ const SignIn = (props: {
                 <form
                     action=""
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
+                    onSubmit={handleSubmit}
                 >
                     <div className="w-[80%] flex flex-col items-center justify-around h-[34%]">
                         <MyInput
@@ -60,8 +69,8 @@ const SignIn = (props: {
                             type="email"
                             isPassword={false}
                             setInput={setEmail}
-                            Error={Error}
-                            setError={() => setError(false)}
+                            isValid={isInvalidEmail}
+                            setIsValid={setIsInvalidEmail}
                             inputclass=""
                         />
                         <MyInput
@@ -70,21 +79,21 @@ const SignIn = (props: {
                             type="password"
                             isPassword={true}
                             setInput={setPass}
-                            Error={Error}
+                            isValid={isvalidPass}
+                            setIsValid={setIsValidPass}
                         />
                     </div>
-                    <Link
-                        href="/dashboard"
+                    <div
                         className="md:w-[79%] w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center"
                     >
                         <CustomButton
                             text="Sign In"
                             color="orange"
                             otherclass=""
-                            btnType="submit"
-                            handleclick={handleSubmit}
+                            // handleclick={handleSubmit}
+    
                         />
-                    </Link>
+                    </div>
                     <div className="w-full flex justify-evenly items-end">
                         <hr className="w-[30%] border border-palette-grey rounded-sm" />
                         <h2 className="text-gray-300 font-body text-xl sm:text-2xl md:text-3xl font-bold ">

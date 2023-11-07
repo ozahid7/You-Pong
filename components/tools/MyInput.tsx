@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { BiHide, BiShowAlt } from "react-icons/bi";
 
@@ -10,13 +10,14 @@ interface MyInputProps {
     type: string;
     isPassword?: boolean;
     setInput: Function;
-    Error?: boolean
-    setError?: () => void
+    isValid?: boolean
+    setIsValid?: any
 }
 
-const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, Error, setError }: MyInputProps) => {
+const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, isValid, setIsValid }: MyInputProps) => {
     let [Icon, setIcon] = useState(false);
-    console.log(Error)
+
+
 
     const hideIcon = () => {
         setIcon(Icon = !Icon)
@@ -34,7 +35,7 @@ const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, Er
             >
             <input
                 onChange={(e) => setInput(e.target.value)}
-                onFocus={setError}
+                onFocus={() => setIsValid(false)}
                 type={type}
                 placeholder={text}
                 className={` ${isPassword ? "pr-12" : "pr-2"} center placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 outline-none  fold:w-[97%]  h-[86%] s:w-[98%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}
@@ -54,7 +55,7 @@ const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, Er
                         />
                         ))}
                 </div>
-                {Error && <span className="text-red-600">Invalid Input</span>}
+                {isValid && <span className="text-red-600">Invalid Input</span>}
                 </>
     );
 };
