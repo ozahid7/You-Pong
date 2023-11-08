@@ -16,12 +16,48 @@ const SignUp = (props: {
     closemodal: () => void;
     showSignIn: () => void;
 }) => {
-
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
 
-    
+
+    let [isInvalidEmail, setIsInvalidEmail] = useState(false);
+    let [isInvalidPass, setIsInvalidPass] = useState(false);
+    let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
+
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
+    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m;
+
+    //check regex if it is valid to post the email and pass to the data base
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        
+        !emailRegex.test(email)
+            ? setIsInvalidEmail(true)
+            : setIsInvalidEmail(false);
+        !passRegex.test(pass)
+            ? setIsInvalidPass(true)
+            : setIsInvalidPass(false);
+        pass != confirmPass ? setIsInvalidconfirmPass(true) : setIsInvalidconfirmPass(false)
+
+        if (!isInvalidEmail && !isInvalidPass  && pass === confirmPass) {
+            const toSend: object = {
+                email: email,
+                password: pass,
+            };
+            fetch("http://localhost:3000/auth/local/signin", {
+                method: "post",
+                headers: { type: "content" },
+                body: toSend as any,
+            }).then((data: object) => {});
+        }
+    };
+
+    //remove invalid error msg from inputs while typing
+    const handleFocus = () => {
+        setIsInvalidEmail(false);
+        setIsInvalidPass(false);
+    };
 
     const handleShowSignIn = () => {
         props.closemodal();
@@ -44,16 +80,21 @@ const SignUp = (props: {
                     <hr className="w-[30%] border border-palette-grey rounded-sm" />
                 </div>
                 <form
+                    onSubmit={handleSubmit}
                     action=""
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
                 >
-                    <div className="w-[80%] flex flex-col items-center justify-around h-[46%]">
+                    <div
+                        onFocus={handleFocus}
+                        className="w-[80%] flex flex-col items-center justify-around h-[46%]"
+                    >
                         <MyInput
                             text="Email"
                             customclass="sm:min-h-[50px] min-w-[210px]"
                             type="email"
                             isPassword={false}
                             setInput={setEmail}
+                            isValid={isInvalidEmail}
                         />
                         <MyInput
                             text="Password"
@@ -61,6 +102,7 @@ const SignUp = (props: {
                             type="password"
                             isPassword={true}
                             setInput={setPass}
+                            isValid={isInvalidPass}
                         />
                         <MyInput
                             text="Confirm Password"
@@ -68,18 +110,16 @@ const SignUp = (props: {
                             type="password"
                             isPassword={true}
                             setInput={setConfirmPass}
+                            isValid={isInvalidConfirmPass}
                         />
                     </div>
-                    <Link
-                        href="/dashboard"
-                        className="w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center"
-                    >
+                    <div className="w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center">
                         <CustomButton
                             text="Sign Up"
                             color="orange"
                             otherclass=""
                         />
-                    </Link>
+                    </div>
                     <div className="w-full flex justify-evenly items-end">
                         <hr className="w-[30%] border border-palette-grey rounded-sm" />
                         <h2 className="text-gray-300 font-body text-xl sm:text-2xl md:text-3xl font-bold ">

@@ -14,34 +14,51 @@ const SignIn = (props: {
     closemodal: () => void;
     showSignUp: () => void;
 }) => {
+
+
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
-    let [isInvalidEmail, setIsInvalidEmail] = useState<boolean>(false);
-    let [isvalidPass, setIsValidPass] = useState<boolean>(false);
+    let [isInvalidEmail, setIsInvalidEmail] = useState(false);
+    let [isInvalidPass, setIsInvalidPass] = useState(false);
 
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m;
 
-
+    //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {
          e.preventDefault();
-         console.log(email);
-         console.log(pass);
          !emailRegex.test(email) ? setIsInvalidEmail(true) : setIsInvalidEmail(false)
-         !passRegex.test(pass) ? setIsValidPass(true) : setIsValidPass(false)
-        
+         !passRegex.test(pass) ? setIsInvalidPass(true) : setIsInvalidPass(false)
+         
+         if(emailRegex.test(email) && passRegex.test(pass)){
+            const toSend: object = {
+                email: email,
+                password: pass
+            }
+            fetch("http://localhost:3000/auth/local/signin", {
+                method: 'post',
+                headers: {"type": "content"},
+                body: toSend as any
+            })
+            .then((data: object) => {
+                
+            })
+
+         }
     }
 
+    //remove invalid error msg from inputs while typing
+    const handleFocus = () => {
+        setIsInvalidEmail(false)
+        setIsInvalidPass(false)
+    }
 
+    //show signup from sign in modal
     const handleShowSignup = () => {
         props.closemodal();
         props.showSignUp();
     };
 
-    useEffect(() => {
-        console.log("email: ", isInvalidEmail);
-        console.log("pass: ", isvalidPass);
-    }, [isInvalidEmail, isvalidPass]);
     return (
         <MyDialog
             isOpen={props.isOpen}
@@ -62,7 +79,7 @@ const SignIn = (props: {
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
                     onSubmit={handleSubmit}
                 >
-                    <div className="w-[80%] flex flex-col items-center justify-around h-[34%]">
+                    <div onFocus={handleFocus} className="w-[80%] flex flex-col items-center justify-around h-[34%]">
                         <MyInput
                             text="Email"
                             customclass="sm:min-h-[50px] min-w-[210px]"
@@ -70,7 +87,6 @@ const SignIn = (props: {
                             isPassword={false}
                             setInput={setEmail}
                             isValid={isInvalidEmail}
-                            setIsValid={setIsInvalidEmail}
                             inputclass=""
                         />
                         <MyInput
@@ -79,8 +95,7 @@ const SignIn = (props: {
                             type="password"
                             isPassword={true}
                             setInput={setPass}
-                            isValid={isvalidPass}
-                            setIsValid={setIsValidPass}
+                            isValid={isInvalidPass}
                         />
                     </div>
                     <div

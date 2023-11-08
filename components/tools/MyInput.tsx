@@ -11,10 +11,9 @@ interface MyInputProps {
     isPassword?: boolean;
     setInput: Function;
     isValid?: boolean
-    setIsValid?: any
 }
 
-const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, isValid, setIsValid }: MyInputProps) => {
+const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, isValid }: MyInputProps) => {
     let [Icon, setIcon] = useState(false);
 
 
@@ -35,7 +34,6 @@ const MyInput = ({ text, customclass, inputclass, type, isPassword, setInput, is
             >
             <input
                 onChange={(e) => setInput(e.target.value)}
-                onFocus={() => setIsValid(false)}
                 type={type}
                 placeholder={text}
                 className={` ${isPassword ? "pr-12" : "pr-2"} center placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 outline-none  fold:w-[97%]  h-[86%] s:w-[98%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}
