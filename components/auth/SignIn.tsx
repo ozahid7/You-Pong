@@ -14,43 +14,50 @@ const SignIn = (props: {
     closemodal: () => void;
     showSignUp: () => void;
 }) => {
-
-
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
+    const [email, setEmail] = useState("");
+    const [pass, setPass] = useState("");
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
+    const [isSubmited, setIsSubmited] = useState(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-    //check regex if it is valid to post the email and pass to the data base
-    const handleSubmit = (e: any) => {
-         e.preventDefault();
-         !emailRegex.test(email) ? setIsInvalidEmail(true) : setIsInvalidEmail(false)
-         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false)
-         
-         if(!isInvalidEmail && !isInvalidPass){
+    
+    useEffect(() => {
+        if (!isInvalidEmail && !isInvalidPass && isSubmited) {
+            console.log("valid input");
             const toSend: object = {
                 email: email,
-                password: pass
-            }
+                password: pass,
+            };
             fetch("http://localhost:3000/auth/local/signin", {
-                method: 'post',
-                headers: {"type": "content"},
-                body: toSend as any
-            })
-            .then((data: object) => {
-                
-            })
-
-         }
-    }
+                method: "post",
+                headers: { type: "content" },
+                body: toSend as any,
+            }).then((data: object) => {});
+            setIsSubmited(false);
+        }
+    }, [isInvalidEmail, isInvalidPass]);
+    
+    //check regex if it is valid to post the email and pass to the data base
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        !emailRegex.test(email)
+        ? setIsInvalidEmail(true)
+        : setIsInvalidEmail(false);
+        setIsSubmited(true);
+        pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
+        
+        console.log("invalidemail: ", isInvalidEmail);
+        console.log("invalidpass: ", isInvalidPass);
+    };
 
     //remove invalid error msg from inputs while typing
     const handleFocus = () => {
-        setIsInvalidEmail(false)
-        setIsInvalidPass(false)
-    }
+        setIsSubmited(false);
+        setIsInvalidEmail(false);
+        setIsInvalidPass(false);
+    };
 
     //show signup from sign in modal
     const handleShowSignup = () => {
