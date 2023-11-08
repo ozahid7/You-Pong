@@ -22,15 +22,14 @@ const SignIn = (props: {
     let [isInvalidPass, setIsInvalidPass] = useState(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m;
 
     //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {
          e.preventDefault();
          !emailRegex.test(email) ? setIsInvalidEmail(true) : setIsInvalidEmail(false)
-         !passRegex.test(pass) ? setIsInvalidPass(true) : setIsInvalidPass(false)
+         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false)
          
-         if(emailRegex.test(email) && passRegex.test(pass)){
+         if(!isInvalidEmail && !isInvalidPass){
             const toSend: object = {
                 email: email,
                 password: pass
@@ -76,10 +75,14 @@ const SignIn = (props: {
                 </div>
                 <form
                     action=""
+                    noValidate
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
                     onSubmit={handleSubmit}
                 >
-                    <div onFocus={handleFocus} className="w-[80%] flex flex-col items-center justify-around h-[34%]">
+                    <div
+                        onFocus={handleFocus}
+                        className="w-[80%] flex flex-col items-center justify-around h-[34%]"
+                    >
                         <MyInput
                             text="Email"
                             customclass="sm:min-h-[50px] min-w-[210px]"
@@ -88,6 +91,7 @@ const SignIn = (props: {
                             setInput={setEmail}
                             isValid={isInvalidEmail}
                             inputclass=""
+                            message="Email is invalid"
                         />
                         <MyInput
                             text="Password"
@@ -96,17 +100,15 @@ const SignIn = (props: {
                             isPassword={true}
                             setInput={setPass}
                             isValid={isInvalidPass}
+                            message="Invalid Password"
                         />
                     </div>
-                    <div
-                        className="md:w-[79%] w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center"
-                    >
+                    <div className="md:w-[79%] w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center">
                         <CustomButton
                             text="Sign In"
                             color="orange"
                             otherclass=""
                             // handleclick={handleSubmit}
-    
                         />
                     </div>
                     <div className="w-full flex justify-evenly items-end">

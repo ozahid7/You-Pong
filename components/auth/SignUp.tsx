@@ -10,7 +10,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-
 const SignUp = (props: {
     isOpen: boolean;
     closemodal: () => void;
@@ -20,27 +19,25 @@ const SignUp = (props: {
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
 
-
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
-    const passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m;
 
     //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        
+
         !emailRegex.test(email)
             ? setIsInvalidEmail(true)
             : setIsInvalidEmail(false);
-        !passRegex.test(pass)
-            ? setIsInvalidPass(true)
-            : setIsInvalidPass(false);
-        pass != confirmPass ? setIsInvalidconfirmPass(true) : setIsInvalidconfirmPass(false)
+        pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
+        pass != confirmPass
+            ? setIsInvalidconfirmPass(true)
+            : setIsInvalidconfirmPass(false);
 
-        if (!isInvalidEmail && !isInvalidPass  && pass === confirmPass) {
+        if (!isInvalidEmail && !isInvalidPass && pass === confirmPass) {
             const toSend: object = {
                 email: email,
                 password: pass,
@@ -57,6 +54,7 @@ const SignUp = (props: {
     const handleFocus = () => {
         setIsInvalidEmail(false);
         setIsInvalidPass(false);
+        setIsInvalidconfirmPass(false);
     };
 
     const handleShowSignIn = () => {
@@ -80,6 +78,7 @@ const SignUp = (props: {
                     <hr className="w-[30%] border border-palette-grey rounded-sm" />
                 </div>
                 <form
+                    noValidate
                     onSubmit={handleSubmit}
                     action=""
                     className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
@@ -95,6 +94,7 @@ const SignUp = (props: {
                             isPassword={false}
                             setInput={setEmail}
                             isValid={isInvalidEmail}
+                            message="Email is invalid"
                         />
                         <MyInput
                             text="Password"
@@ -103,6 +103,7 @@ const SignUp = (props: {
                             isPassword={true}
                             setInput={setPass}
                             isValid={isInvalidPass}
+                            message="Enter at least 8 characters"
                         />
                         <MyInput
                             text="Confirm Password"
@@ -111,6 +112,7 @@ const SignUp = (props: {
                             isPassword={true}
                             setInput={setConfirmPass}
                             isValid={isInvalidConfirmPass}
+                            message="Passwords must match"
                         />
                     </div>
                     <div className="w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center">
