@@ -19,15 +19,17 @@ export class AuthService
         return user
     }
 
+    async genToken(id: string) {
+        const payload = { sub: id };
+        return {access_token: await this.jwt.signAsync(payload, { expiresIn: '2h' })};
+    }
+
     async localSignUp(dto: AuthDto){
         // create hashed password;
         const   salt = await bcrypt.genSalt();
         const   hash = await bcrypt.hash(dto.password, salt);
         // create new user
-        return this.user.create({
-            email: dto.email,
-            hash
-        })
+        return this.user.create({email: dto.email, hash})
     }
     
     async localSignIn(dto: AuthDto){
@@ -40,11 +42,7 @@ export class AuthService
         if (!cmp)
             throw new UnauthorizedException('Uncorrect password');
         // create a jwt;
-        const payload = { sub: user.id_user };
-        return {access_token: await this.jwt.signAsync(payload, { expiresIn: '2h' })};
+        return this.genToken(user.id_user);
     }
-    
-    ftAuoth(){
-        return "allo?"
-    }
+
 }

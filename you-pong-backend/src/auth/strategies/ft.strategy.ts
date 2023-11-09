@@ -1,5 +1,6 @@
+import { Req } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import { Strategy } from "passport-42"
+import  Strategy  from "passport-42"
 
 export class FtStrategy extends PassportStrategy(Strategy, '42'){
     constructor(){
@@ -10,7 +11,11 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
             passReqToCallback:true
         })
     }
-    validate(){
-        ;
+    validate(@Req() req: Request){
+        try {
+            
+        } catch (error) {
+            
+        };
     }
 }
