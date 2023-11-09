@@ -11,6 +11,6 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
         })
     }
     validate(){
-        return "cb";
+        ;
     }
 }
