@@ -36,7 +36,7 @@ const SignIn = (props: {
                 headers: { type: "content" },
                 body: toSend as any,
             }).then((data: object) => {});
-            // setIsSubmited(false);
+            setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited]);
     
