@@ -8,7 +8,7 @@ import {
 } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignUp = (props: {
     isOpen: boolean;
@@ -22,22 +22,16 @@ const SignUp = (props: {
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
+    const [isSubmited, setIsSubmited] = useState(false);
+
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
 
     //check regex if it is valid to post the email and pass to the data base
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-
-        !emailRegex.test(email)
-            ? setIsInvalidEmail(true)
-            : setIsInvalidEmail(false);
-        pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
-        pass != confirmPass
-            ? setIsInvalidconfirmPass(true)
-            : setIsInvalidconfirmPass(false);
-
-        if (!isInvalidEmail && !isInvalidPass && pass === confirmPass) {
+    useEffect(() => {
+        console.log("use effect");
+        if (!isInvalidEmail && !isInvalidPass && isSubmited && !isInvalidConfirmPass) {
+            console.log("valid input");
             const toSend: object = {
                 email: email,
                 password: pass,
@@ -47,11 +41,28 @@ const SignUp = (props: {
                 headers: { type: "content" },
                 body: toSend as any,
             }).then((data: object) => {});
+            // setIsSubmited(false);
         }
+    }, [isInvalidEmail, isInvalidPass, isSubmited, isInvalidConfirmPass]);
+
+    //check regex if it is valid to post the email and pass to the data base
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        !emailRegex.test(email)
+            ? setIsInvalidEmail(true)
+            : setIsInvalidEmail(false);
+        setIsSubmited(true);
+        pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
+        pass != confirmPass ? setIsInvalidconfirmPass(true) : setIsInvalidconfirmPass(false)
+
+        console.log("invalidemail: ", isInvalidEmail);
+        console.log("invalidpass: ", isInvalidPass);
+        console.log("isSubmit: ", isSubmited);
     };
 
     //remove invalid error msg from inputs while typing
     const handleFocus = () => {
+        setIsSubmited(false);
         setIsInvalidEmail(false);
         setIsInvalidPass(false);
         setIsInvalidconfirmPass(false);

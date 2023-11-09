@@ -24,6 +24,7 @@ const SignIn = (props: {
 
     
     useEffect(() => {
+        console.log('use effect')
         if (!isInvalidEmail && !isInvalidPass && isSubmited) {
             console.log("valid input");
             const toSend: object = {
@@ -35,9 +36,9 @@ const SignIn = (props: {
                 headers: { type: "content" },
                 body: toSend as any,
             }).then((data: object) => {});
-            setIsSubmited(false);
+            // setIsSubmited(false);
         }
-    }, [isInvalidEmail, isInvalidPass]);
+    }, [isInvalidEmail, isInvalidPass, isSubmited]);
     
     //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {
@@ -50,6 +51,7 @@ const SignIn = (props: {
         
         console.log("invalidemail: ", isInvalidEmail);
         console.log("invalidpass: ", isInvalidPass);
+        console.log("isSubmit: ", isSubmited);
     };
 
     //remove invalid error msg from inputs while typing
