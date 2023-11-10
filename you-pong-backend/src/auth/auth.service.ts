@@ -10,14 +10,6 @@ export class AuthService
 {
     constructor(private prisma: PrismaService, private jwt:JwtService, private user: UserService){}
 
-    async findUser(_email: string){
-        const user = await this.prisma.user.findUnique({
-            where:{
-                email: _email
-            }
-        });
-        return user
-    }
 
     async genToken(id: string) {
         const payload = { sub: id };
@@ -29,12 +21,16 @@ export class AuthService
         const   salt = await bcrypt.genSalt();
         const   hash = await bcrypt.hash(dto.password, salt);
         // create new user
-        return this.user.create({email: dto.email, hash})
+        return this.user.create({
+            email: dto.email,
+            hash,
+            username: this.user.generateUser()
+        })
     }
-    
+
     async localSignIn(dto: AuthDto){
 
-        const user = await this.findUser(dto.email)
+        const user = await this.user.finduserByEmail(dto.email)
         if (!user)
             throw new ForbiddenException('Email not found in database');
         // check for password

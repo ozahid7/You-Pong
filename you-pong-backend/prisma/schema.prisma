@@ -93,6 +93,7 @@ model User {
 	// freindship_user Freindship[] @relation("freindship_user")
 	// matchs Match_History[]
 	// owned Owned[] @relation(name:"owned")
+	@@map("user")
 }
 
 //CHANNEL MODEL
