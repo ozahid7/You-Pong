@@ -25,7 +25,6 @@ const MyInput = ({
     message,
 }: MyInputProps) => {
     let [Icon, setIcon] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
 
     const hideIcon = () => {
         setIcon((Icon = !Icon));

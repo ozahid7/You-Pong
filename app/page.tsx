@@ -5,10 +5,12 @@ import "./globals.css";
 import Link from "next/link";
 import { landing_page_description } from "@/const";
 import { useState } from "react";
+import TwoFactor from "@/components/auth/TwoFactor";
 
 export default function Home() {
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
+    const [showTwoFactor, setTwoFactor] = useState(false);
 
     return (
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
@@ -74,7 +76,7 @@ export default function Home() {
                             text="GET STARTED"
                             color="orange"
                             otherclass="w-[40%] lg:w-full"
-                            handleclick={() => setSingIn(true)}
+                            handleclick={() => setTwoFactor(true)}
                         />
                     </div>
                 </div>
@@ -99,6 +101,10 @@ export default function Home() {
                 isOpen={showSingIn}
                 closemodal={setSingIn}
                 showSignUp={() => setSignUp(!showSignup)}
+            />
+            <TwoFactor
+                isOpen={showTwoFactor}
+                closemodal={setTwoFactor}
             />
         </div>
     );
