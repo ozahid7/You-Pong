@@ -9,11 +9,12 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MdPassword } from "react-icons/md";
 
 const SignUp = (props: {
     isOpen: boolean;
-    closemodal: () => void;
-    showSignIn: () => void;
+    closemodal: Function;
+    showSignIn: Function;
 }) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
@@ -54,10 +55,6 @@ const SignUp = (props: {
         setIsSubmited(true);
         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
         pass != confirmPass ? setIsInvalidconfirmPass(true) : setIsInvalidconfirmPass(false)
-
-        console.log("invalidemail: ", isInvalidEmail);
-        console.log("invalidpass: ", isInvalidPass);
-        console.log("isSubmit: ", isSubmited);
     };
 
     //remove invalid error msg from inputs while typing
@@ -73,10 +70,14 @@ const SignUp = (props: {
         props.showSignIn();
     };
 
+    
     return (
         <MyDialog
             isOpen={props.isOpen}
-            closemodal={props.closemodal}
+            closemodal={()=>{
+                props.closemodal(false);
+                setEmail('');
+                setPass('');} }
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[50%] w-[90%] s:w-[70%] h:min-h-[560px] min-h-[500px]"
         >

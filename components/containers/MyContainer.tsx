@@ -6,7 +6,7 @@ import { MdCancelPresentation } from "react-icons/md";
 interface MyContainerProps {
     children: React.ReactNode;
     withCorners?: boolean;
-    closeModal: () => void
+    closeModal?: () => void
 }
 
 export function MyContainer({children, withCorners,  closeModal}: MyContainerProps) {

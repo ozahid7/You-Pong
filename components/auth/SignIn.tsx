@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 
 const SignIn = (props: {
     isOpen: boolean;
-    closemodal: () => void;
-    showSignUp: () => void;
+    closemodal: Function;
+    showSignUp: Function;
 }) => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
@@ -48,10 +48,6 @@ const SignIn = (props: {
         : setIsInvalidEmail(false);
         setIsSubmited(true);
         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
-        
-        console.log("invalidemail: ", isInvalidEmail);
-        console.log("invalidpass: ", isInvalidPass);
-        console.log("isSubmit: ", isSubmited);
     };
 
     //remove invalid error msg from inputs while typing
@@ -70,7 +66,11 @@ const SignIn = (props: {
     return (
         <MyDialog
             isOpen={props.isOpen}
-            closemodal={props.closemodal}
+            closemodal={() => {
+                props.closemodal(false);
+                setEmail("");
+                setPass("");
+            }}
             withCorner={false}
             customClass="absolute sm:h-[50%] sm:max-h-[520px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[540px] h-[40%] md:w-[50%] w-[90%] s:w-[70%] min-h-[500px]"
         >

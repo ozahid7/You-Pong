@@ -92,16 +92,12 @@ export default function Home() {
             </section>
             <SignUp
                 isOpen={showSignup}
-                closemodal={() => {
-                    setSignUp(!showSignup);
-                }}
+                closemodal={setSignUp}
                 showSignIn={() => setSingIn(!showSingIn)}
             />
             <SignIn
                 isOpen={showSingIn}
-                closemodal={() => {
-                    setSingIn(!showSingIn);
-                }}
+                closemodal={setSingIn}
                 showSignUp={() => setSignUp(!showSignup)}
             />
         </div>
