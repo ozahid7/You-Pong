@@ -30,7 +30,5 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
         } else {
             return this.auth.genToken(user.id_user)
         }
-
-        return true;
     }
 }
