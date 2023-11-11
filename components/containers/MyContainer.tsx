@@ -18,7 +18,6 @@ export function MyContainer({
   const otherclass = withCorners ? "s:hidden" : "";
   return (
     <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
-      <script src="https://cdn.jsdelivr.net/npm/p5@1.8.0/lib/p5.js"></script>
       <MdCancelPresentation
         onClick={closeModal}
         size={25}

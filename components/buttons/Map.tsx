@@ -7,8 +7,7 @@ interface Props {
   name?: string;
 }
 
-export function Map({ elements, border, background, name }: Props) {
-  
+function Map({ elements, border, background, name }: Props) {
   if (elements == "#497174") name = "Green";
   else if (elements == "#EB6440") name = "Orange";
   else name = "Classic";

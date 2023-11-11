@@ -1,6 +1,4 @@
 import { Background, MyContainer, Map, CustomButton, Mode } from "@/components";
-import Image from "next/image";
-import arrow from "./img/Arrow_back.svg";
 
 export default function GameSettings() {
   return (

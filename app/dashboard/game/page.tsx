@@ -1,157 +1,166 @@
 "use client";
-import { useEffect, useRef } from "react";
-import { MyContainer, CustomButton } from "@/components";
-import * as Matter from "matter-js";
-import { HtmlContext } from "next/dist/server/future/route-modules/pages/vendored/contexts/entrypoints";
+import React, { useEffect, useRef } from "react";
+import { MyContainer } from "@/components";
+import Matter from "matter-js";
+
+const shutTheFuckUp = true;
 
 export default function game() {
-  const BALL_SIZE = 20;
-  const PLANK_WIDTH = 150;
-  const PLANK_HEIGHT = 20;
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const paddleRef = useRef(null);
 
-  const GAME_WIDTH = 800;
-  const GAME_HEIGHT = 600;
-
-  const BALL_START_POINT_X = GAME_WIDTH / 2 - BALL_SIZE;
-  const BALL_START_POINT_Y = GAME_HEIGHT / 2;
-  const BORDER = 15;
-  var in_goal = false;
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  const gameRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine>();
-  const renderRef = useRef<Matter.Render>();
-  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  const ball = Matter.Bodies.circle(
-    BALL_START_POINT_X,
-    BALL_START_POINT_Y,
-    BALL_SIZE,
-    {
-      inertia: 0,
-      friction: 0,
-      frictionStatic: 0,
-      frictionAir: 0,
-      restitution: 1.05,
-      label: "ball",
-    }
-  );
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  const paddleTop = Matter.Bodies.rectangle(
-    GAME_WIDTH / 2,
-    35,
-    PLANK_WIDTH,
-    PLANK_HEIGHT,
-    { isStatic: true, label: "plankOne" }
-  );
-  const paddleBot = Matter.Bodies.rectangle(
-    GAME_WIDTH / 2,
-    GAME_HEIGHT - 35,
-    PLANK_WIDTH,
-    PLANK_HEIGHT,
-    { isStatic: true, label: "plankTwo" }
-  );
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  const top = Matter.Bodies.rectangle(GAME_WIDTH / 2, 10, GAME_WIDTH, BORDER, {
-    isStatic: true,
-    label: "topWall",
-  });
-  const bottom = Matter.Bodies.rectangle(
-    GAME_WIDTH / 2,
-    GAME_HEIGHT - 10,
-    GAME_WIDTH,
-    BORDER,
-    { isStatic: true, label: "bottomWall" }
-  );
-
-  const left = Matter.Bodies.rectangle(
-    10,
-    GAME_HEIGHT / 2,
-    BORDER,
-    GAME_HEIGHT,
-    {
-      isStatic: true,
-      label: "leftWall",
-    }
-  );
-
-  const right = Matter.Bodies.rectangle(
-    GAME_WIDTH - 10,
-    GAME_HEIGHT / 2,
-    BORDER,
-    GAME_HEIGHT,
-    {
-      isStatic: true,
-      label: "rightWall",
-    }
-  );
-  /////////////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
-    if (!engineRef.current) {
-      engineRef.current = Matter.Engine.create();
-    }
+    if (typeof window !== "undefined") {
+      let WIDTH: number = sceneRef.current!.clientWidth;
+      let HEIGHT: number = sceneRef.current!.clientHeight;
+      // Your client-side code here
 
-    if (!renderRef.current) {
-      renderRef.current = Matter.Render.create({
-        element: gameRef.current!,
-        engine: engineRef.current!,
-      });
-    } else {
-      renderRef.current.element = gameRef.current!;
-    }
+      // console.log(sceneRef.current?.clientHeight, HEIGHT);
+      var Engine = Matter.Engine,
+        Render = Matter.Render,
+        Bodies = Matter.Bodies,
+        World = Matter.World,
+        MouseCons = Matter.MouseConstraint,
+        Mouse = Matter.Mouse,
+        Runner = Matter.Runner,
+        Composite = Matter.Composite;
 
-    Matter.World.add(engineRef.current.world, [
-      top,
-      left,
-      bottom,
-      right,
-      paddleTop,
-      paddleBot,
-      ball,
-    ]);
-
-    (function render() {
-      const context = contextRef.current;
-
-      if (context) {
-        var bodies = Matter.Composite.allBodies(engineRef.current.world);
-        window.requestAnimationFrame(render);
-
-        context.fillStyle = "#fff";
-        context.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-        context.beginPath();
-
-        for (var i = 0; i < bodies.length; i += 1) {
-          var vertices = bodies[i].vertices;
-
-          context.moveTo(vertices[0].x, vertices[0].y);
-
-          for (var j = 1; j < vertices.length; j += 1) {
-            context.lineTo(vertices[j].x, vertices[j].y);
-          }
-
-          context.lineTo(vertices[0].x, vertices[0].y);
+      var engine = Engine.create({
+        gravity: {
+          x: 0,
+          y: 0
         }
+      });
 
-        context.lineWidth = 1;
-        context.strokeStyle = "#999";
-        context.stroke();
-      }
-    })();
-    // engineRef.current.gravity.y = 0;
+      var render = Render.create({
+        element: sceneRef.current!,
+        engine: engine,
+        options: {
+          width: WIDTH,
+          height: HEIGHT,
+          background: "#000000",
+          wireframes: false,
+        },
+      });
 
-    Matter.Engine.run(engineRef.current);
-    Matter.Render.run(renderRef.current);
+      var ball = Bodies.circle(WIDTH / 2, HEIGHT / 2, 12, {
+        friction: 0,
+        restitution: 1,
+        inertia: Infinity,
+        density: 0.071,
+        frictionAir: 0,
+        mass: 15,
+        force: {
+          x: 0.3,
+          y: 0.3
+        },
+        render: {
+          fillStyle: "white",
+          strokeStyle: "white",
+          lineWidth: 3,
+        },
+      });
+
+      var topBar = Bodies.rectangle(0, 0, WIDTH * 2, 10, {
+        render: {
+          fillStyle: "white",
+        },
+        isStatic: true,
+      });
+
+      var downBar = Bodies.rectangle(0, HEIGHT, WIDTH * 2, 10, {
+        render: {
+          fillStyle: "white",
+        },
+        isStatic: true,
+      });
+
+      var leftBar = Bodies.rectangle(0, HEIGHT, 10, HEIGHT * 2, {
+        render: {
+          fillStyle: "white",
+        },
+        isStatic: true,
+      });
+
+      var rightBar = Bodies.rectangle(WIDTH, HEIGHT, 10, HEIGHT * 2, {
+        render: {
+          fillStyle: "white",
+        },
+        isStatic: true,
+      });
+
+      var paddleRef = Bodies.rectangle(450, 50, 160, 10, {
+        render: {
+          fillStyle: "white",
+          strokeStyle: "white",
+        },
+        isStatic: true,
+      });
+      var paddle2 = Bodies.rectangle(450, 900, 160, 10, {
+        render: {
+          fillStyle: "white",
+          strokeStyle: "white",
+        },
+        isStatic: true,
+      });
+
+      var mouse = Mouse.create(sceneRef.current!);
+      var options = {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.2, // Adjust the stiffness to control how fast the paddle follows the mouse
+        },
+      };
+
+      var mouseCons = MouseCons.create(engine, options);
+
+      // document.addEventListener('mousemove', (event) => {
+      //   if (paddleRef) {
+      //     Composite.translate(paddleRef., { x: event.clientX - paddleRef.position.x, y: 0 });
+      //   }
+      // });
+
+      World.add(engine.world, [
+        ball,
+        paddleRef,
+        paddle2,
+        topBar,
+        downBar,
+        leftBar,
+        rightBar,
+        mouseCons,
+      ]);
+
+      // setTimeout(() => {
+      //   Matter.Body.applyForce(ball,ball.position ,{
+      //     x: 0.005,
+      //     y: 0.005
+      //   });
+      // }, 2000);
+
+      var runner = Runner.create();
+      Runner.run(runner, engine);
+
+      render.mouse = mouse;
+
+      Render.run(render);
+
+      return () => {
+        Render.stop(render);
+        Runner.stop(runner);
+      };
+    }
   }, []);
-  /////////////////////////////////////////////////////////////////////////////////////////////
   return (
-    <div className="flex w-full h-[90%] justify-center items-center">
-      <div className="flex w-[88%] h-[90%] ">
-        <MyContainer>
-          <div className="flex w-full h-full">
-            <script>
-              console.log("Hello World!")
-            </script>
+    <div className="flex w-full h-[90%] justify-center items-center debug">
+      <div className="flex w-[88%] h-[90%]">
+        <MyContainer closeModal={() => shutTheFuckUp}>
+          <div className="flex flex-col w-full h-full">
+            <div className="flex w-full h-[8%]"></div>
+            <div
+              ref={sceneRef}
+              className="flex w-full h-full"
+            ></div>
           </div>
         </MyContainer>
       </div>

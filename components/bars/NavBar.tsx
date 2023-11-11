@@ -5,8 +5,11 @@ import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 
+const obj = {
+    name: "oussama zahid",
+}
 const NavBar = () => {
-    const name = "oussama zahid";
+    const name = obj.name;
     const isMorethan: boolean = name.length > 7 ? true : false;
     const childcustomClass = `${
         isMorethan ? "animate-marquee" : "animate-m"

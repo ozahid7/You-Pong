@@ -45,12 +45,12 @@ const config: Config = {
         s: "360px",
         h: "465px",
         // Abderrachid's sizes
-        sm: "480px",
-        md: "640px",
-        lg: "992px",
-        xl: "1024px",
-        "2xl": "1280px",
-        "3xl": "1440px",
+        sm_: "480px",
+        md_: "640px",
+        lg_: "992px",
+        xl_: "1024px",
+        "2xl_": "1280px",
+        "3xl_": "1440px",
       },
       colors: {
         palette: {
@@ -69,6 +69,7 @@ const config: Config = {
         nunito: ["Nunito"],
         roboto: ["Roboto"],
         teko: ["Teko"],
+        archivo: ["Archivo"],
       },
       backgroundImage: {
         background: "url('/background.png')",

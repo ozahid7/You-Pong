@@ -4,13 +4,9 @@ import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex h-screen w-full  background">
+    <main className="flex h-screen w-full background">
       <SideBar />
       <main className="flex relative flex-col h-full overflow-auto items-center justify-between w-full">
         <NavBar />
@@ -20,3 +16,5 @@ export default function RootLayout({
     </main>
   );
 }
+
+export default RootLayout;
