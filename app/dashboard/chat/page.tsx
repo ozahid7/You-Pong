@@ -12,19 +12,19 @@ import { useState } from "react";
 import Image from "next/image";
 import ozahid from "../../../public/ozahid-.jpeg";
 import logo from "../../../public/sidebarlogo.png";
-import { LuMoreHorizontal } from "react-icons/lu";
+import { LuMoreHorizontal, LuSearch, LuSend } from "react-icons/lu";
 
 export default function GameSettings() {
   function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
+    var ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
     return strTime;
-  } 
+  }
   const [value, setValue] = useState<number>(0);
   return (
     <div className="flex w-full h-[90%] justify-center items-center">
@@ -47,11 +47,15 @@ export default function GameSettings() {
                         Chats
                       </h1>
                     </div>
-                    <div className="flex w-full h-[50px] self-center justify-center">
-                      <input
-                        className="search"
-                        placeholder="Search"
-                      />
+                    <div className="search_input_chat w-[94%] h-[10%] flex justify-center items-center ">
+                      <div className="center w-[97%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+                        <LuSearch className="h-7 w-7 text-[#9C9C9C]" />
+                        <input
+                          type="text"
+                          placeholder="Search"
+                          className="center text-[#9C9C9C] text-[20px] font-body placeholder:font-[600] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+                        />
+                      </div>
                     </div>
                     {/* THE CHATS DIVS AND TABS*/}
                     <div className="flex h-full w-full flex-row">
@@ -137,7 +141,7 @@ export default function GameSettings() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex h-[95%] w-full flex-col debug">
+                  <div className="flex h-[95%] w-full flex-col ">
                     <div className="flex w-full h-[10%] justify-center">
                       <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
                         <div className="flex flex-row gap-3 items-center">
@@ -164,12 +168,25 @@ export default function GameSettings() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex w-full h-[80%] flex-col">
-                      <div className="flex w-full h-[6%] justify-center items-center text-['Arimo']">
-                          Today {formatAMPM(new Date)}
+                    <div className="flex w-full h-[78%] flex-col">
+                      <div className="flex w-full h-[6%] justify-center items-center text-['Arimo'] text-[#686868] text-[16px] font-[400]">
+                        Today {formatAMPM(new Date())}
                       </div>
                     </div>
-                    <div className="flex w-full h-[10%]"></div>
+                    <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-center self-center">
+                      <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
+                        <div className="center w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+                          <input
+                            type="text"
+                            placeholder="Type a message here ..."
+                            className="center text-[#9C9C9C] text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+                          />
+                          <button>
+                            <LuSend className="h-8 w-8 text-[#497174]" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
