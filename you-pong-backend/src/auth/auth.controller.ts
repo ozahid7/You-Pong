@@ -1,16 +1,14 @@
 import { Body, Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, TfohDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { isLoggedGuard } from 'src/guards/isLoggedIn.guard';
-import { TFAService } from './auth.tfa.service';
 
 @UseGuards(isLoggedGuard)
 @Controller('auth')
 export class AuthController {
-    constructor(private authservice: AuthService,
-                private tfa: TFAService){}
+    constructor(private authservice: AuthService){}
     
     @Post('/local/signup')
     localSignUp(@Req() req: Request, @Body() dto:AuthDto) {
@@ -30,7 +28,12 @@ export class AuthController {
 
     @Post('/twoFactorAuth/:id')
     async twoFactorAuth(@Res() res: Response, @Param('id') id: string){
-        const tfaInfo = await this.tfa.tfaSecreteGenerate(id);
-        return this.tfa.pipeQrCodeStream(res, tfaInfo.optPathUrl);
+        const tfaInfo = await this.authservice.generateTfaSecret(id);
+        return this.authservice.pipeQrCodeStream(res, tfaInfo);
+    }
+    
+    @Get('/twoFactorAuth/:id')
+    async validateTfo(@Body() dto:TfohDto, @Param('id') id:string) {
+        return this.authservice.validateTfa(dto, id);
     }
 }
