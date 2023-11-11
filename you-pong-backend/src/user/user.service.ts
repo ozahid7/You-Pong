@@ -91,9 +91,15 @@ export class UserService {
         return {stats: true}
     }
 
-    // check if jwt is valid
-    CheckJwt(token: string): boolean {
+    async setTfa(secret: string, _id: string) {
+        await this.prisma.user.update({
+            where: {
+                id_user: _id,
+            },
+            data: {
+                two_fact_auth: secret,
+            },
+        });
 
-        return true
     }
 }
