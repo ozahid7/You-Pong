@@ -13,6 +13,7 @@ import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
+import TwoFactor from "./auth/TwoFactor";
 
 export {
     NavBar,
@@ -28,6 +29,7 @@ export {
     MyInput,
     MyDropdown,
     MyDialog,
+    TwoFactor,
     SignUp,
     SignIn,
 };

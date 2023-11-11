@@ -1,11 +1,10 @@
 "use client";
-import { CustomButton, MyContainer, SignIn, SignUp } from "@/components";
+import { CustomButton, MyContainer, TwoFactor, SignIn, SignUp } from "@/components";
 import Image from "next/image";
 import "./globals.css";
 import Link from "next/link";
 import { landing_page_description } from "@/const";
 import { useState } from "react";
-import TwoFactor from "@/components";
 
 export default function Home() {
     const [showSignup, setSignUp] = useState(false);
