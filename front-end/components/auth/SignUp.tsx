@@ -7,6 +7,7 @@ import {
     MyInput,
 } from "@/components";
 import Image from "next/image";
+import axios from "axios"
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdPassword } from "react-icons/md";
@@ -37,11 +38,15 @@ const SignUp = (props: {
                 email: email,
                 password: pass,
             };
-            fetch("http://localhost:3000/auth/local/signin", {
-                method: "post",
-                headers: { type: "content" },
-                body: toSend as any,
-            }).then((data: object) => {});
+            const apiUrl = "http://localhost:4000/auth/local/signin";
+            axios
+                .post(apiUrl, toSend)
+                .then((data: any) => {
+                    console.log("chouf: ", data.data.access_token);
+                })
+                .catch((error) => {
+                    console.log("eeeerrro: ", error);
+                });
             setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited, isInvalidConfirmPass]);
