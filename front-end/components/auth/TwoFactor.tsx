@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useEffect, useState } from "react";
 import { CustomButton, MyDialog } from "..";
 
 interface TwoFactorProps {
@@ -6,22 +8,38 @@ interface TwoFactorProps {
     closemodal: Function;
 }
 
-const renderInputElements = () => {
+
+
+const renderInputElements = (setValue: any) => {
     return (
         <input
-            type="number"
+            maxLength={1}
+            onChange={(e) => {setValue(e.target.value)}}
+            type="text"
             placeholder="___"
-            className="outline-none border placeholder:text-center rounded-sm border-gray-500 w-[30%] max-w-[50px] h-[78%] h:h-[88%] sm:h-[94%] md:h-[96%] lg:h-[100%]"
+            className="outline-none border placeholder:text-center text-center text-lg  rounded-sm border-gray-500 w-[30%] max-w-[50px] h-[78%] h:h-[88%] sm:h-[94%] md:h-[96%] lg:h-[100%]"
         />
     );
 };
 
 const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
+    const [value, setValue] = useState("");
+    const  [code, setCode] = useState("")
+    
+    useEffect(() => {
+        setCode(code + value)
+        console.log(code)
+
+        setValue("")
+    }, [value])
+
     return (
         <MyDialog
             isOpen={isOpen}
             closemodal={() => {
                 closemodal(false);
+                setValue("")
+                setCode("")
             }}
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
@@ -34,7 +52,6 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                     </h2>
                     <hr className="w-[10%] border border-palette-grey rounded-sm" />
                 </div>
-
                 {/* middle section */}
                 <section className=" w-full h-[60%] md:h-[62%] flex flex-col justify-evenly items-center">
                     <img
@@ -49,15 +66,15 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                         +212 65*****71
                     </h3>
                     <div className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]">
-                        <div className="w-[48%] flex justify-between">
-                            {renderInputElements()}
-                            {renderInputElements()}
-                            {renderInputElements()}
+                        <div className="w-[48%] sm:w-[44%] flex justify-between">
+                            {renderInputElements(setValue)}
+                            {renderInputElements(setValue)}
+                            {renderInputElements(setValue)}
                         </div>
-                        <div className="w-[48%] flex justify-between">
-                            {renderInputElements()}
-                            {renderInputElements()}
-                            {renderInputElements()}
+                        <div className="w-[48%] sm:w-[44%] flex justify-between">
+                            {renderInputElements(setValue)}
+                            {renderInputElements(setValue)}
+                            {renderInputElements(setValue)}
                         </div>
                     </div>
                     <span className="text-gray-500 font-extralight text-[10px] h:text-[14px] tracking-[2px]">
