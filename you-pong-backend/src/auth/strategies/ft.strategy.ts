@@ -6,7 +6,7 @@ import { UserService } from "src/user/user.service"
 
 @Injectable()
 export class FtStrategy extends PassportStrategy(Strategy, '42'){
-    constructor(private authService: AuthService,
+    constructor(private auth: AuthService,
                 private user: UserService){
         super({
             clientID : process.env.FT_UID,
@@ -17,6 +17,20 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
     }
 
     async validate(@Req() req: Request, at, rf, profile, callback){
-        return "allo"
+        
+        const user = await this.user.finduserByEmail(profile.emails[0].value);
+        
+        if (!user){
+            await this.user.create({
+                username: profile.username,
+                email: profile.emails[0].value,
+                familyName: profile.name.familyName,
+                givenName: profile.name.givenName,
+            });
+        } else {
+            return this.auth.genToken(user.id_user)
+        }
+
+        return true;
     }
 }

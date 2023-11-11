@@ -4,14 +4,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserService {
 
-    private id:number = 0;
+    private id:number = 157;
 
     async generateUser(usename: string):  Promise<string> {
-        this.id++;
-        const res = usename + (this.id).toString().padStart(3, '0');
+        let res:string = usename + (this.id).toString().padStart(3, '0');
         if ((await this.finduserByUserName(res) == null)){
             return res;
         }
+        this.id++;
         return await this.generateUser(usename);
     }
 

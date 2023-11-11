@@ -7,8 +7,13 @@ import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService){}
+    
     @Patch('update/username/:id/:newUsername')
     updateUsername(@Param('id') id: string, @Param('newUsername') newUsername: string) {
         return this.userService.updateUsername(id, newUsername);
+    }
+    @Get('/me')
+    getMe(){
+        return {username: "adam", lastname: "abdo"}
     }        
 }

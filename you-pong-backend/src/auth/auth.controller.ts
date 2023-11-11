@@ -20,7 +20,7 @@ export class AuthController {
 
     @UseGuards(AuthGuard('42'))
     @Get('/42/callback')
-    ftCallBack(@Res() res: Response){
+    ftCall(@Res() res: Response){
         res.redirect('/user/me');
     }
 }
