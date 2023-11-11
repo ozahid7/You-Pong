@@ -58,6 +58,7 @@ CREATE TABLE "Channel" (
 -- CreateTable
 CREATE TABLE "Room_Chat" (
     "id_room" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "user_role" "user_role" NOT NULL DEFAULT 'OWNER',
     "member_status" "member_status",
     "time_muted" TIMESTAMP(3),
@@ -99,6 +100,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Channel_name_key" ON "Channel"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Room_Chat_name_key" ON "Room_Chat"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ChannelToUser_AB_unique" ON "_ChannelToUser"("A", "B");

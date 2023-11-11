@@ -7,8 +7,13 @@ import { IsUnique } from '@youba/nestjs-dbvalidator';
 export class roomDto {
   @IsString()
   @IsNotEmpty()
+  @IsNotEmpty()
   @Validate(IsUnique, [{ table: 'room', column: 'id_room' }])
   id_room: string;
+  @IsString()
+  @IsNotEmpty()
+  @Validate(IsUnique, [{ table: 'room', column: 'name' }])
+  name: string;
   user_role: 'ADMIN' | 'OWNER' | 'MEMBER';
   member_status?: 'MUTED' | 'BANNED';
   time_muted?: Date;

@@ -21,10 +21,15 @@ export class RoomController {
   @Post()
   async postRoom(
     @Query('username') username: string,
-    @Query('name') name: string,
+    @Query('channel_name') channel_name: string,
+    @Query('room_name') room_name: string,
   ) {
     try {
-      const result = await this.roomService.postRoom(username, name);
+      const result = await this.roomService.postRoom(
+        username,
+        room_name,
+        channel_name,
+      );
       return result;
     } catch (error) {
       throw new HttpException('Failed to create a room', 405);

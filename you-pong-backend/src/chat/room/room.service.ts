@@ -6,19 +6,20 @@ export class RoomService {
   constructor(private prisma: PrismaService) {}
 
   //POST
-  async postRoom(username: string, name: string) {
+  async postRoom(username: string, room_name: string, channel_name: string) {
     const user = await this.prisma.user.findUnique({
       where: { username: username },
     });
     const channel = await this.prisma.channel.findUnique({
       where: {
-        name: name,
+        name: channel_name,
       },
     });
     if (!channel || !user) return 'user or channel unknown !';
 
     const result = await this.prisma.room_Chat.create({
       data: {
+        name: room_name,
         id_user: user.id_user,
         id_channel: channel.id_channel,
       },

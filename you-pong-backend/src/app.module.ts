@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { RoomModule } from './chat/room/room.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MessageModule } from './chat/message/message.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MessageModule } from './chat/message/message.module';
     MessageModule,
     UserModule,
     PrismaModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

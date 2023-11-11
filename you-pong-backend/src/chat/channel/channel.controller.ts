@@ -6,10 +6,13 @@ import {
   HttpException,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChannelService } from './channel.service';
 import { channelDto } from '../dto/channel.create.dto';
+import { Channel } from '@prisma/client';
+import { log } from 'console';
 @Controller('chat/channel')
 export class ChannelController {
   constructor(
@@ -80,6 +83,19 @@ export class ChannelController {
       return result;
     } catch (error) {
       throw new HttpException('Failed to delete a channel', 444);
+    }
+  }
+
+  //PUT
+  @Put(':name')
+  async putChannel(@Param('name') name: string, @Body() channel: Channel) {
+    try {
+      console.log(channel, name);
+
+      const result = await this.channelService.putchannel(name, channel);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to update a channel', 444);
     }
   }
 }

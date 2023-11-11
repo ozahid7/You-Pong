@@ -24,6 +24,6 @@ export class channelDto {
   type: 'DIRECT' | 'PUBLIC' | 'PRIVATE' | 'PROTECTED';
   created_at: Date;
   updated_at: Date;
-  users: userDto[];
-  rooms: roomDto[];
+  users?: userDto[];
+  rooms?: roomDto[];
 }
