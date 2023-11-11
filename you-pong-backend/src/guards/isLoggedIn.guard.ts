@@ -6,11 +6,14 @@ export class isLoggedGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
 
     const request = context.switchToHttp().getRequest();
-    const token = await request.headers['authorization'];
+    const authHead = (await request.headers['authorization']);
 
-    if (!token) {
+    if (!authHead) {
       true;
     }
+
+    const token = authHead.replace('Bearer ', '');    
+    
     try {
       jwt.verify(token, process.env.JWT_SECRET);
       // return true;
