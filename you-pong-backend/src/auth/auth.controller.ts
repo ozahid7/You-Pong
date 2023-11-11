@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +20,7 @@ export class AuthController {
 
     @UseGuards(AuthGuard('42'))
     @Get('/42/callback')
-    ftCallBack(){
-        return this.authservice.ftCallBack()
+    ftCall(@Res() res: Response){
+        res.redirect('/user/me');
     }
 }
