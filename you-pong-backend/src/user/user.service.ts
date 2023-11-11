@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, Req } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -89,5 +89,11 @@ export class UserService {
             });
 
         return {stats: true}
+    }
+
+    // check if jwt is valid
+    CheckJwt(token: string): boolean {
+
+        return true
     }
 }
