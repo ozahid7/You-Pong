@@ -1,12 +1,18 @@
-import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
 
-    *generateUser(usename: string): Generator<string> {
-        id: Number = 0;
+    private id:number = 0;
 
+    async generateUser(usename: string):  Promise<string> {
+        this.id++;
+        const res = usename + (this.id).toString().padStart(3, '0');
+        if ((await this.finduserByUserName(res) == null)){
+            return res;
+        }
+        return await this.generateUser(usename);
     }
 
     constructor(private prisma: PrismaService) {}
@@ -14,10 +20,10 @@ export class UserService {
     private userCounter: number = 0
 
 
-    async finduserById(id: string){
+    async finduserById(_id: string){
         const user = await this.prisma.user.findUnique({
             where:{
-                id_user: id
+                id_user: _id
             }
         });
         return user
@@ -47,7 +53,7 @@ export class UserService {
             const newUser = await this.prisma.user.create({
                 data:
                 {
-                    username: obj.username,
+                    username: await this.generateUser(obj.username),
                     email: obj.email,
                     hash: obj.hash,
                     lastname: obj.familyName,
@@ -64,24 +70,24 @@ export class UserService {
     }
 
     // update username;
-    async updateUsername(id: string, newUser){
-        const user = await this.finduserById(id);
+    async updateUsername(_id: string, newUser: string){
+        const user = await this.finduserById(_id);
         if (user){
-            if (await this.finduserByUserName(newUser)) {
-                throw new ConflictException('Username already exists');
-            }
+            if (await this.finduserByUserName(newUser)) 
+                throw new ConflictException('Username already in use');
         }
-        else {
-            throw new Error(`user with id ${id} not found`);   
-        }
-        this.prisma.user.update({
-            where: {
-                id_user: id
-            },
-            data: {
-                username: newUser
-            }
-        })
-        return true;
+        else
+            throw new NotFoundException(`user with id ${_id} not found`);
+        
+        await this.prisma.user.update({
+                where: {
+                    id_user: _id,
+                },
+                data: {
+                    username: newUser,
+                },
+            });
+
+        return {stats: true}
     }
 }

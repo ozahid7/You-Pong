@@ -24,7 +24,7 @@ export class AuthService
         return this.user.create({
             email: dto.email,
             hash,
-            username: this.user.generateUser()
+            username: "You-Pong"
         })
     }
 
@@ -40,5 +40,4 @@ export class AuthService
         // create a jwt;
         return this.genToken(user.id_user);
     }
-
 }
