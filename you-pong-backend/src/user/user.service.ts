@@ -1,6 +1,7 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { TfohDto } from 'src/auth/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { userDto } from './dto/user.create.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
   }
 
   constructor(private prisma: PrismaService) {}
-/*
+
   //POST
   async postUser(user: userDto) {
     const result = await this.prisma.user.create({
@@ -29,7 +30,6 @@ export class UserService {
         hash: user.hash,
         email: user.email,
         two_fact_auth: user.two_fact_auth,
-        jw_token: user.jw_token,
         victory: user.victory,
         defeats: user.defeats,
         level: user.level,
@@ -108,7 +108,7 @@ export class UserService {
     const result = await this.prisma.user.findMany();
     return result;
   }
-  */
+  
     private userCounter: number = 0
 
 
