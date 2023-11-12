@@ -17,7 +17,7 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
     }
 
     async validate(@Req() req: Request, at, rf, profile, callback){
-        
+        console.log(profile);
         const user = await this.user.finduserByEmail(profile.emails[0].value);
         
         if (!user){
@@ -26,6 +26,7 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
                 email: profile.emails[0].value,
                 familyName: profile.name.familyName,
                 givenName: profile.name.givenName,
+                avatar: profile.photos[0].value
             });
         } else {
             return this.auth.genToken(user.id_user)

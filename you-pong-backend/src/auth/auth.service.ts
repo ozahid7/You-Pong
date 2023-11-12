@@ -28,7 +28,7 @@ export class AuthService
             email: dto.email,
             hash,
             username: "You-Pong"
-        })
+        });
     }
 
     async localSignIn(dto: AuthDto) {
@@ -67,11 +67,11 @@ export class AuthService
                     secret: (await user).two_fact_auth
                 })
                 if (valid === false)
-                    return ("ghalat");
+                    return "ghalat";
                 if (valid === true)
                     return "sa7iiii7"       
             } catch (error) {
-                throw new ForbiddenException('wrong shit asshol')
+                throw new ForbiddenException('wrong id')
             }
         }
 }

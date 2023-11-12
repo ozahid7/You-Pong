@@ -58,6 +58,7 @@ export class UserService {
                     hash: obj.hash,
                     lastname: obj.familyName,
                     firstname: obj.givenName,
+                    avatar: obj.avatar
                 }
             })
             return newUser;
