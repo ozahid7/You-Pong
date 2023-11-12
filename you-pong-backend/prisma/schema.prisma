@@ -113,6 +113,7 @@ model Channel {
 //ROOM_CHAT MODEL
 model Room_Chat {
 	id_room String @id @default(uuid())
+	name String @unique
 	user_role user_role @default(OWNER)
 	member_status member_status?
 	time_muted DateTime?

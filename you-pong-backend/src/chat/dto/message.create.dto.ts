@@ -1,27 +1,15 @@
+import { IsNotEmpty, IsString, Validate } from 'class-validator';
+import { roomDto } from './room.create.dto';
 import { IsUnique } from '@youba/nestjs-dbvalidator';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Validate,
-} from 'class-validator';
 
 export class messageDto {
-  @IsNotEmpty()
-  @IsUUID()
-  id_channel: String;
   @IsString()
   @IsNotEmpty()
-  @Validate(IsUnique, [{ table: 'channel', column: 'name' }])
-  name: string;
+  @Validate(IsUnique, [{ table: 'message', column: 'id_message' }])
+  id_message: string;
   @IsString()
-  @IsOptional()
-  description?: string;
-  @IsOptional()
-  @IsString()
-  avatar?: string;
-  @IsOptional()
-  @IsString()
-  hash?: string;
+  @IsNotEmpty()
+  content: string;
+  created_at: Date;
+  id_room: roomDto;
 }
