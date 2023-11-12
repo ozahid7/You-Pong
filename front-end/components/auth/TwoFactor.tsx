@@ -8,10 +8,6 @@ interface TwoFactorProps {
     closemodal: Function;
 }
 
-
-
-
-
 const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
 
    
@@ -33,52 +29,54 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
     const [key, setKey] = useState('')
 
     function FocuseOn  (name: string, value: string){
-            console.log("name", name, "value", value)
-            if (name === "input1" && key !== "Backspace") 
-                ref2.current?.focus();
-            if (name === "input2" && key !== "Backspace") {
-                ref3.current?.focus();
-            }
-            else if (name === "input2" && key === "Backspace" && value === "") {
-                ref1.current?.focus();
-            }
 
-            if (name === "input3" && key !== "Backspace") {
-                ref4.current?.focus();
-            }
-            else if (name === "input3" && key === "Backspace" && value === "") {
-                ref2.current?.focus();
-            }
-            if (name === "input4" && key !== "Backspace") {
-                ref5.current?.focus();
-            }
-            else if (name === "input4" && key === "Backspace" && value === "") {
-                ref3.current?.focus();
-            }
-            if (name === "input5" && key !== "Backspace") {
-                ref6.current?.focus();
-            }
-            else if (name === "input5" && key === "Backspace" && value === "") {
-                ref4.current?.focus();
-            }
-
-            if (name === "input6" && key === "Backspace" && value === "") {
-                ref5.current?.focus();
-            }
+        if (name === "input1" && key !== "Backspace") 
+            ref2.current?.focus();
+        if (name === "input2" && key !== "Backspace") {
+            ref3.current?.focus();
+        }
+        if (name === "input3" && key !== "Backspace") {
+            ref4.current?.focus();
+        }
+        if (name === "input4" && key !== "Backspace") {
+            ref5.current?.focus();
+        }
+        if (name === "input5" && key !== "Backspace") {
+            ref6.current?.focus();
+        }
     }
 
+    function clearInputs () {
+        if (key === "Backspace") {
+            setValue({
+                input1: "",
+                input2: "",
+                input3: "",
+                input4: "",
+                input5: "",
+                input6: "",
+            });
+            ref1.current?.focus()
+        }
+    }
 
-    const renderInputElements = (name: string, re?: any) => {
+    const renderInputElements = (name: string,  val: string, re?: any) => {
         return (
             <input
                 onChange={(e) => {
                     setValue({ ...Value, [e.target.name]: e.target.value });
-                    FocuseOn(name, e.target.value)
+                    FocuseOn(name, e.target.value);
                 }}
-                onKeyDown={(e) => setKey(e.key)}
+                onKeyDown={(e) => {
+                    setKey(e.key), clearInputs();
+                }}
+                onKeyUp={(e) => {
+                    setKey(e.key), clearInputs();
+                }}
                 type="text"
                 required
                 ref={re}
+                value={val}
                 maxLength={1}
                 name={name}
                 placeholder="___"
@@ -96,6 +94,14 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
             isOpen={isOpen}
             closemodal={() => {
                 closemodal(false);
+                setValue({
+                    input1: "",
+                    input2: "",
+                    input3: "",
+                    input4: "",
+                    input5: "",
+                    input6: "",
+                });
             }}
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
@@ -123,14 +129,14 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                     </h3>
                     <div className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]">
                         <div className="w-[48%] sm:w-[44%] flex justify-between">
-                            {renderInputElements("input1", ref1)}
-                            {renderInputElements("input2", ref2)}
-                            {renderInputElements("input3", ref3)}
+                            {renderInputElements("input1", Value.input1, ref1)}
+                            {renderInputElements("input2", Value.input2, ref2)}
+                            {renderInputElements("input3", Value.input3, ref3)}
                         </div>
-                        <div className="w-[48%] sm:w-[44%] flex justify-between">
-                            {renderInputElements("input4", ref4)}
-                            {renderInputElements("input5", ref5)}
-                            {renderInputElements("input6", ref6)}
+                  <div className="w-[48%] sm:w-[44%] justify-between flex">
+                            {renderInputElements("input4", Value.input4, ref4)}
+                            {renderInputElements("input5", Value.input5, ref5)}
+                            {renderInputElements("input6", Value.input6, ref6)}
                         </div>
                     </div>
                     <span className="text-gray-500 font-extralight text-[10px] h:text-[14px] tracking-[2px]">
