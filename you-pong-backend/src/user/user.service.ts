@@ -1,4 +1,5 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { TfohDto } from 'src/auth/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -149,6 +150,7 @@ export class UserService {
                     hash: obj.hash,
                     lastname: obj.familyName,
                     firstname: obj.givenName,
+                    avatar: obj.avatar
                 }
             })
             return newUser;
@@ -180,5 +182,37 @@ export class UserService {
             });
 
         return {stats: true}
+    }
+
+    async setTfaSecret(secret: string, _id: string) {
+        try{
+            await this.prisma.user.update({
+                where: {
+                    id_user: _id,
+                },
+                data: {
+                    two_fact_auth: secret,
+                },
+            });
+        } catch (error){
+            throw new ForbiddenException(error);
+
+        }
+    }
+    
+    async setTfaStatus(_id: string, dto: TfohDto){
+        try
+        {
+                await this.prisma.user.update({
+                    where: {
+                        id_user: _id,
+                    },
+                    data: {
+                        tfaIsEnable: dto.tfoStatus,
+                    },
+                });        
+            } catch(error){
+                throw new ForbiddenException(error);
+        }
     }
 }
