@@ -31,7 +31,6 @@ const SignUp = (props: {
 
     //check regex if it is valid to post the email and pass to the data base
     useEffect(() => {
-        console.log("use effect");
         if (!isInvalidEmail && !isInvalidPass && isSubmited && !isInvalidConfirmPass) {
             console.log("valid input");
             const toSend: object = {

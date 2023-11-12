@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
+import axios from "axios";
 
 interface TwoFactorProps {
     isOpen: boolean;
@@ -27,6 +28,26 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
         input6: ""
     });
     const [key, setKey] = useState('')
+    const [isValid, setIsValid] = useState(false)
+    const rgx = /^\d+$/
+    let code = ""
+    
+    const handleSend = () =>{
+        code = Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6;
+        rgx.test(code) ? setIsValid(true) : setIsValid(false)
+        code.length === 6 ? setIsValid(true) : setIsValid(false)
+    }
+    
+    useEffect(() => {
+        const apiUrl = "http://localhost:4000/auth/twoFactorAuth/:id";
+        axios
+        .post(apiUrl, code)
+        .then((response: any) => {
+            console.log(response.data)
+        })
+        .catch((error) => (console.log(error)))
+    }, [isValid])
+
 
     function FocuseOn  (name: string, value: string){
 
@@ -84,10 +105,6 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
             />
         );
     };
-
-  
-    
-    
 
     return (
         <MyDialog
@@ -149,6 +166,7 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                             text="Send"
                             color="orange"
                             otherclass="max-w-[280px] w-[60%]"
+                            handleclick={handleSend}
                         />
                     </div>
                     <span className="sm:text-lg mt-2 text-[14px] lg:text-xl text-gray-500">
