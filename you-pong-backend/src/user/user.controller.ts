@@ -1,18 +1,11 @@
-import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards, HttpException, Delete } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { authenticate } from 'passport';
-import {
-  Body,
-  ConflictException,
-  HttpException,
-  HttpStatus,
-  Delete,
-  Put,
-} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from './user.service';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { TfohDto } from 'src/auth/dto';
+import { userDto } from './dto/user.create.dto';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -76,7 +69,6 @@ export class UserController {
       throw new HttpException('Failed to get users', 209);
     }
   }
-    constructor(private userService: UserService){}
     // NotFoundException(`user with id ${_id} not found`)
     @ApiCreatedResponse({description: "change the user's username"})
     @ApiConflictResponse({description: "Username already in use"})
