@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
 import { ChannelModule } from './chat/channel/channel.module';
 import { UserModule } from './user/user.module';
@@ -8,6 +6,10 @@ import { RoomModule } from './chat/room/room.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MessageModule } from './chat/message/message.module';
 import { SocketModule } from './socket/socket.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+
 
 @Module({
   imports: [
@@ -15,11 +17,11 @@ import { SocketModule } from './socket/socket.module';
     ChannelModule,
     RoomModule,
     MessageModule,
-    UserModule,
-    PrismaModule,
+   
+    PrismaModule, AuthModule, UserModule,
     SocketModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AuthController],
+  providers: [AuthService],
 })
 export class AppModule {}
