@@ -1,8 +1,9 @@
-import { Controller, Get, Headers, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { authenticate } from 'passport';
 import { UserService } from './user.service';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import { TfohDto } from 'src/auth/dto';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -17,13 +18,19 @@ export class UserController {
         return this.userService.updateUsername(id, newUsername);
     }
 
+    @Post("update/tfaStatus/:id")
+    updateTfaStatus(@Param('id') id: string, @Body() dto:TfohDto){
+        return 'hello';
+    }
+
     @Get('checkJwt')
     checkJwt(@Headers('Authorization') token: string){
         console.log(token);
     }
-    
+
+    @UseGuards(AuthGuard('jwt'))
     @Get('/me')
     getMe(){
         return {username: "adam", lastname: "abdo"}
-    }        
+    }
 }

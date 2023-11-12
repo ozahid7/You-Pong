@@ -50,7 +50,7 @@ export class AuthService
                 throw new ForbiddenException ('Id not found in database');
             const secret = authenticator.generateSecret();
             const optPathUrl = authenticator.keyuri(user.email, process.env.APP_NAME, secret);
-            await this.user.setTfa(secret, _id);
+            await this.user.setTfaSecret(secret, _id);
             return optPathUrl;
         }
         
@@ -63,7 +63,7 @@ export class AuthService
 
             try{
                 const valid =  authenticator.verify({
-                    token: dto.token,
+                    token: dto.newUsername,
                     secret: (await user).two_fact_auth
                 })
                 if (valid === false)

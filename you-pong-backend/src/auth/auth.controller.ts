@@ -18,19 +18,20 @@ export class AuthController {
         return this.authservice.localSignUp(dto)
     }
 
-    // @UseGuards(AuthGuard('jwt'))
-    @Post('/local/signin')
     @ApiCreatedResponse({description: "return object has access token 'jwt'"})
     @ApiForbiddenResponse({description: "Email not found in database"})
     @ApiUnauthorizedResponse({description: "Uncorrect password"})
     @ApiBearerAuth()
+   
+    @Post('/local/signin')
     localSignIn(@Body() dto:AuthDto){
         return this.authservice.localSignIn(dto)
     }
     
-    @Get('/42/callback')
     @ApiCreatedResponse({description: "create a new user with 42's profile info if user doesn't exist, otherwise logg into the game"})
     @ApiForbiddenResponse({description: "Email not found in database"})
+    
+    @Get('/42/callback')
     @UseGuards(AuthGuard('42'))
     ftCall(@Res() res: Response){
         res.redirect('/user/me');
@@ -39,6 +40,7 @@ export class AuthController {
     
     @ApiCreatedResponse({description: "Generates a QR code for TFA"})
     @ApiForbiddenResponse({description: "Id not found in database"})
+    
     @Get('/twoFactorAuth/:id')
     async twoFactorAuth(@Res() res: Response, @Param('id') id: string){
         const tfaInfo = await this.authservice.generateTfaSecret(id);
@@ -47,6 +49,7 @@ export class AuthController {
     
     @ApiCreatedResponse({description: "return an object has access toket 'jwt'"})
     @ApiForbiddenResponse({description: "Wrong id"})
+    
     @Post('/twoFactorAuth/:id')
     async validateTfo(@Body() dto:TfohDto, @Param('id') id:string) {
         return this.authservice.validateTfa(dto, id);

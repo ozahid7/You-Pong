@@ -15,8 +15,9 @@ export class isLoggedGuard implements CanActivate {
     const token = authHead.replace('Bearer ', '');    
     
     try {
-      jwt.verify(token, process.env.JWT_SECRET);
-      // return true;
+      const valid = jwt.verify(token, process.env.JWT_SECRET);
+      if (!valid) 
+        return true;
     } catch(error) {
         return true
     }
