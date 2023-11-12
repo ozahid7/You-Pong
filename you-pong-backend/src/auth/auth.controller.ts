@@ -26,13 +26,13 @@ export class AuthController {
         res.redirect('/user/me');
     }
 
-    @Post('/twoFactorAuth/:id')
+    @Get('/twoFactorAuth/:id')
     async twoFactorAuth(@Res() res: Response, @Param('id') id: string){
         const tfaInfo = await this.authservice.generateTfaSecret(id);
         return this.authservice.pipeQrCodeStream(res, tfaInfo);
     }
     
-    @Get('/twoFactorAuth/:id')
+    @Post('/twoFactorAuth/:id')
     async validateTfo(@Body() dto:TfohDto, @Param('id') id:string) {
         return this.authservice.validateTfa(dto, id);
     }

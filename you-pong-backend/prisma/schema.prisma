@@ -77,7 +77,7 @@ model User {
 	hash String?
 	email String @unique
 	two_fact_auth String?
-	jw_token String?
+	tfaIsEnable Boolean @default(false)
 	victory Int @default(0)
 	defeats Int @default(0)
 	level Float @default(0.0)

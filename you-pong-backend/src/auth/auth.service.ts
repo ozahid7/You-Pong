@@ -61,9 +61,17 @@ export class AuthService
         async validateTfa(dto: TfohDto, _id: string) {
             const user = this.user.finduserById(_id);
 
-            return authenticator.verify({
-                token: dto.token,
-                secret: (await user).two_fact_auth
-            })
+            try{
+                const valid =  authenticator.verify({
+                    token: dto.token,
+                    secret: (await user).two_fact_auth
+                })
+                if (valid === false)
+                    return ("ghalat");
+                if (valid === true)
+                    return "sa7iiii7"       
+            } catch (error) {
+                throw new ForbiddenException('wrong shit asshol')
+            }
         }
 }

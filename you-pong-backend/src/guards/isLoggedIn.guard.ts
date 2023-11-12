@@ -6,10 +6,10 @@ export class isLoggedGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
 
     const request = context.switchToHttp().getRequest();
-    const authHead = (await request.headers['authorization']);
+    const authHead = (await request.headers['Authorization']);
 
     if (!authHead) {
-      true;
+      return true;
     }
 
     const token = authHead.replace('Bearer ', '');    
