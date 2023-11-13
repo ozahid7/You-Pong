@@ -8,10 +8,14 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Tabs,
+  Tab,
+  Card,
+  CardBody,
 } from "@nextui-org/react";
 import Image from "next/image";
 import groups from "../../public/groups.svg";
-import { Background, Tabs, SwipeableTabs, MyInput, CustomButton } from "..";
+import { Background, MyInput, CustomButton } from "..";
 
 export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -40,7 +44,7 @@ export default function App() {
                   Create a group
                 </ModalHeader>
                 <ModalBody className="w-[60%]">
-                  <div className="flex justify-center items-center flex-col gap-3">
+                  <div className="flex justify-evenly items-center flex-col gap-3">
                     <Image
                       src={groups}
                       alt="groups"
@@ -58,86 +62,73 @@ export default function App() {
                         type="file"
                       />
                     </div>
-                    <div className="flex items-center flex-col justify-center debug">
+                    <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                       <Tabs
-                        value={value}
-                        onChange={(value) => {
-                          setValue(value);
-                        }}
-                        labels={[
-                          <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
-                            PUBLIC
-                          </div>,
-                          <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
-                            PRIVATE
-                          </div>,
-                          <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
-                            PROTECTED
-                          </div>,
-                        ]}
-                        indicator={{
-                          className: "flex bg-white items-center",
-                        }}
-                      ></Tabs>
+                        aria-label="Options"
+                        size="lg"
+                        radius="sm"
+                        className=" w-full h-fit flex justify-center"
+                      >
+                        <Tab
+                          key="public"
+                          title="PUBLIC"
+                          className="w-full"
+                        >
+                          <Card className="bg-[#D6E4E5] shadow-none">
+                            <CardBody>
+                              <MyInput
+                                text="Channel name"
+                                type="text"
+                                customclass="w-full h-[10px] self-center"
+                              ></MyInput>
+                            </CardBody>
+                          </Card>
+                        </Tab>
+                        <Tab
+                          key="private"
+                          title="PRIVATE"
+                          className="w-full"
+                        >
+                          <Card className="bg-[#D6E4E5] shadow-none">
+                            <CardBody className="gap-8">
+                              <MyInput
+                                text="Channel name"
+                                type="text"
+                                customclass="w-full h-[10px] self-center"
+                              ></MyInput>
+                            </CardBody>
+                          </Card>
+                        </Tab>
+                        <Tab
+                          key="protected"
+                          title="PROTECTED"
+                          className="w-full"
+                        >
+                          <Card className="bg-[#D6E4E5] shadow-none">
+                            <CardBody className="gap-8 bg">
+                              <MyInput
+                                text="Channel name"
+                                type="text"
+                                customclass="w-full h-[10px] self-center"
+                              ></MyInput>
+                              <MyInput
+                                text="Password"
+                                type="text"
+                                customclass="w-full h-[10px] self-center"
+                              ></MyInput>
+                              <MyInput
+                                text="Confirm Password"
+                                type="text"
+                                customclass="w-full h-[10px] self-center"
+                              ></MyInput>
+                            </CardBody>
+                          </Card>
+                        </Tab>
+                      </Tabs>
                     </div>
                   </div>
                 </ModalBody>
-                <div className="flex debug items-center justify-center">
-                  <SwipeableTabs
-                    value={value}
-                    className="flex h-[250px] w-[530px] flex-1 overflow-x-hidden justify-center items-center"
-                  >
-                    <div className="flex w-full h-full py-20">
-                      <MyInput
-                        text="Channel name"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                    </div>
-                    <div className="flex w-full h-full py-10 gap-6 flex-col">
-                      <MyInput
-                        text="Channel name"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                      <MyInput
-                        text="Password"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                      <MyInput
-                        text="Confirm password"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                    </div>
-                    <div className="flex w-full h-full py-10 gap-6 flex-col">
-                      <MyInput
-                        text="Channel name"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                      <MyInput
-                        text="Password"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                      <MyInput
-                        text="Confirm password"
-                        customclass=""
-                        type="text"
-                        isPassword={false}
-                      />
-                    </div>
-                  </SwipeableTabs>
-                </div>
-                <ModalFooter>
+                <ModalFooter >
                   {/* <Button
                     color="danger"
                     variant="light"
@@ -151,7 +142,7 @@ export default function App() {
                   >
                     Action
                   </Button> */}
-                  <div className="flex w-[300px] h-[70px]">
+                  <div className="flex w-[300px] h-[70px] debug">
                     <CustomButton
                       color="green"
                       text="CREATE"
