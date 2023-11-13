@@ -364,3 +364,20 @@
     }
  }
 
+
+
+
+ .cor {
+  position: relative;
+}
+
+.cor:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  position: absolute;
+  border-top: 30px solid white;
+  border-right: 30px solid black;
+  width: 0;
+}
