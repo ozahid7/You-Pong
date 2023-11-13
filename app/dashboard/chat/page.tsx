@@ -178,7 +178,7 @@ export default function GameSettings() {
                         <div>
                           <ChatDropdown
                             icon={LuMoreHorizontal}
-                            style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm"
+                            style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm hover:scale-110"
                             size={40}
                           ></ChatDropdown>
                         </div>

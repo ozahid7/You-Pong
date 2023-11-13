@@ -40,7 +40,12 @@ export default function App() {
           {(onClose) => (
             <Background>
               <>
-                <ModalHeader className="flex justify-center font-body text-[40px]">
+                <ModalHeader
+                  className="flex justify-center text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[40px] font-[700] leading-normal not-italic"
+                  style={{
+                    textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
+                  }}
+                >
                   Create a group
                 </ModalHeader>
                 <ModalBody className="w-[60%]">
@@ -72,14 +77,14 @@ export default function App() {
                         <Tab
                           key="public"
                           title="PUBLIC"
-                          className="w-full"
+                          className="w-full font-body"
                         >
                           <Card className="bg-[#D6E4E5] shadow-none">
                             <CardBody>
                               <MyInput
                                 text="Channel name"
                                 type="text"
-                                customclass="w-full h-[10px] self-center"
+                                customclass="w-full h-[3rem] self-center"
                               ></MyInput>
                             </CardBody>
                           </Card>
@@ -87,14 +92,14 @@ export default function App() {
                         <Tab
                           key="private"
                           title="PRIVATE"
-                          className="w-full"
+                          className="w-full font-body"
                         >
                           <Card className="bg-[#D6E4E5] shadow-none">
                             <CardBody className="gap-8">
                               <MyInput
                                 text="Channel name"
                                 type="text"
-                                customclass="w-full h-[10px] self-center"
+                                customclass="w-full h-[3rem] self-center"
                               ></MyInput>
                             </CardBody>
                           </Card>
@@ -102,24 +107,24 @@ export default function App() {
                         <Tab
                           key="protected"
                           title="PROTECTED"
-                          className="w-full"
+                          className="w-full font-body text-red-500"
                         >
                           <Card className="bg-[#D6E4E5] shadow-none">
                             <CardBody className="gap-8 bg">
                               <MyInput
                                 text="Channel name"
                                 type="text"
-                                customclass="w-full h-[10px] self-center"
+                                customclass="w-full h-[3rem] self-center"
                               ></MyInput>
                               <MyInput
                                 text="Password"
                                 type="text"
-                                customclass="w-full h-[10px] self-center"
+                                customclass="w-full h-[3rem] self-center"
                               ></MyInput>
                               <MyInput
                                 text="Confirm Password"
                                 type="text"
-                                customclass="w-full h-[10px] self-center"
+                                customclass="w-full h-[3rem] self-center"
                               ></MyInput>
                             </CardBody>
                           </Card>
@@ -128,7 +133,7 @@ export default function App() {
                     </div>
                   </div>
                 </ModalBody>
-                <ModalFooter >
+                <ModalFooter>
                   {/* <Button
                     color="danger"
                     variant="light"
@@ -142,7 +147,7 @@ export default function App() {
                   >
                     Action
                   </Button> */}
-                  <div className="flex w-[300px] h-[70px] debug">
+                  <div className="flex w-[300px] h-[70px]">
                     <CustomButton
                       color="green"
                       text="CREATE"
