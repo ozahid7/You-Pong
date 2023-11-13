@@ -2,19 +2,28 @@
 import {
   Background,
   MyContainer,
-  CustomButton,
   Tabs,
   SwipeableTabs,
   MiniChat,
   ChatDropdown,
+  MyDialog,
+  GroupsModal,
 } from "@/components";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import ozahid from "../../../public/ozahid-.jpeg";
 import logo from "../../../public/sidebarlogo.png";
-import { LuMoreHorizontal, LuSearch, LuSend } from "react-icons/lu";
+import { NextUIProvider } from "@nextui-org/react";
+import {
+  LuMoreHorizontal,
+  LuSearch,
+  LuSend,
+  LuUsers2,
+  LuUser,
+} from "react-icons/lu";
 
 export default function GameSettings() {
+  const divRef = useRef<HTMLDialogElement>(null);
   function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -26,6 +35,7 @@ export default function GameSettings() {
     return strTime;
   }
   const [value, setValue] = useState<number>(0);
+
   return (
     <div className="flex w-full h-[90%] justify-center items-center">
       <div className="flex w-[88%] h-[90%]">
@@ -33,7 +43,7 @@ export default function GameSettings() {
           <div className="flex w-full h-full min-h-[900px] flex-col py-5 ">
             <Background>
               <div className="w-[95%] h-full">
-                <div className="flex flex-row w-full h-full items-center ">
+                <div className="flex flex-row w-full h-full items-center">
                   {/* SIDE DIV */}
                   <div className="flex h-[90%] w-[45%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid">
                     {/* CHATS */}
@@ -47,7 +57,7 @@ export default function GameSettings() {
                         Chats
                       </h1>
                     </div>
-                    <div className="search_input_chat w-[94%] h-[10%] flex justify-center items-center ">
+                    <div className="search_input_chat w-[94%] h-[7%] flex justify-center items-center ">
                       <div className="center w-[97%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
                         <LuSearch className="h-7 w-7 text-[#9C9C9C]" />
                         <input
@@ -67,10 +77,12 @@ export default function GameSettings() {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center">
+                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
+                                <LuUser className="mt-1 text-[white]"></LuUser>
                                 DIRECT
                               </div>,
-                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center">
+                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
+                                <LuUsers2 className="mt-1 text-[white]"></LuUsers2>
                                 GROUPS
                               </div>,
                             ]}
@@ -135,6 +147,9 @@ export default function GameSettings() {
                                 image={logo}
                                 name="Group6"
                               />
+                              <NextUIProvider>
+                                <GroupsModal></GroupsModal>
+                              </NextUIProvider>
                             </div>
                           </SwipeableTabs>
                         </div>
@@ -162,15 +177,70 @@ export default function GameSettings() {
                         <div>
                           <ChatDropdown
                             icon={LuMoreHorizontal}
-                            style="text-palette-green border-[3px] border-palette-green"
+                            style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm"
                             size={40}
                           ></ChatDropdown>
                         </div>
                       </div>
                     </div>
-                    <div className="flex w-full h-[78%] flex-col">
+                    <div className="flex w-full h-[78%] flex-col justify-center items-center">
                       <div className="flex w-full h-[6%] justify-center items-center text-['Arimo'] text-[#686868] text-[16px] font-[400]">
                         Today {formatAMPM(new Date())}
+                      </div>
+                      {/*CHATS*/}
+                      <div className="flex w-[95%] h-[90%] flex-col flex-wrap gap-8 items-center justify-evenly">
+                        <div className="flex justify-start h-[15%] w-[90%]">
+                          <div
+                            className="flex w-[70%] h-full bg-[#EFF5F5] shadow-md items-center justify-center"
+                            style={{
+                              textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
+                            }}
+                          >
+                            <p className="flex shadow-none w-[90%] h-[90%] text-[#414141] font-['Arimo'] text-[18px] font-[400]">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex h-[15%] w-[90%] justify-end">
+                          <div
+                            className="flex w-[70%] h-full bg-[#497174] items-center justify-center shadow-md "
+                            style={{
+                              textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
+                            }}
+                          >
+                            <p className="w-[90%] h-[90%] shadow-none text-white font-['Arimo'] text-[18px] font-[400]">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry. Lorem Ipsum has been
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-start h-[15%] w-[90%]">
+                          <div
+                            className="flex w-[70%] h-full bg-[#EFF5F5] shadow-md items-center justify-center"
+                            style={{
+                              textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
+                            }}
+                          >
+                            <p className="w-[90%] h-[90%] shadow-none text-[#414141] font-['Arimo'] text-[18px] font-[400]">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex h-[15%] w-[90%] justify-end">
+                          <div
+                            className="flex w-[70%] h-full bg-[#497174] shadow-md items-center justify-center"
+                            style={{
+                              textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
+                            }}
+                          >
+                            <p className="w-[90%] h-[90%] shadow-none text-white font-['Arimo'] text-[18px] font-[400]">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry. Lorem Ipsum has been the
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-center self-center">

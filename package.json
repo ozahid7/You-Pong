@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@nextui-org/button": "^2.0.26",
+    "@nextui-org/react": "^2.2.9",
+    "@nextui-org/system": "^2.0.15",
+    "@nextui-org/theme": "^2.1.17",
     "@types/matter-js": "^0.19.4",
     "framer-motion": "^10.16.4",
     "matter-js": "^0.19.0",

@@ -8,7 +8,7 @@ interface Props {
 
 export function MiniChat({ image, name }: Props) {
   return (
-    <div className="flex w-[90%] h-[10%] rounded-md shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
+    <div className="flex w-[90%] h-[10%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
       <Image
         src={image}
         alt="ozahid"
