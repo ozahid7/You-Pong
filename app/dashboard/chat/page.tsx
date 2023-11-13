@@ -11,6 +11,7 @@ import {
 } from "@/components";
 import { useRef, useState } from "react";
 import Image from "next/image";
+{/*TEST */}
 import ozahid from "../../../public/ozahid-.jpeg";
 import logo from "../../../public/sidebarlogo.png";
 import { NextUIProvider } from "@nextui-org/react";
