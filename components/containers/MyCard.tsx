@@ -12,4 +12,4 @@ const MyCard = ({type}: {type?: string}) => {
   );
 }
 
-export default MyCard
+export default MyCard;

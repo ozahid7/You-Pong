@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { MyContainer } from "@/components";
+import { MyContainer, ScoreCard } from "@/components";
 import Matter from "matter-js";
-
-const shutTheFuckUp = true;
+import Image from "next/image";
+import ozahid from "../../../public/ozahid-.jpeg";
 
 export default function game() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -28,8 +28,8 @@ export default function game() {
       var engine = Engine.create({
         gravity: {
           x: 0,
-          y: 0
-        }
+          y: 0,
+        },
       });
 
       var render = Render.create({
@@ -52,7 +52,7 @@ export default function game() {
         mass: 15,
         force: {
           x: 0.3,
-          y: 0.3
+          y: 0.3,
         },
         render: {
           fillStyle: "white",
@@ -152,11 +152,47 @@ export default function game() {
     }
   }, []);
   return (
-    <div className="flex w-full h-[90%] justify-center items-center debug">
+    <div className="flex w-full h-[90%] justify-center items-center ">
       <div className="flex w-[88%] h-[90%]">
-        <MyContainer closeModal={() => shutTheFuckUp}>
-          <div className="flex flex-col w-full h-full">
-            <div className="flex w-full h-[8%]"></div>
+        <MyContainer>
+          <div className="flex flex-col w-full h-full gap-1">
+            <div className="flex w-full h-[8%]">
+              <ScoreCard>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={ozahid}
+                    className="w-[55px] h-[55px] border-white border-[2px]"
+                    alt="player"
+                  ></Image>
+                  <div className="text-white font-body font-[700] text-[30px]">
+                    <p>Ozahid-</p>
+                  </div>
+                </div>
+                <div className="w-[40%] h-full flex justify-center items-center ">
+                  <div className="w-[80%] h-[90%] flex flex-row justify-evenly items-center">
+                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
+                      1
+                    </div>
+                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
+                      :
+                    </div>
+                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
+                      2
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-white font-body font-[700] text-[30px]">
+                    <p>Ozahid-</p>
+                  </div>
+                  <Image
+                    src={ozahid}
+                    className="w-[55px] h-[55px] border-white border-[2px]"
+                    alt="player"
+                  ></Image>
+                </div>
+              </ScoreCard>
+            </div>
             <div
               ref={sceneRef}
               className="flex w-full h-full"

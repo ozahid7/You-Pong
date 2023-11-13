@@ -126,6 +126,26 @@
   background-repeat: no-repeat;
 }
 
+/* #################################My Score################################# */
+
+.my_score {
+  background: linear-gradient(225deg, transparent 7%, #3E595B 0) top right,
+    linear-gradient(0deg, transparent 0%, #3E595B 0) bottom right,
+    linear-gradient(135deg, transparent 7%, #3E595B 0) top left,
+    linear-gradient(0deg, transparent 0%, #3E595B 0) bottom left;
+  background-size: 55% 55%;
+  background-repeat: no-repeat;
+}
+
+.my_score .center {
+  background: linear-gradient(225deg, transparent 6%, #497174 0) top right,
+    linear-gradient(0deg, transparent 0, #497174 0) bottom right,
+    linear-gradient(135deg, transparent 6%, #497174 0) top left,
+    linear-gradient(0deg, transparent 0%, #497174 0) bottom left;
+  background-size: 60% 60%;
+  background-repeat: no-repeat;
+}
+
 /* ################################# My card one corner ################################# */
 
 .my_card_one_corner {
