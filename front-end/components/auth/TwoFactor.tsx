@@ -28,25 +28,31 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
         input6: ""
     });
     const [key, setKey] = useState('')
-    const [isValid, setIsValid] = useState(false)
+    const [IsInvalid, setIsInvalid] = useState(false)
+    const [IsSubmited, setIsSubmited] = useState(false)
     const rgx = /^\d+$/
     let code = ""
     
     const handleSend = () =>{
         code = Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6;
-        rgx.test(code) ? setIsValid(true) : setIsValid(false)
-        code.length === 6 ? setIsValid(true) : setIsValid(false)
+        !rgx.test(code) ? setIsInvalid(true) : setIsInvalid(false)
+        if(code.length !== 6)
+            setIsInvalid(true)
+        setIsSubmited(true)
     }
     
     useEffect(() => {
-        const apiUrl = "http://localhost:4000/auth/twoFactorAuth/:id";
-        axios
-        .post(apiUrl, code)
-        .then((response: any) => {
-            console.log(response.data)
-        })
-        .catch((error) => (console.log(error)))
-    }, [isValid])
+        if(IsSubmited && !IsInvalid){
+            const apiUrl = "http://localhost:4000/auth/twoFactorAuth/:id";
+            axios
+            .post(apiUrl, code)
+            .then((response: any) => {
+                console.log(response.data)
+            })
+            .catch((error) => (console.log(error)))
+        }
+        setIsSubmited(false)
+    }, [IsInvalid, IsSubmited])
 
 
     function FocuseOn  (name: string, value: string){
@@ -101,7 +107,9 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                 maxLength={1}
                 name={name}
                 placeholder="___"
-                className="outline-none border placeholder:text-center text-center text-lg  rounded-sm border-gray-500 w-[30%] max-w-[50px] h-[78%] h:h-[88%] sm:h-[94%] md:h-[96%] lg:h-[100%]"
+                className={`outline-none border ${
+                    IsInvalid ? " border-red-600 animate-shake" : " border-gray-500"
+                } placeholder:text-center text-center text-lg  rounded-sm w-[30%] max-w-[50px] h-[78%] h:h-[88%] sm:h-[94%] md:h-[96%] lg:h-[100%]`}
             />
         );
     };
@@ -119,6 +127,8 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                     input5: "",
                     input6: "",
                 });
+                setIsSubmited(false)
+                setIsInvalid(false)
             }}
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
@@ -144,7 +154,11 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                     <h3 className="font-bold text-sm md:text-[16px] text-palette-green">
                         +212 65*****71
                     </h3>
-                    <div className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]">
+                    <div onFocus={() => {
+                        setIsInvalid(false)
+                        setIsSubmited(false)
+                    }} 
+                    className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]">
                         <div className="w-[48%] sm:w-[44%] flex justify-between">
                             {renderInputElements("input1", Value.input1, ref1)}
                             {renderInputElements("input2", Value.input2, ref2)}
