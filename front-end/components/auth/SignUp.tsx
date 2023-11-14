@@ -78,12 +78,14 @@ const SignUp = (props: {
     return (
         <MyDialog
             isOpen={props.isOpen}
-            closemodal={()=>{
+            closemodal={() => {
                 props.closemodal(false);
-                setEmail('');
-                setPass('');} }
+                setEmail("");
+                setPass("");
+                setConfirmPass("");
+            }}
             withCorner={false}
-            customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[50%] w-[90%] s:w-[70%] h:min-h-[560px] min-h-[500px]"
+            customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] h:min-h-[560px] min-h-[500px]"
         >
             <div className="flex items-center flex-col h-full overflow-auto">
                 <div className="w-full flex justify-evenly items-end ">
@@ -97,11 +99,11 @@ const SignUp = (props: {
                     noValidate
                     onSubmit={handleSubmit}
                     action=""
-                    className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
+                    className="h:w-[90%] w-full h-[70%] flex flex-col items-center px-2"
                 >
                     <div
                         onFocus={handleFocus}
-                        className="w-[80%] flex flex-col items-center justify-around h-[46%]"
+                        className="w-[80%] pt-2 flex flex-col items-center justify-evenly h-[70%]"
                     >
                         <MyInput
                             text="Email"
@@ -138,20 +140,22 @@ const SignUp = (props: {
                             otherclass=""
                         />
                     </div>
-                    <div className="w-full flex justify-evenly items-end">
+                    <div className="w-full flex  pt-3 justify-evenly items-end">
                         <hr className="w-[30%] border border-palette-grey rounded-sm" />
                         <h2 className="text-gray-300 font-body text-xl sm:text-2xl md:text-3xl font-bold ">
                             OR
                         </h2>
                         <hr className="w-[30%] border border-palette-grey rounded-sm" />
                     </div>
-                    <Link
-                        href="/dashboard"
-                        className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px] mt-2 flex justify-center items-center"
-                    >
-                        <IntraButton type="" />
-                    </Link>
                 </form>
+                <form
+                    method="post"
+                    action="http://localhost:4000/auth/42callback"
+                    className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
+                >
+                    <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">
+                        <IntraButton type="" />
+                    </div>
                 <span className="text-sm md:text-md lg:text-xl text-gray-500">
                     Don’t have an account ?{" "}
                     <span
@@ -161,6 +165,7 @@ const SignUp = (props: {
                         Sign In
                     </span>{" "}
                 </span>
+                </form>
             </div>
         </MyDialog>
     );

@@ -77,7 +77,7 @@ const SignIn = (props: {
                 setPass("");
             }}
             withCorner={false}
-            customClass="absolute sm:h-[50%] sm:max-h-[520px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[540px] h-[40%] md:w-[50%] w-[90%] s:w-[70%] min-h-[500px]"
+            customClass="absolute sm:h-[50%] sm:max-h-[520px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[510px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] min-h-[500px]"
         >
             <div className="flex items-center flex-col h-full overflow-auto">
                 <div className="w-full flex justify-evenly items-end ">
@@ -90,12 +90,12 @@ const SignIn = (props: {
                 <form
                     action=""
                     noValidate
-                    className="h:w-[90%] w-full h-full flex flex-col justify-evenly items-center px-2"
+                    className="h:w-[90%] w-full h-[70%] flex flex-col justify-evenly items-center px-2"
                     onSubmit={handleSubmit}
                 >
                     <div
                         onFocus={handleFocus}
-                        className="w-[80%] flex flex-col items-center justify-around h-[34%]"
+                        className="w-[80%] flex flex-col items-center justify-around h-[50%]"
                     >
                         <MyInput
                             text="Email"
@@ -117,7 +117,7 @@ const SignIn = (props: {
                             message="Invalid Password"
                         />
                     </div>
-                    <div className="md:w-[79%] w-[80%] xl:w-full max-w-[340px] sm:h-[60px] flex justify-center items-center">
+                    <div className="md:w-[79%] w-[80%] xl:w-full max-w-[320px] sm:h-[60px] flex justify-center items-center">
                         <CustomButton
                             text="Sign In"
                             color="orange"
@@ -132,14 +132,16 @@ const SignIn = (props: {
                         </h2>
                         <hr className="w-[30%] border border-palette-grey rounded-sm" />
                     </div>
-                    <Link
-                        href="/dashboard"
-                        className="md:w-[79%] w-[80%] xl:w-full max-w-[340px]  sm:h-[60px] mt-2 flex justify-center items-center"
-                    >
-                        <IntraButton type="login" />
-                    </Link>
                 </form>
-                <span className="text-sm md:text-md mt-2 lg:text-xl text-gray-500">
+                <form
+                    method="post"
+                    action="http://localhost:4000/auth/42callback"
+                    className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
+                >
+                    <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">
+                        <IntraButton type="login" />
+                        </div>
+                <span className="text-[12px] sm:text-[14px] md:text-md mt-2 lg:text-xl text-gray-500">
                     Already have an account ?{" "}
                     <span
                         onClick={handleShowSignup}
@@ -148,6 +150,7 @@ const SignIn = (props: {
                         Sign Up
                     </span>{" "}
                 </span>
+                </form>
             </div>
         </MyDialog>
     );
