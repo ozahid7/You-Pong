@@ -31,12 +31,16 @@ export class AuthController {
     @ApiCreatedResponse({description: "create a new user with 42's profile info if user doesn't exist, otherwise logg into the game"})
     @ApiForbiddenResponse({description: "Email not found in database"})
     
+    @Get('/42')
+    @UseGuards(AuthGuard('42'))
+    ft42(@Res() res: Response){
+    }
+
     @Get('/42/callback')
     @UseGuards(AuthGuard('42'))
-    ftCall(@Res() res: Response){
-        res.redirect('/user/me');
+    ftCallBack(@Res() res: Response){
+        res.redirect('http://localhost:3000/');
     }
-    
     
     @ApiCreatedResponse({description: "Generates a QR code for TFA"})
     @ApiForbiddenResponse({description: "Id not found in database"})

@@ -28,8 +28,9 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
                 givenName: profile.name.givenName,
                 avatar: profile.photos[0].value
             });
+            return true;
         } else {
-            return this.auth.genToken(user.id_user)
+            return true;
         }
     }
 }
