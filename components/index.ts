@@ -21,6 +21,7 @@ import Tabs from "./tools/Tabs";
 import MiniChat from "./tools/MiniChat";
 import ChatDropdown from "./tools/ChatDropdown";
 import GroupsModal from "./tools/GroupsModal"
+import Chat from "./tools/Chat";
 
 export {
   NavBar,
@@ -46,4 +47,5 @@ export {
   MiniChat,
   ChatDropdown,
   GroupsModal,
+  Chat,
 };

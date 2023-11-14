@@ -1,12 +1,13 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
+import image from "../../public/ozahid-.jpeg"
+import { Chat } from "..";
 
 interface Props {
-  image: StaticImageData;
   name: string;
 }
 
-export function MiniChat({ image, name }: Props) {
+export function MiniChat({ name }: Props) {
   return (
     <div className="flex w-[90%] h-[10%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
       <Image
