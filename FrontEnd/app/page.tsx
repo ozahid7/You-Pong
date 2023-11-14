@@ -10,7 +10,7 @@ export default function Home() {
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
     const [showTwoFactor, setTwoFactor] = useState(false);
-
+    
     return (
         <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
             {/* top part */}

@@ -37,7 +37,7 @@ const SignUp = (props: {
                 email: email,
                 password: pass,
             };
-            const apiUrl = "http://localhost:4000/auth/local/signin";
+            const apiUrl = "http://localhost:4000/auth/local/signup";
             axios
                 .post(apiUrl, toSend)
                 .then((data: any) => {
@@ -70,8 +70,8 @@ const SignUp = (props: {
     };
 
     const handleShowSignIn = () => {
-        props.closemodal();
-        props.showSignIn();
+        props.closemodal(false);
+        props.showSignIn(true);
     };
 
     
@@ -149,12 +149,11 @@ const SignUp = (props: {
                     </div>
                 </form>
                 <form
-                    method="post"
-                    action="http://localhost:4000/auth/42callback"
+                    action="http://localhost:4000/auth/42/callback"
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">
-                        <IntraButton type="" />
+                        <IntraButton type=""  />
                     </div>
                 <span className="text-sm md:text-md lg:text-xl text-gray-500">
                     Don’t have an account ?{" "}

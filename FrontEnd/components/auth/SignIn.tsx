@@ -64,8 +64,8 @@ const SignIn = (props: {
 
     //show signup from sign in modal
     const handleShowSignup = () => {
-        props.closemodal();
-        props.showSignUp();
+        props.closemodal(false);
+        props.showSignUp(true);
     };
 
     return (
@@ -135,7 +135,7 @@ const SignIn = (props: {
                 </form>
                 <form
                     method="post"
-                    action="http://localhost:4000/auth/42callback"
+                    action="http://localhost:4000/auth/42/callback"
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">
