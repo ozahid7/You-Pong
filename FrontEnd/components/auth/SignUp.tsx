@@ -29,7 +29,6 @@ const SignUp = (props: {
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
 
-    //check regex if it is valid to post the email and pass to the data base
     useEffect(() => {
         if (!isInvalidEmail && !isInvalidPass && isSubmited && !isInvalidConfirmPass) {
             console.log("valid input");
@@ -149,7 +148,8 @@ const SignUp = (props: {
                     </div>
                 </form>
                 <form
-                    action="http://localhost:4000/auth/42/callback"
+                    method="post"
+                    action="http://localhost:4000/auth/42"
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">

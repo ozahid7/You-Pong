@@ -27,7 +27,7 @@ const MyInput = ({
     let [Icon, setIcon] = useState(false);
 
     const hideIcon = () => {
-        setIcon((Icon = !Icon));
+        setIcon(!Icon);
     };
 
     if (isPassword) {

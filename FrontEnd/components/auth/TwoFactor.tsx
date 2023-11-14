@@ -43,9 +43,12 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
     
     useEffect(() => {
         if(IsSubmited && !IsInvalid){
-            const apiUrl = "http://localhost:4000/auth/twoFactorAuth/:id";
+            const apiUrl =
+                "http://localhost:4000/auth/twoFactorAuth?id=0635007f-b80e-4b54-a85a-d0d4d903e5ec";
+            let adam = { newUsername: code, tfoStatus: true };
+
             axios
-            .post(apiUrl, code)
+            .post(apiUrl, adam)
             .then((response: any) => {
                 console.log(response.data)
             })

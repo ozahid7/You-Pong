@@ -13,7 +13,6 @@ interface MyDialogProps {
 }
 
 function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyDialogProps) {
-    console.log(isOpen)
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog

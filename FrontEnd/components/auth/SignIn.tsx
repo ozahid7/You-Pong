@@ -77,7 +77,7 @@ const SignIn = (props: {
                 setPass("");
             }}
             withCorner={false}
-            customClass="absolute sm:h-[50%] sm:max-h-[520px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[510px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] min-h-[500px]"
+            customClass="absolute sm:h-[50%] sm:max-h-[560px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[510px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] min-h-[500px]"
         >
             <div className="flex items-center flex-col h-full overflow-auto">
                 <div className="w-full flex justify-evenly items-end ">
@@ -95,7 +95,7 @@ const SignIn = (props: {
                 >
                     <div
                         onFocus={handleFocus}
-                        className="w-[80%] flex flex-col items-center justify-around h-[50%]"
+                        className="w-[80%] flex flex-col items-center justify-around h-[46%]"
                     >
                         <MyInput
                             text="Email"
@@ -122,7 +122,6 @@ const SignIn = (props: {
                             text="Sign In"
                             color="orange"
                             otherclass=""
-                            // handleclick={handleSubmit}
                         />
                     </div>
                     <div className="w-full flex justify-evenly items-end">
@@ -135,7 +134,7 @@ const SignIn = (props: {
                 </form>
                 <form
                     method="post"
-                    action="http://localhost:4000/auth/42/callback"
+                    action="http://localhost:4000/auth/42"
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">

@@ -64,6 +64,7 @@ const config: Config = {
                 nunito: ["Nunito"],
                 roboto: ["Roboto"],
                 teko: ["Teko"],
+                black: ["Black Han Sans"],
             },
             backgroundImage: {
                 background: "url('/background.png')",
