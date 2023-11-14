@@ -155,7 +155,7 @@ export default function game() {
     <div className="flex w-full h-[90%] justify-center items-center ">
       <div className="flex w-[88%] h-[90%]">
         <MyContainer>
-          <div className="flex flex-col w-full h-full gap-1">
+          <div className="flex flex-col w-full h-full">
             <div className="flex w-full h-[8%]">
               <ScoreCard>
                 <div className="flex items-center gap-2">
