@@ -6,8 +6,8 @@ import { RoomModule } from './chat/room/room.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MessageModule } from './chat/message/message.module';
 import { SocketModule } from './socket/socket.module';
-import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 
 

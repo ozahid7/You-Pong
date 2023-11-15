@@ -4,7 +4,7 @@ import { authenticate } from 'passport';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from './user.service';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
-import { TfohDto } from 'src/auth/dto';
+// import { TfohDto } from 'src/auth/dto';
 import { userDto } from './dto/user.create.dto';
 
 // @UseGuards(AuthGuard('jwt'))
@@ -78,17 +78,11 @@ export class UserController {
         return this.userService.updateUsername(id, newUsername);
     }
 
-    @Post("update/tfaStatus/:id")
-    updateTfaStatus(@Param('id') id: string, @Body() dto:TfohDto){
-        return 'hello';
-    }
-
     @Get('checkJwt')
     checkJwt(@Headers('Authorization') token: string){
         console.log(token);
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Get('/me')
     getMe(){
         return {username: "adam", lastname: "abdo"}
