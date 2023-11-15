@@ -26,3 +26,18 @@ export interface MyDropdownProps {
     icontype: string
     items: object
 }
+
+export enum channel_type {
+	PRIVATE,
+	PUBLIC,
+	PROTECTED,
+	DIRECT
+}
+
+export interface Channel {
+    name: string,
+    description: string,
+    avatar: string,
+    hash: string,
+    type: channel_type,  
+}

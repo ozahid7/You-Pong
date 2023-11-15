@@ -6,8 +6,8 @@ interface HomeProps {
   channels: Channel;
 }
 
-export function MiniChat({ channels }: HomeProps) {
-  if (channels.type != channel_type.DIRECT) return;
+export function MiniChatGroups({ channels }: HomeProps) {
+  if (channels.type == channel_type.DIRECT) return(<></>);
   return (
     <div className="flex w-[90%] h-[10%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
       <Image
@@ -27,4 +27,4 @@ export function MiniChat({ channels }: HomeProps) {
   );
 }
 
-export default MiniChat;
+export default MiniChatGroups;

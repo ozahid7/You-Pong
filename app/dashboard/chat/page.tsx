@@ -1,5 +1,5 @@
 "use client";
-import { FC, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -7,21 +7,17 @@ import {
   Tabs,
   SwipeableTabs,
   MiniChat,
+  MiniChatGroups,
   Heading,
   GroupsModal,
   Chat,
   SearchBar,
 } from "@/components";
-import { LuSearch, LuSend, LuUsers2, LuUser } from "react-icons/lu";
+import { LuUsers2, LuUser } from "react-icons/lu";
+import { DMList } from "./data";
+import { Channel } from "@/types";
 
-interface PageProps {
-  Params: {
-    chatId: string;
-  };
-}
-
-const GameSettings: FC<PageProps> = ({ Params }: PageProps) => {
-  const divRef = useRef<HTMLDialogElement>(null);
+const GameSettings = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
@@ -48,7 +44,6 @@ const GameSettings: FC<PageProps> = ({ Params }: PageProps) => {
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid">
                     <Heading text="Chats" />
                     <SearchBar />
-                    {/* THE CHATS DIVS AND TABS*/}
                     <div className="flex h-full w-full flex-row">
                       <div className="flex h-full w-full flex-col gap-5">
                         <div className="flex flex-row w-fit h-fit">
@@ -84,13 +79,9 @@ const GameSettings: FC<PageProps> = ({ Params }: PageProps) => {
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
-                                labels={[
-                                  <MiniChat name="User1" />,
-                                  <MiniChat name="User1" />,
-                                  <MiniChat name="User1" />,
-                                  <MiniChat name="User1" />,
-                                  <MiniChat name="User1" />,
-                                ]}
+                                labels={DMList.map((obj) => (
+                                  <MiniChat channels={obj}></MiniChat>
+                                ))}
                                 indicator={{
                                   className:
                                     "bg-palette-green self-center w-[250px]",
@@ -104,13 +95,11 @@ const GameSettings: FC<PageProps> = ({ Params }: PageProps) => {
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
-                                labels={[
-                                  <MiniChat name="Group1" />,
-                                  <MiniChat name="Group2" />,
-                                  <MiniChat name="Group2" />,
-                                  <MiniChat name="Group2" />,
-                                  <MiniChat name="Group2" />,
-                                ]}
+                                labels={DMList.map((obj) => (
+                                  <MiniChatGroups
+                                    channels={obj}
+                                  ></MiniChatGroups>
+                                ))}
                                 indicator={{
                                   className:
                                     "bg-palette-green self-center w-[250px]",
