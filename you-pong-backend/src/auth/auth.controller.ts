@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Req, Res,  } from "@nestjs/common"
+import { Body, Controller, ForbiddenException, Inject, Post, Req, Res } from "@nestjs/common"
 import { localDto } from "./dto"
 import { AuthService } from "./auth.service"
-import { Response } from "express"
+import { Request, Response } from "express"
 
 // @UseGuards(isLoggedGuard)
 @Controller('auth')
@@ -20,8 +20,17 @@ export class AuthController {
      */
     @Post('/local/signin')
     async localSignIn(@Res() res: Response, @Body() dto:localDto){
+        
         const tolken = await this.authservice.localSignIn(dto);
-        // res.cookie('access_token', tolken.access_token, {httpOnly: true, maxAge: 86400000})
-        return "hello world"
+        // if 2fa enable        
+        try{
+            res.clearCookie('access_token');    
+            res.cookie('access_token', 'tolken', {httpOnly: true, maxAge: 86400000})    
+        } catch(error){
+            throw new ForbiddenException('allo')
+        }
+        // if 2fa not enable
+        res.json({})
+        return true;
     }
 }

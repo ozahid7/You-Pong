@@ -1,9 +1,10 @@
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Res, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { localDto } from './dto';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService 
@@ -13,7 +14,7 @@ export class AuthService
 
     async genToken(id: string) {
         const payload = { sub: id };
-        return {access_token: await this.jwt.signAsync(payload, { expiresIn: '2h' })};
+        return  await this.jwt.signAsync(payload, { expiresIn: '2h' });
     }
 
     async localSignUp(dto: localDto) {
@@ -29,7 +30,6 @@ export class AuthService
     }
 
     async localSignIn(dto: localDto) {
-
         const user = await this.user.finduserByEmail(dto.email)
         if (!user)
             throw new ForbiddenException('Email not found in database');
@@ -38,6 +38,7 @@ export class AuthService
         if (!cmp)
             throw new UnauthorizedException('Uncorrect password');
         // create a jwt;
-        return this.genToken(user.id_user);
+        // return this.genToken(user.id_user);
+        return true
     }
 }

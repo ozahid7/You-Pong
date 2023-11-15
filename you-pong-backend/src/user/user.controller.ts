@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards, HttpException, Delete } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { authenticate } from 'passport';
+import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from './user.service';
 import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 // import { TfohDto } from 'src/auth/dto';
 import { userDto } from './dto/user.create.dto';
+import { Request } from 'express';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -84,7 +83,16 @@ export class UserController {
     }
 
     @Get('/me')
-    getMe(){
-        return {username: "adam", lastname: "abdo"}
+    async getMe(@Req() req: Request){
+      try{
+        const specificCookie = await req.cookies['access_token'];
+        console.log('Cookies:', specificCookie);
+      } catch(error){
+        throw new ForbiddenException('cookie not found')
+      }
+
+      // Print the cookies from the request object
+    
+      return {username: "adam", lastname: "abdo"}
     }
 }
