@@ -13,6 +13,7 @@ import MyDropdown from "./tools/MyDropdown";
 import Acheivement from "./containers/Acheivement";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
+import MiniBanner from "./tools/MiniBanner";
 import TwoFactor from "./auth/TwoFactor";
 
 export {
@@ -32,4 +33,5 @@ export {
     TwoFactor,
     SignUp,
     SignIn,
+    MiniBanner
 };
