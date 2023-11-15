@@ -1,4 +1,5 @@
 import React from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface MyCardProps {
     children: React.ReactNode
@@ -10,11 +11,14 @@ interface MyCardProps {
 const MyCard = ({children, type, otherclass, midleclass}: MyCardProps) => {
 
     
-    const customclass = type === undefined ? "my_card" : "my_card_one_corner";
+    const customclass = twMerge(  (type === undefined ? "my_card" : "my_card_one_corner ") +  " w-full p-[4px] sm:p-[6px] overflow-hidden z-10 min-w-[20px] min-h-[100px] max-w-[600px] h-[100%] max-h-[400px] flex justify-center items-center", otherclass);
+    const customclass1 = twMerge(
+        "center  overflow-hidden h-full flex justify-center items-center  w-full", midleclass
+    );
 
   return ( 
-      <div className={`${customclass} ${otherclass} w-full overflow-hidden z-10 min-w-[20px] min-h-[100px] max-w-[600px] h-[100%] max-h-[400px] flex justify-center items-center `}>
-          <div className={`${midleclass} center fold:w-[96%] fold:h-[97%] overflow-hidden h-[95%] s:w-[97%] sm:w-[97%] md:w-[98%] flex justify-center items-center  w-[92%] xl:h-[96%] xl:w-[98%] 2xl:[99%]`}>
+      <div className={`${customclass}`}>
+          <div className={`${customclass1} `}>
             {children}
           </div>
       </div>

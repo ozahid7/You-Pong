@@ -139,16 +139,16 @@ const SignIn = (props: {
                 >
                     <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">
                         <IntraButton type="login" />
-                        </div>
-                <span className="text-[12px] sm:text-[14px] md:text-md mt-2 lg:text-xl text-gray-500">
-                    Already have an account ?{" "}
-                    <span
-                        onClick={handleShowSignup}
-                        className="text-blue-500 text-sm md:text-md cursor-pointer lg:text-xl"
-                    >
-                        Sign Up
-                    </span>{" "}
-                </span>
+                    </div>
+                    <span className="text-[12px] sm:text-[14px] md:text-md mt-2 lg:text-xl text-gray-500">
+                        Already have an account ?{" "}
+                        <span
+                            onClick={handleShowSignup}
+                            className="text-blue-500 text-sm md:text-md cursor-pointer lg:text-xl"
+                        >
+                            Sign Up
+                        </span>{" "}
+                    </span>
                 </form>
             </div>
         </MyDialog>
