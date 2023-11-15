@@ -19,7 +19,6 @@ import Background from "./tools/Background";
 import SwipeableTabs from "./tools/SwipeableTabs";
 import Tabs from "./tools/Tabs";
 import MiniChat from "./tools/MiniChat";
-import MiniChatGroups from "./tools/MiniChatGroups";
 import ChatDropdown from "./tools/ChatDropdown";
 import GroupsModal from "./tools/GroupsModal"
 import Chat from "./tools/Chat";
@@ -53,5 +52,4 @@ export {
   Chat,
   Heading,
   SearchBar,
-  MiniChatGroups,
 };

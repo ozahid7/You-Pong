@@ -3,25 +3,26 @@ import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDropdown } from "@/components";
 import logo from "../../public/groups.svg"
+import { Channel } from "@/types";
 
-interface Props {
-	name: string,
+interface HomePage {
+	channels: Channel;
 }
 
-const Chat = ({name} : Props) => {
+const Chat = ({channels} : HomePage) => {
   return (
     <div className="flex h-[95%] w-full flex-col ">
       <div className="flex w-full h-[10%] justify-center">
         <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
           <div className="flex flex-row gap-3 items-center">
             <Image
-              src={logo}
+              src={channels.avatar}
               className="flex w-[50px] h-[50px] border-[white] border-[2px]"
               alt="image"
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px]">
-                {name}
+                {channels.name}
               </div>
               <div className="text-[#00993D] font-[500] text-[15px] font-['Estedad']">
                 online

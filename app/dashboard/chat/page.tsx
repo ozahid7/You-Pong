@@ -1,13 +1,12 @@
 "use client";
 import { useRef, useState } from "react";
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider, divider } from "@nextui-org/react";
 import {
   Background,
   MyContainer,
   Tabs,
   SwipeableTabs,
   MiniChat,
-  MiniChatGroups,
   Heading,
   GroupsModal,
   Chat,
@@ -15,7 +14,7 @@ import {
 } from "@/components";
 import { LuUsers2, LuUser } from "react-icons/lu";
 import { DMList } from "./data";
-import { Channel } from "@/types";
+import { Channel, channel_type } from "@/types";
 
 const GameSettings = () => {
   const [value, setValue] = useState<number>(0);
@@ -79,7 +78,9 @@ const GameSettings = () => {
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
-                                labels={DMList.map((obj) => (
+                                labels={DMList.filter(
+                                  (obj) => obj.type === channel_type.DIRECT
+                                ).map((obj, i) => (
                                   <MiniChat channels={obj}></MiniChat>
                                 ))}
                                 indicator={{
@@ -95,10 +96,10 @@ const GameSettings = () => {
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
-                                labels={DMList.map((obj) => (
-                                  <MiniChatGroups
-                                    channels={obj}
-                                  ></MiniChatGroups>
+                                labels={DMList.filter(
+                                  (obj) => obj.type !== channel_type.DIRECT
+                                ).map((obj, i) => (
+                                  <MiniChat channels={obj}></MiniChat>
                                 ))}
                                 indicator={{
                                   className:
@@ -119,20 +120,22 @@ const GameSettings = () => {
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      <Chat name="group1"></Chat>
-                      <Chat name="group2"></Chat>
-                      <Chat name="group2"></Chat>
-                      <Chat name="group2"></Chat>
+                      {DMList.filter(
+                        (obj) => obj.type !== channel_type.DIRECT
+                      ).map((obj, i) => (
+                        <Chat channels={obj} key={i}></Chat>
+                      ))}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      <Chat name="user1"></Chat>
-                      <Chat name="user2"></Chat>
-                      <Chat name="user2"></Chat>
-                      <Chat name="user2"></Chat>
+                      {DMList.filter(
+                        (obj) => obj.type === channel_type.DIRECT
+                      ).map((obj, i) => (
+                        <Chat channels={obj} key={i}></Chat>
+                      ))}
                     </SwipeableTabs>
                   )}
                 </div>
