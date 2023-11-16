@@ -42,13 +42,13 @@ const PlayerCard = () => {
                             <ImUserMinus
                                 onClick={hideIcon}
                                 size={120}
-                                className="z-10 h-[20%] w-[20%] s:h-[16%] s:w-[16%] absolute sm:bottom-6 sm:right-2 bottom-3 right-3  hidden h:flex text-cardtitle cursor-pointer"
+                                className="z-10 h-[20%] w-[20%] s:h-[16%] s:w-[16%] absolute sm:bottom-6 sm:right-2 bottom-3 right-3  text-cardtitle cursor-pointer"
                             />
                         ) : (
                             <ImUserPlus
                                 onClick={hideIcon}
-                                size={30}
-                                className="z-10 h-[20%] w-[20%] s:h-[16%] s:w-[16%] absolute sm:bottom-6 sm:right-2 h:flex hidden bottom-3 right-3  text-cardtitle cursor-pointer"
+                                size={120}
+                                className="z-10 h-[14%] w-[14%] s:h-[16%] s:w-[16%] absolute h:bottom-6 h:right-2 bottom-4 right-1  text-cardtitle cursor-pointer"
                             />
                         )}
                         <div className="sm:w-[86%] h-[78%] w-full flex flex-col justify-evenly space-y-1 relative">
@@ -73,7 +73,7 @@ const PlayerCard = () => {
                             <h2 className="font-extrabold font-black text-2xl h:text-3xl sm:text-4xl md:text-5xl text-cardtitle drop-shadow">
                                 OZAHID-
                             </h2>
-                            <div className="flex flex-col justify-between h-auto space-y-3 overflow-hidden w-[80%] sm:w-[90%]">
+                            <div className="flex flex-col justify-between h-auto space-y-3 w-[80%] sm:w-[90%]">
                                 <MiniBanner
                                     isGreen={true}
                                     value="69,7"

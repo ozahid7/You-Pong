@@ -23,7 +23,6 @@ const CustomButton = ({
         otherclass
     );
             
-    console.log(customclass)
     return (
         <button
             type={btnType}

@@ -7,6 +7,13 @@
   @apply select-none;
 }
 
+.container {
+  position: relative;
+  margin: auto;
+  height: 50vh;
+  width: 50vw;
+}
+
 .dblue{
   @apply border-blue-700;
 }
