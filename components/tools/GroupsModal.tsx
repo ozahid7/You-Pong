@@ -16,31 +16,53 @@ import {
 import Image from "next/image";
 import groups from "../../public/groups.svg";
 import { MyInput, Background, Submit } from "..";
-import { string } from "prop-types";
+import { Channel } from "@/types";
+import { setData } from "@/app/dashboard/chat/data/api";
 
-interface dataObjType {
-  type : string,
-  name : string
-}
-var setDataObj : dataObjType = {
+export var setDataObj: Channel = {
   type: "PUBLIC",
   name: "Channel",
+  description: "Change this description",
+  avatar: groups,
 };
 
 export default function GroupsModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selected, setSelected] = useState<string>("PUBLIC");
-  const inputRef = useRef<HTMLInputElement>(null);
-  
+  const nameRef = useRef<HTMLInputElement>(null);
+  const descRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+  const passConfRef = useRef<HTMLInputElement>(null);
+
   const CreateGroupDATA = () => {
-    setDataObj.name = inputRef.current.value;
-    if (inputRef.current.value){
-      // SEND DATA TO HAMID
-      console.log(setDataObj);
-      inputRef.current.value = null;
+    setDataObj.name = nameRef.current.value;
+    if (nameRef.current.value) {
+      if (descRef.current.value) setDataObj.description = descRef.current.value;
+      if (setDataObj.type == "PROTECTED") {
+        if (
+          passRef.current.value &&
+          passConfRef.current.value === passRef.current.value
+        )
+          setDataObj.hash = passRef.current.value;
+        else setDataObj.hash = null;
+      }
+      if (
+        (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
+        setDataObj.type != "PROTECTED"
+      ) {
+        console.log(setDataObj);
+        setData(setDataObj);
+        // SEND DATA TO HAMID RIGHT HERE
+      }
+      descRef.current.value = null;
+      setDataObj.description = "Change this description";
+      nameRef.current.value = null;
+      if (setDataObj.type == "PROTECTED") {
+        passRef.current.value = null;
+        passConfRef.current.value = null;
+      }
     }
-    
-  }
+  };
 
   const handleSelectionChange = (newSelection: string) => {
     setSelected(newSelection);
@@ -108,13 +130,18 @@ export default function GroupsModal() {
                         className="w-full font-body"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody>
+                          <CardBody className="gap-6">
                             <MyInput
-                              ref={inputRef}
+                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                              required={true}
+                            ></MyInput>
+                            <MyInput
+                              ref={descRef}
+                              text="Channel Description"
+                              type="text"
+                              customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                           </CardBody>
                         </Card>
@@ -125,13 +152,18 @@ export default function GroupsModal() {
                         className="w-full font-body"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-8">
+                          <CardBody className="gap-6">
                             <MyInput
-                              ref={inputRef}
+                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                              required
+                            ></MyInput>
+                            <MyInput
+                              ref={descRef}
+                              text="Channel Description"
+                              type="text"
+                              customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                           </CardBody>
                         </Card>
@@ -142,22 +174,29 @@ export default function GroupsModal() {
                         className="w-full font-body text-red-500"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-8 bg">
+                          <CardBody className="gap-6 bg">
                             <MyInput
-                              ref={inputRef}
+                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                              required
                             ></MyInput>
                             <MyInput
-                              text="Password"
+                              ref={descRef}
+                              text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
+                              ref={passRef}
+                              text="Password"
+                              type="password"
+                              customclass="w-full h-[3rem] self-center"
+                            ></MyInput>
+                            <MyInput
+                              ref={passConfRef}
                               text="Confirm Password"
-                              type="text"
+                              type="password"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                           </CardBody>

@@ -66,11 +66,11 @@ const Chats = () => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
+                              <div className="flex font-[500] text-[14px] w-fit h-fit text-[#686868] font-archivo lg:text-[20px] self-center gap-1">
                                 <LuUser className="mt-1 text-[white]" />
                                 DIRECT
                               </div>,
-                              <div className="flex font-[500] w-fit h-fit text-[#686868] font-archivo text-[20px] self-center gap-1">
+                              <div className="flex font-[500] text-[14px] w-fit h-fit text-[#686868] font-archivo lg:text-[20px] self-center gap-1">
                                 <LuUsers2 className="mt-1 text-[white]" />
                                 GROUPS
                               </div>,
@@ -88,7 +88,7 @@ const Chats = () => {
                             <div className="flex w-full h-full justify-start items-center flex-col">
                               <Tabs
                                 value={valueDirect}
-                                className="flex flex-col overflow-auto w-full "
+                                className="flex flex-col overflow-auto lg:w-full w-[170px]"
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}

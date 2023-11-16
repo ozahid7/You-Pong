@@ -17,7 +17,7 @@ const Chat = ({channels} : HomePage) => {
         <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
           <div className="flex flex-row gap-3 items-center">
             <Image
-              src={hamid}
+              src={logo}
               className="flex w-[50px] h-[50px] border-[white] border-[2px]"
               alt="image"
             />
