@@ -20,9 +20,9 @@ export class MessageController {
 
   //POST MANY
   @Post()
-  async postMessages(@Body() message: messageDto[]) {
+  async postMessages(@Body() id_room: string, message: messageDto[]) {
     try {
-      const result = await this.messageService.postMessages(message);
+      const result = await this.messageService.postMessages(id_room, message);
       return result;
     } catch (error) {
       throw new HttpException('Failed to create messages', 403);
@@ -30,9 +30,9 @@ export class MessageController {
   }
   //POST
   @Post()
-  async postMessage(@Body() message: messageDto) {
+  async postMessage(@Body() id_room: string, message: messageDto) {
     try {
-      const result = await this.messageService.postMessage(message);
+      const result = await this.messageService.postMessage(id_room,message);
       return result;
     } catch (error) {
       throw new HttpException('Failed to create a message', 403);

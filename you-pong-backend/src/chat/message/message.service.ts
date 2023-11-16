@@ -39,10 +39,10 @@ export class MessageService {
   }
 
   //POST MANY
-  async postMessages(messages: messageDto[]) {
+  async postMessages(id_room: string, messages: messageDto[]) {
     const data = messages.map((message) => ({
       content: message.content,
-      id_room: message.id_room.id_room,
+      id_room: id_room,
     }));
     if (!data) return 'no data to add !';
     const result = await this.prisma.message.createMany({
@@ -53,11 +53,11 @@ export class MessageService {
   }
 
   //POST
-  async postMessage(message: messageDto) {
+  async postMessage(id_room: string, message: messageDto) {
     const result = await this.prisma.message.create({
       data: {
         content: message.content,
-        id_room: message.id_room.id_room,
+        id_room: id_room,
       },
     });
     return result;

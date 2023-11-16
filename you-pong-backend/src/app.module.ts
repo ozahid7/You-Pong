@@ -9,7 +9,7 @@ import { SocketModule } from './socket/socket.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
-
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -17,9 +17,11 @@ import { AuthService } from './auth/auth.service';
     ChannelModule,
     RoomModule,
     MessageModule,
-   
-    PrismaModule, AuthModule, UserModule,
+    PrismaModule,
+    AuthModule,
+    UserModule,
     SocketModule,
+    UploadModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
