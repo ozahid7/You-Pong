@@ -5,6 +5,7 @@ import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@n
 // import { TfohDto } from 'src/auth/dto';
 import { userDto } from './dto/user.create.dto';
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -68,31 +69,12 @@ export class UserController {
       throw new HttpException('Failed to get users', 209);
     }
   }
-    // NotFoundException(`user with id ${_id} not found`)
-    @ApiCreatedResponse({description: "change the user's username"})
-    @ApiConflictResponse({description: "Username already in use"})
-    @ApiNotFoundResponse({description: "user with id 'id' not found"})
-    @Patch('update/username/:id/:newUsername')
-    updateUsername(@Param('id') id: string, @Param('newUsername') newUsername: string) {
-        return this.userService.updateUsername(id, newUsername);
-    }
 
-    @Get('checkJwt')
-    checkJwt(@Headers('Authorization') token: string){
-        console.log(token);
-    }
-
+    @UseGuards(AuthGuard('jwt'))
     @Get('/me')
     async getMe(@Req() req: Request){
-      try{
-        const specificCookie = await req.cookies['access_token'];
-        console.log('Cookies:', specificCookie);
-      } catch(error){
-        throw new ForbiddenException('cookie not found')
-      }
-
-      // Print the cookies from the request object
-    
+      console.log(await req.cookies['access_token']);
+      
       return {username: "adam", lastname: "abdo"}
     }
 }

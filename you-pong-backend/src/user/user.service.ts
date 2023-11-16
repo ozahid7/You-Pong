@@ -161,57 +161,31 @@ export class UserService {
         }
     }
 
-    // update username;
-    async updateUsername(_id: string, newUser: string){
-        const user = await this.finduserById(_id);
-        if (user){
-            if (await this.finduserByUserName(newUser)) 
-                throw new ConflictException('Username already in use');
-        }
-        else
-            throw new NotFoundException(`user with id ${_id} not found`);
-        
-        await this.prisma.user.update({
-                where: {
-                    id_user: _id,
-                },
-                data: {
-                    username: newUser,
-                },
-            });
-
-        return {stats: true}
+    async getTfaStatus(_email: string){
+    	const user = this.finduserByEmail(_email)
+    	if (!user)
+    	  throw new ForbiddenException('user not found');
+    	try {
+    	  return (await user).tfaIsEnable;
+    	} catch (error) {
+    	  throw new NotFoundException(error)
+    	}
     }
 
-    async setTfaSecret(secret: string, _id: string) {
-        try{
+    async setTfaStatus(_id: string, status: boolean) {
+        try
+        {
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
                 },
                 data: {
-                    two_fact_auth: secret,
+                    tfaIsEnable: status,
                 },
-            });
-        } catch (error){
-            throw new ForbiddenException(error);
-
+            }
+			);        
+		} catch(error){
+                throw new ForbiddenException(error);
         }
     }
-    
-//     async setTfaStatus(_id: string, dto: TfohDto){
-//         try
-//         {
-//                 await this.prisma.user.update({
-//                     where: {
-//                         id_user: _id,
-//                     },
-//                     data: {
-//                         tfaIsEnable: dto.tfoStatus,
-//                     },
-//                 });        
-//             } catch(error){
-//                 throw new ForbiddenException(error);
-//         }
-//     }
 }

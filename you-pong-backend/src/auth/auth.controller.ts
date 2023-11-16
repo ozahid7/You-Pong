@@ -20,17 +20,11 @@ export class AuthController {
      */
     @Post('/local/signin')
     async localSignIn(@Res() res: Response, @Body() dto:localDto){
-        
-        const tolken = await this.authservice.localSignIn(dto);
-        // if 2fa enable        
-        try{
-            res.clearCookie('access_token');    
-            res.cookie('access_token', 'tolken', {httpOnly: true, maxAge: 86400000})    
-        } catch(error){
-            throw new ForbiddenException('allo')
-        }
-        // if 2fa not enable
-        res.json({})
-        return true;
+        await this.authservice.localSignIn(res, dto);
+    }
+
+    @Post('signout')
+    async signout(@Res() res: Response){
+        await this.authservice.signout(res);
     }
 }
