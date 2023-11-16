@@ -1,6 +1,7 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {  ForbiddenException, Injectable, NotFoundException, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDto } from './dto/user.create.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class UserService {
@@ -172,20 +173,43 @@ export class UserService {
     	}
     }
 
-    async setTfaStatus(_id: string, status: boolean) {
-        try
-        {
+    async switchTfaStatus(_id: string) {
+        try{
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
                 },
                 data: {
-                    tfaIsEnable: status,
+                    tfaIsEnable: !(await this.getTfaStatus((await this.finduserById(_id)).email)),
                 },
             }
 			);        
 		} catch(error){
-                throw new ForbiddenException(error);
+          throw new ForbiddenException(error);
         }
     }
+
+    async setTfaSecret(secret: string, _id: string) {
+      try {
+          await this.prisma.user.update({
+              where: {
+                  id_user: _id,
+              },
+              data: {
+                  two_fact_auth: secret,
+              },
+          });
+      } catch (error){
+          throw new ForbiddenException(error);
+      }
+  }
+
+    async signout(@Res() res: Response){
+    	try {
+			res.clearCookie('access_token');
+			res.status(200).json({})
+    	} catch(error) {
+			  throw new ForbiddenException(error);
+    	}
+	}
 }

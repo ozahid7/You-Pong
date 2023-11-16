@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Headers, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from './user.service';
-import { ApiConflictResponse, ApiCreatedResponse, ApiNotFoundResponse } from '@nestjs/swagger';
-// import { TfohDto } from 'src/auth/dto';
 import { userDto } from './dto/user.create.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { authorize } from 'passport';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -76,5 +75,16 @@ export class UserController {
       console.log(await req.cookies['access_token']);
       
       return {username: "adam", lastname: "abdo"}
+    }
+
+    @Post('signout')
+    async signout(@Res() res: Response){
+        await this.userService.signout(res);
+    }
+
+    @Post('/set')
+    @UseGuards(AuthGuard('tfa'))
+    async set(@Req() req: Request){
+      console.log(await req.user);
     }
 }
