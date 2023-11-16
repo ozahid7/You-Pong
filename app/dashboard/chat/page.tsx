@@ -1,6 +1,6 @@
 "use client";
-import { useRef, useState } from "react";
-import { NextUIProvider, divider } from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
   MyContainer,
@@ -13,13 +13,27 @@ import {
   SearchBar,
 } from "@/components";
 import { LuUsers2, LuUser } from "react-icons/lu";
-import { DMList } from "./data";
-import { Channel, channel_type } from "@/types";
+import { Channel } from "@/types";
+import { getData } from "./data/api";
 
-const GameSettings = () => {
+const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
+  const [channel, setChannel] = useState<Channel[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getData();
+        setChannel(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   function formatAMPM(date) {
     var hours = date.getHours();
@@ -74,18 +88,20 @@ const GameSettings = () => {
                             <div className="flex w-full h-full justify-start items-center flex-col">
                               <Tabs
                                 value={valueDirect}
-                                className="flex flex-col overflow-auto"
+                                className="flex flex-col overflow-auto w-full "
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
-                                labels={DMList.filter(
-                                  (obj) => obj.type === channel_type.DIRECT
-                                ).map((obj, i) => (
-                                  <MiniChat channels={obj}></MiniChat>
-                                ))}
+                                labels={channel &&(channel
+                                  .filter(
+                                    (obj: any) => (obj.type === "DIRECT")
+                                  )
+                                  .map((obj : any, i) => (
+                                    <MiniChat channels={obj}></MiniChat>
+                                  )))}
                                 indicator={{
                                   className:
-                                    "bg-palette-green self-center w-[250px]",
+                                    "bg-palette-green self-center ml-3 w-[50px]",
                                 }}
                               ></Tabs>
                             </div>
@@ -96,14 +112,16 @@ const GameSettings = () => {
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
-                                labels={DMList.filter(
-                                  (obj) => obj.type !== channel_type.DIRECT
-                                ).map((obj, i) => (
-                                  <MiniChat channels={obj}></MiniChat>
-                                ))}
+                                labels={channel &&(channel
+                                  .filter(
+                                    (obj: any) => (obj.type !== "DIRECT")
+                                  )
+                                  .map((obj : any, i) => (
+                                    <MiniChat channels={obj}></MiniChat>
+                                  )))}
                                 indicator={{
                                   className:
-                                    "bg-palette-green self-center w-[250px]",
+                                    "bg-palette-green self-center ml-3 w-[50px]",
                                 }}
                               ></Tabs>
                               <NextUIProvider>
@@ -120,22 +138,28 @@ const GameSettings = () => {
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {DMList.filter(
-                        (obj) => obj.type !== channel_type.DIRECT
+                      {channel && (channel.filter(
+                        (obj) => obj.type !== "DIRECT"
                       ).map((obj, i) => (
-                        <Chat channels={obj} key={i}></Chat>
-                      ))}
+                        <Chat
+                          channels={obj}
+                          key={i}
+                        ></Chat>
+                      )))}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {DMList.filter(
-                        (obj) => obj.type === channel_type.DIRECT
+                      {channel && (channel.filter(
+                        (obj) => obj.type === "DIRECT"
                       ).map((obj, i) => (
-                        <Chat channels={obj} key={i}></Chat>
-                      ))}
+                        <Chat
+                          channels={obj}
+                          key={i}
+                        ></Chat>
+                      )))}
                     </SwipeableTabs>
                   )}
                 </div>
@@ -148,4 +172,4 @@ const GameSettings = () => {
   );
 };
 
-export default GameSettings;
+export default Chats;

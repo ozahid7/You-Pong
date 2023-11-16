@@ -24,6 +24,7 @@ import GroupsModal from "./tools/GroupsModal"
 import Chat from "./tools/Chat";
 import Heading from "./tools/Heading"
 import SearchBar from "./tools/SearchBar";
+import Submit from "./tools/Submit";
 
 export {
   NavBar,
@@ -52,4 +53,5 @@ export {
   Chat,
   Heading,
   SearchBar,
+  Submit,
 };

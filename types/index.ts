@@ -39,5 +39,5 @@ export interface Channel {
     description: string,
     avatar: string,
     hash: string,
-    type: channel_type,  
+    type: string,  
 }

@@ -39,7 +39,7 @@ function Tabs({
       {(labels || [])?.map((l, index) => {
         return (
           <button
-            className="label relative"
+            className="label relative w-full"
             key={index}
             onClick={() => {
               onChange(index);
