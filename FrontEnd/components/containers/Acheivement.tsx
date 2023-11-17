@@ -22,14 +22,14 @@ const Acheivement = ({
             <div
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={description}
-                className="dred w-[60%] aspect-1"
+                className="dred w-[60%] aspect-1 md:min-h-[170px] min-h-[150px] min-w-[160px]"
             >
 
 
-                <section className="w-full h-full  overflow-hidden make_center bg-palette-green rounded-t-md relative">
-                    <div className="h-auto  w-auto absolute top-0 h:top-2 right-2 md:top-3 md:right-3">
+                <section className="w-full h-[74%] overflow-hidden make_center bg-palette-green rounded-t-md relative">
+                    <div className="h-auto  w-auto absolute top-2 right-0">
                         <LuUnlock
-                            size={25}
+                            size={20}
                             className={`${
                                 isOpened
                                     ? "w-2 xs:w-3 h:w-6 sm:w-10 text-white"
@@ -46,7 +46,7 @@ const Acheivement = ({
                     >
                         <LuLock
                             size={100}
-                            className=" text-white w-10 sm:w-20 drop-shadow-xl "
+                            className=" text-white  w-10 sm:w-20 drop-shadow-xl "
                         />
                     </div>
                     <Image
@@ -54,11 +54,11 @@ const Acheivement = ({
                         alt="badge"
                         height={200}
                         width={200}
-                        className="object-contain absolute aspect-square w-[60%]"
+                        className="object-contain absolute w-[50%]"
                     />
                 </section>
                 <section className="make_center w-full h-[26%] dred bg-palette-orange rounded-b-md px-1">
-                    <span className="text-white font-body font-bold text-lg sm:text-2xl">
+                    <span className="text-white font-body font-bold drop-shadow-lg md:text-xl">
                         {text}
                     </span>
                 </section>

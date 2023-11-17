@@ -18,18 +18,18 @@ const PlayerCard = () => {
     };
 
     return (
-        <div className="flex justify-center w-[90%] overflow-hidden min-h-[180px] h:min-h-[210px] h-[16%] md:h-[24%] h:h-[20%]">
+        <div className="flex justify-center w-[90%] overflow-hidden min-h-[180px] h:min-h-[210px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
-                <div className="w-full  justify-between flex h-full">
-                    <div className="sm:w-[40%] w-[34%] pb-2 h:pb-0 flex sm:py-2  flex-col justify-around items-center h-full">
-                        <h3 className=" whitespace-nowrap text-cardtitle pl-4  text-[12px] h:left-6 sm:left-8 md:top-4 md:left-8 h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                <div className="w-full relative justify-between items-center flex h-full">
+                        <h3 className=" whitespace-nowrap absolute top-2 left-5    text-cardtitle  text-[12px] h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
                             Player Card
                         </h3>
-                        <div className="w-[80%] h:w-[70%] min-h-[80px] aspect-square sm:w-[60%] md:w-[70%] overflow-hidden rounded-md">
+                    <div className="sm:w-[40%] w-[34%] md:pt-4 flex flex-col justify-end items-center h-[60%] md:h-[70%] lg:h-[80%]">
+                        <div className="w-[90%] min-h-[70px] max-w-[180px] aspect-1  overflow-hidden rounded-md">
                             <img
                                 src="/ozahid-.jpeg"
                                 alt="image"
-                                className="object-cover aspect-square h-full border-2 border-palette-white w-full"
+                                className="object-cover aspect-1 h-full border-2 border-palette-white w-full"
                             />
                         </div>
                     </div>
