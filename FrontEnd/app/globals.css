@@ -7,11 +7,16 @@
   @apply select-none;
 }
 
+
 .container {
   position: relative;
   margin: auto;
   height: 50vh;
   width: 50vw;
+}
+
+.scrol{
+  @apply scrollbar-thin scrollbar-track-[#ADCDCF] scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
 }
 
 .dblue{

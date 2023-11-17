@@ -13,6 +13,7 @@ export interface AcheivementProps{
     text: string
     isOpened: boolean
     classname?: string
+    description: string
 }
 
 export interface AnimatedTextProps {
