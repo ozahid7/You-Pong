@@ -18,18 +18,18 @@ const PlayerCard = () => {
     };
 
     return (
-        <div className="flex justify-center w-[90%] overflow-hidden h-[16%] md:h-[24%] h:h-[20%]">
+        <div className="flex justify-center w-[90%] overflow-hidden min-h-[180px] h:min-h-[210px] h-[16%] md:h-[24%] h:h-[20%]">
             <MyCard otherclass="">
                 <div className="w-full  justify-between flex h-full">
-                    <div className="sm:w-[40%] w-[34%] flex relative flex-col justify-center  md:justify-end  pb-[14px] items-center h-full">
-                        <h3 className=" whitespace-nowrap text-cardtitle absolute text-[12px] top-2 left-2 h:left-6 sm:left-8 md:top-4 md:left-8 h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                    <div className="sm:w-[40%] w-[34%] pb-2 h:pb-0 flex sm:py-2  flex-col justify-around items-center h-full">
+                        <h3 className=" whitespace-nowrap text-cardtitle pl-4  text-[12px] h:left-6 sm:left-8 md:top-4 md:left-8 h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
                             Player Card
                         </h3>
-                        <div className="w-[80%] h:w-[70%] sm:w-[60%] md:w-[70%] md:mb-4 mt-8 overflow-hidden rounded-md">
+                        <div className="w-[80%] h:w-[70%] min-h-[80px] aspect-square sm:w-[60%] md:w-[70%] overflow-hidden rounded-md">
                             <img
                                 src="/ozahid-.jpeg"
                                 alt="image"
-                                className="object-contain h-full aspect-square border-2 border-palette-white w-full"
+                                className="object-cover aspect-square h-full border-2 border-palette-white w-full"
                             />
                         </div>
                     </div>
@@ -52,8 +52,11 @@ const PlayerCard = () => {
                             />
                         )}
                         <div className="sm:w-[86%] h-[78%] w-full flex flex-col justify-evenly space-y-1 relative">
-                            <div className=" w-[80%] xs:w-[60%] s:w-[50%] sm:w-[76%] flex justify-end">
-                                <span className="relative flex h-2 w-2 sm:h-3 sm:w-3">
+                            <div className=" w-full space-x-1  flex">
+                            <h2 className="font-extrabold mt-2 font-black text-2xl h:text-3xl sm:text-4xl md:text-5xl text-cardtitle drop-shadow">
+                                OZAHID-
+                            </h2>
+                                <span className="relative flex h-2 w-2  sm:h-3 sm:w-3">
                                     <span
                                         className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
                                             isOnline
@@ -70,9 +73,6 @@ const PlayerCard = () => {
                                     ></span>
                                 </span>
                             </div>
-                            <h2 className="font-extrabold font-black text-2xl h:text-3xl sm:text-4xl md:text-5xl text-cardtitle drop-shadow">
-                                OZAHID-
-                            </h2>
                             <div className="flex flex-col justify-between h-auto space-y-3 w-[80%] sm:w-[90%]">
                                 <MiniBanner
                                     isGreen={true}

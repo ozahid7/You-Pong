@@ -19,7 +19,7 @@ const CustomButton = ({
             : color === "transparent"
             ? "transparent_button"
             : "signin_button") +
-            " max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] p-[2px] sm:p-[3px]  sm:max-h-[70px]  min-h-[45px] h-[100%] flex justify-center items-center",
+            " max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] p-[2px] sm:p-[3px]  sm:max-h-[70px]  min-h-[40px] h-[100%] flex justify-center items-center",
         otherclass
     );
             

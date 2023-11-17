@@ -3,11 +3,15 @@ import Image from "next/image";
 import { LuUnlock, LuLock } from "react-icons/lu";
 import { AnimatedText } from "..";
 import { AcheivementProps } from "@/types";
+import { twMerge } from "tailwind-merge";
 
-const Acheivement = ({isOpened, text}: AcheivementProps) => {
+const Acheivement = ({isOpened, text, classname}: AcheivementProps) => {
+    
+    const customClass = twMerge("w-full h-full  overflow-hidden ", classname)
+
     return (
-        <main className="w-full h-full  overflow-hidden">
-            <section className="h-[74%] make_center w-full bg-palette-green rounded-t-md relative">
+        <div className={classname}>
+            <section className="w-full p-[10%] overflow-hidden make_center bg-palette-green rounded-t-md relative">
                 <div className="h-auto  w-auto absolute top-0 h:top-2 right-2 md:top-3 md:right-3">
                     <LuUnlock
                         size={25}
@@ -39,12 +43,12 @@ const Acheivement = ({isOpened, text}: AcheivementProps) => {
             <section className="make_center w-full h-[26%] dred bg-palette-orange rounded-b-md px-1">
                 <AnimatedText
                     text={text}
-                    limit={20}
+                    limit={10}
                     maxwidth="max-w-full"
                     color="text-white"
                 />
             </section>
-        </main>
+        </div>
     );
 };
 

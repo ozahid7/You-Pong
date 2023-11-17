@@ -12,6 +12,7 @@ export interface CustomButtonProps {
 export interface AcheivementProps{
     text: string
     isOpened: boolean
+    classname?: string
 }
 
 export interface AnimatedTextProps {
