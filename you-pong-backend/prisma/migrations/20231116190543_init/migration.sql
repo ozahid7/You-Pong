@@ -20,7 +20,7 @@ CREATE TYPE "notification" AS ENUM ('INVITATION', 'GAME', 'MESSAGE');
 CREATE TYPE "state" AS ENUM ('ACCEPTED', 'REFUSED', 'PENDING', 'BLOCKED');
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "user" (
     "id_user" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "firstname" TEXT,
@@ -29,7 +29,7 @@ CREATE TABLE "User" (
     "hash" TEXT,
     "email" TEXT NOT NULL,
     "two_fact_auth" TEXT,
-    "jw_token" TEXT,
+    "tfaIsEnable" BOOLEAN NOT NULL DEFAULT false,
     "victory" INTEGER NOT NULL DEFAULT 0,
     "defeats" INTEGER NOT NULL DEFAULT 0,
     "level" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
@@ -38,7 +38,7 @@ CREATE TABLE "User" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id_user")
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id_user")
 );
 
 -- CreateTable
@@ -93,10 +93,10 @@ CREATE TABLE "_blocked" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Channel_name_key" ON "Channel"("name");
@@ -117,7 +117,7 @@ CREATE UNIQUE INDEX "_blocked_AB_unique" ON "_blocked"("A", "B");
 CREATE INDEX "_blocked_B_index" ON "_blocked"("B");
 
 -- AddForeignKey
-ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "User"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_channel_fkey" FOREIGN KEY ("id_channel") REFERENCES "Channel"("id_channel") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -129,10 +129,10 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_id_room_fkey" FOREIGN KEY ("id_roo
 ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_A_fkey" FOREIGN KEY ("A") REFERENCES "Room_Chat"("id_room") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;

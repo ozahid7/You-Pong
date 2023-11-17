@@ -12,7 +12,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ChannelService } from './channel.service';
 import { channelDto } from '../dto/channel.create.dto';
 import { Channel } from '@prisma/client';
-import { log } from 'console';
 @Controller('chat/channel')
 export class ChannelController {
   constructor(
