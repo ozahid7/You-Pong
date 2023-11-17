@@ -162,10 +162,7 @@ export class UserService {
         }
     }
 
-    async getTfaStatus(_email: string){
-    	const user = this.finduserByEmail(_email)
-    	if (!user)
-    	  throw new ForbiddenException('user not found');
+    async getTfaStatus(user: any){
     	try {
     	  return (await user).tfaIsEnable;
     	} catch (error) {
@@ -174,19 +171,21 @@ export class UserService {
     }
 
     async switchTfaStatus(_id: string) {
-        try{
+      const user = this.finduserById(_id);  
+      try{
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
                 },
                 data: {
-                    tfaIsEnable: !(await this.getTfaStatus((await this.finduserById(_id)).email)),
+                    tfaIsEnable: !(await this.getTfaStatus((await this.finduserById(_id)))),
                 },
             }
 			);        
 		} catch(error){
           throw new ForbiddenException(error);
         }
+        return (await user).tfaIsEnable;
     }
 
     async setTfaSecret(secret: string, _id: string) {

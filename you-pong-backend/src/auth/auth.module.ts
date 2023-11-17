@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { isLoggedGuard } from 'src/guards/isLoggedIn.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { TfaStrategy } from './strategies/tfa.strategy';
+import { FtStrategy } from './strategies/ft.strategy';
 // import { FtStrategy } from './strategies/ft.strategy';
 
 @Module({
@@ -15,7 +16,7 @@ import { TfaStrategy } from './strategies/tfa.strategy';
     }), 
             PassportModule
             ],
-    providers: [AuthService, UserService, JwtStrategy, isLoggedGuard, TfaStrategy]
+    providers: [AuthService, UserService, JwtStrategy, isLoggedGuard, TfaStrategy, FtStrategy]
 })
 
 export class AuthModule {

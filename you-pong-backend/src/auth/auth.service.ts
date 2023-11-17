@@ -52,9 +52,9 @@ export class AuthService
 		if (!cmp)
 			throw new UnauthorizedException('Uncorrect password');   
 		// get user's tfa status
-		const tfaStatus = await this.user.getTfaStatus(dto.email)
+		const tfaStatus = await this.user.getTfaStatus(user)
 		// generate access Cookie
-		if (tfaStatus == true) 
+		if (tfaStatus == false) 
 			await this.genCookie(res, user.id_user, 'access_token')
 		// generate tfa Cookie
 		else
@@ -62,6 +62,22 @@ export class AuthService
 		return res.status(201).json({tfaStatus});
 	}
 	
+	async ftSignIn(@Res() res: Response, @Req() req: Request, _id: string) {
+		const user = await this.user.finduserById(_id);
+		if (!user)
+			throw new ForbiddenException('Id not found in database');
+		const tfaStatus = await this.user.getTfaStatus(user);
+		if (tfaStatus == false) {
+			await this.genCookie(res, user.id_user, 'access_token')
+			res.redirect('/user/me');
+		}
+		// generate tfa Cookie
+		else {
+			await this.genCookie(res, user.id_user, 'tfa');
+			return res.status(201).json({tfaStatus});
+		}
+	}
+
 	async genTfaSecret(_id : string) {		
 		const user = await this.user.finduserById(_id);
 		if (!user)

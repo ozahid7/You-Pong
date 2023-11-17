@@ -16,11 +16,6 @@ export class AuthController {
 		return await this.authservice.localSignUp(dto)
 	}
 
-	/**
-	 * @param dto : email and password
-	 * @param res : response object
-	 * @returns 
-	 */
 	@Post('/local/signin')
 	async localSignIn(@Res() res: Response, @Body() dto:localDto){
 		return await this.authservice.localSignIn(res, dto);
@@ -42,4 +37,15 @@ export class AuthController {
 		
 		return await this.authservice.validateTfa(dto, _id, res);
 	}
+
+	@Get('/42')
+    @UseGuards(AuthGuard('42'))
+	ftAuth(@Req() req: Request){}
+
+	@Get('/42/callback')
+    @UseGuards(AuthGuard('42'))
+    async ftCall(@Res() res: Response, @Req() req: Request) {
+		this.ftAuth(req);
+		await this.authservice.ftSignIn(res, req, req['id_user']); 
+    }
 }
