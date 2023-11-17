@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { channelDto } from '../dto/channel.create.dto';
 import { Channel } from '@prisma/client';
-import { channel } from 'diagnostics_channel';
-import { skip } from 'node:test';
 
 @Injectable()
 export class ChannelService {
