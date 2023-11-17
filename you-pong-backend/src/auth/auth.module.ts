@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
-import { FtStrategy, JwtStrategy } from './strategies';
 import { UserService } from 'src/user/user.service';
 import { isLoggedGuard } from 'src/guards/isLoggedIn.guard';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { TfaStrategy } from './strategies/tfa.strategy';
+import { FtStrategy } from './strategies/ft.strategy';
 // import { FtStrategy } from './strategies/ft.strategy';
 
 @Module({
@@ -14,7 +16,7 @@ import { isLoggedGuard } from 'src/guards/isLoggedIn.guard';
     }), 
             PassportModule
             ],
-    providers: [AuthService, JwtService, JwtStrategy, FtStrategy, UserService, isLoggedGuard]
+    providers: [AuthService, UserService, JwtStrategy, isLoggedGuard, TfaStrategy, FtStrategy]
 })
 
 export class AuthModule {

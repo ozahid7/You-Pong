@@ -3,6 +3,8 @@ import { PassportStrategy } from "@nestjs/passport"
 import { Strategy }  from "passport-42"
 import { AuthService } from "../auth.service"
 import { UserService } from "src/user/user.service"
+import { use } from "passport"
+import { Request } from "express"
 
 @Injectable()
 export class FtStrategy extends PassportStrategy(Strategy, '42'){
@@ -17,19 +19,21 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
     }
 
     async validate(@Req() req: Request, at, rf, profile, callback){
-        console.log(profile);
         const user = await this.user.finduserByEmail(profile.emails[0].value);
-        
+        let newUser = null;
         if (!user){
-            await this.user.create({
+            newUser =  await this.user.create({
                 username: profile.username,
                 email: profile.emails[0].value,
                 familyName: profile.name.familyName,
                 givenName: profile.name.givenName,
-                avatar: profile.photos[0].value
+                avatar: profile._json.image.link
             });
-        } else {
-            return this.auth.genToken(user.id_user)
         }
+        if (newUser)
+            req['id_user'] = await (newUser.id_user);
+        else
+            req['id_user'] = await (user.id_user);
+        return true;
     }
 }

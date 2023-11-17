@@ -1,7 +1,7 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { TfohDto } from 'src/auth/dto';
+import {  ForbiddenException, Injectable, NotFoundException, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { userDto } from './dto/user.create.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class UserService {
@@ -162,57 +162,53 @@ export class UserService {
         }
     }
 
-    // update username;
-    async updateUsername(_id: string, newUser: string){
-        const user = await this.finduserById(_id);
-        if (user){
-            if (await this.finduserByUserName(newUser)) 
-                throw new ConflictException('Username already in use');
-        }
-        else
-            throw new NotFoundException(`user with id ${_id} not found`);
-        
-        await this.prisma.user.update({
-                where: {
-                    id_user: _id,
-                },
-                data: {
-                    username: newUser,
-                },
-            });
-
-        return {stats: true}
+    async getTfaStatus(user: any){
+    	try {
+    	  return (await user).tfaIsEnable;
+    	} catch (error) {
+    	  throw new NotFoundException(error)
+    	}
     }
 
-    async setTfaSecret(secret: string, _id: string) {
-        try{
+    async switchTfaStatus(_id: string) {
+      const user = this.finduserById(_id);  
+      try{
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
                 },
                 data: {
-                    two_fact_auth: secret,
+                    tfaIsEnable: !(await this.getTfaStatus((await this.finduserById(_id)))),
                 },
-            });
-        } catch (error){
-            throw new ForbiddenException(error);
+            }
+			);        
+		} catch(error){
+          throw new ForbiddenException(error);
+        }
+        return (await user).tfaIsEnable;
+    }
 
-        }
-    }
-    
-    async setTfaStatus(_id: string, dto: TfohDto){
-        try
-        {
-                await this.prisma.user.update({
-                    where: {
-                        id_user: _id,
-                    },
-                    data: {
-                        tfaIsEnable: dto.tfoStatus,
-                    },
-                });        
-            } catch(error){
-                throw new ForbiddenException(error);
-        }
-    }
+    async setTfaSecret(secret: string, _id: string) {
+      try {
+          await this.prisma.user.update({
+              where: {
+                  id_user: _id,
+              },
+              data: {
+                  two_fact_auth: secret,
+              },
+          });
+      } catch (error){
+          throw new ForbiddenException(error);
+      }
+  }
+
+    async signout(@Res() res: Response){
+    	try {
+			res.clearCookie('access_token');
+			res.status(200).json({})
+    	} catch(error) {
+			  throw new ForbiddenException(error);
+    	}
+	}
 }
