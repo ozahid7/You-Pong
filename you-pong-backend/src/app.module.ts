@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { UploadModule } from './upload/upload.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UploadModule } from './upload/upload.module';
     UserModule,
     SocketModule,
     UploadModule,
+    FileModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
