@@ -13,7 +13,7 @@ import { UploadService } from './upload.service';
 export class UploadController {
   constructor(private uploadService: UploadService) {}
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('avatar'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     try {
       const result = await this.uploadService.uploadFile(file);
