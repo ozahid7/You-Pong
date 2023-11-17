@@ -1,4 +1,4 @@
-import { LuUser, LuLogOut, LuSettings, LuGamepad2, LuUserX } from "react-icons/lu";
+import { LuUser, LuLogOut, LuSettings, LuGamepad2, LuUserX, LuBan, LuBellOff, LuDoorOpen, LuStar } from "react-icons/lu";
 import { renderIcon } from "@/utils";
 
 
@@ -12,6 +12,16 @@ export const menuChatElements = [
     { href: "/profile", label: "Profile", icon: renderIcon(LuUser)},
     { href: "/game", label: "Play a game", icon: renderIcon(LuGamepad2)},
     { href: "/block", label: "Block", icon: renderIcon(LuUserX)},
+];
+
+export const menuGroupsElements = [
+    { href: "/profile", label: "Profile", icon: renderIcon(LuUser)},
+    { href: "/game", label: "Play a game", icon: renderIcon(LuGamepad2)},
+    { href: "/block", label: "Block", icon: renderIcon(LuUserX)},
+    { href: "/ban", label: "Ban", icon: renderIcon(LuBan)},
+    { href: "/mute", label: "Mute", icon: renderIcon(LuBellOff)},
+    { href: "/kick", label: "Kick", icon: renderIcon(LuDoorOpen)},
+    { href: "/admin", label: "Set as admin", icon: renderIcon(LuStar)},
 ];
 
 export const landing_page_description =

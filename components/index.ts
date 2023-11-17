@@ -25,7 +25,8 @@ import Chat from "./tools/Chat";
 import Heading from "./tools/Heading"
 import SearchBar from "./tools/SearchBar";
 import Submit from "./tools/Submit";
-
+import GroupsChat from "./tools/GroupsChat";
+import GroupDropdown from "./tools/GroupDropdown";
 export {
   NavBar,
   SideBar,
@@ -54,4 +55,6 @@ export {
   Heading,
   SearchBar,
   Submit,
+  GroupsChat,
+  GroupDropdown,
 };

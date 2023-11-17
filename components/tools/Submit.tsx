@@ -1,6 +1,5 @@
 "use client";
 import { CustomButtonProps } from "@/types";
-import { useDisclosure } from "@nextui-org/react";
 import React from "react";
 
 const Submit = ({
@@ -11,8 +10,6 @@ const Submit = ({
   handleclick,
   bordercolor,
 }: CustomButtonProps) => {
-  const { onClose } = useDisclosure();
-
   const customclass =
     color === "orange"
       ? "orange_button"
@@ -26,7 +23,7 @@ const Submit = ({
     <button
       type="submit"
       onClick={handleclick}
-      className={`${customclass} ${otherclass}  max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] sm:max-h-[70px]  min-h-[45px] h-[100%] flex justify-center items-center`}
+      className={`${customclass} ${otherclass} bg-palette-green max-w-[400px]  w-[100%] min-w-[120px] max-h-[55px] sm:max-h-[70px]  min-h-[45px] h-[100%] flex justify-center items-center hover:scale-105 hover: hover:transition-all active:translate-y-1`}
     >
       <div
         className={` ${styleclass} center fold:w-[95%]  h-[90%] s:w-[97%] sm:w-[97%] md:w-[98%] w-[94%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}

@@ -11,8 +11,9 @@ import {
   GroupsModal,
   Chat,
   SearchBar,
+  GroupsChat,
 } from "@/components";
-import { LuUsers2, LuUser } from "react-icons/lu";
+import { LuUsers, LuUser } from "react-icons/lu";
 import { Channel } from "@/types";
 import { getData } from "./data/api";
 
@@ -66,13 +67,19 @@ const Chats = () => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex font-[500] text-[14px] w-fit h-fit text-[#686868] font-archivo lg:text-[20px] self-center gap-1">
-                                <LuUser className="mt-1 text-[white]" />
-                                DIRECT
+                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1">
+                                <LuUser className="mt-1 text-[white] xs:text-[40px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
+
+                                <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
+                                  DIRECT
+                                </p>
                               </div>,
-                              <div className="flex font-[500] text-[14px] w-fit h-fit text-[#686868] font-archivo lg:text-[20px] self-center gap-1">
-                                <LuUsers2 className="mt-1 text-[white]" />
-                                GROUPS
+                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1">
+                                <LuUsers className="mt-1 text-[white] xs:text-[40px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
+
+                                <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
+                                  GROUPS
+                                </p>
                               </div>,
                             ]}
                             indicator={{
@@ -85,23 +92,24 @@ const Chats = () => {
                             value={value}
                             className="h-full w-full flex-1 overflow-x-hidden"
                           >
-                            <div className="flex w-full h-full justify-start items-center flex-col">
+                            <div className="flex w-[95%] h-full justify-start items-center flex-col">
                               <Tabs
                                 value={valueDirect}
-                                className="flex flex-col overflow-auto lg:w-full w-[170px]"
+                                className="flex flex-col flex-grow"
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
-                                labels={channel &&(channel
-                                  .filter(
-                                    (obj: any) => (obj.type === "DIRECT")
-                                  )
-                                  .map((obj : any, i) => (
-                                    <MiniChat channels={obj}></MiniChat>
-                                  )))}
+                                labels={
+                                  channel &&
+                                  channel
+                                    .filter((obj: any) => obj.type === "DIRECT")
+                                    .map((obj: any, i) => (
+                                      <MiniChat channels={obj}></MiniChat>
+                                    ))
+                                }
                                 indicator={{
                                   className:
-                                    "bg-palette-green self-center ml-3 w-[50px]",
+                                    "bg-palette-green self-center 2xl:w-[60px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
                                 }}
                               ></Tabs>
                             </div>
@@ -112,16 +120,17 @@ const Chats = () => {
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
-                                labels={channel &&(channel
-                                  .filter(
-                                    (obj: any) => (obj.type !== "DIRECT")
-                                  )
-                                  .map((obj : any, i) => (
-                                    <MiniChat channels={obj}></MiniChat>
-                                  )))}
+                                labels={
+                                  channel &&
+                                  channel
+                                    .filter((obj: any) => obj.type !== "DIRECT")
+                                    .map((obj: any, i) => (
+                                      <MiniChat channels={obj}></MiniChat>
+                                    ))
+                                }
                                 indicator={{
                                   className:
-                                    "bg-palette-green self-center ml-3 w-[50px]",
+                                    "bg-palette-green self-center 2xl:w-[60px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
                                 }}
                               ></Tabs>
                               <NextUIProvider>
@@ -138,28 +147,30 @@ const Chats = () => {
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {channel && (channel.filter(
-                        (obj) => obj.type !== "DIRECT"
-                      ).map((obj, i) => (
-                        <Chat
-                          channels={obj}
-                          key={i}
-                        ></Chat>
-                      )))}
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type !== "DIRECT")
+                          .map((obj, i) => (
+                            <GroupsChat
+                              channels={obj}
+                              key={i}
+                            ></GroupsChat>
+                          ))}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {channel && (channel.filter(
-                        (obj) => obj.type === "DIRECT"
-                      ).map((obj, i) => (
-                        <Chat
-                          channels={obj}
-                          key={i}
-                        ></Chat>
-                      )))}
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type === "DIRECT")
+                          .map((obj, i) => (
+                            <Chat
+                              channels={obj}
+                              key={i}
+                            ></Chat>
+                          ))}
                     </SwipeableTabs>
                   )}
                 </div>

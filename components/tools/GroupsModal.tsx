@@ -27,7 +27,7 @@ export var setDataObj: Channel = {
 };
 
 export default function GroupsModal() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<string>("PUBLIC");
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
@@ -50,17 +50,18 @@ export default function GroupsModal() {
         (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
         setDataObj.type != "PROTECTED"
       ) {
-        console.log(setDataObj);
+        onClose();
+        // console.log(setDataObj);
         setData(setDataObj);
         // SEND DATA TO HAMID RIGHT HERE
       }
-      descRef.current.value = null;
-      setDataObj.description = "Change this description";
-      nameRef.current.value = null;
-      if (setDataObj.type == "PROTECTED") {
-        passRef.current.value = null;
-        passConfRef.current.value = null;
-      }
+    }
+    descRef.current.value = null;
+    setDataObj.description = "Change this description";
+    nameRef.current.value = null;
+    if (setDataObj.type == "PROTECTED") {
+      passRef.current.value = null;
+      passConfRef.current.value = null;
     }
   };
 
@@ -73,7 +74,7 @@ export default function GroupsModal() {
       <Button
         onPress={onOpen}
         key={"3xl"}
-        className="btn font-['Arimo'] rounded-md bg-palette-green text-white hover:text-palette-green font-[600] hover:bg-[#EFF5F5]"
+        className="btn font-['Arimo'] rounded-md bg-palette-green text-white hover:text-palette-green font-[600] hover:bg-[#EFF5F5] 2xl:w-[16rem] xl:w-[13rem] lg:w-[11rem] md:w-[9rem] xs:w-[6rem] xs:text-[10px] md:text-[14px]"
       >
         Create a group
       </Button>

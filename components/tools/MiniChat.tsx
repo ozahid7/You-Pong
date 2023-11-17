@@ -9,7 +9,7 @@ interface HomeProps {
 
 export function MiniChat({ channels }: HomeProps) {
   return (
-    <div className="flex w-[280px] h-[10%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] ">
+    <div className="flex w-[280px] h-[10%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] 2xl:w-[20rem] xl:w-[15rem] lg:w-[13.5rem] md:w-[10rem] sm:w-[3.1rem] xs:w-[3rem]">
       <Image
         src={hamid}
         alt="image"

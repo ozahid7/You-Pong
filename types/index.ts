@@ -7,6 +7,7 @@ export interface CustomButtonProps {
   styleclass?: string;
   bordercolor?: string;
   handleclick?: MouseEventHandler<HTMLButtonElement>;
+  onclose?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export interface AcheivementProps {
