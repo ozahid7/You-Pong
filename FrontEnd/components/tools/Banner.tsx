@@ -19,11 +19,15 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
     }`;
 
     const classname = twMerge(
-        "max-w-[500px] flex overflow-clip rounded-sm h-full min-h-[100px] w-full min-w-[200px]", style
+        "max-w-[500px] flex overflow-clip z-0 rounded-sm h-full min-h-[100px] w-full min-w-[200px]", style
     );
 
     return (
-        <div className={classname}>
+        <div
+            data-tooltip-id="banner_tooltip"
+            data-tooltip-content={userName}
+            className={classname}
+        >
             <div className={customClass}></div>
             <div
                 className={`w-full max-h-[100px] sm:min-h-full  bg-gradient-to-r ${start} ${end} flex items-center justify-between px-2 sm:px-3`}
@@ -37,7 +41,9 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
                 </div>
                 <div className="h-full px-2 w-full flex flex-col items-center justify-center md:justify-around  md:flex-row">
                     <span className="text-white text-4xl s:text-3xl lg:text-4xl sm:flex font-bold drop-shadow-lg">
-                        { userName.length > 7 ? userName.substring(0, 7) + "." : userName}
+                        {userName.length > 7
+                            ? userName.slice(0, 4) + "..."
+                            : userName}
                     </span>
                     <span className="text-white text-4xl s:text-3xl lg:text-4xl sm:flex font-bold drop-shadow-lg">
                         {wins + " : " + loses}

@@ -1,5 +1,7 @@
+'use client'
 import { Banner, MyCard } from "@/components";
 import React from "react";
+import { Tooltip } from "react-tooltip";
 
 interface match {
     avatar: string;
@@ -75,8 +77,18 @@ const MatchHistory = () => {
                             Match History
                         </h3>
                     </div>
+                    <Tooltip
+                        id="banner_tooltip"
+                        className="greenTooltip font-body border-2 border-palette-grey font-semibold drop-shadow-lg z-10"
+                        style={{
+                            backgroundColor: "#46686A",
+                            color: "#fff",
+                        }}
+                        opacity={1}
+                        place={"top"}
+                    />
                     <div className="w-full h-[90%] flex justify-center overflow-auto my_scroll">
-                        <div className=" flex w-[90%] relative space-y-8 min-w-[180px]  h-[90%] flex-col z-10 items-center justify-between">
+                        <div className=" flex w-[90%] space-y-8 min-w-[180px]  h-[90%] flex-col items-center justify-between">
                             {matchList.map((e, index) => (
                                 <Banner
                                     isGreen={e.wins >= e.loses ? true : false}
