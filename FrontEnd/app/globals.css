@@ -8,15 +8,8 @@
 }
 
 
-.container {
-  position: relative;
-  margin: auto;
-  height: 50vh;
-  width: 50vw;
-}
-
 .my_scroll{
-  @apply scrollbar-thin scrollbar-track-[#ADCDCF] scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
+  @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
 }
 
 .dblue{

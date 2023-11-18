@@ -29,7 +29,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
     return (
         <Link href={link}>
             <div
-                className={`flex px-4 items-center hover:bg-greenborder xl:space-x-7 h-auto w-full ${
+                className={`flex px-4 items-center hover:bg-greenborder 2xl:space-x-7 h-auto w-full ${
                     path === link
                         ? "bg-palette-green text-palette-orange  rounded-md"
                         : "text-white"
@@ -37,7 +37,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
             >
                 {elm}
                 <span
-                    className={` font-body w-full hidden xl:flex font-bold text-2xl ${
+                    className={` font-body w-full hidden 2xl:flex font-bold text-2xl ${
                         path === link ? "text-palette-orange" : "text-white"
                     } `}
                 >
@@ -51,7 +51,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 const SideBar = () => {
     return (
         <aside
-            className={` text-white pb-3 xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}
+            className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}
         >
             {/* top part */}
 
@@ -63,7 +63,7 @@ const SideBar = () => {
                     width={60}
                     className="object-contain"
                 />
-                <div className="pr-8 hidden xl:flex xl:flex-col">
+                <div className="pr-8 hidden 2xl:flex xl:flex-col">
                     <h2 className="text-white text-left font-bold text-2xl">
                         YOU PONG
                     </h2>
@@ -73,7 +73,7 @@ const SideBar = () => {
                 </div>
             </div>
 
-            <div className=" xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
+            <div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
                     {RenderSideBarElements(0, "/dashboard", "Dashboard")}
@@ -90,7 +90,7 @@ const SideBar = () => {
 
                 <div className="h-full w-full  pb-6 justify-end flex flex-col space-y-6 items-center px-2">
                     <Link className="h-auto w-[92%] " href="/">
-                        <div className="w-full py-1 h-auto xl:bg-palette-grey rounded-md flex justify-around items-center">
+                        <div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
                             <Image
                                 className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
                                 src="/ozahid-.jpeg"
@@ -98,7 +98,7 @@ const SideBar = () => {
                                 width={100}
                                 height={100}
                             />
-                            <p className="text-gray-500 break-all text-center hidden xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
+                            <p className="text-gray-500 break-all text-center hidden 2xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
                                 Ozahid-
                             </p>
                         </div>
@@ -110,7 +110,7 @@ const SideBar = () => {
                         <div className="w-[90%]  h-12 border-2 rounded-md border-palette-white space-x-4 flex justify-center items-center">
                             <LuLogOut size="30" />
 
-                            <span className="text-2xl hidden xl:flex font-body font-bold ">
+                            <span className="text-2xl hidden 2xl:flex font-body font-bold ">
                                 Log out
                             </span>
                         </div>

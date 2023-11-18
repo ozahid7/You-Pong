@@ -40,12 +40,12 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
                     />
                 </div>
                 <div className="h-full px-2 w-full flex flex-col items-center justify-center md:justify-around  md:flex-row">
-                    <span className="text-white text-4xl s:text-3xl lg:text-4xl sm:flex font-bold drop-shadow-lg">
+                    <span className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg">
                         {userName.length > 7
                             ? userName.slice(0, 4) + "..."
                             : userName}
                     </span>
-                    <span className="text-white text-4xl s:text-3xl lg:text-4xl sm:flex font-bold drop-shadow-lg">
+                    <span className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg">
                         {wins + " : " + loses}
                     </span>
                 </div>

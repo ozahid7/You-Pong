@@ -23,11 +23,11 @@ const Achievements: Achievement[] = [
 
 const AchievementCard = () => {
     return (
-        <div className="flex justify-center max-w-[340px] min-w-[320px] w-[70%] h-[100%] ">
+        <div className="flex justify-center min-w-[240px] w-full sm:w-[94%] h-[100%] ">
             <MyCard type="nocorner" otherclass="max-h-full flex">
-                <div className="w-full   h-full flex flex-col justify-around items-center">
-                    <div className="w-full pl-12 h-[8%] flex items-center">
-                        <h3 className=" whitespace-nowrap text-cardtitle  text-[12px]  h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                <div className="w-full  h-full flex flex-col justify-around items-center">
+                    <div className="w-full h-[16%] relative  lg:h-[8%] md:h-[30%]  flex items-center">
+                        <h3 className=" whitespace-nowrap text-cardtitle absolute top-3 left-3 h:left-6 h:top-2 sm:left-8 md:top-4 md:left-8 text-[12px]  h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
                             Achievement
                         </h3>
                     </div>

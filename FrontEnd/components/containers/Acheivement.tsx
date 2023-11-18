@@ -22,17 +22,17 @@ const Acheivement = ({
             <div
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={description}
-                className="w-[60%] aspect-1 md:min-h-[170px] min-h-[150px] min-w-[160px]"
+                className="w-[60%] aspect-1 max-w-[200px]  min-w-[180px]"
             >
 
 
                 <section className="w-full h-[74%] overflow-hidden make_center bg-palette-green rounded-t-md relative">
-                    <div className="h-auto  w-auto absolute top-2 right-0">
+                    <div className="h-auto  w-auto absolute top-2 right-2">
                         <LuUnlock
                             size={20}
                             className={`${
                                 isOpened
-                                    ? "w-2 xs:w-3 h:w-6 sm:w-10 text-white"
+                                    ? " text-white"
                                     : "hidden"
                             }`}
                         />

@@ -18,7 +18,7 @@ const PlayerCard = () => {
     };
 
     return (
-        <div className="flex justify-center w-[90%] overflow-hidden min-h-[180px] h:min-h-[210px] h-[20%] md:h-[30%] h:h-[24%]">
+        <div className="flex justify-center debug w-full h:w-[90%] overflow-hidden min-h-[180px] lg:min-h-[260px] h:min-h-[210px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
                 <div className="w-full relative justify-between items-center flex h-full">
                         <h3 className=" whitespace-nowrap absolute top-4 left-10    text-cardtitle  text-[12px] h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">

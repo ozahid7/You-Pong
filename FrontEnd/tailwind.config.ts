@@ -45,6 +45,7 @@ const config: Config = {
                 fold: "290px",
                 s: "360px",
                 h: "465px",
+                xxxl: "1736px"
             },
             colors: {
                 palette: {
