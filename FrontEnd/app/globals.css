@@ -15,7 +15,7 @@
   width: 50vw;
 }
 
-.scrol{
+.my_scroll{
   @apply scrollbar-thin scrollbar-track-[#ADCDCF] scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
 }
 

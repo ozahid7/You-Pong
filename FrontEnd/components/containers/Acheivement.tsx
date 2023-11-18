@@ -22,7 +22,7 @@ const Acheivement = ({
             <div
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={description}
-                className="dred w-[60%] aspect-1 md:min-h-[170px] min-h-[150px] min-w-[160px]"
+                className="w-[60%] aspect-1 md:min-h-[170px] min-h-[150px] min-w-[160px]"
             >
 
 
@@ -57,7 +57,7 @@ const Acheivement = ({
                         className="object-contain absolute w-[50%]"
                     />
                 </section>
-                <section className="make_center w-full h-[26%] dred bg-palette-orange rounded-b-md px-1">
+                <section className="make_center w-full h-[26%] bg-palette-orange rounded-b-md px-1">
                     <span className="text-white font-body font-bold drop-shadow-lg md:text-xl">
                         {text}
                     </span>
