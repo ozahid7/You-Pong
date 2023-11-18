@@ -40,3 +40,6 @@ lerna-debug.log*
 
 #uploaded files
 /uploads
+
+# package-lock.json
+package-lock.json
