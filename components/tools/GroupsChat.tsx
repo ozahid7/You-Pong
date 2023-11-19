@@ -1,22 +1,27 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { GroupDropdown } from "@/components";
-import logo from "../../public/groups.svg"
 import { Channel } from "@/types";
 
 interface HomePage {
-	channels: Channel;
+  channels: Channel;
+  obj: Channel[];
 }
 
-const GroupsChat = ({channels} : HomePage) => {
+
+const GroupsChat = ({ channels, obj }: HomePage) => {
+  const [smiya, setSmiya] = useState<string>(obj[0].name);
   return (
     <div className="flex h-[95%] w-full flex-col ">
       <div className="flex w-full h-[10%] justify-center">
         <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
           <div className="flex flex-row gap-3 items-center">
             <Image
-              src={logo}
+              src={`http://178.62.74.69:400/file/${channels.avatar}`}
+              width={50}
+              height={50}
               className="flex w-[50px] h-[50px] border-[white] border-[2px]"
               alt="image"
             />
@@ -31,6 +36,7 @@ const GroupsChat = ({channels} : HomePage) => {
           </div>
           <div>
             <GroupDropdown
+              obj={channels}
               icon={LuMoreHorizontal}
               style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm hover:scale-110"
               size={40}

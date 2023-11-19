@@ -6,37 +6,26 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
-  useDisclosure,
   Tabs,
   Tab,
   Card,
   CardBody,
+  useDisclosure,
+  Button,
 } from "@nextui-org/react";
-import Image from "next/image";
+import { IconContext } from "react-icons";
+import { LuSettings, LuUser } from "react-icons/lu";
 import groups from "../../public/groups.svg";
+import Image from "next/image";
 import { MyInput, Background, Submit } from "..";
 import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
+import { setDataObj } from "./GroupsModal";
 
-export var setDataObj: Channel = {
-  type: "PUBLIC",
-  name: "Channel",
-  description: "Change this description",
-  avatar: null,
-};
-
-export default function GroupsModal() {
+const ChatEdit = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
-  const [selected, setSelected] = useState<string>("PUBLIC");
   const [file, setFilee] = useState<any>(null);
-
-  const imgRef = useRef<HTMLInputElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const descRef = useRef<HTMLInputElement>(null);
-  const passRef = useRef<HTMLInputElement>(null);
-  const passConfRef = useRef<HTMLInputElement>(null);
+  const [selected, setSelected] = useState<string>("PUBLIC");
 
   let imageUrl: any;
 
@@ -52,58 +41,10 @@ export default function GroupsModal() {
     // Fallback to groups or any other default image source if file is not a Blob or File
     imageUrl = groups;
   }
-  const CreateGroupDATA = async () => {
-    var result = null;
-
-    setDataObj.name = nameRef.current.value;
-    if (nameRef.current.value) {
-      if (descRef.current.value) setDataObj.description = descRef.current.value;
-      if (setDataObj.type == "PROTECTED") {
-        if (
-          passRef.current.value &&
-          passConfRef.current.value === passRef.current.value
-        )
-          setDataObj.hash = passRef.current.value;
-        else setDataObj.hash = null;
-      }
-      if (
-        (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
-        setDataObj.type != "PROTECTED"
-      ) {
-        if (imgRef.current.value !== "") {
-          result = await setFile(imgRef.current.files[0]);
-        } else result = await setFile(null);
-
-        setDataObj.avatar = result;
-
-        onClose();
-        // CLOSE THE MODAL Function :)
-        setData(setDataObj);
-        // SEND DATA TO HAMID RIGHT HERE
-      }
-      clean();
-    }
-  };
 
   const handleSelectionChange = (newSelection: string) => {
     setSelected(newSelection);
     setDataObj.type = newSelection;
-  };
-
-  const clean = () => {
-    setFilee(groups);
-    setDataObj.description = "Change this description";
-    descRef.current.value = null;
-    nameRef.current.value = null;
-    imgRef.current.value = null;
-    if (setDataObj.type == "PROTECTED") {
-      passRef.current.value = null;
-      passConfRef.current.value = null;
-    }
-  };
-  const close = () => {
-    onClose();
-    clean();
   };
 
   return (
@@ -111,19 +52,31 @@ export default function GroupsModal() {
       <Button
         onPress={onOpen}
         key={"3xl"}
-        className="flex btn font-['Arimo'] rounded-md bg-palette-green text-white hover:text-palette-green font-[600] hover:bg-[#EFF5F5] 2xl:w-[16rem] xl:w-[13rem] lg:w-[11rem] md:w-[9rem] xs:w-[6rem] md:text-[14px] xs:text-[10px]"
+        className="flex btn bg-palette-green border-none text-[#EFF5F5] hover:bg-palette-orange rounded-md"
       >
-        <div className="flex flex-wrap ">Create a group</div>
+        <div className="flex flex-row gap-2 w-fit h-fit">
+          <IconContext.Provider
+            value={{
+              size: "25px",
+              className: "text-white border-none",
+            }}
+          >
+            <LuSettings />
+          </IconContext.Provider>
+          <div className="flex text-white font-body font-[600] text-[15px]">
+            Edit group
+          </div>
+        </div>
       </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onClose={close}
+        onClose={onClose}
         size="4xl"
         className=" w-full"
       >
         <ModalContent className="">
-          {(close) => (
+          {(onClose) => (
             <Background>
               <ModalHeader
                 className="flex justify-center text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[40px] font-[700] leading-normal not-italic"
@@ -131,7 +84,8 @@ export default function GroupsModal() {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Create a group
+                Edit a group
+                <div></div>
               </ModalHeader>
               <ModalBody className="w-[60%]">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -150,7 +104,6 @@ export default function GroupsModal() {
                       Choose a picture
                     </label>
                     <input
-                      ref={imgRef}
                       id="files"
                       className="hidden"
                       type="file"
@@ -178,13 +131,11 @@ export default function GroupsModal() {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
                             <MyInput
-                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
@@ -200,13 +151,11 @@ export default function GroupsModal() {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
                             <MyInput
-                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
@@ -222,25 +171,26 @@ export default function GroupsModal() {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 bg">
                             <MyInput
-                              ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              ref={passRef}
-                              text="Password"
+                              text="Current Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              ref={passConfRef}
+                              text="New Password"
+                              type="password"
+                              customclass="w-full h-[3rem] self-center"
+                            ></MyInput>
+                            <MyInput
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
@@ -256,8 +206,7 @@ export default function GroupsModal() {
                 <div className="flex w-[300px] h-[70px]">
                   <Submit
                     color="green"
-                    text="CREATE"
-                    handleclick={CreateGroupDATA}
+                    text="UPDATE"
                   ></Submit>
                 </div>
               </ModalFooter>
@@ -267,4 +216,6 @@ export default function GroupsModal() {
       </Modal>
     </Fragment>
   );
-}
+};
+
+export default ChatEdit;

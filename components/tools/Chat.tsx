@@ -2,9 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDropdown } from "@/components";
-import logo from "../../public/groups.svg";
 import { Channel } from "@/types";
-import hamid from "../../public/ozahid-.jpeg";
+import { getFile } from "@/app/dashboard/chat/data/api";
 
 interface HomePage {
   channels: Channel;
@@ -17,8 +16,10 @@ const Chat = ({ channels }: HomePage) => {
         <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
           <div className="flex flex-row gap-3 items-center">
             <Image
-              src={logo}
+              src={`http://178.62.74.69:400/file/${channels.avatar}`}
               className="flex w-[50px] h-[50px] border-[white] border-[2px]"
+              width={50}
+              height={50}
               alt="image"
             />
             <div className="flex flex-col">

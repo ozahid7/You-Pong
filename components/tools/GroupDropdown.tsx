@@ -1,46 +1,53 @@
 "use client";
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Menu } from "@headlessui/react";
+import { Fragment, useState, useRef } from "react";
 import React from "react";
+import { IconContext } from "react-icons";
+import { LuSettings2, LuUser } from "react-icons/lu";
 import { menuGroupsElements } from "@/const";
 import { renderIcon } from "@/utils";
+import { Channel } from "@/types";
+import {
+  Modal,
+  ModalBody,
+  Button,
+  useDisclosure,
+  ModalContent,
+  NextUIProvider,
+} from "@nextui-org/react";
+import { ChatEdit, MembersEdit } from "..";
 
-const GroupDropdown = (icon: { icon: any; style: string; size: number }) => {
+const GroupDropdown = (icon: { icon?: any; style?: string; size?: number, obj: Channel[] }) => {
+
   return (
     <div className="flex flex-col justify-center relative">
-      <Menu>
-        <Menu.Button
-          as="div"
-          className=""
+      <div className="dropdown dropdown-bottom dropdown-end">
+        <label
+          tabIndex={0}
+          className="btn m-1 bg-palette-green border-none hover:bg-palette-green"
         >
-          {renderIcon(icon.icon, icon.style, icon.size)}
-        </Menu.Button>
-        <Menu.Items
-          as="div"
-          className="flex flex-col h-auto outline-none w-auto rounded-sm drop-shadow-lg bg-palette-white overflow-hidden top-full right-0 absolute z-10"
+          <IconContext.Provider
+            value={{
+              color: "white",
+              size: "20px",
+              className: "hover:text-palette-green border-none test",
+            }}
+          >
+            <LuSettings2 />
+          </IconContext.Provider>
+        </label>
+        <ul
+          tabIndex={0}
+          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-46 gap-2"
         >
-          {menuGroupsElements.map((elm) => (
-            <Menu.Item
-              key={elm.href}
-              as={Fragment}
-            >
-              {({ active }) => (
-                <a
-                  href={elm.href}
-                  className={`py-2 px-4 min-w-[170px] border-b border-palette-grey font-body font-bold flex items-center space-x-4  ${
-                    active
-                      ? "bg-palette-orange text-white"
-                      : " text-palette-green"
-                  }`}
-                >
-                  <div className="h-auto flex">{elm.icon}</div>
-                  <div className="h-auto flex">{elm.label}</div>
-                </a>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
-      </Menu>
+          <li>
+            <MembersEdit></MembersEdit>
+          </li>
+          <li>
+            <ChatEdit></ChatEdit>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };
