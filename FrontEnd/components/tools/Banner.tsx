@@ -19,7 +19,7 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
     }`;
 
     const classname = twMerge(
-        "max-w-[500px] flex overflow-clip z-0 rounded-sm h-full min-h-[60px] h:min-h-[100px] max-h-[100px] w-full min-w-[200px]", style
+        "max-w-[500px] flex overflow-clip z-0 rounded-sm h-full min-h-[80px] h:min-h-[100px] max-h-[100px] w-full min-w-[200px]", style
     );
 
     return (

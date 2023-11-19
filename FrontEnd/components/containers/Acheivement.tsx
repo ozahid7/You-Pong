@@ -22,7 +22,7 @@ const Acheivement = ({
             <div
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={description}
-                className="w-[60%]  aspect-1  min-w-[180px]  max-w-[200px] max-h-[120px] md:max-h-[140px]"
+                className="w-[60%]  aspect-1  min-w-[180px]  max-w-[200px] max-h-[120px] h:max-h-[140px]"
             >
 
 
