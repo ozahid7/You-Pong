@@ -19,7 +19,7 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
     }`;
 
     const classname = twMerge(
-        "max-w-[500px] flex overflow-clip z-0 rounded-sm h-full min-h-[100px] w-full min-w-[200px]", style
+        "max-w-[500px] flex overflow-clip z-0 rounded-sm h-full min-h-[60px] h:min-h-[100px] max-h-[100px] w-full min-w-[200px]", style
     );
 
     return (
@@ -32,14 +32,14 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
             <div
                 className={`w-full max-h-[100px] sm:min-h-full  bg-gradient-to-r ${start} ${end} flex items-center justify-between px-2 sm:px-3`}
             >
-                <div className="w-[18%] pb-[18%] xxs:w-[80px] xxs:h-[60px] sm:min-w-[76px] sm:min-h-[70px]  relative">
+                <div className="w-[17%] pb-[17%] xxs:w-[80px] xxs:h-[60px] sm:min-w-[64px 2xl:min-w-[76px] 2xl:min-h-[70px] sm:min-h-[60px]  relative">
                     <img
                         className=" h-[100%] w-[100%] absolute object-contain rounded-md"
                         src={avatar}
                         alt="avatar"
                     />
                 </div>
-                <div className="h-full px-2 w-full flex flex-col items-center justify-center md:justify-around  md:flex-row">
+                <div className="h-full px-2 w-full flex flex-col items-center justify-center h:justify-around  h:flex-row">
                     <span className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg">
                         {userName.length > 7
                             ? userName.slice(0, 4) + "..."

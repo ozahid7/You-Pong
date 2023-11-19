@@ -23,11 +23,11 @@ const Achievements: Achievement[] = [
 
 const AchievementCard = () => {
     return (
-        <div className="flex justify-center min-w-[240px] w-full sm:w-[94%] h-[100%] ">
+        <div className="flex justify-center min-w-[240px] xl:max-w-[360px] w-full sm:w-[93%] h-[100%] ">
             <MyCard type="nocorner" otherclass="max-h-full flex">
                 <div className="w-full  h-full flex flex-col justify-around items-center">
                     <div className="w-full h-[16%] relative  lg:h-[8%] md:h-[30%]  flex items-center">
-                        <h3 className=" whitespace-nowrap text-cardtitle absolute top-3 left-3 h:left-6 h:top-2 sm:left-8 md:top-4 md:left-8 text-[12px]  h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                        <h3 className=" whitespace-nowrap text-cardtitle absolute top-3 left-3 h:left-6 h:top-2 sm:left-8 md:top-4 md:left-8 text-[12px]  h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
                             Achievement
                         </h3>
                     </div>
@@ -41,7 +41,7 @@ const AchievementCard = () => {
                         opacity={1}
                         place={"left-start"}
                     />
-                    <div className=" flex w-full overflow-y-auto  my_scroll  relative space-y-8 min-w-[180px]  h-[90%] flex-col z-10 items-center justify-between">
+                    <div className=" flex w-full overflow-y-auto  my_scroll  relative space-y-20 min-w-[180px]  h-[90%] flex-col z-10 items-center justify-between">
                         {Achievements.map((e: Achievement, index) => (
                             <Acheivement
                                 classname=""

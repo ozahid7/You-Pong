@@ -22,11 +22,11 @@ const Acheivement = ({
             <div
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={description}
-                className="w-[60%] aspect-1 max-w-[200px]  min-w-[180px]"
+                className="w-[60%]  aspect-1  min-w-[180px] max-w-[200px] max-h-[140px]"
             >
 
 
-                <section className="w-full h-[74%] overflow-hidden make_center bg-palette-green rounded-t-md relative">
+                <section className="w-full h-full overflow-hidden make_center bg-palette-green rounded-t-md relative">
                     <div className="h-auto  w-auto absolute top-2 right-2">
                         <LuUnlock
                             size={20}
@@ -57,7 +57,7 @@ const Acheivement = ({
                         className="object-contain absolute w-[50%]"
                     />
                 </section>
-                <section className="make_center w-full h-[26%] bg-palette-orange rounded-b-md px-1">
+                <section className="make_center w-full h-[30%] bg-palette-orange rounded-b-md px-1">
                     <span className="text-white font-body font-bold drop-shadow-lg md:text-xl">
                         {text}
                     </span>

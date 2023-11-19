@@ -21,7 +21,7 @@ const PlayerCard = () => {
         <div className="flex justify-center debug w-full h:w-[90%] overflow-hidden min-h-[180px] lg:min-h-[260px] h:min-h-[210px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
                 <div className="w-full relative justify-between items-center flex h-full">
-                        <h3 className=" whitespace-nowrap absolute top-4 left-10    text-cardtitle  text-[12px] h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                        <h3 className=" whitespace-nowrap absolute top-4 left-10    text-cardtitle  text-[12px] h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
                             Player Card
                         </h3>
                     <div className="sm:w-[40%] w-[34%] md:pt-4 flex flex-col justify-end items-center h-[60%] md:h-[90%]">
@@ -36,24 +36,24 @@ const PlayerCard = () => {
                     <div className="w-[62%] h-full pr-1 sm:pr-0 flex flex-col items-center justify-center pt-1 sm:pt-2 relative">
                         <MdOutlineSettings
                             size={120}
-                            className="z-10 h-5 w-5 sm:h-[14%]  sm:w-[14%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
+                            className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                         />
                         {Icon ? (
                             <ImUserMinus
                                 onClick={hideIcon}
                                 size={120}
-                                className="z-10 h-[20%] w-[20%] s:h-[16%] s:w-[16%] absolute sm:bottom-6 sm:right-2 bottom-3 right-3  text-cardtitle cursor-pointer"
+                                className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-2 bottom-3 right-3  text-cardtitle cursor-pointer"
                             />
                         ) : (
                             <ImUserPlus
                                 onClick={hideIcon}
                                 size={120}
-                                className="z-10 h-[14%] w-[14%] s:h-[16%] s:w-[16%] absolute h:bottom-6 h:right-2 bottom-4 right-1  text-cardtitle cursor-pointer"
+                                className="z-10 h-[14%] w-[14%] absolute h:bottom-6 h:right-2 bottom-4 right-1  text-cardtitle cursor-pointer"
                             />
                         )}
                         <div className="sm:w-[86%] h-[78%] w-full flex flex-col justify-evenly space-y-1 relative">
                             <div className=" w-full space-x-1  flex">
-                            <h2 className="font-extrabold mt-2 font-black text-2xl h:text-3xl sm:text-4xl md:text-5xl text-cardtitle drop-shadow">
+                            <h2 className="font-extrabold mt-2 font-black text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
                                 OZAHID-
                             </h2>
                                 <span className="relative flex h-2 w-2  sm:h-3 sm:w-3">

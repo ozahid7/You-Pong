@@ -11,10 +11,10 @@ const MiniBanner = (props: {
 }) => {
     const start = props.isGreen ? "from-[#508286]" : "from-[#E97152]";
     const valuestyle = twMerge(
-        "text-white font-body drop-shadow-lg font-bold text-md h:text-xl md:text-2xl" , props.valueStyle
+        "text-white font-body drop-shadow-lg font-bold text-md h:text-lg md:text-xl" , props.valueStyle
     );
     const namestyle = twMerge(
-        "text-white text-md h:text-xl md:text-2xl drop-shadow-md font-bold", props.nameStyle
+        "text-white text-md h:text-lg md:text-xl drop-shadow-md font-bold", props.nameStyle
     );
     const className = twMerge(
         "max-w-[300px] flex overflow-clip rounded-sm drop-shadow-md h-full font-body h:w-[80%] md:min-h-[45px] min-h-[34px] h:min-h-[40px] w-full", props.className

@@ -72,8 +72,8 @@ const MatchHistory = () => {
         <div className="flex justify-center 2xl:max-w-[520px] min-w-[256px] w-[90%] dblue h-[100%] ">
             <MyCard type="nocorner" otherclass="max-h-full w-[94%] flex">
                 <div className="w-full dgreen   h-full flex flex-col justify-around items-center">
-                    <div className="w-full pl-12 md:h-[20%] h-[10%] xl:h-[8%] flex items-center">
-                        <h3 className=" whitespace-nowrap text-cardtitle  text-[12px]  h:text-lg md:text-2xl font-bold font-audio drop-shadow-sm">
+                    <div className="w-full pl-12 md:h-[14%] relative h-[8%] xl:h-[8%] flex items-center">
+                        <h3 className=" whitespace-nowrap text-cardtitle  text-[12px] absolute top-4 left-4 h:left-6 h:top-2 sm:left-8 md:top-6 md:left-12  h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
                             Match History
                         </h3>
                     </div>
