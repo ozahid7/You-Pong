@@ -21,7 +21,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
     const ref6 = useRef<HTMLInputElement>(null);
 
     const image = isEnabled ? '/mobile.svg' : '/ozahid-.jpeg'
-    const msg = !isEnabled ? "Scan the Qr code above and enter the code :" : "A verfication code has been set in :";
+    const msg = !isEnabled ? "Scan the Qr code and Enter the OTP from :" : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
         input1: "",
@@ -180,7 +180,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
                         </div>
                     </div>
                     <span className="text-gray-500 font-extralight text-[10px] h:text-[14px] tracking-[2px]">
-                        Enter the code
+                        Enter the code here
                     </span>
                 </section>
                 <section className="h-[30%] flex flex-col justify-around items-center w-full">
@@ -192,11 +192,8 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
                             handleclick={handleSend}
                         />
                     </div>
-                    <span className="sm:text-lg mt-2 text-[14px] lg:text-xl text-gray-500">
-                        Didn't Validate?{" "}
-                        <span className="text-blue-500 text-[14px] sm:text-lg cursor-pointer lg:text-xl">
-                            Try Again
-                        </span>{" "}
+                    <span className="sm:text-lg max-w-[270px] sm:max-w-[320px] mt-2 text-[14px] text-center lg:text-xl text-gray-500">
+                        Don't have the Authenticator app yet ? get it from Google Play
                     </span>
                 </section>
             </div>
