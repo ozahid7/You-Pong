@@ -17,19 +17,28 @@ import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
 import groups from "../../public/groups.svg";
 import Image from "next/image";
-import { MyInput, Background, Submit } from "..";
+import { InputGroup, Background, Submit, InputGroupPass } from "..";
 import { Channel } from "@/types";
-import { setData, setFile } from "@/app/dashboard/chat/data/api";
-import { setDataObj } from "./GroupsModal";
+import { putData, setData, setFile } from "@/app/dashboard/chat/data/api";
 
+var setDataObj: Channel = {
+  type: undefined,
+  name: undefined,
+  description: undefined,
+  avatar: undefined,
+};
 interface HomePage {
   channels: Channel;
 }
 
 const ChatEdit = ({ channels }: HomePage) => {
+  const nameRef = useRef<HTMLInputElement>();
+  const descRef = useRef<HTMLInputElement>();
+  const passRef = useRef<HTMLInputElement>();
+  const imgRef = useRef<HTMLInputElement>();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
-  const [selected, setSelected] = useState<string>("PUBLIC");
+  const [selected, setSelected] = useState<string>(channels.type);
 
   let imageUrl: any;
 
@@ -39,12 +48,27 @@ const ChatEdit = ({ channels }: HomePage) => {
     } catch (error) {
       console.error("Error creating object URL:", error);
       // Handle the error gracefully or provide a fallback URL
-      imageUrl = groups;
+      imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
     }
   } else {
-    // Fallback to groups or any other default image source if file is not a Blob or File
-    imageUrl = groups;
+    // Fallback to channels.avatar or any other default image source if file is not a Blob or File
+    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
   }
+  var result = undefined;
+  const SendDataToLeader = async () => {
+    if (imgRef.current.value !== "") {
+      result = await setFile(imgRef.current.files[0]);
+    }
+    if (channels.name !== nameRef.current.value)
+      setDataObj.name = nameRef.current.value;
+    if (channels.description !== descRef.current.value)
+      setDataObj.description = descRef.current.value;
+    setDataObj.type = channels.type;
+    setDataObj.avatar = result;
+    result = await putData(setDataObj, channels.name);
+    console.log(result);
+    onClose();
+  };
 
   const handleSelectionChange = (newSelection: string) => {
     setSelected(newSelection);
@@ -108,6 +132,7 @@ const ChatEdit = ({ channels }: HomePage) => {
                       Choose a picture
                     </label>
                     <input
+                      ref={imgRef}
                       id="files"
                       className="hidden"
                       type="file"
@@ -116,10 +141,10 @@ const ChatEdit = ({ channels }: HomePage) => {
                       }}
                     />
                     <div className="flex flex-col">
-                      <div className="font-body text-[30px] font-[700]">
+                      <div className="font-body text-[30px] font-[700] flex self-center">
                         {channels.name}
                       </div>
-                      <div className="flex flex-row gap-2">
+                      <div className="flex flex-row gap-2 justify-center">
                         <div className="flex font-archivo text-[#686868]">
                           Members: 129
                         </div>
@@ -147,16 +172,18 @@ const ChatEdit = ({ channels }: HomePage) => {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <MyInput
+                            <InputGroup
+                              ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></InputGroup>
+                            <InputGroup
+                              ref={descRef}
                               text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                            ></InputGroup>
                           </CardBody>
                         </Card>
                       </Tab>
@@ -167,16 +194,18 @@ const ChatEdit = ({ channels }: HomePage) => {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <MyInput
+                            <InputGroup
+                              ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></InputGroup>
+                            <InputGroup
+                              ref={descRef}
                               text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                            ></InputGroup>
                           </CardBody>
                         </Card>
                       </Tab>
@@ -187,31 +216,30 @@ const ChatEdit = ({ channels }: HomePage) => {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 bg">
-                            <MyInput
+                            <InputGroup
+                              ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></InputGroup>
+                            <InputGroup
+                              ref={descRef}
                               text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Current Password"
-                              type="password"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></InputGroup>
+                            <InputGroupPass
                               text="New Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                              isPassword={true}
+                            ></InputGroupPass>
+                            <InputGroupPass
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                              isPassword={true}
+                            ></InputGroupPass>
                           </CardBody>
                         </Card>
                       </Tab>
@@ -224,6 +252,7 @@ const ChatEdit = ({ channels }: HomePage) => {
                   <Submit
                     color="green"
                     text="UPDATE"
+                    handleclick={SendDataToLeader}
                   ></Submit>
                 </div>
               </ModalFooter>

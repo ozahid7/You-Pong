@@ -29,6 +29,8 @@ import GroupsChat from "./tools/GroupsChat";
 import GroupDropdown from "./tools/GroupDropdown";
 import ChatEdit from "./tools/ChatEdit";
 import MembersEdit from "./tools/MembersEdit"
+import InputGroup from "./tools/InputGroup"
+import InputGroupPass from "./tools/InputGroupPass"
 
 export {
   NavBar,
@@ -62,4 +64,6 @@ export {
   GroupDropdown,
   ChatEdit,
   MembersEdit,
+  InputGroup,
+  InputGroupPass,
 };
