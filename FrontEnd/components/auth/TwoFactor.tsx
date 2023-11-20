@@ -7,9 +7,10 @@ import axios from "axios";
 interface TwoFactorProps {
     isOpen: boolean;
     closemodal: Function;
+    isEnabled: boolean;
 }
 
-const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
+const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
 
    
     const ref1 = useRef<HTMLInputElement>(null);
@@ -18,6 +19,9 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
     const ref4 = useRef<HTMLInputElement>(null);
     const ref5 = useRef<HTMLInputElement>(null);
     const ref6 = useRef<HTMLInputElement>(null);
+
+    const image = isEnabled ? '/mobile.svg' : '/ozahid-.jpeg'
+    const msg = !isEnabled ? "Scan the Qr code above and enter the code :" : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
         input1: "",
@@ -130,8 +134,8 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                     input5: "",
                     input6: "",
                 });
-                setIsSubmited(false)
-                setIsInvalid(false)
+                setIsSubmited(false);
+                setIsInvalid(false);
             }}
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
@@ -147,27 +151,29 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                 {/* middle section */}
                 <section className=" w-full h-[60%] md:h-[62%] flex flex-col justify-evenly items-center">
                     <img
-                        src="mobile.svg"
+                        src={image}
                         alt="logo"
                         className="h-20 h:h-24 sm:h-28 md:h-32 lg:h-36"
                     />
                     <span className="text-[10px] sm:text-[15px] text-gray-600 h:text-[13px] text-center md:text-[16px] lg:text-[18px]">
-                        A verfication code has been sent to this mobile number:
+                        {msg}
                     </span>
                     <h3 className="font-bold text-sm md:text-[16px] text-palette-green">
-                        +212 65*****71
+                        Google Authenticator
                     </h3>
-                    <div onFocus={() => {
-                        setIsInvalid(false)
-                        setIsSubmited(false)
-                    }} 
-                    className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]">
+                    <div
+                        onFocus={() => {
+                            setIsInvalid(false);
+                            setIsSubmited(false);
+                        }}
+                        className="w-[98%] h-[70px] md:mt-2 flex justify-between max-w-[360px]"
+                    >
                         <div className="w-[48%] sm:w-[44%] flex justify-between">
                             {renderInputElements("input1", Value.input1, ref1)}
                             {renderInputElements("input2", Value.input2, ref2)}
                             {renderInputElements("input3", Value.input3, ref3)}
                         </div>
-                  <div className="w-[48%] sm:w-[44%] justify-between flex">
+                        <div className="w-[48%] sm:w-[44%] justify-between flex">
                             {renderInputElements("input4", Value.input4, ref4)}
                             {renderInputElements("input5", Value.input5, ref5)}
                             {renderInputElements("input6", Value.input6, ref6)}
@@ -187,9 +193,9 @@ const TwoFactor = ({ isOpen, closemodal }: TwoFactorProps) => {
                         />
                     </div>
                     <span className="sm:text-lg mt-2 text-[14px] lg:text-xl text-gray-500">
-                        Didn't receive a code?{" "}
+                        Didn't Validate?{" "}
                         <span className="text-blue-500 text-[14px] sm:text-lg cursor-pointer lg:text-xl">
-                            Resend
+                            Try Again
                         </span>{" "}
                     </span>
                 </section>

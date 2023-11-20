@@ -102,6 +102,7 @@ export default function Home() {
                 showSignUp={() => setSignUp(!showSignup)}
             />
             <TwoFactor
+                isEnabled={true}
                 isOpen={showTwoFactor}
                 closemodal={setTwoFactor}
             />
