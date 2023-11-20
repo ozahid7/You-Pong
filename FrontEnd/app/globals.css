@@ -8,8 +8,12 @@
 }
 
 
-.my_scroll{
+.my_scroll_green{
   @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
+}
+
+.my_scroll_orange{
+  @apply scrollbar-thin scrollbar-track-orange-100  z-0 scrollbar-corner-orange-100 scrollbar-thumb-palette-orange;
 }
 
 .dblue{

@@ -5,16 +5,40 @@ import { Tooltip } from "react-tooltip";
 interface match {
     avatar: string;
     user: string;
-    wins: string;
-    loses: string;
+    wins: string | '0';
+    loses: string | '0';
 }
 
 const matchList: match[] = [
     {
         avatar: "/ozahid-.jpeg",
         user: "ozahid-",
+        wins: "9",
+        loses: "7",
+    },
+    {
+        avatar: "/ozahid-.jpeg",
+        user: "ozahid-",
         wins: "5",
-        loses: "5",
+        loses: "7",
+    },
+    {
+        avatar: "/ozahid-.jpeg",
+        user: "ozahid-",
+        wins: "9",
+        loses: "7",
+    },
+    {
+        avatar: "/ozahid-.jpeg",
+        user: "ozahid-",
+        wins: "2",
+        loses: "7",
+    },
+    {
+        avatar: "/ozahid-.jpeg",
+        user: "ozahid-",
+        wins: "9",
+        loses: "7",
     },
     
 ]
@@ -37,7 +61,7 @@ const HistoryCard = () => {
                         opacity={1}
                         place={"top"}
                     />
-                    <div className="w-full xl:h-[90%] h:h-[84%] h-[88%] items-center relative flex justify-center overflow-auto my_scroll mb-2">
+                    <div className="w-full xl:h-[90%] h:h-[84%] h-[88%] items-center relative flex justify-center overflow-auto my_scroll_green mb-2">
                         { matchList.length < 1 && <span className="absolute font-audio text-xl text-cardtitle">No match yet</span>}
                         <div className=" flex w-[90%] min-w-[180px] h-[100%] flex-col items-center space-y-10">
                             {matchList.map((e, index) => (

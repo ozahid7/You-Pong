@@ -14,6 +14,11 @@ const Achievements: Achievement[] = [
         description: "Play your first game",
         isOwned: true,
     },
+    {
+        title: "Achievement 1",
+        description: "Play your first game",
+        isOwned: false,
+    },
   
     
    
@@ -39,7 +44,7 @@ const AchievementCard = () => {
                       opacity={1}
                       place={"top-start"}
                   />
-                  <div className=" flex w-full overflow-y-auto my_scroll  md:h-[90%] h:h-[84%] h-[86%] space-y-20 flex-col items-center mb-2">
+                  <div className=" flex w-full overflow-y-auto my_scroll_green  md:h-[90%] h:h-[84%] h-[86%] space-y-20 flex-col items-center mb-2">
                       {Achievements.map((e: Achievement, index) => (
                           <Acheivement
                               classname=""
