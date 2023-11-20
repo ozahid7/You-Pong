@@ -17,7 +17,7 @@ export class AuthService
 
 	async genToken(id: string) {
 		const payload = { sub: id };
-		return  await this.jwt.signAsync(payload, { expiresIn: '24h' });
+		return  await this.jwt.signAsync(payload, { expiresIn: '24h', secret: process.env.JWT_SECRET });
 	}
 
 	async genCookie(@Res() res: Response, _id : string, key) {

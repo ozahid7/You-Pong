@@ -34,7 +34,7 @@ CREATE TABLE "user" (
     "defeats" INTEGER NOT NULL DEFAULT 0,
     "level" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "rank" INTEGER,
-    "status" "user_status" NOT NULL DEFAULT 'ONLINE',
+    "status" "user_status" NOT NULL DEFAULT 'OFFLINE',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -81,6 +81,15 @@ CREATE TABLE "Message" (
 );
 
 -- CreateTable
+CREATE TABLE "Freindship" (
+    "id_user" TEXT NOT NULL,
+    "id_freind" TEXT NOT NULL,
+    "state" "state" NOT NULL,
+
+    CONSTRAINT "Freindship_pkey" PRIMARY KEY ("id_user","id_freind")
+);
+
+-- CreateTable
 CREATE TABLE "_ChannelToUser" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -124,6 +133,12 @@ ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_channel_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_id_room_fkey" FOREIGN KEY ("id_room") REFERENCES "Room_Chat"("id_room") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_freind_fkey" FOREIGN KEY ("id_freind") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;

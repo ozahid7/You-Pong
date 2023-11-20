@@ -82,15 +82,15 @@ model User {
 	defeats Int @default(0)
 	level Float @default(0.0)
 	rank Int?
-	status user_status @default(ONLINE)
+	status user_status @default(OFFLINE)
 	created_at DateTime @default(now())
 	updated_at DateTime @updatedAt
 	rooms Room_Chat[] @relation(name: "users")
 	blocked Room_Chat[] @relation(name: "blocked")
 	channels Channel[]
 	// notifications Notification[]
-	// freindship_freind Freindship[] @relation("freindship_freind")
-	// freindship_user Freindship[] @relation("freindship_user")
+	freindship_freind Freindship[] @relation("freindship_freind")
+	freindship_user Freindship[] @relation("freindship_user")
 	// matchs Match_History[]
 	// owned Owned[] @relation(name:"owned")
 	@@map("user")
@@ -154,15 +154,15 @@ model Message {
 // 	users User[] 
 // }
 
-// //FREINDSHIP MODEL
-// model Freindship {
-// 	id_user String
-// 	user User @relation("freindship_user", fields: [id_user], references: [id_user])
-// 	id_freind String
-// 	freind User @relation("freindship_freind", fields: [id_freind], references: [id_user])
-// 	state state
-// 	@@id([id_user, id_freind])
-// }
+//FREINDSHIP MODEL
+model Freindship {
+	id_user String
+	user User @relation("freindship_user", fields: [id_user], references: [id_user])
+	id_freind String
+	freind User @relation("freindship_freind", fields: [id_freind], references: [id_user])
+	state state
+	@@id([id_user, id_freind])
+}
 
 // //ACHIEVEMENT MODEL
 // model Achievement {
