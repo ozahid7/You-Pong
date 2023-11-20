@@ -17,8 +17,11 @@ import {
 } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from "..";
 
-const GroupDropdown = (icon: { icon?: any; style?: string; size?: number, obj: Channel[] }) => {
+interface HomePage {
+  channels: Channel,
+}
 
+const GroupDropdown = ({channels} : HomePage) => {
   return (
     <div className="flex flex-col justify-center relative">
       <div className="dropdown dropdown-bottom dropdown-end">
@@ -44,7 +47,7 @@ const GroupDropdown = (icon: { icon?: any; style?: string; size?: number, obj: C
             <MembersEdit></MembersEdit>
           </li>
           <li>
-            <ChatEdit></ChatEdit>
+            <ChatEdit channels={channels}></ChatEdit>
           </li>
         </ul>
       </div>

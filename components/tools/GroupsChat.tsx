@@ -5,14 +5,12 @@ import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { GroupDropdown } from "@/components";
 import { Channel } from "@/types";
 
-interface HomePage {
-  channels: Channel;
-  obj: Channel[];
+interface obj {
+  channels : Channel;
 }
 
-
-const GroupsChat = ({ channels, obj }: HomePage) => {
-  const [smiya, setSmiya] = useState<string>(obj[0].name);
+const GroupsChat = ({ channels } : obj) => {
+  const [smiya, setSmiya] = useState<string>("");
   return (
     <div className="flex h-[95%] w-full flex-col ">
       <div className="flex w-full h-[10%] justify-center">
@@ -36,10 +34,10 @@ const GroupsChat = ({ channels, obj }: HomePage) => {
           </div>
           <div>
             <GroupDropdown
-              obj={channels}
-              icon={LuMoreHorizontal}
-              style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm hover:scale-110"
-              size={40}
+              // icon={LuMoreHorizontal}
+              // style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm hover:scale-110"
+              // size={40}
+              channels={channels}
             ></GroupDropdown>
           </div>
         </div>

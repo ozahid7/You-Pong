@@ -152,7 +152,6 @@ const Chats = () => {
                           .filter((obj) => obj.type !== "DIRECT")
                           .map((obj, i) => (
                             <GroupsChat
-                              obj={channel}
                               channels={obj}
                               key={i}
                             ></GroupsChat>

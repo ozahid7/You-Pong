@@ -22,7 +22,11 @@ import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
 import { setDataObj } from "./GroupsModal";
 
-const ChatEdit = () => {
+interface HomePage {
+  channels: Channel;
+}
+
+const ChatEdit = ({ channels }: HomePage) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>("PUBLIC");
@@ -63,7 +67,7 @@ const ChatEdit = () => {
           >
             <LuSettings />
           </IconContext.Provider>
-          <div className="flex text-white font-body font-[600] text-[15px]">
+          <div className="flex text-white font-body font-[600] text-[15px] mt-1">
             Edit group
           </div>
         </div>
@@ -96,7 +100,7 @@ const ChatEdit = () => {
                     height={30}
                     className="w-[9rem] aspect-square"
                   />
-                  <div className="flex p-3 border-b-white border-b-[2px] w-full justify-center items-center">
+                  <div className="flex p-3 border-b-white border-b-[2px] w-full justify-center items-center flex-col gap-2">
                     <label
                       htmlFor="files"
                       className="btn font-body bg-palette-green text-white hover:bg-palette-orange"
@@ -111,6 +115,19 @@ const ChatEdit = () => {
                         setFilee(event.target.files?.[0] as File);
                       }}
                     />
+                    <div className="flex flex-col">
+                      <div className="font-body text-[30px] font-[700]">
+                        {channels.name}
+                      </div>
+                      <div className="flex flex-row gap-2">
+                        <div className="flex font-archivo text-[#686868]">
+                          Members: 129
+                        </div>
+                        <div className="flex font-archivo text-[#00993D]">
+                          Online: 12
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                     <Tabs
@@ -131,12 +148,12 @@ const ChatEdit = () => {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
                             <MyInput
-                              text="Channel name"
+                              text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              text="Channel Description"
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
@@ -151,12 +168,12 @@ const ChatEdit = () => {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
                             <MyInput
-                              text="Channel name"
+                              text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              text="Channel Description"
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
@@ -171,12 +188,12 @@ const ChatEdit = () => {
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 bg">
                             <MyInput
-                              text="Channel name"
+                              text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>
                             <MyInput
-                              text="Channel Description"
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></MyInput>

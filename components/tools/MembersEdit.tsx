@@ -88,7 +88,7 @@ const ChatEdit = () => {
                 <div></div>
               </ModalHeader>
               {/* <ModalBody className="w-[60%]"> */}
-                {/* <div className="flex justify-evenly items-center flex-col gap-3">
+              {/* <div className="flex justify-evenly items-center flex-col gap-3">
                   <Image
                     src={imageUrl}
                     alt="groups"
