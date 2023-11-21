@@ -14,7 +14,7 @@ function MyToggle({Default, enable, handelCheck, otherclass}: MyToggleProps) {
     const [enabled, setEnabled] = useState(false);
 
     const classname = twMerge(`w-[140px] h-[43px] pr-3 flex items-center justify-around ${
-                    enabled
+                    !enabled
                         ? "bg-palette-orange border-2 border-orangeborder"
                         : "bg-palette-green border-2 border-greenborder"
                 }

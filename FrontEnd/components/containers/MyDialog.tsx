@@ -3,6 +3,7 @@ import React from "react";
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MyContainer } from "..";
+import { twMerge } from "tailwind-merge";
 
 interface MyDialogProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ interface MyDialogProps {
 }
 
 function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyDialogProps) {
+    const classname = twMerge("flex justify-center", customClass);
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -33,7 +35,7 @@ function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyD
                     <div className="fixed inset-0 bg-black/30 backdrop-blur-[10px]" />
                 </Transition.Child>
                 <div className="fixed h-full w-full max-h-screen flex justify-center items-center inset-0 overflow-auto">
-                    <div className={`${customClass} flex justify-center`}>
+                    <div className={classname}>
                         <MyContainer withCorners={withCorner} closeModal={closemodal}>
                             <div className=" make_center h-[100%] overflow-auto">
                                 <Transition.Child

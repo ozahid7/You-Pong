@@ -33,5 +33,5 @@ export {
     TwoFactor,
     SignUp,
     SignIn,
-    MiniBanner
+    MiniBanner,
 };
