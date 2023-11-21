@@ -4,24 +4,25 @@ import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { GroupDropdown } from "@/components";
 import { Channel } from "@/types";
+import { Avatar } from "@nextui-org/react";
 
 interface obj {
-  channels : Channel;
+  channels: Channel;
 }
 
-const GroupsChat = ({ channels } : obj) => {
+const GroupsChat = ({ channels }: obj) => {
   const [smiya, setSmiya] = useState<string>("");
   return (
     <div className="flex h-[95%] w-full flex-col ">
       <div className="flex w-full h-[10%] justify-center">
         <div className="flex flex-row h-full w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid ">
           <div className="flex flex-row gap-3 items-center">
-            <Image
-              src={`http://178.62.74.69:400/file/${channels.avatar}`}
-              width={50}
-              height={50}
-              className="flex w-[50px] h-[50px] border-[white] border-[2px]"
-              alt="image"
+            <Avatar
+              isBordered
+              radius="sm"
+              color="default"
+              className="flex w-[60px] h-[60px]"
+              src={`http://localhost:4000/file/${channels.avatar}`}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px]">
@@ -33,12 +34,7 @@ const GroupsChat = ({ channels } : obj) => {
             </div>
           </div>
           <div>
-            <GroupDropdown
-              // icon={LuMoreHorizontal}
-              // style="text-palette-green border-[3px] border-palette-green cursor-pointer rounded-sm hover:scale-110"
-              // size={40}
-              channels={channels}
-            ></GroupDropdown>
+            <GroupDropdown channels={channels}></GroupDropdown>
           </div>
         </div>
       </div>

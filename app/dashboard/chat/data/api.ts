@@ -6,7 +6,7 @@ import { attachReactRefresh } from "next/dist/build/webpack-config";
 
 export const getData = async () => {
   try {
-    const response = await axios.get("http://178.62.74.69:400/chat/channel");
+    const response = await axios.get("http://localhost:4000/chat/channel");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -26,7 +26,7 @@ export const setData = async (data: Channel) => {
     };
 
     const response = await axios.post(
-      "http://178.62.74.69:400/chat/channel",
+      "http://localhost:4000/chat/channel",
       obj
     );
     return response.data;
@@ -48,7 +48,7 @@ export const putData = async (data: Channel, name: string) => {
     };
 
     const response = await axios.put(
-      `http://178.62.74.69:400/chat/channel/${name}`,
+      `http://localhost:4000/chat/channel/${name}`,
       obj
     );
     return response.data;
@@ -65,7 +65,7 @@ export const setFile = async (file: File | null) => {
     formData.append("avatar", file);
 
     const response = await axios.post(
-      "http://178.62.74.69:400/upload",
+      "http://localhost:4000/upload",
       formData,
       {
         headers: {
@@ -83,9 +83,7 @@ export const setFile = async (file: File | null) => {
 
 export const getFile = async (pathname: string) => {
   try {
-    const response = await axios.get(
-      `http://178.62.74.69:400/file/${pathname}`
-    );
+    const response = await axios.get(`http://localhost:4000/file/${pathname}`);
 
     return response.data;
   } catch (error) {

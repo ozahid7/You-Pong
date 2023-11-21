@@ -18,6 +18,7 @@ import groups from "../../public/groups.svg";
 import { MyInput, Background, Submit } from "..";
 import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
+import { LuPlusSquare } from "react-icons/lu";
 
 export var setDataObj: Channel = {
   type: "PUBLIC",
@@ -110,10 +111,11 @@ export default function GroupsModal() {
     <Fragment>
       <Button
         onPress={onOpen}
-        key={"3xl"}
-        className="flex btn font-['Arimo'] rounded-md bg-palette-green text-white hover:text-palette-green font-[600] hover:bg-[#EFF5F5] 2xl:w-[16rem] xl:w-[13rem] lg:w-[11rem] md:w-[9rem] xs:w-[6rem] md:text-[14px] xs:text-[10px]"
+        size="md"
+        className="flex btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-archivo text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md center green_button border-none hover:border-none"
       >
-        <div className="flex flex-wrap ">Create a group</div>
+        <LuPlusSquare />
+        Create
       </Button>
       <Modal
         isOpen={isOpen}

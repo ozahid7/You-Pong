@@ -48,11 +48,11 @@ const ChatEdit = ({ channels }: HomePage) => {
     } catch (error) {
       console.error("Error creating object URL:", error);
       // Handle the error gracefully or provide a fallback URL
-      imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+      imageUrl = `http://localhost:4000/file/${channels.avatar}`;
     }
   } else {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
-    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+    imageUrl = `http://localhost:4000/file/${channels.avatar}`;
   }
   var result = undefined;
   const SendDataToLeader = async () => {

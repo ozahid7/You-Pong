@@ -3,7 +3,7 @@ import { Menu } from "@headlessui/react";
 import { Fragment, useState, useRef } from "react";
 import React from "react";
 import { IconContext } from "react-icons";
-import { LuSettings2, LuUser } from "react-icons/lu";
+import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { menuGroupsElements } from "@/const";
 import { renderIcon } from "@/utils";
 import { Channel } from "@/types";
@@ -18,10 +18,10 @@ import {
 import { ChatEdit, MembersEdit } from "..";
 
 interface HomePage {
-  channels: Channel,
+  channels: Channel;
 }
 
-const GroupDropdown = ({channels} : HomePage) => {
+const GroupDropdown = ({ channels }: HomePage) => {
   return (
     <div className="flex flex-col justify-center relative">
       <div className="dropdown dropdown-bottom dropdown-end">
@@ -48,6 +48,26 @@ const GroupDropdown = ({channels} : HomePage) => {
           </li>
           <li>
             <ChatEdit channels={channels}></ChatEdit>
+          </li>
+          <li>
+            <Button
+              key={"3xl"}
+              className="flex btn bg-palette-orange border-none text-[#EFF5F5] hover:bg-palette-orange rounded-md"
+            >
+              <div className="flex flex-row gap-2 w-fit h-fit">
+                <IconContext.Provider
+                  value={{
+                    size: "25px",
+                    className: "text-white border-none",
+                  }}
+                >
+                  <LuLogOut />
+                </IconContext.Provider>
+                <div className="flex text-white font-body font-[600] text-[15px] mt-1">
+                  Leave group
+                </div>
+              </div>
+            </Button>
           </li>
         </ul>
       </div>

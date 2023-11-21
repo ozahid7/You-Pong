@@ -95,7 +95,7 @@ const Chats = () => {
                             <div className="flex w-[95%] h-full justify-start items-center flex-col">
                               <Tabs
                                 value={valueDirect}
-                                className="flex flex-col flex-grow"
+                                className="flex flex-col"
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
