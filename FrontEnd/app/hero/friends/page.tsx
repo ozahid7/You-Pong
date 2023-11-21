@@ -11,12 +11,12 @@ const page = () => {
               <MyContainer>
                   <div className=" flex flex-col justify-center items-center h-[100%] overflow-y-auto">
                       <div className="w-full h-[90%] h:w-[90%] rounded-md bg-palette-grey border-[5px] flex flex-col items-center justify-around border-palette-white shadow-md ">
-                          <div className="w-[94%] h-[16%] dred flex items-center ">
+                          <div className="w-[90%] h-[16%] flex items-center ">
                               <span className="text-lg sm:text-2xl md:text-3xl xl:text-3xl drop-shadow-sm font-body text-cardtitle font-bold ">
                                   Friends
                               </span>
                           </div>
-                          <div className="search_input_friends  w-[90%]  p-[2px] sm:max-h-[56px]   max-h-[46px] h-[10%] dred flex justify-center items-center">
+                          <div className="search_input_friends  w-[90%]  p-[2px] sm:max-h-[56px]   max-h-[46px] h-[10%] flex justify-center items-center">
                               <div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
                                   <LuSearch className="h-7 w-7 text-placeholdercolor" />
                                   <input
