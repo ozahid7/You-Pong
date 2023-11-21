@@ -33,7 +33,7 @@ const CustomButton = ({
             <div
                 className={` ${styleclass} center h-full w-full  flex justify-center items-center overflow-hidden`}
             >
-                <span className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-2xl md:text-3xl lg:text-4xl ">
+                <span className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-1xl md:text-2xl lg:text-3xl ">
                     {text}
                 </span>
             </div>

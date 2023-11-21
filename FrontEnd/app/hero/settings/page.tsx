@@ -11,7 +11,7 @@ const page = () => {
     const [showProfileSetting, setShowProfileSetting] = useState(false);
 
     return (
-        <div className="h-full w-full make_center">
+        <div className="h-full min-h-[600px] w-full make_center">
             <div className="flex justify-center w-[70%] max-w-[800px] min-w-[260px] min-h-[600px] h-[70%]">
                 <MyContainer>
                     <div className=" flex flex-col items-center h-[100%] overflow-y-auto">
@@ -28,7 +28,7 @@ const page = () => {
                         </div>
                         <div className="h-[60%] flex justify-center w-full">
                             <div className="w-[80%] h-[70%] pt-2 flex flex-col  bg-palette-grey drop-shadow-md items-center space-y-4 ">
-                                <div onClick={() => setShowProfileSetting(true)} className="w-[94%] flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm">
+                                <div onClick={() => {setShowProfileSetting(true)}} className="w-[94%] cursor-pointer flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm">
                                     <span className="text-md sm:text-xl md:text-2xl xl:text-3xl font-body drop-shadow-sm font-semibold text-cardtitle ">
                                         Profile
                                     </span>
@@ -42,7 +42,7 @@ const page = () => {
 
                                     <MyToggle
                                         otherclass="h-[38px]"
-                                        handelCheck={() => setTwoFactor(true)}
+                                        handelCheck={() => {setTwoFactor(true)}}
                                     />
                                 </div>
                             </div>

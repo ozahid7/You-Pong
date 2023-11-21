@@ -12,7 +12,7 @@ const Achievements: Achievement[] = [
     {
         title: "Achievement 1",
         description: "Play your first game",
-        isOwned: true,
+        isOwned: false,
     },
     {
         title: "Achievement 1",

@@ -11,7 +11,7 @@ export default function RootLayout({
     return (
         <main className="flex h-screen w-full background">
             <SideBar />
-            <main className="flex flex-col min-h-[800px] h-full overflow-y-auto my_scroll_orange items-center justify-between w-full">
+            <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify-between w-full">
                 <NavBar />
                 {children}
                 <MobileSideBar />
