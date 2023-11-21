@@ -22,7 +22,7 @@ const GroupsChat = ({ channels }: obj) => {
               radius="sm"
               color="default"
               className="flex w-[60px] h-[60px]"
-              src={`http://localhost:4000/file/${channels.avatar}`}
+              src={`http://178.62.74.69:400/file/${channels.avatar}`}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px]">

@@ -18,19 +18,20 @@ import Map from "./buttons/Map";
 import Background from "./tools/Background";
 import SwipeableTabs from "./tools/SwipeableTabs";
 import Tabs from "./tools/Tabs";
-import MiniChat from "./tools/MiniChat";
-import ChatDropdown from "./tools/ChatDropdown";
-import GroupsModal from "./tools/GroupsModal";
-import Chat from "./tools/Chat";
+import MiniChat from "../app/dashboard/chat/components/MiniChat";
+import ChatDropdown from "../app/dashboard/chat/components/ChatDropdown";
+import GroupsModal from "../app/dashboard/chat/components/GroupsModal";
+import Chat from "../app/dashboard/chat/components/Chat";
 import Heading from "./tools/Heading";
 import SearchBar from "./tools/SearchBar";
 import Submit from "./tools/Submit";
-import GroupsChat from "./tools/GroupsChat";
-import GroupDropdown from "./tools/GroupDropdown";
-import ChatEdit from "./tools/ChatEdit";
-import MembersEdit from "./tools/MembersEdit"
-import InputGroup from "./tools/InputGroup"
-import InputGroupPass from "./tools/InputGroupPass"
+import GroupsChat from "../app/dashboard/chat/components/GroupsChat";
+import GroupDropdown from "../app/dashboard/chat/components/GroupDropdown";
+import ChatEdit from "../app/dashboard/chat/components/ChatEdit";
+import MembersEdit from "../app/dashboard/chat/components/MembersEdit";
+import InputGroup from "../app/dashboard/chat/components/InputGroup";
+import InputGroupPass from "../app/dashboard/chat/components/InputGroupPass";
+import JoinModal from "@/app/dashboard/chat/components/JoinModal";
 
 export {
   NavBar,
@@ -66,4 +67,5 @@ export {
   MembersEdit,
   InputGroup,
   InputGroupPass,
+  JoinModal,
 };

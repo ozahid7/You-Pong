@@ -15,7 +15,7 @@ import {
   ModalContent,
   NextUIProvider,
 } from "@nextui-org/react";
-import { ChatEdit, MembersEdit } from "..";
+import { ChatEdit, MembersEdit } from "../../../../components";
 
 interface HomePage {
   channels: Channel;
@@ -52,7 +52,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
           <li>
             <Button
               key={"3xl"}
-              className="flex btn bg-palette-orange border-none text-[#EFF5F5] hover:bg-palette-orange rounded-md"
+              className="flex btn bg-palette-orange border-none text-[#EFF5F5] rounded-md center orange_button"
             >
               <div className="flex flex-row gap-2 w-fit h-fit">
                 <IconContext.Provider
@@ -63,7 +63,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
                 >
                   <LuLogOut />
                 </IconContext.Provider>
-                <div className="flex text-white font-body font-[600] text-[15px] mt-1">
+                <div className="flex text-white font-body font-[600] bg-transparent text-[15px] mt-1">
                   Leave group
                 </div>
               </div>

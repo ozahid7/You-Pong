@@ -12,6 +12,7 @@ import {
   Chat,
   SearchBar,
   GroupsChat,
+  JoinModal,
 } from "@/components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import { Channel } from "@/types";
@@ -55,27 +56,27 @@ const Chats = () => {
             <Background>
               <div className="w-[95%] h-full">
                 <div className="flex flex-row w-full h-full items-center">
-                  <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid">
+                  <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid ">
                     <Heading text="Chats" />
                     <SearchBar />
-                    <div className="flex h-full w-full flex-row">
-                      <div className="flex h-full w-full flex-col gap-5">
-                        <div className="flex flex-row w-fit h-fit">
+                    <div className="flex h-full w-[95%] flex-row  justify-center items-center">
+                      <div className="flex h-full w-full flex-col gap-5 justify-center items-center">
+                        <div className="flex flex-row w-fit h-fit ">
                           <Tabs
                             value={value}
                             onChange={(value) => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1">
-                                <LuUser className="mt-1 text-[white] xs:text-[40px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
+                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1 ">
+                                <LuUser className="mt-1 text-[white] xs:text-[30px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
 
                                 <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
                                   DIRECT
                                 </p>
                               </div>,
                               <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1">
-                                <LuUsers className="mt-1 text-[white] xs:text-[40px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
+                                <LuUsers className="mt-1 text-[white] xs:text-[30px] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] " />
 
                                 <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
                                   GROUPS
@@ -113,7 +114,7 @@ const Chats = () => {
                                 }}
                               ></Tabs>
                             </div>
-                            <div className="flex w-full h-full justify-start items-center flex-col">
+                            <div className="flex w-full h-full justify-start items-center flex-col ">
                               <Tabs
                                 value={valueGroups}
                                 className="flex flex-col flex-grow"
@@ -133,8 +134,9 @@ const Chats = () => {
                                     "bg-palette-green self-center 2xl:w-[60px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
                                 }}
                               ></Tabs>
-                              <NextUIProvider>
-                                <GroupsModal></GroupsModal>
+                              <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
+                                <GroupsModal />
+                                <JoinModal />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

@@ -14,8 +14,8 @@ import {
   CardBody,
 } from "@nextui-org/react";
 import Image from "next/image";
-import groups from "../../public/groups.svg";
-import { MyInput, Background, Submit } from "..";
+import groups from "../../../../public/groups.svg";
+import { MyInput, Background, Submit } from "../../../../components";
 import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
 import { LuPlusSquare } from "react-icons/lu";
@@ -111,11 +111,11 @@ export default function GroupsModal() {
     <Fragment>
       <Button
         onPress={onOpen}
-        size="md"
-        className="flex btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-archivo text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md center green_button border-none hover:border-none"
+        size="lg"
+        className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md green_button border-none hover:border-none"
       >
-        <LuPlusSquare />
         Create
+        {/* <LuPlusSquare /> */}
       </Button>
       <Modal
         isOpen={isOpen}
