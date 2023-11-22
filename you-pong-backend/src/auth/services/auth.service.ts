@@ -1,8 +1,6 @@
 import { ForbiddenException, Injectable, Req, Res, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { authenticator } from 'otplib';
-import { toFileStream } from 'qrcode';
 import { FindUserService, TfaUserService } from 'src/user/services';
 
 @Injectable()
@@ -24,32 +22,6 @@ export class AuthService
 			res.cookie(key, token, {httpOnly: true, maxAge: 86400000});
 		} catch (error) {
 			throw new ForbiddenException(error);
-		}
-	}
-	
-	async genTfaSecret(_id : string) {		
-		const user = await this.findUser.finduserById(_id);
-		if (!user)
-			throw new ForbiddenException ('Id not found in database');
-		const secret = authenticator.generateSecret();
-		const optPathUrl = authenticator.keyuri(user.email, process.env.APP_NAME, secret);
-		await this.TfaUserService.setTfaSecret(secret, _id);
-		return optPathUrl;
-	}
-
-	async pipeQrCodeStream(stream: Response, optPathUrl: string) {
-		return await toFileStream(stream, optPathUrl);
-	}
-	
-	async checkCode(code :string, user: any) : Promise<boolean> {
-		try {
-			const valid =  await authenticator.verify({
-				token: code,
-				secret: (await user).two_fact_auth
-			})
-				return valid;
-		} catch (error) {
-			throw new ForbiddenException('wrong id')
 		}
 	}
 }

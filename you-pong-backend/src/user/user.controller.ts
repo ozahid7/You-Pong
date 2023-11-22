@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException } from '@nestjs/common';
 import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
 import { UserService } from './services';
+import { tfaDto } from 'src/auth/dto';
+import { toFileStream } from 'qrcode';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -68,14 +70,29 @@ export class UserController {
 	  }
 	}
 
+	@UseGuards(AuthGuard('jwt'))
 	@Post('signout')
 	async signout(@Res() res: Response){
 		await this.userService.signout(res);
 	}
-
+	
 	@Post('/tfa/switch')
 	@UseGuards(AuthGuard('jwt'))
-	async set(@Req() req){
-		return await this.TfaUserService.switchTfaStatus(req.user.sub);
+	async set(@Req() req, @Body() dto: tfaDto){
+		return await this.TfaUserService.switchTfaStatus(req.user.sub, dto.code);
+	}
+		
+	@UseGuards(AuthGuard('jwt'))
+	@Get('/twoFactorAuth/')
+	async twoFactorAuth(@Req() req, @Res() res) {
+		try {
+			const _id = req.user.sub;
+		
+			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
+			const QrFile =  await toFileStream(res, tfaInfo);
+			
+		} catch(error) {
+			throw new ForbiddenException("couldn't generate Qr Code");
+		}
 	}
 }

@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { FindUserService } from "./find.service";
-import { AuthService } from "src/auth/services";
+import { authenticator } from 'otplib';
 
 @Injectable()
 export class TfaUserService {
@@ -17,19 +17,23 @@ export class TfaUserService {
     	}
     }
 
-    async switchTfaStatus(_id: string) {
+    async switchTfaStatus(_id: string, code: string) {
       const user = this.findUser.finduserById(_id);
-      try{
-            // if checkCode()
+      if (!user)
+        throw new NotFoundException('user not found')
+
+      try {
+            if ((await this.checkTfaCode(code, user)) == false)
+                throw new ForbiddenException('code is incorrect');
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
                 },
                 data: {
-                    tfaIsEnable: !(await this.getTfaStatus((await this.findUser.finduserById(_id)))),
+                    tfaIsEnable: !(await this.getTfaStatus((await user))),
                 },
             }
-			);        
+			);
 		} catch(error){
           throw new ForbiddenException(error);
         }
@@ -50,4 +54,27 @@ export class TfaUserService {
           throw new ForbiddenException(error);
       }
   }
+
+    async checkTfaCode(code :string, user: any) : Promise<boolean> {
+        try {
+            const valid =  await authenticator.verify({
+                token: code,
+                secret: (await user).two_fact_auth
+            })
+                return valid;
+        } catch (error) {
+            throw new ForbiddenException('wrong id')
+        }
+    }
+
+    async genTfaSecret(_id : string) {		
+		const user = await this.findUser.finduserById(_id);
+		if (!user)
+			throw new ForbiddenException ('Id not found in database');
+		const secret = authenticator.generateSecret();
+		const optPathUrl = authenticator.keyuri(user.email, process.env.APP_NAME, secret);
+		await this.setTfaSecret(secret, _id);
+		return await optPathUrl;
+	}
+
 }
