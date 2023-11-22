@@ -23,15 +23,6 @@ export class AuthController {
 		return await this.localService.localSignIn(res, dto);
 	}
 
-	// @UseGuards(AuthGuard('tfa'))
-	// @Get('/twoFactorAuth/')
-	// async twoFactorAuth(@Req() req, @Res() res: Response){
-	// 	const _id = req.user.sub;
-		
-	// 	const tfaInfo = await this.authservice.genTfaSecret(_id);
-	// 	return await this.authservice.pipeQrCodeStream(res, tfaInfo);    
-	// }
-
 	@UseGuards(AuthGuard('tfa'))
 	@Post('/twoFactorAuth/')
 	async validateTfo(@Req() req, @Res() res: Response ,@Body() dto:tfaDto) {
@@ -39,7 +30,7 @@ export class AuthController {
 		return await this.TfaAuthService.validateTfa(dto, _id, res);
 	}
 
-	@Get('/42')
+	@Post('/42')
     @UseGuards(AuthGuard('42'))
 	ftAuth(@Req() req: Request){}
 

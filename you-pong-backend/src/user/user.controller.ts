@@ -6,6 +6,11 @@ import { TfaUserService } from './services/tfa.service';
 import { UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import { toFileStream } from 'qrcode';
+import { Readable, Stream } from 'stream';
+import { json } from 'stream/consumers';
+import { Type } from 'class-transformer';
+import { type } from 'os';
+import { error } from 'console';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -87,10 +92,8 @@ export class UserController {
 	async twoFactorAuth(@Req() req, @Res() res) {
 		try {
 			const _id = req.user.sub;
-		
 			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
-			const QrFile =  await toFileStream(res, tfaInfo);
-			
+			await toFileStream(res, tfaInfo);
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
 		}

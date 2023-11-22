@@ -6,9 +6,7 @@ import { FindUserService, TfaUserService } from 'src/user/services';
 @Injectable()
 export class AuthService 
 {
-	constructor(private jwt:JwtService,
-				private findUser: FindUserService,
-				private TfaUserService: TfaUserService){}
+	constructor(private jwt:JwtService,){}
 
 	async genToken(id: string) {
 		const payload = { sub: id };
