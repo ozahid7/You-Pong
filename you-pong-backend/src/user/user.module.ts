@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { FindUserService, TfaUserService, UserService } from './services';
+import { FindUserService, InfoUserService, TfaUserService, UserService } from './services';
 import { AuthService } from 'src/auth/services';
-import { AuthController } from 'src/auth/auth.controller';
 
 
 @Module({
@@ -11,7 +10,7 @@ import { AuthController } from 'src/auth/auth.controller';
     secret : process.env.TFA_JWT_SECRET,
     global: true
   })], 
-  providers: [UserService, TfaUserService, FindUserService, AuthService],
-  exports: [UserService, TfaUserService, FindUserService]
+  providers: [UserService, TfaUserService, FindUserService, AuthService, InfoUserService],
+  exports: [UserService, TfaUserService, FindUserService, InfoUserService]
 })
 export class UserModule {}

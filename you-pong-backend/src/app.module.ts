@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { FileModule } from './file/file.module';
 import { AuthService, FtService, TfaAuthService, localService } from './auth/services';
-import { FindUserService, TfaUserService } from './user/services';
+import { FindUserService, InfoUserService, TfaUserService } from './user/services';
 import { UserController } from './user/user.controller';
 
 @Module({
@@ -34,6 +34,7 @@ import { UserController } from './user/user.controller';
               TfaAuthService,
               TfaUserService,
               FindUserService,
+              InfoUserService
   ]
 })
 export class AppModule {}

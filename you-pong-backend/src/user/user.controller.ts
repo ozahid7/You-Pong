@@ -3,14 +3,9 @@ import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
-import { UserService } from './services';
+import { InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import { toFileStream } from 'qrcode';
-import { Readable, Stream } from 'stream';
-import { json } from 'stream/consumers';
-import { Type } from 'class-transformer';
-import { type } from 'os';
-import { error } from 'console';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -18,6 +13,7 @@ export class UserController {
   constructor(
 	private TfaUserService: TfaUserService,
 	private userService: UserService,
+	private infosService: InfoUserService
   ) {}
 
   //POST MANY
@@ -97,5 +93,12 @@ export class UserController {
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
 		}
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Get('/GetHero/')
+	async getHero(@Res() res, @Req() req){
+		const _id = req.user.sub;
+		return await this.infosService.getHero(_id);
 	}
 }
