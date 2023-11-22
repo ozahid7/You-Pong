@@ -21,9 +21,8 @@ export class TfaUserService {
       const user = this.findUser.finduserById(_id);
       if (!user)
         throw new NotFoundException('user not found')
-
       try {
-            if ((await this.checkTfaCode(code, user)) == false)
+            if ((await user).tfaIsEnable && (await this.checkTfaCode(code, user)))
                 throw new ForbiddenException('code is incorrect');
             await this.prisma.user.update({
                 where: {
