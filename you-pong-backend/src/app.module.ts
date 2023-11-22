@@ -13,6 +13,9 @@ import { FileModule } from './file/file.module';
 import { AuthService, FtService, TfaAuthService, localService } from './auth/services';
 import { FindUserService, InfoUserService, TfaUserService } from './user/services';
 import { UserController } from './user/user.controller';
+import { AchievementController } from './achievement/achievement.controller';
+import { AchievementModule } from './achievement/achievement.module';
+import { AchievementService } from './achievement/achievement.service';
 
 @Module({
   imports: [
@@ -26,15 +29,17 @@ import { UserController } from './user/user.controller';
     SocketModule,
     UploadModule,
     FileModule,
+    AchievementModule,
   ],
-  controllers: [AuthController, UserController],
+  controllers: [AuthController, UserController, AchievementController],
   providers: [AuthService,
               FtService,
               localService,
               TfaAuthService,
               TfaUserService,
               FindUserService,
-              InfoUserService
+              InfoUserService,
+              AchievementService
   ]
 })
 export class AppModule {}
