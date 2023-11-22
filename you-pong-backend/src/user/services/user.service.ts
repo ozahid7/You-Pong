@@ -1,7 +1,8 @@
 import {  ForbiddenException, Injectable, NotFoundException, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
+import { userDto } from '../dto/user.create.dto';
+import { FindUserService } from './find.service';
 
 @Injectable()
 export class UserService {
@@ -10,14 +11,15 @@ export class UserService {
 
   async generateUser(usename: string):  Promise<string> {
       let res:string = usename + (this.id).toString().padStart(3, '0');
-      if ((await this.finduserByUserName(res) == null)){
+      if ((await this.findService.finduserByUserName(res) == null)){
           return res;
       }
       this.id++;
       return await this.generateUser(usename);
   }
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+              private findService: FindUserService) {}
 
   //POST
   async postUser(user: userDto) {
@@ -108,37 +110,6 @@ export class UserService {
     const result = await this.prisma.user.findMany();
     return result;
   }
-  
-    private userCounter: number = 0
-
-
-    async finduserById(_id: string){
-        const user = await this.prisma.user.findUnique({
-            where:{
-                id_user: _id
-            }
-        });
-        return user
-    }
-
-    async finduserByUserName(_username: string){
-        const user = await this.prisma.user.findUnique({
-            where:{
-                username: _username
-            }
-        });
-        return user
-    }
-    
-    async finduserByEmail(_email: string){
-        const user = await this.prisma.user.findUnique({
-            where:{
-                email: _email
-            }
-        });
-        return user
-    }
-
     // create a user
     async create(obj: any){
         try {
@@ -161,47 +132,6 @@ export class UserService {
             throw(error)
         }
     }
-
-    async getTfaStatus(user: any){
-    	try {
-    	  return (await user).tfaIsEnable;
-    	} catch (error) {
-    	  throw new NotFoundException(error)
-    	}
-    }
-
-    async switchTfaStatus(_id: string) {
-      const user = this.finduserById(_id);  
-      try{
-            await this.prisma.user.update({
-                where: {
-                    id_user: _id,
-                },
-                data: {
-                    tfaIsEnable: !(await this.getTfaStatus((await this.finduserById(_id)))),
-                },
-            }
-			);        
-		} catch(error){
-          throw new ForbiddenException(error);
-        }
-        return (await user).tfaIsEnable;
-    }
-
-    async setTfaSecret(secret: string, _id: string) {
-      try {
-          await this.prisma.user.update({
-              where: {
-                  id_user: _id,
-              },
-              data: {
-                  two_fact_auth: secret,
-              },
-          });
-      } catch (error){
-          throw new ForbiddenException(error);
-      }
-  }
 
     async signout(@Res() res: Response){
     	try {

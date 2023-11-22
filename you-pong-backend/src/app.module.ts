@@ -8,9 +8,11 @@ import { MessageModule } from './chat/message/message.module';
 import { SocketModule } from './socket/socket.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
 import { UploadModule } from './upload/upload.module';
 import { FileModule } from './file/file.module';
+import { AuthService, FtService, TfaAuthService, localService } from './auth/services';
+import { FindUserService, TfaUserService } from './user/services';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -25,7 +27,13 @@ import { FileModule } from './file/file.module';
     UploadModule,
     FileModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+  controllers: [AuthController, UserController],
+  providers: [AuthService,
+              FtService,
+              localService,
+              TfaAuthService,
+              TfaUserService,
+              FindUserService,
+  ]
 })
 export class AppModule {}

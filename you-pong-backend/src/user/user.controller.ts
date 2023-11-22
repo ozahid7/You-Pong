@@ -1,16 +1,15 @@
 import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from './user.service';
 import { userDto } from './dto/user.create.dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { authorize } from 'passport';
+import { TfaUserService } from './services/tfa.service';
+import { UserService } from './services';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(
-	private prisma: PrismaService,
+	private TfaUserService: TfaUserService,
 	private userService: UserService,
   ) {}
 
@@ -77,6 +76,6 @@ export class UserController {
 	@Post('/tfa/switch')
 	@UseGuards(AuthGuard('jwt'))
 	async set(@Req() req){
-		return await this.userService.switchTfaStatus(req.user.sub);
+		return await this.TfaUserService.switchTfaStatus(req.user.sub);
 	}
 }
