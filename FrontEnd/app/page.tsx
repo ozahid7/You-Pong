@@ -12,7 +12,7 @@ export default function Home() {
     const [showTwoFactor, setTwoFactor] = useState(false);
     
     return (
-        <div className="h-full w-full relative max-w-[1600px] xl:w-[90%]">
+        <div className="h-full  w-full relative max-w-[1600px] xl:w-[90%]">
             {/* top part */}
             <section className="w-ful z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
                 <img

@@ -1,61 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Black+Han+Sans&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Nunito:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Teko:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Black+Han+Sans&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Nunito:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Teko:wght@300;400&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-  @apply select-none;
+* {
+    @apply select-none;
 }
 
-
-.my_scroll_green{
-  @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
+.my_scroll_green {
+    @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
 }
 
-.my_scroll_orange{
-  @apply scrollbar-thin scrollbar-track-orange-100  z-0 scrollbar-corner-orange-100 scrollbar-thumb-palette-orange;
+.my_scroll_orange {
+    @apply scrollbar-thin scrollbar-track-orange-100  z-0 scrollbar-corner-orange-100 scrollbar-thumb-palette-orange;
 }
 
-.dblue{
-  @apply border-blue-700;
+.dblue {
+    @apply border-blue-700;
 }
-.dred{
-  @apply border-2 border-red-700;
+.dred {
+    @apply border-2 border-red-700;
 }
-.dgreen{
-  @apply border-2 border-green-700;
+.dgreen {
+    @apply border-2 border-green-700;
 }
 
-
-.debug{
-  @apply border-2 border-red-700;
+.debug {
+    @apply border-2 border-red-700;
 }
-.debug > *{
-  @apply border-2 border-green-700;
+.debug > * {
+    @apply border-2 border-green-700;
 }
-.debug > * > *{
-  @apply border-2 border-blue-700;
+.debug > * > * {
+    @apply border-2 border-blue-700;
 }
 
 /* my aliases */
 
-.make_center{
-  @apply flex justify-center items-center;
+.make_center {
+    @apply flex justify-center items-center;
 }
 
-.background{
-  @apply bg-background bg-no-repeat bg-origin-content bg-cover;
+.background {
+    @apply bg-background bg-no-repeat bg-origin-content bg-cover;
 }
 
-.circle{
-  @apply bg-circle bg-no-repeat bg-origin-content bg-cover;
+.circle {
+    @apply bg-circle bg-no-repeat bg-origin-content bg-cover;
 }
-
 
 @layer base {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }

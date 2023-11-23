@@ -138,7 +138,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
                 setIsInvalid(false);
             }}
             withCorner={false}
-            customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
+            customClass="absolute sm:h-[50%] max-h-[660px] max-w-[540px] h-[40%] md:w-[70%] w-[90%] s:w-[74%] h:min-h-[560px] min-h-[500px]"
         >
             <div className="flex items-center flex-col h-full overflow-auto">
                 <div className="w-full flex justify-evenly items-end ">
@@ -192,7 +192,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
                             handleclick={handleSend}
                         />
                     </div>
-                    <span className="sm:text-lg max-w-[270px] sm:max-w-[320px] mt-2 text-[14px] text-center lg:text-xl text-gray-500">
+                    <span className="sm:text-lg max-w-[270px] sm:max-w-[320px] mt-2 text-[14px] text-center lg:text-lg text-gray-500">
                         Don't have the Authenticator app yet ? get it from Google Play
                     </span>
                 </section>
