@@ -17,10 +17,15 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import groups from "../../../../public/groups.svg";
+import ozahid from "../../../../public/ozahid-.jpeg";
 import { MyInput, Background, Submit } from "../../../../components";
 import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
-import { LuLogIn, LuLock, LuUnlock } from "react-icons/lu";
+import {
+  IoLockClosedOutline,
+  IoLockOpenOutline,
+  IoEnterOutline,
+} from "react-icons/io5";
 
 export var setDataObj: Channel = {
   type: "PUBLIC",
@@ -76,53 +81,74 @@ export default function JoinModal() {
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                     <Table aria-label="Example empty table">
                       <TableHeader>
-                        <TableColumn className="font-['Chakra_Petch'] font-[600] text-shadow-md">
+                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+                          AVATAR
+                        </TableColumn>
+                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
                           NAME
                         </TableColumn>
-                        <TableColumn className="font-['Chakra_Petch'] font-[600] text-shadow-md">
+                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
                           TYPE
                         </TableColumn>
-                        <TableColumn className="font-['Chakra_Petch'] font-[600] text-shadow-md">
+                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
                           ACTION
                         </TableColumn>
                       </TableHeader>
                       <TableBody emptyContent={"No channels to display."}>
                         <TableRow>
-                          <TableCell className="text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[18px] font-[700] leading-normal not-italic">
-                            Channel1
+                          <TableCell>
+                            <Image
+                              src={groups}
+                              width={50}
+                              height={50}
+                              className="border-[2px] border-palette-green p-[0.5]"
+                              alt="image"
+                            />
                           </TableCell>
-                          <TableCell className="font-archivo text-[18px] text-palette-orange">
-                            <div className="flex flex-row gap-2 items-center">
+                          <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
+                            Channel
+                          </TableCell>
+                          <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
+                            <div className="flex flex-row gap-1 items-center w-fit p-1">
+                              <IoLockClosedOutline />
                               PROTECTED
-                              <LuLock />
                             </div>
                           </TableCell>
                           <TableCell className="flex flex-row">
                             <Button
-                              size="md"
-                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] green_button rounded-md border-none hover:border-none"
+                              size="lg"
+                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
                             >
-                              <LuLogIn />
+                              <IoEnterOutline />
                               Join
                             </Button>
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell className="text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[18px] font-[700] leading-normal not-italic">
-                            Channel1
+                          <TableCell>
+                            <Image
+                              src={ozahid}
+                              width={50}
+                              height={50}
+                              className="border-[2px] border-palette-green p-[0.5]"
+                              alt="image"
+                            />
                           </TableCell>
-                          <TableCell className="font-archivo text-[18px] text-palette-orange">
-                            <div className="flex flex-row gap-2 items-center">
+                          <TableCell className="font-body font-[500] text-[18px] text-[#424242] overflow-x-hidden">
+                            Channel
+                          </TableCell>
+                          <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
+                            <div className="flex flex-row gap-1 items-center w-fit p-1">
+                              <IoLockOpenOutline />
                               PUBLIC
-                              <LuUnlock />
                             </div>
                           </TableCell>
                           <TableCell className="flex flex-row h-full">
                             <Button
-                              size="md"
-                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[600] text-[#EFF5F5] rounded-md green_button border-none hover:border-none"
+                              size="lg"
+                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
                             >
-                              <LuLogIn />
+                              <IoEnterOutline />
                               Join
                             </Button>
                           </TableCell>
@@ -132,15 +158,7 @@ export default function JoinModal() {
                   </div>
                 </div>
               </ModalBody>
-              <ModalFooter>
-                <div className="flex w-[300px] h-[70px]">
-                  <Submit
-                    color="orange"
-                    text="JOIN"
-                    // handleclick={}
-                  ></Submit>
-                </div>
-              </ModalFooter>
+              <ModalFooter></ModalFooter>
             </Background>
           )}
         </ModalContent>

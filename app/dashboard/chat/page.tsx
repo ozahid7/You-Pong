@@ -17,25 +17,29 @@ import {
 import { LuUsers, LuUser } from "react-icons/lu";
 import { Channel } from "@/types";
 import { getData } from "./data/api";
+import { fetchData } from "next-auth/client/_utils";
+import useSWR from "swr";
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
   const [channel, setChannel] = useState<Channel[]>();
+  
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+  const { data: channelData } = useSWR<Channel[]>(
+    "http://178.62.74.69:400/chat/channel",
+    fetcher,
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getData();
-        setChannel(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (channelData) {
+      setChannel(channelData);
+    }
+  }, [channelData]);
+  
+  // fetchData();
 
   function formatAMPM(date) {
     var hours = date.getHours();
