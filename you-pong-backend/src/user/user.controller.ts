@@ -101,14 +101,14 @@ export class UserController {
 
 	@UseGuards(AuthGuard('jwt'))
 	@Get('/GetHero/')
-	async getHero(@Res() res, @Req() req){
+	async getHero(@Res() res: Response, @Req() req){
 		const _id = req.user.sub;
-		return await this.infosService.getHero(_id);
+		res.status(200).json(await this.infosService.getHero(_id));
 	}
 
 	@UseGuards(AuthGuard('jwt'))
-	@Post()
-	async setOwned(@Res() res, @Body() dto: unlockAchDto){
-		return this.achUserService.setOWned(res.user.sub, dto.title);
+	@Post('/achievement/unlock')
+	async setOwned(@Req() req, @Body() dto: unlockAchDto){
+		return this.achUserService.setOWned(req.user.sub, dto.title);
 	}
 }

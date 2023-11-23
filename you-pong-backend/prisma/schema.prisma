@@ -176,7 +176,7 @@ model Achievement {
 
 //OWNED MODEL
 model Owned {
-	id_achievement String 
+	id_achievement String @unique
 	achievement Achievement @relation(fields: [id_achievement], references: [id_achievement]) 
 	id_user String
 	user User @relation(name:"owned" ,fields: [id_user], references: [id_user])
