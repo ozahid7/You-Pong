@@ -10,7 +10,7 @@ export class InfoUserService {
         if (!user)
             throw new NotFoundException('user not found!');
         return {
-            usernfo:{
+            usernfo: {
                 username: user.username,
                 level: user.level,
                 rank: user.rank,

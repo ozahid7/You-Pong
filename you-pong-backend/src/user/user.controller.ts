@@ -6,6 +6,9 @@ import { TfaUserService } from './services/tfa.service';
 import { InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import { toFileStream } from 'qrcode';
+import { achievUserService } from './services/achievemennt.service';
+import { title } from 'process';
+import {  unlockAchDto } from './dto';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -13,7 +16,8 @@ export class UserController {
   constructor(
 	private TfaUserService: TfaUserService,
 	private userService: UserService,
-	private infosService: InfoUserService
+	private infosService: InfoUserService,
+	private achUserService: achievUserService
   ) {}
 
   //POST MANY
@@ -100,5 +104,11 @@ export class UserController {
 	async getHero(@Res() res, @Req() req){
 		const _id = req.user.sub;
 		return await this.infosService.getHero(_id);
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Post()
+	async setOwned(@Res() res, @Body() dto: unlockAchDto){
+		return this.achUserService.setOWned(res.user.sub, dto.title);
 	}
 }

@@ -16,6 +16,7 @@ import { UserController } from './user/user.controller';
 import { AchievementController } from './achievement/achievement.controller';
 import { AchievementModule } from './achievement/achievement.module';
 import { AchievementService } from './achievement/achievement.service';
+import { achievUserService } from './user/services/achievemennt.service';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { AchievementService } from './achievement/achievement.service';
               TfaUserService,
               FindUserService,
               InfoUserService,
-              AchievementService
+              AchievementService,
+              achievUserService,
   ]
 })
 export class AppModule {}
