@@ -4,19 +4,21 @@ import { Switch } from "@headlessui/react";
 import { twMerge } from "tailwind-merge";
 
 interface MyToggleProps {
-    Default?: string
-    enable?: string
+    string1?: string
+    string2?: string
     handelCheck?: any
     otherclass?: string
+    enabled: boolean
+    setIsEnabled: any
 }
 
-function MyToggle({Default, enable, handelCheck, otherclass}: MyToggleProps) {
-    const [enabled, setEnabled] = useState(false);
+function MyToggle({string1, string2, handelCheck, otherclass, enabled, setIsEnabled}: MyToggleProps) {
+    
 
     const classname = twMerge(`w-[140px] h-[43px] pr-3 flex items-center justify-around ${
                     !enabled
-                        ? "bg-palette-orange border-2 border-orangeborder"
-                        : "bg-palette-green border-2 border-greenborder"
+                        ? "bg-palette-green border-2 border-greenborder"
+                        : "bg-palette-orange border-2 border-orangeborder"
                 }
           relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-sm transition-colors duration-200 ease-in-out focus-visible:ring-2  focus-visible:ring-white/75`, otherclass)
 
@@ -27,7 +29,7 @@ function MyToggle({Default, enable, handelCheck, otherclass}: MyToggleProps) {
                 onChange={() => {
                     if (enabled === false)
                         handelCheck();
-                    setEnabled(!enabled)
+                    setIsEnabled(!enabled)
                 }}
                 className={classname}
             >
@@ -36,7 +38,7 @@ function MyToggle({Default, enable, handelCheck, otherclass}: MyToggleProps) {
                         enabled ? "flex " : "hidden"
                     }`}
                 >
-                    {Default}
+                    {string1}
                 </span>
                 <span
                     aria-hidden="true"
@@ -50,7 +52,7 @@ function MyToggle({Default, enable, handelCheck, otherclass}: MyToggleProps) {
                         enabled ? "hidden" : "flex"
                     } font-body font-bold text-white text-lg`}
                 >
-                    {enable}
+                    {string2}
                 </span>
             </Switch>
         </div>

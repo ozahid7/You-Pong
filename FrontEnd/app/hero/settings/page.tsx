@@ -9,6 +9,8 @@ import ProfileSettings from "./ProfileSettings";
 const page = () => {
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);
+        const [enabled, setEnabled] = useState(false);
+
 
     return (
         <div className="h-full min-h-[600px] w-full make_center">
@@ -28,7 +30,12 @@ const page = () => {
                         </div>
                         <div className="h-[60%] flex justify-center w-full">
                             <div className="w-[80%] h-[70%] pt-2 flex flex-col  bg-palette-grey drop-shadow-md items-center space-y-4 ">
-                                <div onClick={() => {setShowProfileSetting(true)}} className="w-[94%] cursor-pointer flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm">
+                                <div
+                                    onClick={() => {
+                                        setShowProfileSetting(true);
+                                    }}
+                                    className="w-[94%] cursor-pointer flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm"
+                                >
                                     <span className="text-md sm:text-xl md:text-2xl xl:text-3xl font-body drop-shadow-sm font-semibold text-cardtitle ">
                                         Profile
                                     </span>
@@ -42,7 +49,11 @@ const page = () => {
 
                                     <MyToggle
                                         otherclass="h-[38px]"
-                                        handelCheck={() => {setTwoFactor(true)}}
+                                        handelCheck={() => {
+                                            setTwoFactor(true);
+                                        }}
+                                        enabled={enabled}
+                                        setIsEnabled={setEnabled}
                                     />
                                 </div>
                             </div>
@@ -55,10 +66,10 @@ const page = () => {
                     closemodal={setTwoFactor}
                 />
             </div>
-                <ProfileSettings
-                    isOpen={showProfileSetting}
-                    setIsOpen={setShowProfileSetting}
-                />
+            <ProfileSettings
+                isOpen={showProfileSetting}
+                setIsOpen={setShowProfileSetting}
+            />
         </div>
     );
 };

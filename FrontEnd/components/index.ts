@@ -15,6 +15,7 @@ import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 import MiniBanner from "./tools/MiniBanner";
 import TwoFactor from "./auth/TwoFactor";
+import MyToolTip from "./tools/MyToolTip";
 
 export {
     NavBar,
@@ -34,4 +35,5 @@ export {
     SignUp,
     SignIn,
     MiniBanner,
+    MyToolTip
 };

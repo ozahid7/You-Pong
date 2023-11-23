@@ -8,19 +8,19 @@ import { MyDropdownProps } from "@/types";
 import { menuElements } from "@/const"
 import { renderIcon } from "@/utils";
 
-const MyDropdown = (props: {icon: any, style?: string, size?: number, image?: any}) => {
+const MyDropdown = (props: {icon: any, style?: string, size?: number, image?: any, placement: string}) => {
 
     
     return (
         <div className="flex flex-col justify-center relative">
-            <Menu>
-                <Menu.Button as="div" className="">
+            <Menu >
+                <Menu.Button  as="div" className="">
                   { props.icon !== "" ? renderIcon(props.icon, props.style, props.size) : props.image }
                 </Menu.Button>
                 <Menu.Items
                     as="div"
                     
-                    className="flex flex-col h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+                    className={`flex flex-col border-2 border-palette-green  h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full ${props.placement} absolute`}
                 >
                     {menuElements.map((elm) => (
                         <Menu.Item  key={elm.href} as={Fragment}>

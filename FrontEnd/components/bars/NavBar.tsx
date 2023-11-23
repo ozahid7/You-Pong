@@ -56,6 +56,7 @@ const NavBar = () => {
                         icon={FiChevronDown}
                         style="text-white cursor-pointer"
                         size={25}
+                        placement="right-0"
                     />
                 </div>
             </div>

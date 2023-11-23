@@ -1,11 +1,19 @@
-"use client";
+'use client'
 import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
+import { FaUserCheck } from "react-icons/fa";
+import { FaUserTimes } from "react-icons/fa";
 
-const FriendBanner = (props: { zindex?: number, image: any, userName: string, status: string }) => {
 
+
+const RequestBanner = (props: {
+    zindex?: number;
+    image: any;
+    userName: string;
+    status: string;
+}) => {
     const [enabled, setEnabled] = useState(false);
 
     return (
@@ -18,7 +26,7 @@ const FriendBanner = (props: { zindex?: number, image: any, userName: string, st
                     <span
                         data-tooltip-id="username"
                         data-tooltip-content={props.userName}
-                        className="font-body text-palette-green text-lg font-bold"
+                        className="font-body text-palette-green text-sm h:text-lg font-bold"
                     >
                         {props.userName.length > 7
                             ? props.userName.slice(0, 4) + "..."
@@ -30,12 +38,16 @@ const FriendBanner = (props: { zindex?: number, image: any, userName: string, st
                 </div>
             </div>
             <div className="flex space-x-2 md:space-x-8">
-                <LuMessageSquarePlus
+                <FaUserCheck
                     size={35}
-                    className="cursor-pointer mt-1 text-cardtitle"
+                    className="cursor-pointer mt-1 text-green-700"
+                />
+                <FaUserTimes
+                    size={35}
+                    className="cursor-pointer mt-1 text-red-600"
                 />
                 <MyToggle
-                    otherclass="h-[38px] hidden sm:flex min-w-[120px]"
+                    otherclass="h-[38px] hidden lg:flex min-w-[120px]"
                     handelCheck={() => {}}
                     string1="unblock"
                     string2="block"
@@ -47,4 +59,4 @@ const FriendBanner = (props: { zindex?: number, image: any, userName: string, st
     );
 };
 
-export default FriendBanner;
+export default RequestBanner;
