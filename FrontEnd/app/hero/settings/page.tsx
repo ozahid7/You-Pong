@@ -1,16 +1,33 @@
 "use client";
 import { MyContainer, TwoFactor } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
+import axios from "axios";
 
 const page = () => {
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);
-        const [enabled, setEnabled] = useState(false);
+    const [enabled, setEnabled] = useState(false);
+    const [submit, setSubmit] = useState(false);
+    const [path, setPath] = useState('')
 
+    useEffect(() => {
+        if (submit){
+            console.log('from use effect')
+            const apiUrl = "http://localhost:4000/user/twoFactorAuth/";
+            axios.get(apiUrl)
+            .then((response) => {
+                console.log(response.data)
+                setPath(response.data.qrcode)
+            }).catch((error) => {
+                console.log(error)
+            })
+            setSubmit(false)
+        }
+    }, [enabled]) 
 
     return (
         <div className="h-full min-h-[600px] w-full make_center">
@@ -51,9 +68,11 @@ const page = () => {
                                         otherclass="h-[38px]"
                                         handelCheck={() => {
                                             setTwoFactor(true);
+                                            setSubmit(true)
                                         }}
                                         enabled={enabled}
                                         setIsEnabled={setEnabled}
+                                    
                                     />
                                 </div>
                             </div>
@@ -64,6 +83,7 @@ const page = () => {
                     isEnabled={false}
                     isOpen={showTwoFactor}
                     closemodal={setTwoFactor}
+                    path={path}
                 />
             </div>
             <ProfileSettings

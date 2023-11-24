@@ -1,5 +1,7 @@
 "use client";
 import { CustomButton, MyDialog, MyInput } from "@/components";
+import { LuUpload } from "react-icons/lu";
+
 import React, { useState } from "react";
 
 interface ProfileSettingsProps {
@@ -31,11 +33,11 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
             isOpen={isOpen}
             closemodal={() => {
                 setIsOpen(false);
-                setNewPass("")
-                setUserName("")
-                setCurrentPass("")
-                setConfirmPass("")
-                setSelectedFile("/ozahid-.jpeg")
+                setNewPass("");
+                setUserName("");
+                setCurrentPass("");
+                setConfirmPass("");
+                setSelectedFile("/ozahid-.jpeg");
             }}
             withCorner={false}
             customClass="absolute h-[64%] w-[90%] sm:w-[66%] max-w-[700px]"
@@ -51,15 +53,18 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                         <input
                             id="uploadphoto"
                             type="file"
-                            onChange={(e) => {handelFileSelect(e)}}
+                            onChange={(e) => {
+                                handelFileSelect(e);
+                            }}
                             accept="image/*"
-                            className="min-h-[47px] max-w-[180px] h:max-w-[230px] outline-none   rounded-sm flex pt-[5px] border-2 border-palette-green text-cardtitle"
+                            className="min-h-[47px] max-w-[140px] md:max-w-[180px] outline-none  rounded-lg flex pt-[5px] border-2 border-palette-green text-cardtitle"
                         />
                         <label
                             htmlFor="uploadphoto"
-                            className="font-body absolute cursor-pointer text-[14px] flex justify-center items-center w-[105px] min-h-[47px] left-0 bottom-0 bg-palette-green text-md border-l-2 border-y-2 border-palette-grey  italic font-semibold text-white"
+                            className="font-body absolute space-x-3 cursor-pointer rounded-md text-[14px] flex justify-center items-center w-full h-full left-0 bottom-0 bg-palette-green text-md border-2 drop-shadow-md border-palette-grey  italic font-semibold text-white"
                         >
-                            Upload File
+                            <span className="text-md lg:text-lg">Upload File</span>
+                            <LuUpload size={16}/>
                         </label>
                     </div>
                 </div>
@@ -115,7 +120,11 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                             </div>
                         </div>
                     </div>
-                    <form method="post" action='' className="min-h-[40px] sm:min-h-[56px] md:min-h-[62px] flex justify-center  items-center w-full">
+                    <form
+                        method="post"
+                        action=""
+                        className="min-h-[40px] sm:min-h-[56px] md:min-h-[62px] flex justify-center  items-center w-full"
+                    >
                         <CustomButton
                             text="Update"
                             color="orange"

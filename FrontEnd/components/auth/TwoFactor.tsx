@@ -8,9 +8,10 @@ interface TwoFactorProps {
     isOpen: boolean;
     closemodal: Function;
     isEnabled: boolean;
+    path?: string
 }
 
-const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
+const TwoFactor = ({ isOpen, closemodal, isEnabled, path  }: TwoFactorProps) => {
 
    
     const ref1 = useRef<HTMLInputElement>(null);
@@ -20,7 +21,9 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled  }: TwoFactorProps) => {
     const ref5 = useRef<HTMLInputElement>(null);
     const ref6 = useRef<HTMLInputElement>(null);
 
-    const image = isEnabled ? '/mobile.svg' : '/ozahid-.jpeg'
+    const image = isEnabled
+        ? "/mobile.svg"
+        : path;
     const msg = !isEnabled ? "Scan the Qr code and Enter the OTP from :" : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
