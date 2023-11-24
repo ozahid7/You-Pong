@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import FriendBanner from "./FriendBanner";
 import { MyToolTip } from "@/components";
@@ -13,46 +13,84 @@ interface Friend {
 }
 
 const FriendsList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "List" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Listhfkshshgks" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "List" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "List" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "List" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
+    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
 ];
 const BlockedList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Blocked" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Blocked" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Blocked" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "Blocked" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Blocked" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
+    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
 ];
 const RequestList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Request" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Request" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Request" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "Request" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Request" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
+    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
+    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
 ];
 
-const CustomTabs = () => {
+const CustomTabs = (props: { input: string, setInput: any }) => {
     const [index, setIndex] = useState(0);
+    const [ListArr, setListArr] = useState(FriendsList);
+    const [RequestArr, setRequestArr] = useState(RequestList);
+    const [BlockArr, setBlockArr] = useState(BlockedList);
+    
+    
+    useEffect(() => {
+        setListArr(
+            FriendsList.filter((friend) =>
+                friend.userName
+                    .toLowerCase()
+                    .includes(props.input.toLowerCase())
+            )
+        );
+        setRequestArr(
+            RequestList.filter((friend) =>
+                friend.userName
+                    .toLowerCase()
+                    .includes(props.input.toLowerCase())
+            )
+        );
+        setBlockArr(
+            BlockedList.filter((friend) =>
+                friend.userName
+                    .toLowerCase()
+                    .includes(props.input.toLowerCase())
+            )
+        );
+    }, [props.input]);
 
     const renderImage = (path: string) => {
         return (
             <img
-            src={path}
-            alt="logo"
-            className="h-10  object-contain border-2 max-w-[220px] max-h-[220px] border-white  rounded-md sm:h-14 md:h-16"
+                src={path}
+                alt="logo"
+                className="h-10  object-contain border-2 max-w-[220px] max-h-[220px] border-white  rounded-md sm:h-14 md:h-16"
             />
-        )
-    }
-    
+        );
+    };
+
     return (
         <div className="w-full flex flex-col items-center h-[70%]">
             <Tab.Group
                 defaultIndex={0}
                 onChange={(index) => {
                     setIndex(index);
+                    props.setInput('')
                 }}
             >
                 <Tab.List className="bg-[#819FA1] outline-none min-h-[50px] space-x-1  py-2 w-[90%] flex rounded-sm  justify-evenly">
@@ -76,14 +114,12 @@ const CustomTabs = () => {
                     ></Tab>
                 </Tab.List>
                 <Tab.Panels className="mt-4  flex overflow-y-auto  my_scroll_green flex-grow w-[90%]">
-                    <MyToolTip id="username"/>
+                    <MyToolTip id="username" />
                     <Tab.Panel className="h-[20%]  space-y-4 w-full">
-                        {FriendsList.map((e, index) => (
+                        {ListArr.map((e, index) => (
                             <FriendBanner
                                 key={index}
-                                userName={
-                                    e.userName
-                                }
+                                userName={e.userName}
                                 image={renderImage(e.avatar)}
                                 status={e.status}
                             />
@@ -91,12 +127,10 @@ const CustomTabs = () => {
                     </Tab.Panel>
                     {/* Displays this panel by default */}
                     <Tab.Panel className="h-[20%] space-y-4 w-full">
-                        {RequestList.map((e, index) => (
+                        {RequestArr.map((e, index) => (
                             <RequestBanner
                                 key={index}
-                                userName={
-                                   e.userName
-                                }
+                                userName={e.userName}
                                 image={renderImage(e.avatar)}
                                 status={e.status}
                             />
@@ -104,12 +138,10 @@ const CustomTabs = () => {
                     </Tab.Panel>
 
                     <Tab.Panel className="h-[20%]  space-y-4 w-full">
-                        {BlockedList.map((e, index) => (
+                        {BlockArr.map((e, index) => (
                             <BlockedBanner
                                 key={index}
-                                userName={
-                                    e.userName
-                                }
+                                userName={e.userName}
                                 image={renderImage(e.avatar)}
                                 status={e.status}
                             />

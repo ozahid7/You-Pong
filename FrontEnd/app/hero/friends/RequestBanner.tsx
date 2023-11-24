@@ -40,11 +40,11 @@ const RequestBanner = (props: {
             <div className="flex space-x-2 md:space-x-8">
                 <FaUserCheck
                     size={35}
-                    className="cursor-pointer mt-1 text-green-700"
+                    className="cursor-pointer mt-1 text-palette-green"
                 />
                 <FaUserTimes
                     size={35}
-                    className="cursor-pointer mt-1 text-red-600"
+                    className="cursor-pointer mt-1 text-palette-orange"
                 />
                 <MyToggle
                     otherclass="h-[38px] hidden lg:flex min-w-[120px]"

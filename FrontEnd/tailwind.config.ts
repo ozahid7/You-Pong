@@ -45,7 +45,7 @@ const config: Config = {
                 fold: "290px",
                 s: "360px",
                 h: "465px",
-                xxxl: "1736px"
+                xxxl: "1736px",
             },
             colors: {
                 palette: {
@@ -66,6 +66,8 @@ const config: Config = {
                 roboto: ["Roboto"],
                 teko: ["Teko"],
                 black: ["Black Han Sans"],
+                orbitron: ["Orbitron"],
+                russo: ["Russo One"],
             },
             backgroundImage: {
                 background: "url('/background.png')",

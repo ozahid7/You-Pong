@@ -51,7 +51,7 @@ const PlayerCard = () => {
                       )}
                       <div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
                           <div className=" w-full space-x-1  flex">
-                              <h2 className="font-extrabold mt-2 font-black text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
+                              <h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
                                   OZAHID-
                               </h2>
                               <span className="relative flex h-2 w-2  sm:h-3 sm:w-3">

@@ -21,7 +21,7 @@ export default function RootLayout({
             </head>
             <body className="flex h-screen min-w-[280px] min-body  background">
                 
-                <main className="flex flex-col h-full overflow-auto my_scroll_orange items-center justify-between w-full">
+                <main className="flex flex-col h-full overflow-y-auto items-center justify-between w-full">
                     {children}
                 </main>
             </body>

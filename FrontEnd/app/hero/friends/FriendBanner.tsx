@@ -32,7 +32,7 @@ const FriendBanner = (props: { zindex?: number, image: any, userName: string, st
             <div className="flex space-x-2 md:space-x-8">
                 <LuMessageSquarePlus
                     size={35}
-                    className="cursor-pointer mt-1 text-cardtitle"
+                    className="cursor-pointer mt-1 text-palette-green"
                 />
                 <MyToggle
                     otherclass="h-[38px] hidden sm:flex min-w-[120px]"
