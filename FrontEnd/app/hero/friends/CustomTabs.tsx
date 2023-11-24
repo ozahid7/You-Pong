@@ -14,7 +14,7 @@ interface Friend {
 
 const FriendsList: Friend[] = [
     { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
+    { avatar: "/ozahid-.jpeg", status: "online", userName: "Adam" },
     { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
     { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
     { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
@@ -95,20 +95,20 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
             >
                 <Tab.List className="bg-[#819FA1] outline-none min-h-[50px] space-x-1  py-2 w-[90%] flex rounded-sm  justify-evenly">
                     <Tab
-                        className={`outline-none before:content-['List'] sm:before:content-['Friend_List'] text-sm md:text-lg font-body xl:text-xl drop-shadow-lg  ${
+                        className={`outline-none before:content-['List'] sm:before:content-['Friend_List'] text-sm md:text-md font-body xl:text-xl drop-shadow-lg  ${
                             index === 0 ? "border-b-2 border-white" : ""
                         } font-semibold text-white rounded- hover:scale-110`}
                     ></Tab>
 
                     {/* Selects this tab by default */}
                     <Tab
-                        className={`outline-none text-sm md:text-lg before:content-['Requests'] sm:before:content-['Friend_Request'] font-body xl:text-xl drop-shadow-lg  ${
+                        className={`outline-none text-sm md:text-md before:content-['Requests'] sm:before:content-['Friend_Request'] font-body xl:text-xl drop-shadow-lg  ${
                             index === 1 ? "border-b-2 border-white" : ""
                         } font-semibold text-white rounded- hover:scale-110`}
                     ></Tab>
 
                     <Tab
-                        className={`outline-none text-sm md:text-lg before:content-['Blocked'] sm:before:content-['Blocked_Friends']  font-body xl:text-xl drop-shadow-lg  ${
+                        className={`outline-none text-sm md:text-md before:content-['Blocked'] sm:before:content-['Blocked_Friends']  font-body xl:text-xl drop-shadow-lg  ${
                             index === 2 ? "border-b-2 border-white" : ""
                         } font-semibold text-white rounded- hover:scale-110`}
                     ></Tab>
