@@ -94,9 +94,8 @@ export class UserController {
 			const _id = req.user.sub;
 			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
 			// console.log({photo: await qrocode.toFileStream(res, tfaInfo)});
-			const the = await qrocode.toDataURL("data");
-			// res.status(201).json({img : `<img src="${the}" alt="QR Code" />`})
-			return the;
+			const qr = await qrocode.toDataURL("data");
+			res.status(201).json({img : qr})
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
 		}
