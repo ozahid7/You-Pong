@@ -5,7 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
 import { InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
-import { toFileStream } from 'qrcode';
+import * as qrocode from 'qrcode';
 import { achievUserService } from './services/achievemennt.service';
 import { title } from 'process';
 import {  unlockAchDto } from './dto';
@@ -93,11 +93,20 @@ export class UserController {
 		try {
 			const _id = req.user.sub;
 			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
-			await toFileStream(res, tfaInfo);
+			// console.log({photo: await qrocode.toFileStream(res, tfaInfo)});
+			const the = await qrocode.toDataURL("data");
+			// res.status(201).json({img : `<img src="${the}" alt="QR Code" />`})
+			return the;
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
 		}
 	}
+	// const _id = req.user.sub;
+	// const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
+	// // console.log({photo: await qrocode.toFileStream(res, tfaInfo)});
+	// const the = await qrocode.toDataURL("tfaInfo");
+	// res.status.json({})
+	// return `<img src="${the}" alt="QR Code" />`;
 
 	@UseGuards(AuthGuard('jwt'))
 	@Get('/GetHero/')

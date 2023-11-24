@@ -20,7 +20,7 @@ export class achievUserService {
             });
         return true;
         } catch(error) {
-            throw new ForbiddenException(error);
+            throw new ForbiddenException(`cannot unlock the achievement ${title}`);
         }
     }
 }
