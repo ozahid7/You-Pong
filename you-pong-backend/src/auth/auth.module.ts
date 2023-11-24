@@ -18,5 +18,4 @@ import { FindUserService, TfaUserService, UserService } from 'src/user/services'
     exports: [AuthService, localService, FtService],
 })
 
-export class AuthModule {
-}
+export class AuthModule {}

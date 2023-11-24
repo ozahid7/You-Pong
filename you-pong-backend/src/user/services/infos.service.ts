@@ -12,7 +12,7 @@ export class InfoUserService {
         
         async creatAchObj(){
             const ach = await this.prisma.achievement.findMany();
-            const objArray: { stats: boolean; title: string; description: string }[] = [];
+            const objArray: { isOwned: boolean; title: string; description: string }[] = [];
 
             for (const achievemennt of ach) {
                 let val = await this.prisma.owned.findUnique({
@@ -21,7 +21,7 @@ export class InfoUserService {
                     }
                 });
                 objArray.push({
-                    stats: val ? true : false,
+                    isOwned: val ? true : false,
                     title: achievemennt.title,
                     description: achievemennt.description
                 });

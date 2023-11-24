@@ -17,6 +17,7 @@ import { AchievementController } from './achievement/achievement.controller';
 import { AchievementModule } from './achievement/achievement.module';
 import { AchievementService } from './achievement/achievement.service';
 import { achievUserService } from './user/services/achievemennt.service';
+import { JwtStrategy } from './auth/strategies';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { achievUserService } from './user/services/achievemennt.service';
               InfoUserService,
               AchievementService,
               achievUserService,
+              JwtStrategy,
   ]
 })
 export class AppModule {}
