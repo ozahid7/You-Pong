@@ -24,8 +24,7 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
 
     return (
         <div
-            data-tooltip-id="banner_tooltip"
-            data-tooltip-content={userName}
+            
             className={classname}
         >
             <div className={customClass}></div>
@@ -40,7 +39,11 @@ const Banner = ({ isGreen, userName, avatar, wins, loses, style }: BannerProps) 
                     />
                 </div>
                 <div className="h-full px-2 w-full flex flex-col items-center justify-center h:justify-around  h:flex-row">
-                    <span className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg">
+                    <span
+                        data-tooltip-id="banner_tooltip"
+                        data-tooltip-content={userName}
+                        className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg"
+                    >
                         {userName.length > 7
                             ? userName.slice(0, 4) + "..."
                             : userName}

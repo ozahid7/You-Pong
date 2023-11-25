@@ -7,19 +7,20 @@ interface MyContainerProps {
     children: React.ReactNode;
     withCorners?: boolean;
     closeModal?: () => void
+    isModal?: boolean
 }
 
-export function MyContainer({children, withCorners,  closeModal}: MyContainerProps) {
+export function MyContainer({children, withCorners,  closeModal, isModal}: MyContainerProps) {
 
     const customclass = withCorners ? "hidden" : "";
     const otherclass = withCorners ? "s:hidden" : "";
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
-            <MdCancelPresentation
+            {isModal && <MdCancelPresentation
                 onClick={closeModal}
                 size={25}
                 className="absolute z-10 text-gray-400 h:top-6 cursor-pointer h:left-8 top-4 left-4  rounded-sm"
-            />
+            />}
             {/* <!--content container(the div in center) --> */}
             <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] overflow-auto translate-y-[-50%] left-[50%] translate-x-[-50%]">
                 {children}

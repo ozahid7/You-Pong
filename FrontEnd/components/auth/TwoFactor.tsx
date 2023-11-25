@@ -110,7 +110,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path  }: TwoFactorProps) => 
                 onKeyUp={(e) => {
                     setKey(e.key), clearInputs();
                 }}
-                type="text"
+                type="digit"
                 required
                 ref={re}
                 value={val}
