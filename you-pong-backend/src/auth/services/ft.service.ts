@@ -16,7 +16,7 @@ export class FtService
 		const tfaStatus = await this.TfaUserService.getTfaStatus(user);
 		if (tfaStatus == false) {
 			await this.authService.genCookie(res, user.id_user, 'access_token')
-			res.redirect('http://localhost:3000/hero');
+			res.redirect('http://localhost:3000/hero/settings');
 		}
 		// generate tfa Cookie
 		else {

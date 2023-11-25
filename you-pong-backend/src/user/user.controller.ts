@@ -93,19 +93,12 @@ export class UserController {
 		try {
 			const _id = req.user.sub;
 			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
-			// console.log({photo: await qrocode.toFileStream(res, tfaInfo)});
 			const qr = await qrocode.toDataURL("data");
 			res.status(201).json({img : qr})
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
 		}
 	}
-	// const _id = req.user.sub;
-	// const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
-	// // console.log({photo: await qrocode.toFileStream(res, tfaInfo)});
-	// const the = await qrocode.toDataURL("tfaInfo");
-	// res.status.json({})
-	// return `<img src="${the}" alt="QR Code" />`;
 
 	@UseGuards(AuthGuard('jwt'))
 	@Get('/GetHero/')

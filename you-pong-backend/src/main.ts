@@ -6,9 +6,13 @@ import cookieParser from 'cookie-parser';
 
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {cors: true});
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PATCH"],
+  });
   app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle('You-Pong')

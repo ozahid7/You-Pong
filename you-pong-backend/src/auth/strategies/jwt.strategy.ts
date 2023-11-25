@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt'){
                     const token = req.cookies['access_token'];
                     return token;
                 } catch(error) {
-                    throw new ForbiddenException(error);
+                    throw new ForbiddenException('cookie not found');
                 }
             },
             ignoreExpiration: false,
