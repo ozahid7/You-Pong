@@ -22,7 +22,9 @@ export class TfaUserService {
       if (!user)
         throw new NotFoundException('user not found')
       try {
-            if ((await user).tfaIsEnable && (await this.checkTfaCode(code, user)))
+            if (((await user).tfaIsEnable) == false)
+                true;
+            else if (await this.checkTfaCode(code, user))
                 throw new ForbiddenException('code is incorrect');
             await this.prisma.user.update({
                 where: {
