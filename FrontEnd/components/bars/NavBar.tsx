@@ -4,6 +4,7 @@ import Image from "next/image";
 import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
+import SearchBar from "./SearchBar";
 
 const NavBar = () => {
     const name = "oussama zahid";
@@ -14,18 +15,9 @@ const NavBar = () => {
 
     return (
         <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
-            <div className="flex justify-end s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
+            <div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
                 {/* input search */}
-                <div className="search_input  w-[60%] max-h-[50px] max-w-[220px] p-[2px] min-w-[140px] sm:max-h-[60px]   min-h-[40px] h-[10%] flex justify-center items-center">
-                    <div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
-                        <LuSearch className="h-7 w-7 text-white" />
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            className="center text-white font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
-                        />
-                    </div>
-                </div>
+                <SearchBar/>
 
                 <div className="p-2 border-2 border-white rounded-sm">
                     <LuBell className="text-white stroke-white h-5 w-5" />

@@ -21,7 +21,10 @@ const NotFound = () => {
                             This page could not be found
                         </span>
                         <div className="w-[70%] lg:w-full h-[30%] pt-2  h:mt-8 make_center">
-                            <Link href="/hero" className="w-full min flex justify-center h-[45px] sm:h-[80px]">
+                            <Link
+                                href="/hero/dashboard"
+                                className="w-full min flex justify-center h-[45px] sm:h-[80px]"
+                            >
                                 <CustomButton
                                     color="orange"
                                     text="Go Back Home"

@@ -16,7 +16,6 @@ import SignUp from "./auth/SignUp";
 import MiniBanner from "./tools/MiniBanner";
 import TwoFactor from "./auth/TwoFactor";
 import MyToolTip from "./tools/MyToolTip";
-import MyCombobox from "./containers/MyCompobox";
 
 export {
     NavBar,
@@ -37,5 +36,4 @@ export {
     SignIn,
     MiniBanner,
     MyToolTip,
-    MyCombobox
 };

@@ -45,7 +45,7 @@ const matchList: match[] = [
 
 const HistoryCard = () => {
     return (
-        <div className="flex justify-center items-center   max-w-[720px] xl:max-h-none max-h-[500px] xl:max-w-[520px] min-w-[256px] w-[90%] xl:w-[92%] h-[94%] xl:h-[90%] ">
+        <div className="flex justify-center z-0 items-center   max-w-[720px] xl:max-h-none max-h-[500px] xl:max-w-[520px] min-w-[256px] w-[90%] xl:w-[92%] h-[94%] xl:h-[90%] ">
             <MyCard type="nocorner" otherclass="max-h-full w-full flex ">
                 <div className="w-full relative   h-full flex flex-col justify-end items-end">
                     <h3 className=" whitespace-nowrap text-cardtitle  text-[12px] absolute top-4 left-4 h:left-6 sm:left-8 md:left-8  h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">

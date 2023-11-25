@@ -46,7 +46,7 @@ const MobileSideBar = () => {
     return (
         <aside className=" w-full  flex sm:hidden items-end">
             <div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
-                {RenderMobileSidBarElement(0, "/hero")}
+                {RenderMobileSidBarElement(0, "/hero/dashboard")}
                 {RenderMobileSidBarElement(1, "/hero/freinds")}
                 {RenderMobileSidBarElement(2, "/hero/messages")}
                 {RenderMobileSidBarElement(3, "/hero/notifications")}
