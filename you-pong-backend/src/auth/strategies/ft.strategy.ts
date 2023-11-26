@@ -21,6 +21,8 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
 
     async validate(@Req() req: Request, at, rf, profile, callback){
         const user = await this.findUser.finduserByEmail(profile.emails[0].value);
+        console.log(profile);
+        
         let newUser = null;
         if (!user){
             newUser =  await this.user.create({
