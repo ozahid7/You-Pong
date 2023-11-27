@@ -91,8 +91,6 @@ const SignIn = (props: {
 
     return (
         <>
-            {status === 'loading' && <div className="w-full h-3 bg-red-600"></div>}
-            {status === 'idle'  &&
              <MyDialog
                 isOpen={props.isOpen}
                 closemodal={() => {
@@ -176,7 +174,6 @@ const SignIn = (props: {
                     </form>
                 </div>
             </MyDialog>
-}
         </>
     );
 };

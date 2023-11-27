@@ -6,6 +6,7 @@ import Link from "next/link";
 import { landing_page_description } from "@/const";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 const queryClient = new QueryClient();
 
@@ -85,11 +86,10 @@ export default function Home() {
                                 text="GET STARTED"
                                 color="orange"
                                 otherclass="w-[40%] lg:w-full"
-                                handleclick={() => setTwoFactor(true)}
+                                handleclick={() => setSingIn(true)}
                             />
                         </div>
                     </div>
-
                     <div className="flex justify-end z-0 items-center w-full xl:w-[50%] mt-10 xl:mt-60 2xl:mt-24">
                         <div className="relative w-full 2xl:w-[90%] lg:w-80% md:h-[590px] xl:h-[690px] 2xl:h-[800px] h:h-[400px] h-[360px] flex justify-center">
                             <img

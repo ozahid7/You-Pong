@@ -11,9 +11,10 @@ interface MyDialogProps {
     children?: React.ReactNode;
     withCorner?: boolean;
     customClass?: string;
+    withClose?: boolean
 }
 
-function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyDialogProps) {
+function MyDialog({ isOpen, closemodal, children, withCorner, customClass, withClose }: MyDialogProps) {
     const classname = twMerge("flex justify-center", customClass);
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -36,7 +37,7 @@ function MyDialog({ isOpen, closemodal, children, withCorner, customClass }: MyD
                 </Transition.Child>
                 <div className="fixed h-full w-full max-h-screen flex justify-center items-center inset-0 overflow-auto">
                     <div className={classname}>
-                        <MyContainer withCorners={withCorner} closeModal={closemodal} isModal={true}>
+                        <MyContainer isLoader={withClose} withCorners={withCorner} closeModal={closemodal} isModal={true}>
                             <div className=" make_center h-[100%] overflow-auto">
                                 <Transition.Child
                                     as={Fragment}

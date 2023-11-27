@@ -27,7 +27,7 @@ const CustomButton = ({
         <button
             type={btnType}
             onClick={handleclick}
-            onSubmit={handleclick}
+            
             className= {`${customclass}`}
         >
             <div

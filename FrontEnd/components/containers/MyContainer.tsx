@@ -8,15 +8,16 @@ interface MyContainerProps {
     withCorners?: boolean;
     closeModal?: () => void
     isModal?: boolean
+    isLoader?: boolean
 }
 
-export function MyContainer({children, withCorners,  closeModal, isModal}: MyContainerProps) {
+export function MyContainer({children, withCorners,  closeModal, isModal, isLoader}: MyContainerProps) {
 
     const customclass = withCorners ? "hidden" : "";
     const otherclass = withCorners ? "s:hidden" : "";
     return (
         <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
-            {isModal && <MdCancelPresentation
+            {isModal && !isLoader && <MdCancelPresentation
                 onClick={closeModal}
                 size={25}
                 className="absolute z-10 text-gray-400 h:top-6 cursor-pointer h:left-8 top-4 left-4  rounded-sm"

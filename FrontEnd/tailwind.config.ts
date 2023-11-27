@@ -10,6 +10,7 @@ const config: Config = {
         extend: {
             animation: {
                 marquee: "marquee 8s linear infinite",
+                marquee2: "marquee 1s linear infinite",
                 shake: "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
             },
             keyframes: {
