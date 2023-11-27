@@ -12,16 +12,16 @@ const page = () => {
     const [showProfileSetting, setShowProfileSetting] = useState(false);
     const [enabled, setEnabled] = useState(false);
     const [submit, setSubmit] = useState(false);
-    const [path, setPath] = useState('')
+    const [path, setPath] = useState("/mobile.svg");
 
     useEffect(() => {
         if (submit){
             console.log('from use effect')
-            const apiUrl = "http://localhost:4000/user/twoFactorAuth/";
-            axios.get(apiUrl)
+            const apiUrl = "http://localhost:4000/user/twoFactorAuth";
+            axios.get(apiUrl, {withCredentials: true})
             .then((response) => {
-                console.log(response.data)
-                setPath(response.data.qrcode)
+                console.log(response)
+                setPath(response.data.img)
             }).catch((error) => {
                 console.log(error)
             })
@@ -84,6 +84,7 @@ const page = () => {
                     isOpen={showTwoFactor}
                     closemodal={setTwoFactor}
                     path={path}
+                    
                 />
             </div>
             <ProfileSettings

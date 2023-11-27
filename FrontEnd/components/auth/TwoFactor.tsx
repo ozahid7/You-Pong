@@ -11,7 +11,7 @@ interface TwoFactorProps {
     path?: string
 }
 
-const TwoFactor = ({ isOpen, closemodal, isEnabled, path  }: TwoFactorProps) => {
+const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
 
    
     const ref1 = useRef<HTMLInputElement>(null);
@@ -34,32 +34,41 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path  }: TwoFactorProps) => 
         input5: "",
         input6: ""
     });
+    const [code, setCode] = useState('');
     const [key, setKey] = useState('')
     const [IsInvalid, setIsInvalid] = useState(false)
     const [IsSubmited, setIsSubmited] = useState(false)
-    const rgx = /^\d+$/
-    let code = ""
     
+    const rgx = /^\d+$/;
+    
+    console.log(code)
     const handleSend = () =>{
-        code = Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6;
-        !rgx.test(code) ? setIsInvalid(true) : setIsInvalid(false)
-        if(code.length !== 6)
+        setCode(Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6);
+         let cod =
+             Value.input1 +
+             Value.input2 +
+             Value.input3 +
+             Value.input4 +
+             Value.input5 +
+             Value.input6;
+        if(cod.length !== 6)
             setIsInvalid(true)
+        !rgx.test(cod) ? setIsInvalid(true) : setIsInvalid(false);
+        console.log("regex = ", rgx.test(cod));
         setIsSubmited(true)
     }
-    
+
     useEffect(() => {
+
         if(IsSubmited && !IsInvalid){
             const apiUrl =
-                "http://localhost:4000/auth/twoFactorAuth?id=0635007f-b80e-4b54-a85a-d0d4d903e5ec";
-            let adam = { newUsername: code, tfoStatus: true };
-
+                "http://localhost:4000/user/tfa/switch";
             axios
-            .post(apiUrl, adam)
-            .then((response: any) => {
-                console.log(response.data)
-            })
-            .catch((error) => (console.log(error)))
+                .post(apiUrl, {code: code}, { withCredentials: true })
+                .then((response: any) => {
+                 
+                })
+                .catch((error) => console.log(error));
         }
         setIsSubmited(false)
     }, [IsInvalid, IsSubmited])
@@ -137,6 +146,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path  }: TwoFactorProps) => 
                     input5: "",
                     input6: "",
                 });
+                setCode("")
                 setIsSubmited(false);
                 setIsInvalid(false);
             }}

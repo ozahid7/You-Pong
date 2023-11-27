@@ -11,12 +11,16 @@ import axios from "axios"
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdPassword } from "react-icons/md";
+import { useQuery } from "react-query";
+
 
 const SignUp = (props: {
     isOpen: boolean;
     closemodal: Function;
     showSignIn: Function;
 }) => {
+
+
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
