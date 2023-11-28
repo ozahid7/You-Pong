@@ -5,6 +5,7 @@ import { AuthService } from 'src/auth/services';
 import { achievUserService } from './services/achievemennt.service';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { UserStatusGateway } from './user.gateway';
+import { UserController } from './user.controller';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { UserStatusGateway } from './user.gateway';
     global: true
   })], 
   providers: [UserService, TfaUserService, FindUserService, AuthService, InfoUserService, achievUserService, AchievementService, UserStatusGateway],
-  exports: [UserService, TfaUserService, FindUserService, InfoUserService, achievUserService, InfoUserService, UserStatusGateway]
+  exports: [UserService, TfaUserService, FindUserService, InfoUserService, achievUserService, InfoUserService, UserStatusGateway],
+  controllers: [UserController]
 })
 export class UserModule {}
