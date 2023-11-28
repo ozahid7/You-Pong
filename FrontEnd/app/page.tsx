@@ -5,10 +5,8 @@ import "./globals.css";
 import Link from "next/link";
 import { landing_page_description } from "@/const";
 import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import Loader from "@/components/tools/Loader";
 
-const queryClient = new QueryClient();
+
 
 
 
@@ -18,7 +16,7 @@ export default function Home() {
     const [showTwoFactor, setTwoFactor] = useState(false);
     
     return (
-        <QueryClientProvider client={queryClient}>
+        
             <div className="h-full  w-full relative max-w-[1600px] xl:w-[90%]">
                 {/* top part */}
                 <section className="w-ful z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
@@ -116,6 +114,5 @@ export default function Home() {
                     closemodal={setTwoFactor}
                 />
             </div>
-        </QueryClientProvider>
     );
 }

@@ -72,7 +72,6 @@ const config: Config = {
             },
             backgroundImage: {
                 background: "url('/background.png')",
-                circle: "url('/wave.svg')",
                 profile: "url('/ozahid-.jpeg')",
             },
         },

@@ -20,8 +20,6 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
               userName.slice(userName.length - 3)
             : userName;
 
-    console.log(name);
-
     const hideIcon = () => {
         setIcon(!Icon);
     };

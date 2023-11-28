@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { SideBar, NavBar, MobileSideBar } from "@/components";
 
+
 import "./globals.css";
 import "./input.css";
+import UseQueryProvider from "@/providers/UseQueryProvider";
 
 
 
@@ -22,9 +24,12 @@ export default function RootLayout({
                     <link rel="icon" href="/favicon.ico" />
                 </head>
                 <body className="flex h-screen min-w-[280px] min-body  background">
+                    <UseQueryProvider>
+
                     <main className="flex flex-col h-full overflow-y-auto my_scroll_orange items-center justify-between w-full">
                         {children}
                     </main>
+                    </UseQueryProvider>
                 </body>
             </html>
     );

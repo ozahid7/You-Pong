@@ -11,17 +11,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
-const fetchUser =  () => {
-        try {
-             axios.get(`http://localhost:4000/user`).then((response) => {
-                console.log(response.data);
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    console.log("from fetch user");
-};
-
 const SignIn = (props: {
     isOpen: boolean;
     closemodal: Function;
@@ -32,14 +21,8 @@ const SignIn = (props: {
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     const [isSubmited, setIsSubmited] = useState(false);
-    const [isLoged, setIsLoged] = useState(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
-    const { data, status } = useQuery(["user"], fetchUser, {
-    enabled: isLoged});
-
-
 
     useEffect(() => {
         if (!isInvalidEmail && !isInvalidPass && isSubmited) {
@@ -52,12 +35,7 @@ const SignIn = (props: {
                 .post(apiUrl, toSend, { withCredentials: true })
                 .then((response: any) => {
                     console.log('response = ', response.data)
-                    if (
-                        response.data.tfaStatus === true ||
-                        response.data.tfaStatus === false
-                    ){
-                        setIsLoged(true);
-                    }
+                    
                 })
                 .catch((error) => {
                     console.log("eeeerrro: ", error);

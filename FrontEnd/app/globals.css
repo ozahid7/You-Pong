@@ -46,9 +46,7 @@
     @apply bg-background bg-no-repeat bg-origin-content bg-cover;
 }
 
-.circle {
-    @apply bg-circle bg-no-repeat bg-origin-content bg-cover;
-}
+
 
 @layer base {
     input[type="number"]::-webkit-inner-spin-button,
