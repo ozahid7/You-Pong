@@ -1,17 +1,23 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from './user.service';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException } from '@nestjs/common';
 import { userDto } from './dto/user.create.dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { authorize } from 'passport';
+import { TfaUserService } from './services/tfa.service';
+import { InfoUserService, UserService } from './services';
+import { tfaDto } from 'src/auth/dto';
+import * as qrocode from 'qrcode';
+import { achievUserService } from './services/achievemennt.service';
+import { title } from 'process';
+import {  unlockAchDto } from './dto';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(
-	private prisma: PrismaService,
+	private TfaUserService: TfaUserService,
 	private userService: UserService,
+	private infosService: InfoUserService,
+	private achUserService: achievUserService
   ) {}
 
   //POST MANY
@@ -69,14 +75,41 @@ export class UserController {
 	  }
 	}
 
+	@UseGuards(AuthGuard('jwt'))
 	@Post('signout')
 	async signout(@Res() res: Response){
 		await this.userService.signout(res);
 	}
-
+	
 	@Post('/tfa/switch')
 	@UseGuards(AuthGuard('jwt'))
-	async set(@Req() req){
-		return await this.userService.switchTfaStatus(req.user.sub);
+	async set(@Req() req, @Body() dto: tfaDto){
+		return await this.TfaUserService.switchTfaStatus(req.user.sub, dto.code);
+	}
+		
+	@UseGuards(AuthGuard('jwt'))
+	@Get('/twoFactorAuth/')
+	async twoFactorAuth(@Req() req, @Res() res) {
+		try {
+			const _id = req.user.sub;
+			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
+			const qr = await qrocode.toDataURL("data");
+			res.status(201).json({img : qr})
+		} catch(error) {
+			throw new ForbiddenException("couldn't generate Qr Code");
+		}
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Get('/GetHero/')
+	async getHero(@Res() res: Response, @Req() req){
+		const _id = req.user.sub;
+		res.status(200).json(await this.infosService.getHero(_id));
+	}
+
+	@UseGuards(AuthGuard('jwt'))
+	@Post('/achievement/unlock')
+	async setOwned(@Req() req, @Body() dto: unlockAchDto){
+		return this.achUserService.setOWned(req.user.sub, dto.title);
 	}
 }

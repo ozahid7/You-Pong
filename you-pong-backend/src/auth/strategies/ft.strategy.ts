@@ -1,15 +1,16 @@
 import { Inject, Injectable, Req } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
 import { Strategy }  from "passport-42"
-import { AuthService } from "../auth.service"
-import { UserService } from "src/user/user.service"
 import { use } from "passport"
 import { Request } from "express"
+import { AuthService } from "../services"
+import { FindUserService, UserService } from "src/user/services"
 
 @Injectable()
 export class FtStrategy extends PassportStrategy(Strategy, '42'){
     constructor(private auth: AuthService,
-                private user: UserService){
+                private user: UserService,
+                private findUser: FindUserService){
         super({
             clientID : process.env.FT_UID,
             clientSecret: process.env.FT_SEC,
@@ -19,7 +20,9 @@ export class FtStrategy extends PassportStrategy(Strategy, '42'){
     }
 
     async validate(@Req() req: Request, at, rf, profile, callback){
-        const user = await this.user.finduserByEmail(profile.emails[0].value);
+        const user = await this.findUser.finduserByEmail(profile.emails[0].value);
+        console.log(profile);
+        
         let newUser = null;
         if (!user){
             newUser =  await this.user.create({
