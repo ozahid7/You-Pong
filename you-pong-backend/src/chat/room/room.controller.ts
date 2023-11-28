@@ -6,6 +6,7 @@ import {
   Query,
   Delete,
   Get,
+  Put,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RoomService } from './room.service';
@@ -48,10 +49,10 @@ export class RoomController {
   }
 
   //DELETE
-  @Delete(':id_room')
-  async deleteRoom(@Param('id_room') id_room: string) {
+  @Delete(':name')
+  async deleteRoom(@Param('name') name: string) {
     try {
-      const result = await this.roomService.deleteRoom(id_room);
+      const result = await this.roomService.deleteRoom(name);
       return result;
     } catch (error) {
       throw new HttpException('Failed to delete a room', 405);
@@ -70,13 +71,24 @@ export class RoomController {
   }
 
   //GET
-  @Get(':id_room')
-  async getRoom(@Param('id_room') id_room: string) {
+  @Get(':name')
+  async getRoom(@Param('name') name: string) {
     try {
-      const result = await this.roomService.getRoom(id_room);
+      const result = await this.roomService.getRoom(name);
       return result;
     } catch (error) {
       throw new HttpException('Failed to get a room', 405);
+    }
+  }
+
+  //PUT
+  @Put(':name')
+  async putRoom(@Param('name') name: string) {
+    try {
+      const result = await this.roomService.putRoom(name);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to update a room', 406);
     }
   }
 }

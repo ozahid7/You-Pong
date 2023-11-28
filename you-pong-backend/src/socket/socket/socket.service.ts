@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Req, UseGuards } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -11,7 +11,9 @@ import { Server, Socket } from 'socket.io';
 import { roomDto } from '../../chat/dto/room.create.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ReadableByteStreamControllerCallback } from 'stream/web';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Injectable()
 @WebSocketGateway()
 export class SocketService implements OnModuleInit {
@@ -42,12 +44,13 @@ export class SocketService implements OnModuleInit {
       if (socket.rooms[this.room.name]) socket.join(this.room.name);
       console.log('joined ', this.room.name);
     });
-    this.server.on('DM', async ({ receiverId, idRoom, message }) => {
-      //Block condition
+    this.server.on('DM', async ({ receiverId, nameRoom, message }) => {
+      // Block condition
       await this.prisma.message.create({
         data: {
           content: message,
-          id_room: idRoom,
+          name: nameRoom,
+          id_sender: 'user_id',
         },
       });
       const receiverUser = this.users.find((user) => {

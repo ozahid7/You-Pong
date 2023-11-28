@@ -41,6 +41,7 @@ enum match_status {
 enum member_status {
 	MUTED
 	BANNED
+	NONE
 }
 
 //USER_ROLE (admin, member, owner)
@@ -88,9 +89,10 @@ model User {
 	rooms Room_Chat[] @relation(name: "users")
 	blocked Room_Chat[] @relation(name: "blocked")
 	channels Channel[]
+	messages Message[]
 	// notifications Notification[]
-	freindship_freind Freindship[] @relation("freindship_freind")
-	freindship_user Freindship[] @relation("freindship_user")
+	// freindship_freind Freindship[] @relation("freindship_freind")
+	// freindship_user Freindship[] @relation("freindship_user")
 	// matchs Match_History[]
 	// owned Owned[] @relation(name:"owned")
 	@@map("user")
@@ -112,12 +114,12 @@ model Channel {
 
 //ROOM_CHAT MODEL
 model Room_Chat {
-	id_room String @id @default(uuid())
-	name String @unique
+	name String @unique @id @default(uuid())
 	user_role user_role @default(OWNER)
-	member_status member_status?
+	member_status member_status @default(NONE)
 	time_muted DateTime?
 	joined_at DateTime @default(now())
+	lefted Boolean @default(true)
 	lefted_at DateTime?
 	blocked_users User[] @relation("blocked")
 	id_user String
@@ -125,6 +127,7 @@ model Room_Chat {
 	id_channel String
 	channel Channel @relation(name: "room", fields: [id_channel],references: [id_channel])
 	messages Message[]
+	@@unique([id_channel, id_user])
 }
 
 //MESSAGE MODEL
@@ -132,8 +135,10 @@ model Message {
 	id_message String @id @default(uuid())
 	content String
 	created_at DateTime @default(now())
-	id_room String
-	room Room_Chat @relation(fields: [id_room], references: [id_room])
+	id_sender String
+	user User @relation(fields: [id_sender], references: [id_user])
+	name String
+	room Room_Chat @relation(fields: [name], references: [name])
 }
 
 // //NOTIFICATION MODEL
@@ -154,15 +159,15 @@ model Message {
 // 	users User[] 
 // }
 
-//FREINDSHIP MODEL
-model Freindship {
-	id_user String
-	user User @relation("freindship_user", fields: [id_user], references: [id_user])
-	id_freind String
-	freind User @relation("freindship_freind", fields: [id_freind], references: [id_user])
-	state state
-	@@id([id_user, id_freind])
-}
+// // FREINDSHIP MODEL
+// model Freindship {
+// 	id_freindship String @id
+// 	id_user String
+// 	user User @relation("freindship_user", fields: [id_user], references: [id_user])
+// 	id_freind String
+// 	freind User @relation("freindship_freind", fields: [id_freind], references: [id_user])
+// 	state state
+// }
 
 // //ACHIEVEMENT MODEL
 // model Achievement {

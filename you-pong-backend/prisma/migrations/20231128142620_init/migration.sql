@@ -8,7 +8,7 @@ CREATE TYPE "channel_type" AS ENUM ('PRIVATE', 'PUBLIC', 'PROTECTED', 'DIRECT');
 CREATE TYPE "match_status" AS ENUM ('WIN', 'LOSE');
 
 -- CreateEnum
-CREATE TYPE "member_status" AS ENUM ('MUTED', 'BANNED');
+CREATE TYPE "member_status" AS ENUM ('MUTED', 'BANNED', 'NONE');
 
 -- CreateEnum
 CREATE TYPE "user_role" AS ENUM ('ADMIN', 'MEMBER', 'OWNER');
@@ -57,17 +57,17 @@ CREATE TABLE "Channel" (
 
 -- CreateTable
 CREATE TABLE "Room_Chat" (
-    "id_room" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "user_role" "user_role" NOT NULL DEFAULT 'OWNER',
-    "member_status" "member_status",
+    "member_status" "member_status" NOT NULL DEFAULT 'NONE',
     "time_muted" TIMESTAMP(3),
     "joined_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lefted" BOOLEAN NOT NULL DEFAULT true,
     "lefted_at" TIMESTAMP(3),
     "id_user" TEXT NOT NULL,
     "id_channel" TEXT NOT NULL,
 
-    CONSTRAINT "Room_Chat_pkey" PRIMARY KEY ("id_room")
+    CONSTRAINT "Room_Chat_pkey" PRIMARY KEY ("name")
 );
 
 -- CreateTable
@@ -75,18 +75,10 @@ CREATE TABLE "Message" (
     "id_message" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "id_room" TEXT NOT NULL,
+    "id_sender" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id_message")
-);
-
--- CreateTable
-CREATE TABLE "Freindship" (
-    "id_user" TEXT NOT NULL,
-    "id_freind" TEXT NOT NULL,
-    "state" "state" NOT NULL,
-
-    CONSTRAINT "Freindship_pkey" PRIMARY KEY ("id_user","id_freind")
 );
 
 -- CreateTable
@@ -114,6 +106,9 @@ CREATE UNIQUE INDEX "Channel_name_key" ON "Channel"("name");
 CREATE UNIQUE INDEX "Room_Chat_name_key" ON "Room_Chat"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Room_Chat_id_channel_id_user_key" ON "Room_Chat"("id_channel", "id_user");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_ChannelToUser_AB_unique" ON "_ChannelToUser"("A", "B");
 
 -- CreateIndex
@@ -132,13 +127,10 @@ ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_user_fkey" FOREIGN KEY ("id
 ALTER TABLE "Room_Chat" ADD CONSTRAINT "Room_Chat_id_channel_fkey" FOREIGN KEY ("id_channel") REFERENCES "Channel"("id_channel") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Message" ADD CONSTRAINT "Message_id_room_fkey" FOREIGN KEY ("id_room") REFERENCES "Room_Chat"("id_room") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Message" ADD CONSTRAINT "Message_id_sender_fkey" FOREIGN KEY ("id_sender") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_freind_fkey" FOREIGN KEY ("id_freind") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Message" ADD CONSTRAINT "Message_name_fkey" FOREIGN KEY ("name") REFERENCES "Room_Chat"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -147,7 +139,7 @@ ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_A_fkey" FOREIGN KEY 
 ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_A_fkey" FOREIGN KEY ("A") REFERENCES "Room_Chat"("id_room") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_A_fkey" FOREIGN KEY ("A") REFERENCES "Room_Chat"("name") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_blocked" ADD CONSTRAINT "_blocked_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
