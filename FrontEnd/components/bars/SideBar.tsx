@@ -1,5 +1,6 @@
 "use client";
 
+import { apiHost } from "@/const";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -59,12 +60,12 @@ const SideBar = () => {
     const router = useRouter();
 
     const handleLogout = async () => {
-        const apiUrl = "http://178.62.74.69:400/user/signout";
+        const apiUrl = `${apiHost}user/signout`;
         try {
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
             await axios
-                .post(apiUrl)
+                .post(apiUrl, { withCredentials: true })
                 .then((response) => {
                     console.log("data posted successfuly : ");
                     localStorage.removeItem("isLogedIn");

@@ -12,10 +12,10 @@ const withAuth = (Component: any) => {
             console.log('is auth = ', isAuth)
         }
 
-    useEffect(() => {
         if(!isAuth){
             redirect("/");
         }
+    useEffect(() => {
         setValid(true)
     }, [])
         

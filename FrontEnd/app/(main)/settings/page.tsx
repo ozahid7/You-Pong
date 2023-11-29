@@ -7,6 +7,7 @@ import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
 import axios from "axios";
 import withAuth from "@/components/auth/withAuth";
+import { apiHost } from "@/const";
 
 const page = () => {
     const [showTwoFactor, setTwoFactor] = useState(false);
@@ -17,7 +18,7 @@ const page = () => {
 
     useEffect(() => {
         if (submit) {
-            const apiUrl = "http://localhost:4000/user/twoFactorAuth";
+            const apiUrl = `${apiHost}user/twoFactorAuth`;
             try {
                 axios
                     .get(apiUrl, { withCredentials: true })

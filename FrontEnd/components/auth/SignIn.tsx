@@ -6,6 +6,7 @@ import {
     MyDialog,
     MyInput,
 } from "@/components";
+import { apiHost } from "@/const";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ const SignIn = (props: {
                 email: email,
                 password: pass,
             };
-            const apiUrl = "http://178.62.74.69:400/auth/local/signin";
+            const apiUrl = `${apiHost}auth/local/signin`;
             setIsLoading(true)
             try {
                 axios
@@ -91,7 +92,7 @@ const SignIn = (props: {
                     props.closemodal(false);
                     setEmail("");
                     setPass("");
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }}
                 withCorner={false}
                 customClass="absolute sm:h-[50%] sm:max-h-[560px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[510px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] min-h-[500px]"
@@ -152,7 +153,7 @@ const SignIn = (props: {
                     </form>
                     <form
                         method="post"
-                        action="http://localhost:4000/auth/42"
+                        action={`${apiHost}auth/42`}
                         className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                     >
                         <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">

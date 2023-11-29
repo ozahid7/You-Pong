@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { MdPassword } from "react-icons/md";
 import { useQuery } from "react-query";
+import { apiHost} from "@/const/index"
 
 const SignUp = (props: {
     isOpen: boolean;
@@ -41,7 +42,7 @@ const SignUp = (props: {
                 email: email,
                 password: pass,
             };
-            const apiUrl = "http://178.62.74.69:400/auth/local/signup";
+            const apiUrl = `${apiHost}auth/local/signup`;
             setIsLoading(true);
             try {
                 axios
@@ -171,7 +172,7 @@ const SignUp = (props: {
                 </form>
                 <form
                     method="post"
-                    action="http://localhost:4000/auth/42"
+                    action={`${apiHost}auth/42`}
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">

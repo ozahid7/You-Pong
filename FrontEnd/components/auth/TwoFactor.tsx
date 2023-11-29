@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
 import axios from "axios";
+import { apiHost } from "@/const";
 
 interface TwoFactorProps {
     isOpen: boolean;
@@ -60,7 +61,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
 
         if(IsSubmited && !IsInvalid){
             const apiUrl =
-                "http://localhost:4000/user/tfa/switch";
+                `${apiHost}user/tfa/switch`;
             try {
             axios
                 .post(apiUrl, {code: code}, { withCredentials: true })

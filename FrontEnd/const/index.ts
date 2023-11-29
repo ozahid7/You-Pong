@@ -9,6 +9,8 @@ export const menuElements = [
     { href: "/settings", label: "Setting", icon: renderIcon(LuSettings)},
 ];
 
+export const apiHost = "http://localhost:4000/";
+
 export const landing_page_description =
     "ft_transcendence is the last common core project of école 42. The superficial purpose of this project is to implement a real-time online pong contest website, This project is about creating a website for\
  the mighty Pong contest! Thanks to your website, users will play Pong with others.\
