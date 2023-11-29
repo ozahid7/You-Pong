@@ -7,7 +7,6 @@ import { InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import * as qrocode from 'qrcode';
 import { achievUserService } from './services/achievemennt.service';
-import { title } from 'process';
 import {  unlockAchDto } from './dto';
 
 // @UseGuards(AuthGuard('jwt'))
