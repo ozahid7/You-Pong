@@ -7,20 +7,17 @@ import {
     MyInput,
 } from "@/components";
 import Image from "next/image";
-import axios from "axios"
+import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { MdPassword } from "react-icons/md";
 import { useQuery } from "react-query";
-
 
 const SignUp = (props: {
     isOpen: boolean;
     closemodal: Function;
     showSignIn: Function;
 }) => {
-
-
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
@@ -29,26 +26,44 @@ const SignUp = (props: {
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
     const [isSubmited, setIsSubmited] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
 
     useEffect(() => {
-        if (!isInvalidEmail && !isInvalidPass && isSubmited && !isInvalidConfirmPass) {
-            console.log("valid input");
+        if (
+            !isInvalidEmail &&
+            !isInvalidPass &&
+            isSubmited &&
+            !isInvalidConfirmPass
+        ) {
             const toSend: object = {
                 email: email,
                 password: pass,
             };
-            const apiUrl = "http://localhost:4000/auth/local/signup";
-            axios
-                .post(apiUrl, toSend)
-                .then((data: any) => {
-                    console.log("chouf: ", data.data.access_token);
-                })
-                .catch((error) => {
-                    console.log("eeeerrro: ", error);
-                });
+            const apiUrl = "http://178.62.74.69:400/auth/local/signup";
+            setIsLoading(true);
+            try {
+                axios
+                    .post(apiUrl, toSend)
+                    .then((response: any) => {
+                        console.log(
+                            "data loaded successfuly : ",
+                            response.data
+                        );
+                        
+                        setTimeout(() => {
+                            props.closemodal(false);
+                            props.showSignIn(true);
+                            setIsLoading(false);
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        console.log(".catch error : ", error);
+                    });
+            } catch (e) {
+                console.log("adam throw : ", e);
+            }
             setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited, isInvalidConfirmPass]);
@@ -61,7 +76,9 @@ const SignUp = (props: {
             : setIsInvalidEmail(false);
         setIsSubmited(true);
         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
-        pass != confirmPass ? setIsInvalidconfirmPass(true) : setIsInvalidconfirmPass(false)
+        pass != confirmPass
+            ? setIsInvalidconfirmPass(true)
+            : setIsInvalidconfirmPass(false);
     };
 
     //remove invalid error msg from inputs while typing
@@ -77,7 +94,6 @@ const SignUp = (props: {
         props.showSignIn(true);
     };
 
-    
     return (
         <MyDialog
             isOpen={props.isOpen}
@@ -86,6 +102,7 @@ const SignUp = (props: {
                 setEmail("");
                 setPass("");
                 setConfirmPass("");
+                setIsLoading(false);
             }}
             withCorner={false}
             customClass="absolute sm:h-[50%] max-h-[620px] max-w-[540px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] h:min-h-[560px] min-h-[500px]"
@@ -141,6 +158,7 @@ const SignUp = (props: {
                             text="Sign Up"
                             color="orange"
                             otherclass=""
+                            isLoading={isLoading}
                         />
                     </div>
                     <div className="w-full flex  pt-3 justify-evenly items-end">
@@ -157,17 +175,17 @@ const SignUp = (props: {
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">
-                        <IntraButton type=""  />
+                        <IntraButton type="" />
                     </div>
-                <span className="text-sm md:text-md lg:text-xl text-gray-500">
-                    Don’t have an account ?{" "}
-                    <span
-                        onClick={handleShowSignIn}
-                        className="text-blue-500 cursor-pointer text-sm md:text-md lg:text-xl"
-                    >
-                        Sign In
-                    </span>{" "}
-                </span>
+                    <span className="text-sm md:text-md lg:text-xl text-gray-500">
+                        Don’t have an account ?{" "}
+                        <span
+                            onClick={handleShowSignIn}
+                            className="text-blue-500 cursor-pointer text-sm md:text-md lg:text-xl"
+                        >
+                            Sign In
+                        </span>{" "}
+                    </span>
                 </form>
             </div>
         </MyDialog>

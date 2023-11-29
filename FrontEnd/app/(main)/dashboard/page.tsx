@@ -16,6 +16,7 @@ import {
 } from "@tanstack/react-query";
 import { promises } from "dns";
 import Loader from "@/components/tools/Loader";
+import withAuth from "@/components/auth/withAuth";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,7 @@ const queryClient = new QueryClient();
 const getUser = async () => {
         const apiUrl = "http://jsonplaceholder.typicode.com/photos";
         try {
-            await new Promise ((resolve) => setTimeout(resolve, 200))
+            await new Promise ((resolve) => setTimeout(resolve, 500))
             await axios
                 .get(apiUrl)
                 .then((response: any) => {
@@ -39,7 +40,6 @@ const getUser = async () => {
 }
 
 const page = () => {
-
     const UserQuery = useQuery({
         queryKey: ['user'],
         queryFn: getUser

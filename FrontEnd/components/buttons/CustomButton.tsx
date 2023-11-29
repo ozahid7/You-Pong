@@ -1,5 +1,7 @@
 "use client";
 import { CustomButtonProps } from "@/types";
+import CircularProgress from "@mui/joy/CircularProgress";
+
 import { twMerge } from "tailwind-merge";
 import React from "react";
 
@@ -10,6 +12,7 @@ const CustomButton = ({
     styleclass,
     handleclick,
     btnType,
+    isLoading,
 }: CustomButtonProps) => {
     const customclass = twMerge(
         (color === "orange"
@@ -27,14 +30,21 @@ const CustomButton = ({
         <button
             type={btnType}
             onClick={handleclick}
-            
-            className= {`${customclass}`}
+            className={`${customclass}`}
         >
             <div
                 className={` ${styleclass} center h-full w-full  flex justify-center items-center overflow-hidden`}
             >
                 <span className="text-white drop-shadow-lg font-bold font-body fold:text-md h:text-xl sm:text-1xl md:text-2xl lg:text-3xl ">
-                    {text}
+                    {isLoading ? (
+                        <CircularProgress
+                            thickness={3}
+                            size="sm"
+                            color="neutral"
+                        />
+                    ) : (
+                        text
+                    )}
                 </span>
             </div>
         </button>

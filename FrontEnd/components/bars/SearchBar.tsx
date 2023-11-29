@@ -41,7 +41,7 @@ const SearchBar = () => {
             )
         );
     }, [Input]);
-    console.log(Input)
+    
     return (
         <Combobox>
             <div className="flex flex-col h-full  relative justify-center w-full max-w-[220px] sm:max-h-[60px]">

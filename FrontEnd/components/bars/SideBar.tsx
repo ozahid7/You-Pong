@@ -1,8 +1,10 @@
 "use client";
 
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 import {
     LuLayoutDashboard,
@@ -12,6 +14,10 @@ import {
     LuSettings,
     LuLogOut,
 } from "react-icons/lu";
+import { useQuery, QueryClient } from "react-query";
+
+const queryClient = new QueryClient();
+
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();
@@ -27,6 +33,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
     const elm = Elements[index];
 
     return (
+
         <Link href={link}>
             <div
                 className={`flex px-4 items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
@@ -49,6 +56,28 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 };
 
 const SideBar = () => {
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        const apiUrl = "http://178.62.74.69:400/user/signout";
+        try {
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await axios
+                .post(apiUrl)
+                .then((response) => {
+                    console.log("data posted successfuly : ");
+                    localStorage.removeItem("isLogedIn");
+                    router.push("/");
+                })
+                .catch((e) => {
+                    console.log(".catch error", e);
+                });
+        } catch (e) {
+            console.log("adam throw this :", e);
+        }
+    };
+
     return (
         <aside
             className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}
@@ -76,15 +105,15 @@ const SideBar = () => {
             <div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
-                    {RenderSideBarElements(0, "/hero/dashboard", "Dashboard")}
-                    {RenderSideBarElements(1, "/hero/friends", "Friends")}
+                    {RenderSideBarElements(0, "/dashboard", "Dashboard")}
+                    {RenderSideBarElements(1, "/friends", "Friends")}
                     {RenderSideBarElements(2, "/messages", "Messages")}
                     {RenderSideBarElements(
                         3,
-                        "/hero/notifications",
+                        "/notifications",
                         "Notifications"
                     )}
-                    {RenderSideBarElements(4, "/hero/settings", "Settings")}
+                    {RenderSideBarElements(4, "/settings", "Settings")}
                 </div>
                 {/* bottom part */}
 
@@ -106,7 +135,10 @@ const SideBar = () => {
 
                     <hr className="w-[80%] py-1" />
 
-                    <Link href="/login" className="w-full flex justify-center">
+                    <div
+                        onClick={() => handleLogout()}
+                        className="w-full flex cursor-pointer justify-center"
+                    >
                         <div className="w-[90%]  h-12 border-2 rounded-md border-palette-white space-x-4 flex justify-center items-center">
                             <LuLogOut size="30" />
 
@@ -114,7 +146,7 @@ const SideBar = () => {
                                 Log out
                             </span>
                         </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
         </aside>

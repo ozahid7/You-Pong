@@ -7,6 +7,7 @@ export interface CustomButtonProps {
     styleclass?: string;
     handleclick?: any;
     btnType?: "button" | "submit";
+    isLoading?: boolean
 }
 
 export interface AcheivementProps{

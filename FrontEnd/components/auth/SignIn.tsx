@@ -8,6 +8,7 @@ import {
 } from "@/components";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -21,6 +22,8 @@ const SignIn = (props: {
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     const [isSubmited, setIsSubmited] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter()
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -30,16 +33,29 @@ const SignIn = (props: {
                 email: email,
                 password: pass,
             };
-            const apiUrl = "http://localhost:4000/auth/local/signin";
-            axios
-                .post(apiUrl, toSend, { withCredentials: true })
-                .then((response: any) => {
-                    console.log('response = ', response.data)
-                    
-                })
-                .catch((error) => {
-                    console.log("eeeerrro: ", error);
-                });
+            const apiUrl = "http://178.62.74.69:400/auth/local/signin";
+            setIsLoading(true)
+            try {
+                axios
+                    .post(apiUrl, toSend)
+                    .then((response: any) => {
+                        console.log('data loaded successfyly :', response.data)
+                        const key = Object.keys(response.data);
+                        if (key && key[0] == 'tfaStatus'){
+                            localStorage.setItem('isLogedIn', key[0])
+                            setTimeout(() => {
+                                router.push('/dashboard')
+                                setIsLoading(false);
+                            }, 1000);
+                        }
+
+                    })
+                    .catch((error) => {
+                        console.log(".catch error : ", error);
+                    });
+                } catch (e) {
+                    console.log("adam throw : ", e);
+                }
             setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited]);
@@ -69,12 +85,13 @@ const SignIn = (props: {
 
     return (
         <>
-             <MyDialog
+            <MyDialog
                 isOpen={props.isOpen}
                 closemodal={() => {
                     props.closemodal(false);
                     setEmail("");
                     setPass("");
+                    setIsLoading(false)
                 }}
                 withCorner={false}
                 customClass="absolute sm:h-[50%] sm:max-h-[560px] lg:max-h-[580px] h:max-h-[440px] max-h-[400px] max-w-[510px] h-[40%] md:w-[60%] w-[90%] s:w-[70%] min-h-[500px]"
@@ -122,6 +139,7 @@ const SignIn = (props: {
                                 text="Sign In"
                                 color="orange"
                                 otherclass=""
+                                isLoading={isLoading}
                             />
                         </div>
                         <div className="w-full flex justify-evenly items-end">

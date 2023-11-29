@@ -41,7 +41,6 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
     
     const rgx = /^\d+$/;
     
-    console.log(code)
     const handleSend = () =>{
         setCode(Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6);
          let cod =
@@ -54,7 +53,6 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         if(cod.length !== 6)
             setIsInvalid(true)
         !rgx.test(cod) ? setIsInvalid(true) : setIsInvalid(false);
-        console.log("regex = ", rgx.test(cod));
         setIsSubmited(true)
     }
 
@@ -63,12 +61,16 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         if(IsSubmited && !IsInvalid){
             const apiUrl =
                 "http://localhost:4000/user/tfa/switch";
+            try {
             axios
                 .post(apiUrl, {code: code}, { withCredentials: true })
                 .then((response: any) => {
-                 
+                    console.log('data loaded successfuly : ', response.data)
                 })
-                .catch((error) => console.log(error));
+                .catch((error) => console.log('.catch error : ', error));
+            }catch(e){
+                console.log('adam throw this : ', e)
+            }
         }
         setIsSubmited(false)
     }, [IsInvalid, IsSubmited])

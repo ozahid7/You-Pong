@@ -1,9 +1,11 @@
+'use client'
 import type { Metadata } from "next";
 import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
+import withAuth from "@/components/auth/withAuth";
 
-export default function RootLayout({
+function RootLayout({
     children,
 }: {
     children: React.ReactNode;
@@ -19,3 +21,5 @@ export default function RootLayout({
         </main>
     );
 }
+
+export default withAuth(RootLayout);

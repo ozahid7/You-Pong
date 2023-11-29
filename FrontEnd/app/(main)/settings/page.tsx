@@ -6,6 +6,7 @@ import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
 import axios from "axios";
+import withAuth from "@/components/auth/withAuth";
 
 const page = () => {
     const [showTwoFactor, setTwoFactor] = useState(false);
@@ -15,19 +16,24 @@ const page = () => {
     const [path, setPath] = useState("/mobile.svg");
 
     useEffect(() => {
-        if (submit){
-            console.log('from use effect')
+        if (submit) {
             const apiUrl = "http://localhost:4000/user/twoFactorAuth";
-            axios.get(apiUrl, {withCredentials: true})
-            .then((response) => {
-                console.log(response)
-                setPath(response.data.img)
-            }).catch((error) => {
-                console.log(error)
-            })
-            setSubmit(false)
+            try {
+                axios
+                    .get(apiUrl, { withCredentials: true })
+                    .then((response) => {
+                        console.log('data loaded successfuly : ', response.data);
+                        setPath(response.data.img);
+                    })
+                    .catch((error: any) => {
+                        console.log('.catch error : ', error);
+                    });
+            } catch (e) {
+                console.log("adam throw this : ", e);
+            }
+            setSubmit(false);
         }
-    }, [enabled]) 
+    }, [enabled]);
 
     return (
         <div className="h-full min-h-[600px] w-full make_center">
@@ -68,11 +74,10 @@ const page = () => {
                                         otherclass="h-[38px]"
                                         handelCheck={() => {
                                             setTwoFactor(true);
-                                            setSubmit(true)
+                                            setSubmit(true);
                                         }}
                                         enabled={enabled}
                                         setIsEnabled={setEnabled}
-                                    
                                     />
                                 </div>
                             </div>
@@ -84,7 +89,6 @@ const page = () => {
                     isOpen={showTwoFactor}
                     closemodal={setTwoFactor}
                     path={path}
-                    
                 />
             </div>
             <ProfileSettings
