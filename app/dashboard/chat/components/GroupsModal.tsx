@@ -81,7 +81,6 @@ export default function GroupsModal() {
         onClose();
         // CLOSE THE MODAL Function :)
         object = await setData(setDataObj);
-        console.log(object);
         // SEND DATA TO HAMID RIGHT HERE
         if (object.object !== null)
           mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
@@ -98,14 +97,15 @@ export default function GroupsModal() {
   const clean = () => {
     setFilee(groups);
     setDataObj.description = "Change this description";
-    if (descRef.current.value !== null)
-      descRef.current.value = null;
-    nameRef.current.value = null;
-    imgRef.current.value = null;
-    if (setDataObj.type == "PROTECTED") {
-      passRef.current.value = null;
-      passConfRef.current.value = null;
-    }
+    setDataObj.avatar = null;
+    // if (descRef.current.value !== null)
+    //   descRef.current.value = null;
+    // nameRef.current.value = null;
+    // imgRef.current.value = null;
+    // if (setDataObj.type == "PROTECTED") {
+    //   passRef.current.value = null;
+    //   passConfRef.current.value = null;
+    // }
   };
   const close = () => {
     onClose();

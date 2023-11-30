@@ -33,7 +33,7 @@ function MyTabs({
   const layoutId = useId();
   return (
     <div
-      className={twMerge("flex gap-4", className)}
+      className={twMerge("flex gap-4 ", className)}
       {...props}
     >
       {(labels || [])?.map((l, index) => {

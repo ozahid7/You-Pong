@@ -65,8 +65,8 @@ const Chats = () => {
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid ">
                     <Heading text="Chats" />
                     <SearchBar />
-                    <div className="flex h-full w-[95%] flex-row  justify-center items-center">
-                      <div className="flex h-full w-full flex-col gap-5 justify-center items-center">
+                    <div className="flex h-full w-[95%] flex-row  justify-center items-center ">
+                      <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
                           <MyTabs
                             value={value}
@@ -94,12 +94,12 @@ const Chats = () => {
                             }}
                           ></MyTabs>
                         </div>
-                        <div className="flex h-full w-full ">
+                        <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="h-full w-full flex-1 overflow-x-hidden"
-                          >
-                            <div className="flex w-[95%] h-full justify-start items-center flex-col">
+                            className="h-full w-full"
+                            >
+                            <div className="flex w-[full] h-full justify-start items-center flex-col ">
                               <MyTabs
                                 value={valueDirect}
                                 className="flex flex-col"
@@ -120,7 +120,7 @@ const Chats = () => {
                                 }}
                               ></MyTabs>
                             </div>
-                            <div className="flex w-full h-full justify-start items-center flex-col gap-2">
+                            <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
                                 className="flex flex-col flex-grow"
@@ -143,7 +143,7 @@ const Chats = () => {
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
                                 {/* {GroupsModal()} */}
-                                <JoinModal />
+                                <JoinModal objects={channel} />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

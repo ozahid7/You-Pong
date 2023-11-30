@@ -6,21 +6,42 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Tabs,
-  Tab,
-  Card,
-  CardBody,
+  Table,
+  TableCell,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableHeader,
   useDisclosure,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
   Button,
+  Dropdown,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
-import { LuSettings, LuUser, LuUsers } from "react-icons/lu";
+import {
+  LuSettings,
+  LuUser,
+  LuUsers,
+  LuArrowDown,
+  LuStar,
+  LuBan,
+  LuBellOff,
+  LuDoorOpen,
+} from "react-icons/lu";
 import groups from "../../../../public/groups.svg";
 import Image from "next/image";
-import { MyInput, Background, Submit } from "../../../../components";
+import {
+  MyInput,
+  Background,
+  Submit,
+  MyContainer,
+} from "../../../../components";
 import { Channel } from "@/types";
 import { setData, setFile } from "@/app/dashboard/chat/data/api";
 import { setDataObj } from "./GroupsModal";
+import { color } from "framer-motion";
 
 const ChatEdit = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -72,7 +93,7 @@ const ChatEdit = () => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        size="4xl"
+        size="2xl"
         className=" w-full"
       >
         <ModalContent className="">
@@ -87,129 +108,176 @@ const ChatEdit = () => {
                 Members
                 <div></div>
               </ModalHeader>
-              {/* <ModalBody className="w-[60%]"> */}
-              {/* <div className="flex justify-evenly items-center flex-col gap-3">
-                  <Image
-                    src={imageUrl}
-                    alt="groups"
-                    width={30}
-                    height={30}
-                    className="w-[9rem] aspect-square"
-                  />
-                  <div className="flex p-3 border-b-white border-b-[2px] w-full justify-center items-center">
-                    <label
-                      htmlFor="files"
-                      className="btn font-body bg-palette-green text-white hover:bg-palette-orange"
-                    >
-                      Choose a picture
-                    </label>
-                    <input
-                      id="files"
-                      className="hidden"
-                      type="file"
-                      onChange={(event) => {
-                        setFilee(event.target.files?.[0] as File);
-                      }}
-                    />
-                  </div>
-                  <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
-                    <Tabs
-                      selectedKey={selected}
-                      onSelectionChange={(newSelection) =>
-                        handleSelectionChange(newSelection.toString())
-                      }
-                      aria-label="Options"
-                      size="lg"
-                      radius="sm"
-                      className=" w-full h-fit flex justify-center"
-                    >
-                      <Tab
-                        key="PUBLIC"
-                        title="PUBLIC"
-                        className="w-full font-body"
-                      >
-                        <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-6">
-                            <MyInput
-                              text="Channel name"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Channel Description"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                          </CardBody>
-                        </Card>
-                      </Tab>
-                      <Tab
-                        key="PRIVATE"
-                        title="PRIVATE"
-                        className="w-full font-body"
-                      >
-                        <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-6">
-                            <MyInput
-                              text="Channel name"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Channel Description"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                          </CardBody>
-                        </Card>
-                      </Tab>
-                      <Tab
-                        key="PROTECTED"
-                        title="PROTECTED"
-                        className="w-full font-body text-red-500"
-                      >
-                        <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-6 bg">
-                            <MyInput
-                              text="Channel name"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Channel Description"
-                              type="text"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Current Password"
-                              type="password"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="New Password"
-                              type="password"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
-                              text="Confirm Password"
-                              type="password"
-                              customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                          </CardBody>
-                        </Card>
-                      </Tab>
-                    </Tabs>
-                  </div>
-                </div>
-              </ModalBody> */}
-              <ModalFooter>
-                {/* <div className="flex w-[300px] h-[70px]">
-                  <Submit
-                    color="green"
-                    text="UPDATE"
-                  ></Submit>
-                </div> */}
-              </ModalFooter>
+              <ModalBody className="w-[90%]">
+                <Table
+                  aria-label="Example empty table"
+                  hideHeader
+                >
+                  <TableHeader>
+                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+                      AVATAR
+                    </TableColumn>
+                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+                      NAME
+                    </TableColumn>
+                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+                      TYPE
+                    </TableColumn>
+                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+                      ACTIONS
+                    </TableColumn>
+                  </TableHeader>
+                  <TableBody emptyContent={"No channels to display."}>
+                    <TableRow className="flex items-center justify-evenly border-palette-green rounded-lg border-b-[1px] border-t-[1px]">
+                      <TableCell>
+                        <Image
+                          src={groups}
+                          width={50}
+                          height={50}
+                          className="border-[2px] border-palette-green p-[0.5]"
+                          alt="image"
+                        />
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[18px] text-[#424242] border-palette-green">
+                        Oussama Zahid
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
+                        <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
+                          Owner
+                        </div>
+                      </TableCell>
+                      <TableCell className="flex flex-row h-full justify-center items-center">
+                        <Dropdown className="bg-palette-white self-center">
+                          <DropdownTrigger className="w-fit">
+                            <Button
+                              size="lg"
+                              className="flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                            >
+                              Action
+                              <LuArrowDown />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu className="w-full ">
+                            <DropdownItem
+                              className="hover:bg-palette-white border-none"
+                              variant="bordered"
+                            >
+                              <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                <LuStar />
+                                Set as admin
+                              </button>
+                            </DropdownItem>
+                            <DropdownItem
+                              className="hover:bg-palette-white border-none"
+                              variant="bordered"
+                            >
+                              <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                <LuBellOff />
+                                Mute
+                              </button>
+                            </DropdownItem>
+                            <DropdownItem
+                              className="hover:bg-palette-white border-none"
+                              variant="bordered"
+                            >
+                              <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                <LuDoorOpen />
+                                Kick
+                              </button>
+                            </DropdownItem>
+                            <DropdownItem
+                              className="hover:bg-palette-white border-none"
+                              variant="bordered"
+                            >
+                              <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                <LuBan />
+                                Ban
+                              </button>
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </TableCell>
+                    </TableRow>
+                    {/* <TableRow>
+                      <TableCell>
+                        <Image
+                          src={groups}
+                          width={50}
+                          height={50}
+                          className="border-[2px] border-palette-green p-[0.5]"
+                          alt="image"
+                        />
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[18px] text-[#424242] overflow-x-hidden">
+                        User2
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[17px] text-[#424242]">
+                        <div className="flex flex-row gap-1 items-center w-fit p-1 text-palette-green font-[600]">
+                          Member
+                        </div>
+                      </TableCell>
+                      <TableCell className="flex flex-row h-full w-[135px]">
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              size="lg"
+                              className="flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                            >
+                              Action
+                              <LuArrowDown />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu>
+                            <DropdownItem>Set as admin</DropdownItem>
+                            <DropdownItem>Mute</DropdownItem>
+                            <DropdownItem>Kick</DropdownItem>
+                            <DropdownItem>Ban</DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </TableCell>
+                    </TableRow> */}
+                    {/* <TableRow>
+                      <TableCell>
+                        <Image
+                          src={groups}
+                          width={50}
+                          height={50}
+                          className="border-[2px] border-palette-green p-[0.5]"
+                          alt="image"
+                        />
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[18px] text-[#424242] overflow-x-hidden">
+                        User2
+                      </TableCell>
+                      <TableCell className="font-body font-[500] text-[17px] text-[#424242]">
+                        <div className="flex flex-row gap-1 items-center w-fit p-1 text-palette-green font-[600]">
+                          Member
+                        </div>
+                      </TableCell>
+                      <TableCell className="flex flex-row h-full w-[135px]">
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button
+                              size="lg"
+                              className="flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                            >
+                              Action
+                              <LuArrowDown />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu>
+                            <DropdownItem>Set as admin</DropdownItem>
+                            <DropdownItem>Mute</DropdownItem>
+                            <DropdownItem>Kick</DropdownItem>
+                            <DropdownItem>Ban</DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </TableCell>
+                    </TableRow> */}
+                  </TableBody>
+                </Table>
+              </ModalBody>
+              <ModalFooter></ModalFooter>
             </Background>
           )}
         </ModalContent>

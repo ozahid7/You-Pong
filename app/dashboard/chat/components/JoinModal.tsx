@@ -27,22 +27,15 @@ import {
   IoEnterOutline,
 } from "react-icons/io5";
 
-export var setDataObj: Channel = {
-  type: "PUBLIC",
-  name: "Channel",
-  description: "Change this description",
-  avatar: null,
-};
+// export var setDataObj: Channel = {
+//   type: "PUBLIC",
+//   name: "Channel",
+//   description: "Change this description",
+//   avatar: groups,
+// };
 
-export default function JoinModal() {
+export default function JoinModal({ objects }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
-  const [selected, setSelected] = useState<string>("PUBLIC");
-
-  const handleSelectionChange = (newSelection: string) => {
-    setSelected(newSelection);
-    setDataObj.type = newSelection;
-  };
 
   const close = () => {
     onClose();
@@ -63,7 +56,8 @@ export default function JoinModal() {
         onOpenChange={onOpenChange}
         onClose={close}
         size="2xl"
-        className=" w-full"
+        scrollBehavior="inside"
+        placement="center"
       >
         <ModalContent className="">
           {(close) => (
@@ -76,7 +70,7 @@ export default function JoinModal() {
               >
                 Join a group
               </ModalHeader>
-              <ModalBody className="w-[95%]">
+              <ModalBody className="w-[95%] max-h-[600px] overflow-auto scrollbar-hide rounded-md">
                 <div className="flex justify-evenly items-center flex-col gap-3">
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                     <Table aria-label="Example empty table">
@@ -94,65 +88,51 @@ export default function JoinModal() {
                           ACTION
                         </TableColumn>
                       </TableHeader>
-                      <TableBody emptyContent={"No channels to display."}>
-                        <TableRow>
-                          <TableCell>
-                            <Image
-                              src={groups}
-                              width={50}
-                              height={50}
-                              className="border-[2px] border-palette-green p-[0.5]"
-                              alt="image"
-                            />
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
-                            Channel
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
-                            <div className="flex flex-row gap-1 items-center w-fit p-1">
-                              <IoLockClosedOutline />
-                              PROTECTED
-                            </div>
-                          </TableCell>
-                          <TableCell className="flex flex-row">
-                            <Button
-                              size="lg"
-                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
-                            >
-                              <IoEnterOutline />
-                              Join
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>
-                            <Image
-                              src={ozahid}
-                              width={50}
-                              height={50}
-                              className="border-[2px] border-palette-green p-[0.5]"
-                              alt="image"
-                            />
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[18px] text-[#424242] overflow-x-hidden">
-                            Channel
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
-                            <div className="flex flex-row gap-1 items-center w-fit p-1">
-                              <IoLockOpenOutline />
-                              PUBLIC
-                            </div>
-                          </TableCell>
-                          <TableCell className="flex flex-row h-full">
-                            <Button
-                              size="lg"
-                              className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
-                            >
-                              <IoEnterOutline />
-                              Join
-                            </Button>
-                          </TableCell>
-                        </TableRow>
+                      <TableBody
+                        emptyContent={"No channels to display."}
+                        className=""
+                      >
+                        {objects &&
+                          objects
+                            .filter(
+                              (obj: any) =>
+                                obj.type !== "DIRECT" && obj.type !== "PRIVATE"
+                            )
+                            .map((obj: any, i) => (
+                              <TableRow key={i}>
+                                <TableCell>
+                                  <Image
+                                    src={groups}
+                                    width={50}
+                                    height={50}
+                                    className="border-[2px] border-palette-green p-[0.5]"
+                                    alt="image"
+                                  />
+                                </TableCell>
+                                <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
+                                  {obj.name}
+                                </TableCell>
+                                <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
+                                  <div className="flex flex-row gap-1 items-center w-fit p-1">
+                                    {obj.type === "PUBLIC" ? (
+                                      <IoLockOpenOutline />
+                                    ) : (
+                                      <IoLockClosedOutline />
+                                    )}
+                                    {obj.type}
+                                  </div>
+                                </TableCell>
+                                <TableCell className="flex flex-row">
+                                  <Button
+                                    size="lg"
+                                    className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                                  >
+                                    <IoEnterOutline />
+                                    Join
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
                       </TableBody>
                     </Table>
                   </div>
