@@ -20,7 +20,7 @@ interface Props extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   };
 }
 
-function Tabs({
+function MyTabs({
   value,
   onChange,
   labels,
@@ -70,4 +70,4 @@ function Tabs({
   );
 }
 
-export default Tabs;
+export default MyTabs;

@@ -17,7 +17,7 @@ import Mode from "./tools/Mode";
 import Map from "./buttons/Map";
 import Background from "./tools/Background";
 import SwipeableTabs from "./tools/SwipeableTabs";
-import Tabs from "./tools/Tabs";
+import MyTabs from "./tools/Tabs";
 import MiniChat from "../app/dashboard/chat/components/MiniChat";
 import ChatDropdown from "../app/dashboard/chat/components/ChatDropdown";
 import GroupsModal from "../app/dashboard/chat/components/GroupsModal";
@@ -53,7 +53,7 @@ export {
   Map,
   Background,
   SwipeableTabs,
-  Tabs,
+  MyTabs,
   MiniChat,
   ChatDropdown,
   GroupsModal,

@@ -32,6 +32,7 @@ var setDataObj: Channel = {
   description: undefined,
   avatar: undefined,
 };
+
 interface HomePage {
   channels: Channel;
 }
@@ -71,7 +72,6 @@ const ChatEdit = ({ channels }: HomePage) => {
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels.name);
-    console.log(result);
     onClose();
   };
 
