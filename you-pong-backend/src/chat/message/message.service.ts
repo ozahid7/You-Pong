@@ -7,8 +7,12 @@ export class MessageService {
   constructor(private prisma: PrismaService) {}
 
   //GET MANY
-  async getMessages() {
-    const result = await this.prisma.message.findMany();
+  async getMessages(name: string) {
+    const result = await this.prisma.message.findMany({
+      where: {
+        name: name,
+      },
+    });
     return result;
   }
 
@@ -39,10 +43,11 @@ export class MessageService {
   }
 
   //POST MANY
-  async postMessages(id_room: string, messages: messageDto[]) {
+  async postMessages(name: string, messages: messageDto[], id_user: string) {
     const data = messages.map((message) => ({
       content: message.content,
-      id_room: id_room,
+      name: name,
+      id_sender: id_user,
     }));
     if (!data) return 'no data to add !';
     const result = await this.prisma.message.createMany({
@@ -53,11 +58,12 @@ export class MessageService {
   }
 
   //POST
-  async postMessage(id_room: string, message: messageDto) {
+  async postMessage(name: string, message: messageDto, id_user: string) {
     const result = await this.prisma.message.create({
       data: {
         content: message.content,
-        id_room: id_room,
+        name: name,
+        id_sender: id_user,
       },
     });
     return result;

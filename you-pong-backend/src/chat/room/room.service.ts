@@ -22,6 +22,7 @@ export class RoomService {
         name: room_name,
         id_user: user.id_user,
         id_channel: channel.id_channel,
+        lefted: false,
       },
     });
     return result;
@@ -34,20 +35,20 @@ export class RoomService {
   }
 
   //DELETE
-  async deleteRoom(id_room: string) {
+  async deleteRoom(name: string) {
     const result = await this.prisma.room_Chat.delete({
       where: {
-        id_room: id_room,
+        name: name,
       },
     });
     return result;
   }
 
   //GET
-  async getRoom(id_room: string) {
+  async getRoom(name: string) {
     const result = await this.prisma.room_Chat.findUnique({
       where: {
-        id_room: id_room,
+        name: name,
       },
     });
     return result;
@@ -58,4 +59,29 @@ export class RoomService {
     const result = await this.prisma.room_Chat.findMany();
     return result;
   }
+
+  //PUT LEFT
+  async putRoom(name: string) {
+    const result = await this.prisma.room_Chat.update({
+      where: {
+        name: name,
+      },
+      data: {
+        lefted: true,
+      },
+    });
+    return result;
+  }
+  //PUT JOIN
+  // async putRoom_join(name: string) {
+  //   const result = await this.prisma.room_Chat.update({
+  //     where: {
+  //       name: name,
+  //     },
+  //     data: {
+  //       lefted: false,
+  //     },
+  //   });
+  //   return result;
+  // }
 }
