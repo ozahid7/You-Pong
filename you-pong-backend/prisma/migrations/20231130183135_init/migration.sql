@@ -82,6 +82,27 @@ CREATE TABLE "Message" (
 );
 
 -- CreateTable
+CREATE TABLE "Achievement" (
+    "id_achievement" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "avatar" TEXT NOT NULL,
+    "requirement" TEXT NOT NULL,
+
+    CONSTRAINT "Achievement_pkey" PRIMARY KEY ("id_achievement")
+);
+
+-- CreateTable
+CREATE TABLE "Owned" (
+    "id_achievement" TEXT NOT NULL,
+    "id_user" TEXT NOT NULL,
+    "owned_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "avatar" TEXT NOT NULL,
+
+    CONSTRAINT "Owned_pkey" PRIMARY KEY ("id_achievement","id_user")
+);
+
+-- CreateTable
 CREATE TABLE "_ChannelToUser" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -109,6 +130,12 @@ CREATE UNIQUE INDEX "Room_Chat_name_key" ON "Room_Chat"("name");
 CREATE UNIQUE INDEX "Room_Chat_id_channel_id_user_key" ON "Room_Chat"("id_channel", "id_user");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Achievement_title_key" ON "Achievement"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Owned_id_achievement_key" ON "Owned"("id_achievement");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_ChannelToUser_AB_unique" ON "_ChannelToUser"("A", "B");
 
 -- CreateIndex
@@ -131,6 +158,12 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_id_sender_fkey" FOREIGN KEY ("id_s
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_name_fkey" FOREIGN KEY ("name") REFERENCES "Room_Chat"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Owned" ADD CONSTRAINT "Owned_id_achievement_fkey" FOREIGN KEY ("id_achievement") REFERENCES "Achievement"("id_achievement") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Owned" ADD CONSTRAINT "Owned_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ChannelToUser" ADD CONSTRAINT "_ChannelToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;
