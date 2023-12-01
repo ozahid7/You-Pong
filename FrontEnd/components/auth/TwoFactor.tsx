@@ -64,7 +64,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
                 `${apiHost}user/tfa/switch`;
             try {
             axios
-                .post(apiUrl, {code: code}, { withCredentials: true })
+                .post(apiUrl, {code: code}, {withCredentials: true})
                 .then((response: any) => {
                     console.log('data loaded successfuly : ', response.data)
                 })

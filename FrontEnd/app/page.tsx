@@ -11,6 +11,7 @@ import "./globals.css";
 import { landing_page_description } from "@/const";
 import { useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import UseQueryProvider from "@/providers/UseQueryProvider";
 
 function Home() {
     const [showSignup, setSignUp] = useState(false);
@@ -19,7 +20,7 @@ function Home() {
 
     if (typeof window !== 'undefined') {
         const isLogedin =
-            localStorage.getItem("isLogedIn") === "tfaStatus" ? true : false;
+            localStorage.getItem("isLogedIn") === "true" ? true : false;
         useLayoutEffect(() => {
             if (isLogedin) {
                 redirect("/dashboard");

@@ -1,15 +1,19 @@
-'use client'
+"use client";
 import type { Metadata } from "next";
 import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
 import withAuth from "@/components/auth/withAuth";
+import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
+import { useRouter } from "next/navigation";
+import { apiHost } from "@/const";
+import axios from "axios";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { useState } from "react";
+import UseQueryProvider from "@/providers/UseQueryProvider";
 
-function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <main className="flex h-screen w-full background">
             <SideBar />
@@ -22,4 +26,4 @@ function RootLayout({
     );
 }
 
-export default withAuth(RootLayout);
+export default RootLayout;

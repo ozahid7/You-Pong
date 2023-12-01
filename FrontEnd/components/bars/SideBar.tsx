@@ -61,11 +61,10 @@ const SideBar = () => {
 
     const handleLogout = async () => {
         const apiUrl = `${apiHost}user/signout`;
-        try {
 
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            // await new Promise((resolve) => setTimeout(resolve, 1000));
             await axios
-                .post(apiUrl, { withCredentials: true })
+                .get(apiUrl, {withCredentials: true} )
                 .then((response) => {
                     console.log("data posted successfuly : ");
                     localStorage.removeItem("isLogedIn");
@@ -74,9 +73,7 @@ const SideBar = () => {
                 .catch((e) => {
                     console.log(".catch error", e);
                 });
-        } catch (e) {
-            console.log("adam throw this :", e);
-        }
+       
     };
 
     return (

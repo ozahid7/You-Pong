@@ -9,7 +9,7 @@ import {
 import { apiHost } from "@/const";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
@@ -38,18 +38,13 @@ const SignIn = (props: {
             setIsLoading(true)
             try {
                 axios
-                    .post(apiUrl, toSend)
+                    .post(apiUrl, toSend, {withCredentials: true})
                     .then((response: any) => {
                         console.log('data loaded successfyly :', response.data)
-                        const key = Object.keys(response.data);
-                        if (key && key[0] == 'tfaStatus'){
-                            localStorage.setItem('isLogedIn', key[0])
-                            setTimeout(() => {
-                                router.push('/dashboard')
-                                setIsLoading(false);
-                            }, 1000);
-                        }
-
+                        setTimeout(() => {
+                            setIsLoading(false);
+                            redirect("/dashboard");
+                        }, 800);
                     })
                     .catch((error) => {
                         console.log(".catch error : ", error);
@@ -60,6 +55,14 @@ const SignIn = (props: {
             setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited]);
+
+    useEffect(() => {
+
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 4000)
+
+    }, [isLoading])
 
     //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {

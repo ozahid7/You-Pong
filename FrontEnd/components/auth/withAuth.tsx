@@ -1,28 +1,28 @@
-'use client'
-import React, { useLayoutEffect, useState } from 'react'
-import { useEffect } from 'react'
-import { redirect } from 'next/navigation'
+"use client";
+import React, { useLayoutEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRouter, redirect } from "next/navigation";
 
 const withAuth = (Component: any) => {
-    return function WithAuth(props: any){
-        const [valid, setValid] = useState(false)
+    return (props: any) => {
+        const router = useRouter();
+        const [valid, setValid] = useState(false);
         var isAuth: boolean = false;
-        if (typeof window !== 'undefined') {
-            isAuth = localStorage.getItem('isLogedIn') === 'tfaStatus' ? true : false;
-            console.log('is auth = ', isAuth)
+        if (typeof window !== "undefined") {
+            isAuth =
+                localStorage.getItem("isLogedIn") === "true" ? true : false;
+            console.log("is auth = ", isAuth);
         }
 
-        if(!isAuth){
-            redirect("/");
-        }
-    useEffect(() => {
-        setValid(true)
-    }, [])
-        
-    
-    if (valid ) return <Component {...props}/>
+        useEffect(() => {
+            if (!isAuth) {
+                router.push("/");
+            }
+            setValid(true);
+        }, []);
 
+        if (valid) return <Component {...props} />;
     };
-}
+};
 
-export default withAuth
+export default withAuth;

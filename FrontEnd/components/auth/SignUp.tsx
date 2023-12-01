@@ -46,7 +46,7 @@ const SignUp = (props: {
             setIsLoading(true);
             try {
                 axios
-                    .post(apiUrl, toSend)
+                    .post(apiUrl, toSend, {withCredentials: true})
                     .then((response: any) => {
                         console.log(
                             "data loaded successfuly : ",

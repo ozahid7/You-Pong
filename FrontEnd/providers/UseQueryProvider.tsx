@@ -5,9 +5,10 @@ import { useState } from "react";
 
 
 const UseQueryProvider = ({children}: {children: React.ReactNode}) => {
-    const [queryClient] = useState(() => new QueryClient)
+    const [client] = useState(new QueryClient());
+
     return (
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={client}>
             {children}
         </QueryClientProvider>
     );
