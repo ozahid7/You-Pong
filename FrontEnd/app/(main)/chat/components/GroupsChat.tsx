@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
-import { GroupDropdown } from "@/components";
+import { GroupDropdown } from ".";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 

@@ -43,7 +43,7 @@ import { setData, setFile } from "@/app/(main)/chat/data/api";
 import { setDataObj } from "./GroupsModal";
 import { color } from "framer-motion";
 
-const ChatEdit = () => {
+const MembersEdit = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>("PUBLIC");
@@ -286,4 +286,4 @@ const ChatEdit = () => {
   );
 };
 
-export default ChatEdit;
+export default MembersEdit;

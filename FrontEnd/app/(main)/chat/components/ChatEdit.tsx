@@ -17,12 +17,8 @@ import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
 import groups from "../../../../public/groups.svg";
 import Image from "next/image";
-import {
-  InputGroup,
-  Background,
-  Submit,
-  InputGroupPass,
-} from "../../../../components";
+import { InputGroup, InputGroupPass } from ".";
+import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import { putData, setData, setFile } from "@/app/(main)/chat/data/api";
 
