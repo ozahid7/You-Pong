@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
-import groups from "../../public/groups.svg";
+import groups from "../../../../public/groups.svg";
 import Image from "next/image";
 import {
   InputGroup,
@@ -125,8 +125,8 @@ const ChatEdit = ({ channels }: HomePage) => {
                   <Image
                     src={imageUrl}
                     alt="groups"
-                    width={30}
-                    height={30}
+                    width={100}
+                    height={100}
                     className="w-[9rem] aspect-square"
                   />
                   <div className="flex p-3 border-b-white border-b-[2px] w-full justify-center items-center flex-col gap-2">
