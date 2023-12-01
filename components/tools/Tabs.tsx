@@ -20,7 +20,7 @@ interface Props extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   };
 }
 
-function Tabs({
+function MyTabs({
   value,
   onChange,
   labels,
@@ -33,13 +33,13 @@ function Tabs({
   const layoutId = useId();
   return (
     <div
-      className={twMerge("flex gap-4", className)}
+      className={twMerge("flex gap-4 ", className)}
       {...props}
     >
       {(labels || [])?.map((l, index) => {
         return (
           <button
-            className="label relative"
+            className="label relative w-full"
             key={index}
             onClick={() => {
               onChange(index);
@@ -70,4 +70,4 @@ function Tabs({
   );
 }
 
-export default Tabs;
+export default MyTabs;

@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/dashboard/game/sketch.ts"
+    "app/(main)/game/sketch.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -17,11 +17,22 @@ import Mode from "./tools/Mode";
 import Map from "./buttons/Map";
 import Background from "./tools/Background";
 import SwipeableTabs from "./tools/SwipeableTabs";
-import Tabs from "./tools/Tabs";
-import MiniChat from "./tools/MiniChat";
-import ChatDropdown from "./tools/ChatDropdown";
-import GroupsModal from "./tools/GroupsModal"
-import ScoreCard from "./tools/ScoreCard"
+import MyTabs from "./tools/Tabs";
+import MiniChat from "../app/(main)/chat/components/MiniChat";
+import ChatDropdown from "../app/(main)/chat/components/ChatDropdown";
+import GroupsModal from "../app/(main)/chat/components/GroupsModal";
+import Chat from "../app/(main)/chat/components/Chat";
+import Heading from "./tools/Heading";
+import SearchBar from "./tools/SearchBar";
+import Submit from "./tools/Submit";
+import GroupsChat from "../app/(main)/chat/components/GroupsChat";
+import GroupDropdown from "../app/(main)/chat/components/GroupDropdown";
+import ChatEdit from "../app/(main)/chat/components/ChatEdit";
+import MembersEdit from "../app/(main)/chat/components/MembersEdit";
+import InputGroup from "../app/(main)/chat/components/InputGroup";
+import InputGroupPass from "../app/(main)/chat/components/InputGroupPass";
+import JoinModal from "@/app/(main)/chat/components/JoinModal";
+import ScoreCard from "./tools/ScoreCard";
 
 export {
   NavBar,
@@ -43,9 +54,20 @@ export {
   Map,
   Background,
   SwipeableTabs,
-  Tabs,
+  MyTabs,
   MiniChat,
   ChatDropdown,
   GroupsModal,
+  Chat,
+  Heading,
+  SearchBar,
+  Submit,
+  GroupsChat,
+  GroupDropdown,
+  ChatEdit,
+  MembersEdit,
+  InputGroup,
+  InputGroupPass,
+  JoinModal,
   ScoreCard,
 };
