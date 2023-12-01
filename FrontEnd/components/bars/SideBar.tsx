@@ -105,7 +105,7 @@ const SideBar = () => {
                 <div className="h-auto flex flex-col space-y-5">
                     {RenderSideBarElements(0, "/dashboard", "Dashboard")}
                     {RenderSideBarElements(1, "/friends", "Friends")}
-                    {RenderSideBarElements(2, "/messages", "Messages")}
+                    {RenderSideBarElements(2, "/chat", "Chat")}
                     {RenderSideBarElements(
                         3,
                         "/notifications",

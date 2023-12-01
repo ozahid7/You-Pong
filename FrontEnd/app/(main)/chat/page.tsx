@@ -7,7 +7,6 @@ import {
   MyTabs,
   SwipeableTabs,
   ChatHeading,
-  SearchBar,
 } from "@/components";
 import {
   MiniChat,
@@ -15,10 +14,12 @@ import {
   GroupsChat,
   GroupsModal,
   JoinModal,
+  SearchChat,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import { getData } from "./data/api";
 import useSWR from "swr";
+import { Channel } from "@/types";
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
@@ -34,7 +35,7 @@ const Chats = () => {
     }
   };
 
-  const { data: channel, error, isLoading } = useSWR("/myData", fetchData);
+  const { data: channel, error, isLoading } = useSWR<Channel[]>("/myData", fetchData);
 
   if (error) return <div>ERROR</div>;
 
@@ -63,10 +64,10 @@ const Chats = () => {
           <div className="flex w-full h-full min-h-[900px] flex-col py-5 ">
             <Background>
               <div className="w-[95%] h-full">
-                <div className="flex flex-row w-full h-full items-center">
+                <div className="flex flex-row w-full h-full items-center ">
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid ">
                     <ChatHeading text="Chats" />
-                    <SearchBar />
+                    <SearchChat object={channel}/>
                     <div className="flex h-full w-[95%] flex-row  justify-center items-center ">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
@@ -161,7 +162,10 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type !== "DIRECT")
                           .map((obj, i) => (
-                            <GroupsChat channels={obj} key={i}></GroupsChat>
+                            <GroupsChat
+                              channels={obj}
+                              key={i}
+                            ></GroupsChat>
                           ))}
                     </SwipeableTabs>
                   ) : (
@@ -173,7 +177,10 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type === "DIRECT")
                           .map((obj, i) => (
-                            <Chat channels={obj} key={i}></Chat>
+                            <Chat
+                              channels={obj}
+                              key={i}
+                            ></Chat>
                           ))}
                     </SwipeableTabs>
                   )}

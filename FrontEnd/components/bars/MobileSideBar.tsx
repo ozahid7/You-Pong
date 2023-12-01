@@ -48,7 +48,7 @@ const MobileSideBar = () => {
             <div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
                 {RenderMobileSidBarElement(0, "/dashboard")}
                 {RenderMobileSidBarElement(1, "/freinds")}
-                {RenderMobileSidBarElement(2, "/messages")}
+                {RenderMobileSidBarElement(2, "/chat")}
                 {RenderMobileSidBarElement(3, "/notifications")}
                 {RenderMobileSidBarElement(4, "/settings")}
             </div>
