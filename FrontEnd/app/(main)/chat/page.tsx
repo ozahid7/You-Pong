@@ -6,14 +6,16 @@ import {
   MyContainer,
   MyTabs,
   SwipeableTabs,
-  MiniChat,
-  Heading,
-  Chat,
+  ChatHeading,
   SearchBar,
+} from "@/components";
+import {
+  MiniChat,
+  Chat,
   GroupsChat,
   GroupsModal,
   JoinModal,
-} from "@/components";
+} from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import { getData } from "./data/api";
 import useSWR from "swr";
@@ -63,7 +65,7 @@ const Chats = () => {
               <div className="w-[95%] h-full">
                 <div className="flex flex-row w-full h-full items-center">
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid ">
-                    <Heading text="Chats" />
+                    <ChatHeading text="Chats" />
                     <SearchBar />
                     <div className="flex h-full w-[95%] flex-row  justify-center items-center ">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
@@ -98,7 +100,7 @@ const Chats = () => {
                           <SwipeableTabs
                             value={value}
                             className="h-full w-full"
-                            >
+                          >
                             <div className="flex w-[full] h-full justify-start items-center flex-col ">
                               <MyTabs
                                 value={valueDirect}
@@ -159,10 +161,7 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type !== "DIRECT")
                           .map((obj, i) => (
-                            <GroupsChat
-                              channels={obj}
-                              key={i}
-                            ></GroupsChat>
+                            <GroupsChat channels={obj} key={i}></GroupsChat>
                           ))}
                     </SwipeableTabs>
                   ) : (
@@ -174,10 +173,7 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type === "DIRECT")
                           .map((obj, i) => (
-                            <Chat
-                              channels={obj}
-                              key={i}
-                            ></Chat>
+                            <Chat channels={obj} key={i}></Chat>
                           ))}
                     </SwipeableTabs>
                   )}

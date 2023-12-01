@@ -15,7 +15,7 @@ import {
   ModalContent,
   NextUIProvider,
 } from "@nextui-org/react";
-import { ChatEdit, MembersEdit } from "../../../../components";
+import { ChatEdit, MembersEdit } from ".";
 
 interface HomePage {
   channels: Channel;

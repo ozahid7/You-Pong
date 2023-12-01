@@ -4,7 +4,6 @@ import { CustomButton, IntraButton, MyCard } from "..";
 import { MdCancelPresentation } from "react-icons/md";
 
 interface MyContainerProps {
-<<<<<<< HEAD:FrontEnd/components/containers/MyContainer.tsx
     children: React.ReactNode;
     withCorners?: boolean;
     closeModal?: () => void
@@ -39,43 +38,6 @@ export function MyContainer({children, withCorners,  closeModal, isModal, isLoad
                     <div className="left w-[100%] h-[100%]"></div>
                 </div>
             </div>
-=======
-  children: React.ReactNode;
-  withCorners?: boolean;
-  closeModal?: () => void;
-}
-
-export function MyContainer({
-  children,
-  withCorners,
-  closeModal,
-}: MyContainerProps) {
-  const customclass = withCorners ? "hidden" : "";
-  const otherclass = withCorners ? "s:hidden" : "";
-  return (
-    <div className="bg-white w-full h-full flex rounded-sm relative overflow-auto">
-      <MdCancelPresentation
-        onClick={closeModal}
-        size={25}
-        className="absolute z-10 text-gray-400 h:top-6 cursor-pointer h:left-8 top-4 left-4  rounded-sm"
-      />
-      {/* <!--content container(the div in center) --> */}
-      <div className=" h-[90%] w-[90%] min-w-[20px] flex-col justify-center items-center absolute top-[50%] overflow-auto translate-y-[-50%] left-[50%] translate-x-[-50%]">
-        {children}
-      </div>
-
-      {/* <!-- top bar orange --> */}
-      <div
-        className={`${customclass} min-w-[60px] flex h-[2%] min-h-[11px] w-[50%] max-w-xl absolute left-[50%] translate-x-[-50%] overflow-clip`}
-      >
-        <div className="w-[60%] h-[100%] absolute right-0">
-          <div className="right w-[100%] h-[100%]"></div>
-        </div>
-        <div className="w-[60%] h-[100%] absolute">
-          <div className="left w-[100%] h-[100%]"></div>
-        </div>
-      </div>
->>>>>>> GameSettings:components/containers/MyContainer.tsx
 
       {/* <!-- green bar center in left --> */}
       <div
