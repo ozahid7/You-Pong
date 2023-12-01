@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { Channel } from "@/types";
+import { GroupsChat } from ".";
 
 interface friend {
   userName: string;
@@ -33,13 +34,15 @@ const FriendsList: friend[] = [
 ];
 
 const SearchChat = ({ object }) => {
-  const [FriendArr, setFriendArr] = useState(FriendsList);
+  const [FriendArr, setFriendArr] = useState(object);
   const [Input, setInput] = useState("");
+
+  const showGroup = (channel: Channel) => {};
 
   useEffect(() => {
     setFriendArr(
-      FriendsList.filter((user) =>
-        user.userName.toLowerCase().includes(Input.toLowerCase())
+      object.filter((user) =>
+        user.name.toLowerCase().includes(Input.toLowerCase())
       )
     );
   }, [Input]);
@@ -73,11 +76,13 @@ const SearchChat = ({ object }) => {
           leaveTo="transform scale-95 opacity-0"
         >
           <Combobox.Options className="bg-white max-h-[400px] overflow-y-auto my_scroll_green ml-10 min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute">
-            {object.map((channel, index) => (
+            {FriendArr.map((channel, index) => (
               <Combobox.Option
-                className=""
                 key={index}
                 value={channel}
+                onClick={() => {
+                  showGroup(channel);
+                }}
               >
                 <div className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]">
                   <img

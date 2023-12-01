@@ -35,7 +35,11 @@ const Chats = () => {
     }
   };
 
-  const { data: channel, error, isLoading } = useSWR<Channel[]>("/myData", fetchData);
+  const {
+    data: channel,
+    error,
+    isLoading,
+  } = useSWR<Channel[]>("/myData", fetchData);
 
   if (error) return <div>ERROR</div>;
 
@@ -67,7 +71,7 @@ const Chats = () => {
                 <div className="flex flex-row w-full h-full items-center ">
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid ">
                     <ChatHeading text="Chats" />
-                    <SearchChat object={channel}/>
+                    <SearchChat object={channel} />
                     <div className="flex h-full w-[95%] flex-row  justify-center items-center ">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
@@ -100,7 +104,7 @@ const Chats = () => {
                         <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="h-full w-full"
+                            className="h-full w-full debug my_scroll_green scrollbar-hide"
                           >
                             <div className="flex w-[full] h-full justify-start items-center flex-col ">
                               <MyTabs

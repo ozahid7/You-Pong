@@ -49,6 +49,13 @@ const config: Config = {
         s: "360px",
         h: "465px",
         xxxl: "1736px",
+        // Abderrachid's sizes
+        sm_: "480px",
+        md_: "640px",
+        lg_: "992px",
+        xl_: "1024px",
+        "2xl_": "1280px",
+        "3xl_": "1440px",
       },
       colors: {
         palette: {
@@ -72,6 +79,7 @@ const config: Config = {
         orbitron: ["Orbitron"],
         russo: ["Russo One"],
         arimo: ["Arimo"],
+        archivo: ["Archivo"],
       },
       backgroundImage: {
         background: "url('/background.png')",

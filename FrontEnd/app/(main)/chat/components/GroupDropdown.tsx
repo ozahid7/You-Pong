@@ -28,6 +28,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
         <label
           tabIndex={0}
           className="btn m-1 bg-palette-green border-none hover:bg-palette-green"
+          role="button"
         >
           <IconContext.Provider
             value={{
@@ -41,7 +42,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-46 gap-2"
+          className="dropdown-content z-[1] menu p-2  bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
             <MembersEdit></MembersEdit>
