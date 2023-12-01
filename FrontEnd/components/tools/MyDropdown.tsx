@@ -2,10 +2,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import React from "react";
-import { LuMenu } from "react-icons/lu";
-import { FiChevronDown } from "react-icons/fi";
-import { MyDropdownProps } from "@/types";
-import { menuElements } from "@/const"
+import { menuElements } from "@/const";
 import { renderIcon } from "@/utils";
 
 const MyDropdown = (props: {icon: any, style?: string, size?: number, image?: any, placement: string}) => {

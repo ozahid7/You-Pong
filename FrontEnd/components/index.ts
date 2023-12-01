@@ -16,24 +16,36 @@ import SignUp from "./auth/SignUp";
 import MiniBanner from "./tools/MiniBanner";
 import TwoFactor from "./auth/TwoFactor";
 import MyToolTip from "./tools/MyToolTip";
+import Submit from "./tools/Submit";
+import Background from "./tools/Background";
+import MyTabs from "./tools/Tabs";
+import SwipeableTabs from "./tools/SwipeableTabs";
+import SearchBar from "./bars/SearchBar";
+import ChatHeading from "./tools/Heading";
 
 export {
-    NavBar,
-    SideBar,
-    MyContainer,
-    CustomButton,
-    IntraButton,
-    MyCard,
-    AnimatedText,
-    Banner,
-    MobileSideBar,
-    Acheivement,
-    MyInput,
-    MyDropdown,
-    MyDialog,
-    TwoFactor,
-    SignUp,
-    SignIn,
-    MiniBanner,
-    MyToolTip,
+  NavBar,
+  SideBar,
+  MyContainer,
+  CustomButton,
+  IntraButton,
+  MyCard,
+  AnimatedText,
+  Banner,
+  MobileSideBar,
+  Acheivement,
+  MyInput,
+  MyDropdown,
+  MyDialog,
+  TwoFactor,
+  SignUp,
+  SignIn,
+  MiniBanner,
+  MyToolTip,
+  Submit,
+  Background,
+  MyTabs,
+  SwipeableTabs,
+  SearchBar,
+  ChatHeading,
 };

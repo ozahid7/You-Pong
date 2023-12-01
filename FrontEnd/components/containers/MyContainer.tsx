@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { CustomButton, IntraButton, MyCard } from "..";
 import { MdCancelPresentation } from "react-icons/md";
@@ -39,122 +39,122 @@ export function MyContainer({children, withCorners,  closeModal, isModal, isLoad
                 </div>
             </div>
 
-            {/* <!-- green bar center in left --> */}
-            <div
-                className={`${otherclass} hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]`}
-            >
-                <div className="w-[100%] h-[50%] absolute">
-                    <div className="ltop w-[100%] h-[100%]"></div>
-                </div>
-                <div className="w-[100%] h-[60%] absolute bottom-0">
-                    <div className="lbottom w-[100%] h-[100%]"></div>
-                </div>
-            </div>
-
-            {/* <!-- green bar center in right --> */}
-            <div
-                className={`${otherclass} hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute right-0 top-[50%] scale-x-[-1] translate-y-[-50%]`}
-            >
-                <div className="w-[100%] h-[50%] absolute">
-                    <div className="ltop w-[100%] h-[100%]"></div>
-                </div>
-                <div className="w-[100%] h-[60%] absolute bottom-0">
-                    <div className="lbottom w-[100%] h-[100%]"></div>
-                </div>
-            </div>
-
-            {/* <!-- top left corner --> */}
-
-            <div
-                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden relative`}
-            >
-                {/* left side */}
-                <div className="h-[100%] w-[18%] sm:max-w-[14px] min-w-[10px] absolute">
-                    <div className="w-[100%] h-[100%]">
-                        <div className="ctleft w-[100%] h-[100%]"></div>
-                    </div>
-                </div>
-                {/* top side */}
-                <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
-                    <div className=" w-[100%] h-[100%]">
-                        <div className="flex w-[100%] h-[100%]">
-                            <div className="w-[100%] h-[100%]">
-                                <div className="cttop w-[100%] h-[100%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* <!-- right top corner --> */}
-
-            <div
-                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute top-0 right-0`}
-            >
-                {/* <!-- top --> */}
-                <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
-                    <div className=" w-[100%] h-[100%]">
-                        <div className="flex w-[100%] h-[100%]">
-                            <div className="w-[100%] h-[100%]">
-                                <div className="crtop w-[100%] h-[100%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- left --> */}
-                <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute right-0">
-                    <div className="w-[100%] h-[100%]">
-                        <div className="crtop w-[100%] h-[100%]"></div>
-                    </div>
-                </div>
-            </div>
-
-            {/* <!-- bottom right corner --> */}
-            <div
-                className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 right-0`}
-            >
-                {/* <!-- top --> */}
-                <div className="w-[100%] h-[15%] min-h-[10px] absolute bottom-0">
-                    <div className=" w-[100%] h-[100%]">
-                        <div className="flex w-[100%] h-[100%]">
-                            <div className="w-[100%] h-[100%]">
-                                <div className="crbottom w-[100%] h-[100%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- left --> */}
-                <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute right-0">
-                    <div className="w-[100%] h-[100%]">
-                        <div className="crbottom w-[100%] h-[100%]"></div>
-                    </div>
-                </div>
-            </div>
-
-            {/* <!-- bottom left corner --> */}
-            <div
-                className={` ${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 left-0  scale-y-[-1]`}
-            >
-                {/* <!-- left --> */}
-                <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute">
-                    <div className="w-[100%] h-[100%]">
-                        <div className="ctleft w-[100%] h-[100%]"></div>
-                    </div>
-                </div>
-
-                {/* <!-- top --> */}
-                <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
-                    <div className=" w-[100%] h-[100%]">
-                        <div className="flex w-[100%] h-[100%]">
-                            <div className="w-[100%] h-[100%]">
-                                <div className="cttop w-[100%] h-[100%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      {/* <!-- green bar center in left --> */}
+      <div
+        className={`${otherclass} hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute top-[50%] translate-y-[-50%]`}
+      >
+        <div className="w-[100%] h-[50%] absolute">
+          <div className="ltop w-[100%] h-[100%]"></div>
         </div>
-    );
+        <div className="w-[100%] h-[60%] absolute bottom-0">
+          <div className="lbottom w-[100%] h-[100%]"></div>
+        </div>
+      </div>
+
+      {/* <!-- green bar center in right --> */}
+      <div
+        className={`${otherclass} hide overflow-hidden max-w-[16px]  h-[60%] w-[2%] min-w-[11px] hidden s:flex min-h-[80px] absolute right-0 top-[50%] scale-x-[-1] translate-y-[-50%]`}
+      >
+        <div className="w-[100%] h-[50%] absolute">
+          <div className="ltop w-[100%] h-[100%]"></div>
+        </div>
+        <div className="w-[100%] h-[60%] absolute bottom-0">
+          <div className="lbottom w-[100%] h-[100%]"></div>
+        </div>
+      </div>
+
+      {/* <!-- top left corner --> */}
+
+      <div
+        className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden relative`}
+      >
+        {/* left side */}
+        <div className="h-[100%] w-[18%] sm:max-w-[14px] min-w-[10px] absolute">
+          <div className="w-[100%] h-[100%]">
+            <div className="ctleft w-[100%] h-[100%]"></div>
+          </div>
+        </div>
+        {/* top side */}
+        <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
+          <div className=" w-[100%] h-[100%]">
+            <div className="flex w-[100%] h-[100%]">
+              <div className="w-[100%] h-[100%]">
+                <div className="cttop w-[100%] h-[100%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- right top corner --> */}
+
+      <div
+        className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute top-0 right-0`}
+      >
+        {/* <!-- top --> */}
+        <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
+          <div className=" w-[100%] h-[100%]">
+            <div className="flex w-[100%] h-[100%]">
+              <div className="w-[100%] h-[100%]">
+                <div className="crtop w-[100%] h-[100%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <!-- left --> */}
+        <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute right-0">
+          <div className="w-[100%] h-[100%]">
+            <div className="crtop w-[100%] h-[100%]"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- bottom right corner --> */}
+      <div
+        className={`${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 right-0`}
+      >
+        {/* <!-- top --> */}
+        <div className="w-[100%] h-[15%] min-h-[10px] absolute bottom-0">
+          <div className=" w-[100%] h-[100%]">
+            <div className="flex w-[100%] h-[100%]">
+              <div className="w-[100%] h-[100%]">
+                <div className="crbottom w-[100%] h-[100%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <!-- left --> */}
+        <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute right-0">
+          <div className="w-[100%] h-[100%]">
+            <div className="crbottom w-[100%] h-[100%]"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* <!-- bottom left corner --> */}
+      <div
+        className={` ${otherclass} hide h-[8%] max-h-[66px] max-w-[66px] sm:w-[11%]  xs:w-[8%] s:flex hidden absolute bottom-0 left-0  scale-y-[-1]`}
+      >
+        {/* <!-- left --> */}
+        <div className="h-[100%] w-[14%] sm:max-w-[10px] min-w-[10px] absolute">
+          <div className="w-[100%] h-[100%]">
+            <div className="ctleft w-[100%] h-[100%]"></div>
+          </div>
+        </div>
+
+        {/* <!-- top --> */}
+        <div className="corner w-[100%] h-[15%] min-h-[10px] absolute">
+          <div className=" w-[100%] h-[100%]">
+            <div className="flex w-[100%] h-[100%]">
+              <div className="w-[100%] h-[100%]">
+                <div className="cttop w-[100%] h-[100%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default MyContainer;

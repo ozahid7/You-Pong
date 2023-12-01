@@ -26,12 +26,22 @@ function MyToggle({string1, string2, handelCheck, otherclass, enabled, setIsEnab
         <div className="">
             <Switch
                 checked={enabled}
+<<<<<<< HEAD:FrontEnd/components/tools/MyToggle.tsx
                 onChange={() => {
                     if (enabled === false)
                         handelCheck();
                     setIsEnabled(!enabled)
                 }}
                 className={classname}
+=======
+                onChange={setEnabled}
+                className={`w-[141px] h-[42px] pr-3 flex items-center justify-around ${
+                    enabled
+                        ? "bg-palette-orange border-2 border-orangeborder"
+                        : "bg-palette-green border-2 border-greenborder"
+                }
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-sm transition-colors duration-200 ease-in-out focus-visible:ring-2  focus-visible:ring-white/75`}
+>>>>>>> GameSettings:components/tools/MyToggle.tsx
             >
                 <span
                     className={` font-body font-bold text-white text-lg ml-3 ${

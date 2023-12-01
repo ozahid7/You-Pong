@@ -6,8 +6,11 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
 
+const obj = {
+    name: "oussama zahid",
+}
 const NavBar = () => {
-    const name = "oussama zahid";
+    const name = obj.name;
     const isMorethan: boolean = name.length > 7 ? true : false;
     const childcustomClass = `${
         isMorethan ? "animate-marquee" : "animate-m"
