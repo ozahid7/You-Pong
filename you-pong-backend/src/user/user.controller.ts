@@ -127,4 +127,15 @@ export class UserController {
 		const _id = req.user.sub;
 		await this.userService.updateUsername(_id, dto.friend);
 	}
+	
+	@UseGuards(AuthGuard('jwt'))
+	@Post('incMatchRes')
+	async incMatchRes(@Body() dto: friendDto, @Req() req){
+		const _id = req.user.sub;
+		if (dto.friend == "victory")
+			return await this.infosService.incVictory(_id);
+		else if (dto.friend == "defeat")
+			return await this.infosService.incDefeat(_id);
+		throw new ServiceUnavailableException('Unvalide match result');
+	}
 }

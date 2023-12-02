@@ -177,7 +177,7 @@ export class UserService {
         }
       });
       } catch (error) {
-        throw new NotAcceptableException("Something went wrong"); 
+        throw new NotAcceptableException("username already in use!"); 
       }
   }
 }

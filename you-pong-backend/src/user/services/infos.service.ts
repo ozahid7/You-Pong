@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, ServiceUnavailableException } from "@nestjs/common";
 import { FindUserService } from "./find.service";
 import { use } from "passport";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -12,8 +12,7 @@ export class InfoUserService {
         
         async creatAchObj(){
             const ach = await this.prisma.achievement.findMany();
-            const objArray: { isOwned: boolean; title: string; description: string }[] = [];
-
+            const objArray: { isOwned: boolean; title: string; description: string }[] = [];    
             for (const achievemennt of ach) {
                 let val = await this.prisma.owned.findUnique({
                     where: {
@@ -27,8 +26,7 @@ export class InfoUserService {
                 });
             };
             return (objArray);
-        }
-
+        }   
         async getHero(_id: string) {
         try {
             const user = await this.finduser.finduserById(_id);
@@ -47,6 +45,40 @@ export class InfoUserService {
             };
         } catch(error){
             throw new NotFoundException('user not found');
+        }
+    }
+
+    async incDefeat(_id: string) {
+        try {
+            await this.prisma.user.update({
+                where:{
+                    id_user: _id,
+                }, 
+                data: {
+                    defeats: {
+                        increment: 1
+                    }
+                }
+            })
+        } catch (error) {
+            throw new ServiceUnavailableException("could't validate the defeat!");
+        }
+    }
+
+    async incVictory(_id: string) {
+        try {
+            await this.prisma.user.update({
+                where:{
+                    id_user: _id,
+                }, 
+                data: {
+                    victory: {
+                        increment: 1
+                    }
+                }
+            })
+        } catch (error) {
+            throw new ServiceUnavailableException("could't validate the victory!");
         }
     }
 }
