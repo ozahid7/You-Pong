@@ -1,14 +1,15 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, HttpException, Delete, Res, Req, ForbiddenException, ServiceUnavailableException } from '@nestjs/common';
 import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
-import { InfoUserService, UserService } from './services';
+import { FindUserService, InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import * as qrocode from 'qrcode';
 import { achievUserService } from './services/achievemennt.service';
 import { title } from 'process';
 import {  unlockAchDto } from './dto';
+import { friendDto } from 'src/friend/dto';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -17,7 +18,8 @@ export class UserController {
 	private TfaUserService: TfaUserService,
 	private userService: UserService,
 	private infosService: InfoUserService,
-	private achUserService: achievUserService
+	private achUserService: achievUserService,
+	private findService: FindUserService
   ) {}
 
   //POST MANY
@@ -107,9 +109,22 @@ export class UserController {
 		res.status(200).json(await this.infosService.getHero(_id));
 	}
 
+	// @UseGuards(AuthGuard('jwt'))
+	// @Post('/achievement/unlock')
+	// async setOwned(@Req() req, @Body() dto: unlockAchDto){
+	// 	return this.achUserService.setOWned(req.user.sub, dto.title);
+	// }
+	
 	@UseGuards(AuthGuard('jwt'))
-	@Post('/achievement/unlock')
-	async setOwned(@Req() req, @Body() dto: unlockAchDto){
-		return this.achUserService.setOWned(req.user.sub, dto.title);
+	@Get('/findUser')
+	async findUser(@Body() dto: friendDto, @Res() res){
+		const val =  await this.userService.findUser(dto.friend);
+		res.status(201).json(val);
+	}
+	@UseGuards(AuthGuard('jwt'))
+	@Patch('/updateUsername')
+	async updateUsername(@Req()req, @Body() dto: friendDto) {
+		const _id = req.user.sub;
+		await this.userService.updateUsername(_id, dto.friend);
 	}
 }
