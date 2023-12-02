@@ -82,6 +82,16 @@ CREATE TABLE "Message" (
 );
 
 -- CreateTable
+CREATE TABLE "Freindship" (
+    "id_freindship" TEXT NOT NULL,
+    "id_user" TEXT NOT NULL,
+    "id_freind" TEXT NOT NULL,
+    "state" "state" NOT NULL,
+
+    CONSTRAINT "Freindship_pkey" PRIMARY KEY ("id_freindship")
+);
+
+-- CreateTable
 CREATE TABLE "Achievement" (
     "id_achievement" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -158,6 +168,12 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_id_sender_fkey" FOREIGN KEY ("id_s
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_name_fkey" FOREIGN KEY ("name") REFERENCES "Room_Chat"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_user_fkey" FOREIGN KEY ("id_user") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Freindship" ADD CONSTRAINT "Freindship_id_freind_fkey" FOREIGN KEY ("id_freind") REFERENCES "user"("id_user") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Owned" ADD CONSTRAINT "Owned_id_achievement_fkey" FOREIGN KEY ("id_achievement") REFERENCES "Achievement"("id_achievement") ON DELETE RESTRICT ON UPDATE CASCADE;

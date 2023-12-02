@@ -76,24 +76,24 @@ export class UserController {
 	}
 
 	@UseGuards(AuthGuard('jwt'))
-	@Post('signout')
+	@Get('signout')
 	async signout(@Res() res: Response){
 		await this.userService.signout(res);
 	}
-	
+
 	@Post('/tfa/switch')
 	@UseGuards(AuthGuard('jwt'))
 	async set(@Req() req, @Body() dto: tfaDto){
 		return await this.TfaUserService.switchTfaStatus(req.user.sub, dto.code);
 	}
-		
+
 	@UseGuards(AuthGuard('jwt'))
 	@Get('/twoFactorAuth/')
 	async twoFactorAuth(@Req() req, @Res() res) {
 		try {
 			const _id = req.user.sub;
 			const tfaInfo = await this.TfaUserService.genTfaSecret(_id);
-			const qr = await qrocode.toDataURL("data");
+			const qr = await qrocode.toDataURL(tfaInfo);
 			res.status(201).json({img : qr})
 		} catch(error) {
 			throw new ForbiddenException("couldn't generate Qr Code");
