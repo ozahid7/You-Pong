@@ -104,7 +104,7 @@ const Chats = () => {
                         <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="h-full w-full debug my_scroll_green scrollbar-hide"
+                            className="h-full w-full flex-1  overflow-x-hidden my_scroll_green scrollbar-hide"
                           >
                             <div className="flex w-[full] h-full justify-start items-center flex-col ">
                               <MyTabs
@@ -130,7 +130,7 @@ const Chats = () => {
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
-                                className="flex flex-col flex-grow"
+                                className="flex flex-col flex-grow w-full"
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
@@ -160,7 +160,7 @@ const Chats = () => {
                   {value ? (
                     <SwipeableTabs
                       value={valueGroups}
-                      className="h-full w-full  flex-1  overflow-x-hidden"
+                      className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
                     >
                       {channel &&
                         channel

@@ -81,18 +81,18 @@ const ChatEdit = ({ channels }: HomePage) => {
       <Button
         onPress={onOpen}
         key={"3xl"}
-        className="flex btn bg-palette-green border-none text-[#EFF5F5] rounded-md green_button"
+        className="flex btn bg-palette-white border-palette-green text-palette-green rounded-md hover:bg-palette-orange hover:text-palette-white"
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{
               size: "25px",
-              className: "text-white border-none",
+              className: "text-palette-green border-none",
             }}
           >
             <LuSettings />
           </IconContext.Provider>
-          <div className="flex text-white font-body font-[600] text-[15px] mt-1">
+          <div className="flex text-palette-green font-body font-[600] text-[15px] mt-1">
             Edit group
           </div>
         </div>

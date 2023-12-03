@@ -37,7 +37,7 @@ export const setData = async (data: Channel) => {
   }
 };
 
-export const putData = async (data: Channel, name: string) => {
+export const putData = async (data : Channel, name: string) => {
   try {
     const obj = {
       name: data.name,
@@ -87,6 +87,17 @@ export const getFile = async (pathname: string) => {
       `http://178.62.74.69:400/file/${pathname}`
     );
 
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const getMembers = async () => {
+  try {
+    const response = await axios.get("http://178.62.74.69:400/user");
     return response.data;
   } catch (error) {
     // Handle errors here

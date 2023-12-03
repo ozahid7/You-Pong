@@ -1,5 +1,4 @@
-import React from "react";
-import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 interface HomeProps {
@@ -8,7 +7,7 @@ interface HomeProps {
 
 const MiniChat = ({ channels }: HomeProps) => {
   return (
-    <div className="flex w-[280px] h-[8%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] 2xl:w-[20rem] xl:w-[15rem] lg:w-[13.5rem] md:w-[10rem] sm:w-[3.1rem] xs:w-[3rem]">
+    <div className="flex max-w-[420px] 2xl:w-[290px] xl:w-[125%] h-[8%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] xl:w[300px]">
       <Avatar
         isBordered
         radius="sm"
@@ -18,7 +17,9 @@ const MiniChat = ({ channels }: HomeProps) => {
       />
       <div className="w-[70%] h-[80%] overflow-hidden">
         <p className="text-[#424242] font-archivo font-[800] text-[19px]">
-          {channels.name}
+          {channels.name.length > 6
+            ? channels.name.slice(0, 5) + "..."
+            : channels.name}
         </p>
         <div className="text-[#686868] text-[14px] font-[500] w-full h-full">
           {channels.description}

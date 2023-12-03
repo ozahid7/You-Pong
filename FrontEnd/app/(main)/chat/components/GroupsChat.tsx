@@ -1,17 +1,44 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { GroupDropdown } from ".";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
+import { getMembers } from "../data/api";
+import { User } from "@/types";
+import { MyDropdown } from "@/components";
+import { FiChevronDown } from "react-icons/fi";
 
 interface obj {
   channels: Channel;
 }
 
 const GroupsChat = ({ channels }: obj) => {
-  const [smiya, setSmiya] = useState<string>("");
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    const Members = async () => {
+      const result = await getMembers();
+      setUsers(result);
+      return result;
+    };
+
+    Members();
+  }, []);
+
+  const isThere = (user) => {
+    // user.channels.find((channel) => {
+    //   if (channel.name === channels.name) return true;
+    // });
+    // return false;
+    console.log(user.channels);
+    return true;
+  };
+
+  const usersOnline = users.filter((user) => {
+    user.status === "ONLINE" && isThere(user) == true;
+  });
+
   return (
     <div className="flex h-[95%] w-full flex-col ">
       <div className="flex w-full h-[10%] justify-center">
@@ -29,7 +56,7 @@ const GroupsChat = ({ channels }: obj) => {
                 {channels.name}
               </div>
               <div className="text-[#00993D] font-[500] text-[15px] font-['Estedad']">
-                online: 10 members
+                online: {usersOnline.length} members
               </div>
             </div>
           </div>
