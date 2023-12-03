@@ -7,6 +7,8 @@ import {
     MyInput,
 } from "@/components";
 import { apiHost } from "@/const";
+import { singInData } from "@/types/Api";
+import { useAxios } from "@/utils";
 import axios from "axios";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -28,36 +30,29 @@ const SignIn = (props: {
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+    const signIn = async () => {
+        const toSend: object = {
+            email: email,
+            password: pass,
+        };
+        try{
+            const response = await useAxios<singInData>('post', 'auth/local/signin', toSend)
+            console.log(response.tfaStatus)
+        }catch(error){
+            console.log('error = ', error)
+        }
+    }
+
     useEffect(() => {
         if (!isInvalidEmail && !isInvalidPass && isSubmited) {
-            const toSend: object = {
-                email: email,
-                password: pass,
-            };
             const apiUrl = `${apiHost}auth/local/signin`;
             setIsLoading(true)
-            try {
-                axios
-                    .post(apiUrl, toSend, {withCredentials: true})
-                    .then((response: any) => {
-                        console.log('data loaded successfyly :', response.data)
-                        setTimeout(() => {
-                            setIsLoading(false);
-                            redirect("/dashboard");
-                        }, 800);
-                    })
-                    .catch((error) => {
-                        console.log(".catch error : ", error);
-                    });
-                } catch (e) {
-                    console.log("adam throw : ", e);
-                }
             setIsSubmited(false);
+            signIn();
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited]);
 
     useEffect(() => {
-
         setTimeout(() => {
             setIsLoading(false)
         }, 4000)
