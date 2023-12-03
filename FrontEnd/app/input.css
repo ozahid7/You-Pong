@@ -471,3 +471,13 @@
   right: 15%;
   animation-delay: 0.3s;
 }
+
+.button_hover {
+  background-color: white;
+  color: orangered;
+}
+
+.button_hover:hover {
+  background-color: orangered;
+  color: white;
+}

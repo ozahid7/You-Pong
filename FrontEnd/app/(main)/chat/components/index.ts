@@ -10,6 +10,7 @@ import JoinModal from "./JoinModal";
 import MembersEdit from "./MembersEdit";
 import MiniChat from "./MiniChat";
 import SearchChat from "./SearchChat";
+import MyButton from "./MyButton";
 
 export {
     Chat,
@@ -23,5 +24,6 @@ export {
     JoinModal,
     MembersEdit,
     MiniChat,
-    SearchChat
+    SearchChat,
+    MyButton
 }

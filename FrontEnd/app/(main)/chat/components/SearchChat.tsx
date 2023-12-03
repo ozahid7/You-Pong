@@ -49,10 +49,10 @@ const SearchChat = ({ object }) => {
 
   return (
     <Combobox>
-      <div className="flex flex-col md:h-full relative justify-center w-[90%] max-w-[280px] sm:max-h-[60px]">
+      <div className="flex flex-col md:h-full xs:pl-1 relative justify-center w-[90%] max-w-[280px] sm:max-h-[60px]">
         <div className="search_input_chat md:h-[85%] w-full p-[2px] min-h-[40px] flex justify-center items-center">
-          <div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
-            <LuSearch className="h-7 w-7 text-palette-green" />
+          <div className="center pl-3 xs:p-0 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
+            <LuSearch className="h-7 w-7 text-palette-green xs:w-[10px]" />
             <Combobox.Input
               type="text"
               autoComplete="off"
@@ -61,7 +61,7 @@ const SearchChat = ({ object }) => {
               }}
               value={Input}
               placeholder="Search"
-              className="center text-palette-green font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
+              className="center text-palette-green xs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
             />
           </div>
         </div>

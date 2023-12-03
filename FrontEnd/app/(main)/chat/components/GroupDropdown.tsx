@@ -16,6 +16,7 @@ import {
   NextUIProvider,
 } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
+import { FiChevronDown } from "react-icons/fi";
 
 interface HomePage {
   channels: Channel;
@@ -27,22 +28,21 @@ const GroupDropdown = ({ channels }: HomePage) => {
       <div className="dropdown dropdown-bottom dropdown-end">
         <label
           tabIndex={0}
-          className="btn m-1 bg-palette-green border-none hover:bg-palette-green"
           role="button"
         >
           <IconContext.Provider
             value={{
-              color: "white",
-              size: "20px",
-              className: "hover:text-palette-green border-none test",
+              color: "",
+              size: "25px",
+              className: " text-palette-green border-none test",
             }}
           >
-            <LuSettings2 />
+            <FiChevronDown />
           </IconContext.Provider>
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content z-[1] menu p-2  bg-palette-white rounded-box w-52 gap-2"
+          className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
             <MembersEdit></MembersEdit>

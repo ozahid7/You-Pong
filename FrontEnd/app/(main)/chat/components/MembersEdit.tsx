@@ -42,6 +42,7 @@ import { Channel } from "@/types";
 import { setData, setFile } from "@/app/(main)/chat/data/api";
 import { setDataObj } from "./GroupsModal";
 import { color } from "framer-motion";
+import { MyButton } from ".";
 
 const MembersEdit = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -72,29 +73,30 @@ const MembersEdit = () => {
     <Fragment>
       <Button
         onPress={onOpen}
-        key={"3xl"}
-        className="flex btn bg-palette-green border-none text-[#EFF5F5] rounded-md center green_button"
+        className="rounded-none btn green_button"
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{
               size: "25px",
-              className: "text-white border-none",
+              className: "text-palette-white border-none",
             }}
           >
             <LuUsers />
           </IconContext.Provider>
-          <div className="flex text-white font-body font-[600] text-[15px] mt-1">
+          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
             Members
           </div>
         </div>
       </Button>
       <Modal
         isOpen={isOpen}
+        placement="center"
         onOpenChange={onOpenChange}
         onClose={onClose}
         size="2xl"
-        className=" w-full"
+        backdrop="blur"
+        className="w-full"
       >
         <ModalContent className="">
           {(onClose) => (

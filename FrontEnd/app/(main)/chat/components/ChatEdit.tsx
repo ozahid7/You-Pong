@@ -80,19 +80,18 @@ const ChatEdit = ({ channels }: HomePage) => {
     <Fragment>
       <Button
         onPress={onOpen}
-        key={"3xl"}
-        className="flex btn bg-palette-white border-palette-green text-palette-green rounded-md hover:bg-palette-orange hover:text-palette-white"
+        className="rounded-none btn green_button"
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{
               size: "25px",
-              className: "text-palette-green border-none",
+              className: "text-palette-white border-none",
             }}
           >
             <LuSettings />
           </IconContext.Provider>
-          <div className="flex text-palette-green font-body font-[600] text-[15px] mt-1">
+          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
             Edit group
           </div>
         </div>
@@ -103,6 +102,8 @@ const ChatEdit = ({ channels }: HomePage) => {
         onClose={onClose}
         size="4xl"
         className=" w-full"
+        backdrop="blur"
+        placement="center"
       >
         <ModalContent className="">
           {(onClose) => (

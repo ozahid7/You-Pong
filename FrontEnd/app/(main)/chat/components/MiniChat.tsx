@@ -7,7 +7,7 @@ interface HomeProps {
 
 const MiniChat = ({ channels }: HomeProps) => {
   return (
-    <div className="flex max-w-[420px] 2xl:w-[290px] xl:w-[125%] h-[8%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] xl:w[300px]">
+    <div className="flex max-w-[420px] 2xl:w-[300px] xl:w-[280px] lg:w-[220px] md:w-[155px] sm:w-[120px] xs:w-[44px] h-[8%] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5] xl:w[300px]">
       <Avatar
         isBordered
         radius="sm"
@@ -15,7 +15,7 @@ const MiniChat = ({ channels }: HomeProps) => {
         className="flex w-[44px] h-[44px] "
         src={`http://178.62.74.69:400/file/${channels.avatar}`}
       />
-      <div className="w-[70%] h-[80%] overflow-hidden">
+      <div className="w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block">
         <p className="text-[#424242] font-archivo font-[800] text-[19px]">
           {channels.name.length > 6
             ? channels.name.slice(0, 5) + "..."
