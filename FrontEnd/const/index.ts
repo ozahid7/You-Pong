@@ -42,3 +42,11 @@ export const landing_page_description =
   "ft_transcendence is the last common core project of école 42. The superficial purpose of this project is to implement a real-time online pong contest website, This project is about creating a website for\
  the mighty Pong contest! Thanks to your website, users will play Pong with others.\
 You will provide a nice user interface, a chat, and real-time multiplayer online games!";
+
+export const myRoutes = {
+    root: '/',
+    dashboard: '/dashboard',
+    settings: '/settings',
+    friends: '/friends',
+    chat: '/chat'
+}

@@ -2,8 +2,10 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
-import axios from "axios";
-import { apiHost } from "@/const";
+import { useAxios } from "@/utils";
+import { redirect, useRouter } from "next/navigation";
+import { endPoints, tfaSendCodeData } from "@/types/Api";
+import { myRoutes } from "@/const";
 
 interface TwoFactorProps {
     isOpen: boolean;
@@ -25,6 +27,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
     const image = isEnabled
         ? "/mobile.svg"
         : path;
+
     const msg = !isEnabled ? "Scan the Qr code and Enter the OTP from :" : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
@@ -35,10 +38,12 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         input5: "",
         input6: ""
     });
+
     const [code, setCode] = useState('');
     const [key, setKey] = useState('')
     const [IsInvalid, setIsInvalid] = useState(false)
     const [IsSubmited, setIsSubmited] = useState(false)
+    const router = useRouter()
     
     const rgx = /^\d+$/;
     
@@ -57,21 +62,27 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         setIsSubmited(true)
     }
 
+    const SendCode = async () => {
+        const toSend = {
+            code: code
+        }
+        try{
+            const response = await useAxios<tfaSendCodeData>("post", endPoints.tfaSendCode, toSend);
+            console.log('response = ', response)
+            if (response.valid === false){
+                setIsInvalid(true)
+            }else{
+                router.replace(myRoutes.dashboard)
+            }
+        }catch(error){
+            console.log('error = ', error)
+        }
+    }
+
     useEffect(() => {
 
         if(IsSubmited && !IsInvalid){
-            const apiUrl =
-                `${apiHost}user/tfa/switch`;
-            try {
-            axios
-                .post(apiUrl, {code: code}, {withCredentials: true})
-                .then((response: any) => {
-                    console.log('data loaded successfuly : ', response.data)
-                })
-                .catch((error) => console.log('.catch error : ', error));
-            }catch(e){
-                console.log('adam throw this : ', e)
-            }
+            SendCode()
         }
         setIsSubmited(false)
     }, [IsInvalid, IsSubmited])

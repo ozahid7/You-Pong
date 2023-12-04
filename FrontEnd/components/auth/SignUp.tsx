@@ -1,28 +1,19 @@
 "use client";
-import {
-    CustomButton,
-    IntraButton,
-    MyContainer,
-    MyDialog,
-    MyInput,
-} from "@/components";
-import Image from "next/image";
-import axios from "axios";
-import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
-import { MdPassword } from "react-icons/md";
-import { useQuery } from "react-query";
-import { apiHost} from "@/const/index"
+import { CustomButton, IntraButton, MyDialog, MyInput } from "@/components";
+import { useEffect, useState } from "react";
+import { baseURL, useAxios } from "@/utils";
+import { endPoints, singUpData } from "@/types/Api";
 
 const SignUp = (props: {
     isOpen: boolean;
     closemodal: Function;
     showSignIn: Function;
 }) => {
+
+    
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
-
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
     let [isInvalidPass, setIsInvalidPass] = useState(false);
     let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
@@ -31,6 +22,23 @@ const SignUp = (props: {
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
 
+    const signUp = async () => {
+        const toSend: object = {
+            email: email,
+            password: pass,
+        };
+        try {
+            const response = await useAxios<singUpData>(
+                "post",
+                endPoints.signup,
+                toSend
+            );
+            console.log("response = ", response);
+        } catch (error) {
+            console.log("error = ", error);
+        }
+    };
+
     useEffect(() => {
         if (
             !isInvalidEmail &&
@@ -38,33 +46,8 @@ const SignUp = (props: {
             isSubmited &&
             !isInvalidConfirmPass
         ) {
-            const toSend: object = {
-                email: email,
-                password: pass,
-            };
-            const apiUrl = `${apiHost}auth/local/signup`;
             setIsLoading(true);
-            try {
-                axios
-                    .post(apiUrl, toSend, {withCredentials: true})
-                    .then((response: any) => {
-                        console.log(
-                            "data loaded successfuly : ",
-                            response.data
-                        );
-                        
-                        setTimeout(() => {
-                            props.closemodal(false);
-                            props.showSignIn(true);
-                            setIsLoading(false);
-                        }, 1000);
-                    })
-                    .catch((error) => {
-                        console.log(".catch error : ", error);
-                    });
-            } catch (e) {
-                console.log("adam throw : ", e);
-            }
+            signUp();
             setIsSubmited(false);
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited, isInvalidConfirmPass]);
@@ -81,6 +64,13 @@ const SignUp = (props: {
             ? setIsInvalidconfirmPass(true)
             : setIsInvalidconfirmPass(false);
     };
+
+    //set loader in the button to the default state
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 3000);
+    }, [isLoading]);
 
     //remove invalid error msg from inputs while typing
     const handleFocus = () => {
@@ -172,7 +162,7 @@ const SignUp = (props: {
                 </form>
                 <form
                     method="post"
-                    action={`${apiHost}auth/42`}
+                    action={`${baseURL}auth/42`}
                     className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                 >
                     <div className="w-[80%] xl:w-full max-w-[340px]  sm:h-[60px]  flex justify-center items-center">

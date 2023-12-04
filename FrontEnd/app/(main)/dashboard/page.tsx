@@ -45,10 +45,6 @@ const page = () => {
        return null;
    };
 
-   useLayoutEffect(() => {
-
-   })
-
    const UserQuery = useQuery({
        queryKey: ["user"],
        queryFn: getUser,

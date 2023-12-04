@@ -1,6 +1,6 @@
 "use client";
 
-import { apiHost } from "@/const";
+import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -103,15 +103,15 @@ const SideBar = () => {
             <div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
-                    {RenderSideBarElements(0, "/dashboard", "Dashboard")}
-                    {RenderSideBarElements(1, "/friends", "Friends")}
-                    {RenderSideBarElements(2, "/messages", "Messages")}
+                    {RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
+                    {RenderSideBarElements(1, myRoutes.friends, "Friends")}
+                    {RenderSideBarElements(2, myRoutes.chat, "Messages")}
                     {RenderSideBarElements(
                         3,
                         "/notifications",
                         "Notifications"
                     )}
-                    {RenderSideBarElements(4, "/settings", "Settings")}
+                    {RenderSideBarElements(4, myRoutes.settings, "Settings")}
                 </div>
                 {/* bottom part */}
 

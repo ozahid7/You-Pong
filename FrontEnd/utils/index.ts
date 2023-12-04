@@ -6,7 +6,7 @@ export const renderIcon = (icon: any, style?: string, elmsize?: number) => {
     return React.createElement(icon, { className: style, size: elmsize });
 };
 
-const baseURL = "http://localhost:4000/";
+export const baseURL = "http://localhost:4000/";
 
 const axiosInstance = axios.create({
     baseURL,

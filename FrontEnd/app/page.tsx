@@ -119,11 +119,13 @@ function Home() {
                 isOpen={showSingIn}
                 closemodal={setSingIn}
                 showSignUp={() => setSignUp(!showSignup)}
+                showTwoFactor={() => setTwoFactor(!showTwoFactor)}
             />
             <TwoFactor
                 isEnabled={true}
                 isOpen={showTwoFactor}
                 closemodal={setTwoFactor}
+                
             />
         </div>
     );
