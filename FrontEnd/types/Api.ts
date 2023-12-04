@@ -1,20 +1,27 @@
 export type singInData = {
-    tfaStatus: boolean
-}
+    tfaStatus: boolean;
+};
 
 export type singUpData = {
-    tfaStatus: any
-}
+    tfaStatus: any;
+};
 
 export type tfaSendCodeData = {
-    valid: boolean
-}
+    valid: boolean;
+};
 
-
-
-
-
-
+export type userData = {
+    userInfo: {
+        achievements: [];
+        level: number;
+        loses: number;
+        rank: string;
+        tfaStatus: boolean;
+        username: string;
+        wins: number;
+        avatar: string;
+    };
+};
 
 //EndPoints
 export const endPoints = {

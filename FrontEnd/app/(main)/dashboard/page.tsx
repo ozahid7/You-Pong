@@ -1,6 +1,6 @@
 "use client";
 import { Acheivement } from "@/components";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -20,8 +20,12 @@ import withAuth from "@/components/auth/withAuth";
 import { apiHost } from "@/const";
 import router, { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { MyContext } from "../layout";
+
 
 const page = () => {
+    const user = useContext(MyContext)
+    console.log(user)
     return (
         <div className="w-full 2xl:w-[92%] xl:min-h-[90vh] pb-24 h-auto  flex flex-col xl:flex-row">
             <div className="w-full flex flex-col md:flex-row xl:w-[66%]">

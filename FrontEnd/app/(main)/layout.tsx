@@ -7,27 +7,34 @@ import { apiHost } from "@/const";
 import axios from "axios";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 import { useQuery } from "react-query";
+import { useUser } from "@nextui-org/react";
+import { useAxios } from "@/utils";
+import { endPoints, userData } from "@/types/Api";
+import { createContext, useContext, useEffect, useState } from "react";
+
+interface myContextProps {
+    userData: any;
+    isLoged: boolean;
+}
+
+
+export const MyContext = createContext<myContextProps | undefined>(undefined);
+
+
 
 function RootLayout({ children }: { children: React.ReactNode }) {
-
-     const router = useRouter();
+    const [isAuth, setIsAuth] = useState(false);
+    const [isLoged, setIsLoged] = useState(false)
+    const [userData, setUserData] = useState(undefined)
+    const router = useRouter();
     const getUser = async () => {
-        const apiUrl = `${apiHost}user/GetHero`;
         try {
             await new Promise((resolve) => setTimeout(resolve, 500));
-            await axios
-                .get(apiUrl, { withCredentials: true })
-                .then((response: any) => {
-                    console.log('from layout',  response.data);
-                    setTimeout(() => {
-                        localStorage.setItem("isLogedIn", "true");
-                    }, 1000);
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        } catch (e) {
-            console.log(e);
+            const response = await useAxios<userData>("get", endPoints.getuser);
+            setUserData(response.userInfo)
+            setIsLoged(true)
+        } catch (error) {
+            console.log("error = :", error);
         }
         return null;
     };
@@ -36,15 +43,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         queryKey: ["user"],
         queryFn: getUser,
     });
+
     return (
-        <main className="flex h-screen w-full background">
-            <SideBar />
-            <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
-                <NavBar />
-                {children}
-                <MobileSideBar />
+        <MyContext.Provider value={{userData, isLoged}}>
+            <main className="flex h-screen w-full background">
+                <SideBar />
+                <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
+                    <NavBar />
+                    {children}
+                    <MobileSideBar />
+                </main>
             </main>
-        </main>
+        </MyContext.Provider>
     );
 }
 
