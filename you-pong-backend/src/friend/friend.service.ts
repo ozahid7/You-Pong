@@ -100,10 +100,57 @@ export class friendService{
 	}
 	
 	async remove(user: string, friend: string) {
-
-	}
+		const init = await this.opInit(user, friend, 'remove');
+		const req = await this.prisma.freindship.findUnique({
+			where: {
+				id_freindship: init.fr.id_user + init.us.id_user,
+				state: 'ACCEPTED'
+			}
+		});
+		if (!req)
+			throw new BadRequestException(`you're not friend with ${friend}`);
+		try {
+			await this.prisma.freindship.deleteMany({
+				where:{
+					OR: [
+						{id_freindship: init.fr.id_user + init.us.id_user},
+						{id_freindship: init.us.id_user + init.fr.id_user}
+					],
+				},
+			});
+			return ({satue: 'SUCCESS'});
+		} catch (error) {
+			throw new BadRequestException(error);
+		};
+	};
 	
 	async block(user: string, friend: string) {
-
+		const init = await this.opInit(user, friend, 'block');
+		const req = await this.prisma.freindship.findUnique({
+			where: {
+				id_freindship: init.fr.id_user + init.us.id_user,
+				
+				NOT: [
+					{ state: 'BLOCKED' },
+				],
+			},
+		});
+		if (!req)
+			throw new BadRequestException(`you can't block ${friend}`);
+		if (req.state == 'BLOCKED')
+			throw new BadRequestException(`${friend} is already blocked!`);
+		try {
+			await this.prisma.freindship.update({
+				where: {
+					id_freindship: init.us.id_user  + init.fr.id_user
+				},
+				data: {
+					state: 'BLOCKED'
+				}
+			});
+			return ({satue: 'SUCCESS'});
+		} catch (error) {
+			throw new BadRequestException(error);
+		}
 	}
 }

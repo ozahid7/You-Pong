@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { friendDto } from "./dto";
 import { friendService } from "./friend.service";
 import { FindUserService } from "src/user/services";
@@ -46,7 +46,7 @@ export class friendController{
     }
 
     // block user
-    @Post('block')
+    @Patch('block')
     @UseGuards(AuthGuard('jwt'))
     async block(@Req() req, @Res() res, @Body() dto: friendDto){
         res
