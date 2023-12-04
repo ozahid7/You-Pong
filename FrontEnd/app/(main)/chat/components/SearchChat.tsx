@@ -10,29 +10,6 @@ interface friend {
   avatar: string;
 }
 
-const FriendsList: friend[] = [
-  { userName: "anas Reynolds", avatar: "/ozahid-.jpeg" },
-  { userName: "Ahmed Towne", avatar: "/ozahid-.jpeg" },
-  { userName: "achraf Wunsch", avatar: "/ozahid-.jpeg" },
-  { userName: "yahya Kessler", avatar: "/ozahid-.jpeg" },
-  { userName: "abdrached Rohan", avatar: "/ozahid-.jpeg" },
-  { userName: "Durward Reynolds", avatar: "/ozahid-.jpeg" },
-  { userName: "ahmad Towne", avatar: "/ozahid-.jpeg" },
-  { userName: "anouar Wunsch", avatar: "/ozahid-.jpeg" },
-  { userName: "youness Kessler", avatar: "/ozahid-.jpeg" },
-  { userName: "Katelyn Rohan", avatar: "/ozahid-.jpeg" },
-  { userName: "Durward Reynolds", avatar: "/ozahid-.jpeg" },
-  { userName: "oussama Towne", avatar: "/ozahid-.jpeg" },
-  { userName: "amjad Wunsch", avatar: "/ozahid-.jpeg" },
-  { userName: "wassim Kessler", avatar: "/ozahid-.jpeg" },
-  { userName: "anas Rohan", avatar: "/ozahid-.jpeg" },
-  { userName: "youssef Reynolds", avatar: "/ozahid-.jpeg" },
-  { userName: "amjad Towne", avatar: "/ozahid-.jpeg" },
-  { userName: "oussama Wunsch", avatar: "/ozahid-.jpeg" },
-  { userName: "mohamed Kessler", avatar: "/ozahid-.jpeg" },
-  { userName: "hamid Rohan", avatar: "/ozahid-.jpeg" },
-];
-
 const SearchChat = ({ object }) => {
   const [FriendArr, setFriendArr] = useState(object);
   const [Input, setInput] = useState("");
@@ -49,10 +26,11 @@ const SearchChat = ({ object }) => {
 
   return (
     <Combobox>
-      <div className="flex flex-col md:h-full xs:pl-1 relative justify-center w-[90%] max-w-[280px] sm:max-h-[60px]">
-        <div className="search_input_chat md:h-[85%] w-full p-[2px] min-h-[40px] flex justify-center items-center">
-          <div className="center pl-3 xs:p-0 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
-            <LuSearch className="h-7 w-7 text-palette-green xs:w-[10px]" />
+      <div className="flex flex-col m-1 relative justify-center w-[96%] h-[9%] ">
+        <div className="search_input_chat md_:h-[88%] sm_:h-[70%] w-full p-[2px] min-h-[40px] flex justify-center items-center">
+          <div className="center  outline-none w-full h-full  flex justify-center items-center overflow-hidden">
+            <LuSearch className="m-1 text-palette-green xs:w-[25px] sm_:block xxs:hidden
+                3xl_:w-8 3xl_:h-8 2xl_:w-7 2xl_:h-7 lg_:w-6 lg_:h-6 md_:w-5 md_:h-5" />
             <Combobox.Input
               type="text"
               autoComplete="off"
@@ -61,7 +39,7 @@ const SearchChat = ({ object }) => {
               }}
               value={Input}
               placeholder="Search"
-              className="center text-palette-green xs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
+              className="flex center text-palette-green sm:placeholder-opacity-100 xxs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-full 2xl_:placeholder:text-[28px] lg_:placeholder:text-[25px] md_:placeholder:text-[20px]"
             />
           </div>
         </div>

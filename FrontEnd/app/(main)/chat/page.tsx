@@ -69,11 +69,10 @@ const Chats = () => {
             <Background>
               <div className="w-[95%] h-full">
                 <div className="flex flex-row w-full h-full items-center ">
-                  <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid
-                  2xl:bg-red-500 xl:bg-blue-500 lg:bg-white md:bg-amber-500 sm:bg-fuchsia-500 xs:bg-emerald-500 fold:bg-red-500 xxs:bg-yellow-500">
+                  <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid pr-5">
                     <ChatHeading text="Chats" />
                     <SearchChat object={channel} />
-                    <div className="flex h-full w-[95%] flex-row  justify-center items-center ">
+                    <div className="flex h-full w-full flex-row justify-center items-center">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
                           <MyTabs
@@ -82,35 +81,34 @@ const Chats = () => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1 ">
-                                <LuUser className="mt-1 text-[white] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] xs:text-[20px] fold:text-[20px]" />
-
-                                <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
+                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                                <LuUser className="text-[white]" />
+                                <div className="xxs:hidden lg_:block">
                                   DIRECT
-                                </p>
+                                </div>
                               </div>,
-                              <div className="flex w-fit h-fit text-[#686868] font-archivo self-center gap-1">
-                                <LuUsers className="mt-1 text-[white] 2xl:text-[30px] xl:text-[23px] lg:text-[20px] md:text-[14px] xs:text-[20px] " />
-
-                                <p className="xs:text-[0px] 2xl:text-[25px] xl:text-[21px] lg:text-[18px] md:text-[12px] md:font-[500]">
-                                  GROUPS
-                                </p>
+                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                                <LuUsers className="text-[white]" />
+                                <div className="xxs:hidden lg_:block">
+                                  CHANNELS
+                                </div>
                               </div>,
                             ]}
                             indicator={{
-                              className: "bg-white self-center xs:w-[22px]",
+                              className:
+                                "bg-white self-center lg_:w-[98%] sm_:w-[92%]",
                             }}
                           ></MyTabs>
                         </div>
                         <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="h-full w-full flex-1  overflow-x-hidden my_scroll_green scrollbar-hide"
+                            className="flex h-full w-full justify-center overflow-x-hidden my_scroll_green scrollbar-hide "
                           >
-                            <div className="flex w-[full] h-full justify-start items-center flex-col ">
+                            <div className="flex w-full h-full justify-start items-center flex-col">
                               <MyTabs
                                 value={valueDirect}
-                                className="flex flex-col"
+                                className="flex flex-col self-center w-fit h-fit"
                                 onChange={(valueDirect) => {
                                   setValueDirect(valueDirect);
                                 }}
@@ -124,14 +122,14 @@ const Chats = () => {
                                 }
                                 indicator={{
                                   className:
-                                    "bg-palette-green self-center 2xl:w-[60px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
+                                    "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
                                 }}
                               ></MyTabs>
                             </div>
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
-                                className="flex flex-col flex-grow"
+                                className="flex flex-col flex-grow w-fit h-fit"
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
                                 }}
