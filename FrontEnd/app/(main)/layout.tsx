@@ -1,19 +1,41 @@
 "use client";
-import type { Metadata } from "next";
 import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
-import withAuth from "@/components/auth/withAuth";
-import { useQuery } from "react-query";
-import Loader from "@/components/tools/Loader";
 import { useRouter } from "next/navigation";
 import { apiHost } from "@/const";
 import axios from "axios";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { useState } from "react";
 import UseQueryProvider from "@/providers/UseQueryProvider";
+import { useQuery } from "react-query";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
+
+     const router = useRouter();
+    const getUser = async () => {
+        const apiUrl = `${apiHost}user/GetHero`;
+        try {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            await axios
+                .get(apiUrl, { withCredentials: true })
+                .then((response: any) => {
+                    console.log('from layout',  response.data);
+                    setTimeout(() => {
+                        localStorage.setItem("isLogedIn", "true");
+                    }, 1000);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        } catch (e) {
+            console.log(e);
+        }
+        return null;
+    };
+
+    const UserQuery = useQuery({
+        queryKey: ["user"],
+        queryFn: getUser,
+    });
     return (
         <main className="flex h-screen w-full background">
             <SideBar />
@@ -26,4 +48,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     );
 }
 
-export default RootLayout;
+export default UseQueryProvider(RootLayout);

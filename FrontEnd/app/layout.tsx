@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "./input.css";
-import UseQueryProvider from "@/providers/UseQueryProvider";
+import "./input.css";import UseQueryProvider from "@/providers/UseQueryProvider";
+;
 
 export const metadata: Metadata = {
   title: "You Pong",
@@ -22,11 +22,9 @@ export default function RootLayout({
         />
       </head>
       <body className="flex h-screen min-w-[280px] min-body  background">
-        <UseQueryProvider>
           <main className="flex flex-col h-full overflow-y-auto my_scroll_orange items-center justify-between w-full">
-            {children}
+            {children }
           </main>
-        </UseQueryProvider>
       </body>
     </html>
   );
