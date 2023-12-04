@@ -136,8 +136,21 @@ export class friendService{
 			},
 		});
 		if (!req)
-			throw new BadRequestException(`you can't block ${friend}`);
-		if (req.state == 'BLOCKED')
+		{
+			try {
+				await this.prisma.freindship.create({
+					data: {
+						id_freindship: init.us.id_user  + init.fr.id_user,
+						id_freind: init.fr.id_user,
+						id_user: init.us.id_user,
+						state: 'BLOCKED'
+					}
+				});
+			} catch (error) {
+				throw new BadRequestException(error);
+			}
+		}
+		else if (req.state == 'BLOCKED')
 			throw new BadRequestException(`${friend} is already blocked!`);
 		try {
 			await this.prisma.freindship.update({
@@ -151,6 +164,40 @@ export class friendService{
 			return ({satue: 'SUCCESS'});
 		} catch (error) {
 			throw new BadRequestException(error);
+		};
+	};
+
+	// send wich object wich status 
+	async fillArr(us: any, state: state) {
+        const objArray: {	avatar: string;
+			username: string;
+			status: string
+		}[] = [];
+		const obj = await this.prisma.freindship.findMany({
+			where: {
+				id_freind: us.id_user,
+				state,
+			}
+		});
+		for (const i of obj) {
+			const fr = await this.findUser.finduserById(i.id_user);
+			objArray.push({
+				avatar: fr.avatar,
+				username: fr.username,
+				status: fr.status
+			});
 		}
+		return objArray;
 	}
+
+	async sort(user: string) {
+		// get friends
+		const us = await this.findUser.finduserById(user);
+		if (!us)
+			throw new NotFoundException(`no such user`);
+		const accepted = await this.fillArr(us, 'ACCEPTED');
+		console.log(accepted);
+		
+		// console.log(accepted);
+	};
 }
