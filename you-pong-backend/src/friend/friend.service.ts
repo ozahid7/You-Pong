@@ -1,4 +1,6 @@
-import { BadRequestException, Injectable, ServiceUnavailableException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, ServiceUnavailableException } from "@nestjs/common";
+import { state } from "@prisma/client";
+import { response } from "express";
 import { use } from "passport";
 import { PrismaService } from "src/prisma/prisma.service";
 import { FindUserService } from "src/user/services";
@@ -8,133 +10,100 @@ export class friendService{
 	constructor(private prisma: PrismaService,
 				private findUser: FindUserService){}
 
-	async postcolumn(state: any, id_user: string, id_freind: string) {
-		try {			
+	async opInit(user: string, friend: string, op: string) {
+		const fr = await this.findUser.finduserByUserName(friend);
+		if (!fr)
+			throw new NotFoundException(`no such user ${friend}`);
+		const us = await this.findUser.finduserById(user);
+		if (!us)
+			throw new NotFoundException(`no such user`);
+		if (us.id_user === fr.id_user)
+			throw new ForbiddenException(`can't ${op} yourself!`);
+		return {us, fr};
+	}
+
+	async send(user: string, friend: string) {
+		const init = await this.opInit(user, friend, 'add');
+		try {
 			await this.prisma.freindship.create({
 				data: {
-					id_freind,
-					id_user,
-					state,
-					id_freindship: id_user + id_freind 
+					id_freind: init.fr.id_user,
+					id_user: init.us.id_user,
+					id_freindship : init.us.id_user + init.fr.id_user,
+					state: "PENDING"
 				}
-			})         
-		} catch (error) {
-			throw new BadRequestException("a request have been already sent!");
+			});
+			return ({satue: 'SUCCESS'});
+		} catch(error) {
+			if (error.code == 'P2002')
+				throw new BadRequestException("A relation already exists");
+			throw new BadRequestException(error);
 		}
 	}
-
-	async deletefriendship(id_freindship: string) {
-		try {
-			await this.prisma.freindship.delete({
-				where : {
-					id_freindship,
-				}
-			})
-		} catch (error) {
-			throw new BadRequestException("Couldn't remove friendship");
-		}
-	}
-
-	async updateStatus(id_freindship, state) {
-		try {
-			await this.prisma.freindship.update({
-				where: {
-					id_freindship
-				},
-				data: {
-					state
-				}
-			})
-		} catch (error) {
-			throw new BadRequestException("Could't accept the friend request");  
-		}
-	}
-
-	async sendReq(userUid: string, friendName: string) {
-		const friend = await this.findUser.finduserByUserName(friendName);
-		if (!friend)
-			throw new ServiceUnavailableException(`Could't find friend with the username '${friendName}'`);
-		const user = await this.findUser.finduserById(userUid);
-		if (!user)
-			throw new BadRequestException("DB couldn't fetch user please ma sure theat you're logged");
-		if (user.id_user == friend.id_user)
-			throw new BadRequestException("You can't add yourself -_- !");  
-		const pend = await this.prisma.freindship.findFirst({
-			where: {
-				id_freindship: friend.id_user + user.id_user,
-			}
-		});
-		if (pend === null)
-			await this.postcolumn("PENDING", user.id_user, friend.id_user);
-		else
-		{
-			if (pend.state == 'PENDING')
-				throw new BadRequestException(`${friend.username} have already send you a friend request`);
-			if (pend.state == "ACCEPTED")
-				throw new BadRequestException(`${friend.username} and You are already friends`);
-		}
-		return {status: "SUCCESS"};
-	};
-
-	async acceptReq(userUid: string, friendName: string) {
-		const friend = await this.findUser.finduserByUserName(friendName);
-		if (!friend)
-			throw new ServiceUnavailableException(`Could't find friend with the username '${friendName}'`);
-		const user = await this.findUser.finduserById(userUid);
-		if (!user)
-			throw new BadRequestException("DB couldn't fetch user please ma sure theat you're logged");
-		if (user.id_user == friend.id_user)
-			throw new BadRequestException("You can't accept yourself -_- !");  
-		// check for request
+	
+	async accept(user: string, friend: string) {
+		const init = await this.opInit(user, friend, 'accept');
+		
+		// check if req is sent
 		const req = await this.prisma.freindship.findUnique({
 			where: {
-				id_freindship: friend.id_user + user.id_user,
-				state: "PENDING"
+				id_freindship: init.fr.id_user + init.us.id_user,
+				state: 'PENDING'
 			}
 		});
 		if (!req)
-			throw new BadRequestException("No request was found to be accepted");  
-	// add user
-		await this.postcolumn("ACCEPTED", user.id_user, friend.id_user);
-		await this.updateStatus(friend.id_user + user.id_user, "ACCEPTED");
-		return {status: "SUCCESS"};
-	};
-
-	async removeFriend(userUid: string, friendName: string) {
-		const friend = await this.findUser.finduserByUserName(friendName);
-		if (!friend)
-			throw new ServiceUnavailableException(`Could't find friend with the username '${friendName}'`);
-		const user = await this.findUser.finduserById(userUid);
-		if (!user)
-			throw new BadRequestException("DB couldn't fetch user please ma sure theat you're logged");
-		if (user.id_user == friend.id_user)
-			throw new BadRequestException("You can't remove yourself -_- !");
-		await this.deletefriendship(user.id_user + friend.id_user);
-		await this.deletefriendship(friend.id_user + user.id_user);
-		return {status: "SUCCESS"};
+			throw new BadRequestException(`no req was sent!`);
+		try {
+			await this.prisma.freindship.create({
+				data: {
+					id_freind: init.fr.id_user,
+					id_user: init.us.id_user,
+					id_freindship : init.us.id_user + init.fr.id_user,
+					state: "ACCEPTED"
+				}
+			});
+			await this.prisma.freindship.update({
+				where: {
+					id_freindship: init.fr.id_user + init.us.id_user
+				},
+				data: {
+					state: 'ACCEPTED'
+				}
+			});
+			return ({satue: 'SUCCESS'});
+		} catch(error) {
+			throw new BadRequestException(error);
+		}
 	}
 
-	async blockFriend(userUid: string, friendName: string) {
-		const friend = await this.findUser.finduserByUserName(friendName);
-		if (!friend)
-			throw new ServiceUnavailableException(`Could't find friend with the username '${friendName}'`);
-		const user = await this.findUser.finduserById(userUid);
-		if (!user)
-			throw new BadRequestException("DB couldn't fetch user please ma sure theat you're logged");
-		if (user.id_user == friend.id_user)
-			throw new BadRequestException("You can't remove yourself -_- !");
+	async decline(user: string, friend: string) {
+		const init = await this.opInit(user, friend, 'decline');
 		const req = await this.prisma.freindship.findUnique({
 			where: {
-				id_freindship: friend.id_user + user.id_user,
+				id_freindship: init.fr.id_user + init.us.id_user,
+				state: 'PENDING'
 			}
 		});
-		if (req)
-			await this.updateStatus(friend.id_user + user.id_user, 'BLOCKED');
-		else
-		{
-			await this.postcolumn("ACCEPTED", user.id_user, friend.id_user);
-			await this.postcolumn("BLOCKED", friend.id_user, user.id_user);
+		if (!req)
+			throw new BadRequestException(`no req was sent!`);
+		try {
+			await this.prisma.freindship.delete({
+				where: {
+					id_freindship: init.fr.id_user + init.us.id_user,
+					state: 'PENDING'
+				}
+			});
+			return ({satue: 'SUCCESS'});
+		} catch (error) {
+			throw new BadRequestException(error);			
 		}
-		return {status: "SUCCESS"};
+	}
+	
+	async remove(user: string, friend: string) {
+
+	}
+	
+	async block(user: string, friend: string) {
+
 	}
 }

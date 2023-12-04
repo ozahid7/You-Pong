@@ -3,41 +3,55 @@ import { friendDto } from "./dto";
 import { friendService } from "./friend.service";
 import { FindUserService } from "src/user/services";
 import { AuthGuard } from "@nestjs/passport";
+import { Response } from "express";
 
 @Controller('friend')
 export class friendController{
-    constructor(private friendService: friendService,){
-    }
+    constructor(private friendService: friendService,){}
 
-    @Post('sendReq')
+    // send request
+    @Post('send')
     @UseGuards(AuthGuard('jwt'))
-    async sendReq(@Req() req, @Res() res ,@Body() dto: friendDto) {
-        res
-        .status(201)
-        .json(await this.friendService.sendReq(req.user.sub, dto.friend));
-    }
-
-    @Post('acceptReq')
-    @UseGuards(AuthGuard('jwt'))
-    async acceptReq(@Req() req, @Res() res ,@Body() dto: friendDto) {
-        res
-        .status(201)
-        .json(await this.friendService.acceptReq(req.user.sub, dto.friend));
-    }
-    
-    @Delete('removeFri')
-    @UseGuards(AuthGuard('jwt'))
-    async removeFriend(@Req() req, @Res() res ,@Body() dto: friendDto){
+    async send(@Req() req, @Res() res: Response, @Body() dto: friendDto){
         res
         .status(200)
-        .json(await this.friendService.removeFriend(req.user.sub, dto.friend));
+        .json(await this.friendService.send(req.user.sub, dto.friend));
+    }
+    
+    // accept request
+    @Post('accept')
+    @UseGuards(AuthGuard('jwt'))
+    async accept(@Req() req, @Res() res, @Body() dto: friendDto){
+        res
+        .status(200)
+        .json(await this.friendService.accept(req.user.sub, dto.friend));
+    }
+
+    // decline requset
+    @Delete('decline')
+    @UseGuards(AuthGuard('jwt'))
+    async decline(@Req() req, @Res() res, @Body() dto: friendDto){
+        res
+        .status(200)
+        .json(await this.friendService.decline(req.user.sub, dto.friend));
+    }
+
+    // remove friend
+    @Delete('remove')
+    @UseGuards(AuthGuard('jwt'))
+    async remove(@Req() req, @Res() res, @Body() dto: friendDto){
+        res
+        .status(200)
+        .json(await this.friendService.remove(req.user.sub, dto.friend));
+    }
+
+    // block user
+    @Post('block')
+    @UseGuards(AuthGuard('jwt'))
+    async block(@Req() req, @Res() res, @Body() dto: friendDto){
+        res
+        .status(200)
+        .json(await this.friendService.block(req.user.sub, dto.friend));
 
     }
-    // @Post('declinetReq')
-    // @UseGuards(AuthGuard('jwt'))
-    // async acceptReq(@Req() req, @Res() res ,@Body() dto: friendDto) {
-    //     res
-    //     .status(201)
-    //     .json(await this.friendService.acceptReq(req.user.sub, dto.friend, 'decline'));
-    // }
 }
