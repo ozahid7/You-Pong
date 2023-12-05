@@ -151,7 +151,20 @@ export class friendService{
 			}
 		}
 		else if (req.state == 'BLOCKED')
-			throw new BadRequestException(`${friend} is already blocked!`);
+		{
+			try {
+				await this.prisma.freindship.create({
+					data: {
+						id_freindship: init.us.id_user  + init.fr.id_user,
+						id_freind: init.fr.id_user,
+						id_user: init.us.id_user,
+						state: 'BLOCKED'
+					}
+				});
+			} catch (error) {
+				throw new BadRequestException(error);
+			}
+		}
 		try {
 			await this.prisma.freindship.update({
 				where: {
