@@ -155,6 +155,7 @@ export class UserService {
       wins: user.victory,
       losts: user.defeats,
       status: user.status,
+      channels: user.channels,
     };
   }
 

@@ -33,14 +33,17 @@ export class InfoUserService {
             if (!user)
                 throw new NotFoundException('user not found!');
             return {
-                usernfo: {
+                userInfo: {
+                    uid: user.id_user,
                     username: user.username,
                     level: user.level,
                     rank: user.rank,
                     loses: user.defeats,
                     wins: user.victory,
                     tfaStatus: user.tfaIsEnable,
-                    achieveents: await this.creatAchObj()
+                    achievements: await this.creatAchObj(),
+                    avatar: user.avatar,
+                    channels: user.channels
                 }
             };
         } catch(error){

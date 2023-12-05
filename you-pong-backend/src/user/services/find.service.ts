@@ -8,26 +8,35 @@ export class FindUserService {
         const user = await this.prisma.user.findUnique({
             where:{
                 id_user: _id
-            }
+            },
+            include: {
+                channels: true,
+            },
         });
-        return user
-    }
+        return (user);
+    };
 
     async finduserByUserName(_username: string){
         const user = await this.prisma.user.findUnique({
             where:{
                 username: _username
-            }
+            },
+            include:{
+                channels: true,
+            },
         });
-        return user
-    }
+        return (user);
+    };
     
     async finduserByEmail(_email: string){
         const user = await this.prisma.user.findUnique({
             where:{
                 email: _email
+            },
+            include:{
+                channels: true,
             }
         });
-        return user
-    }
+        return (user);
+    };
 }

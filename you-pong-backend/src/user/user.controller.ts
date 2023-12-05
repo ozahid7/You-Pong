@@ -114,13 +114,14 @@ export class UserController {
 	// async setOwned(@Req() req, @Body() dto: unlockAchDto){
 	// 	return this.achUserService.setOWned(req.user.sub, dto.title);
 	// }
-	
+
 	@UseGuards(AuthGuard('jwt'))
 	@Get('/findUser')
 	async findUser(@Body() dto: friendDto, @Res() res){
 		const val =  await this.userService.findUser(dto.friend);
 		res.status(201).json(val);
 	}
+
 	@UseGuards(AuthGuard('jwt'))
 	@Patch('/updateUsername')
 	async updateUsername(@Req()req, @Body() dto: friendDto) {
