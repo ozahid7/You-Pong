@@ -4,32 +4,39 @@ import { Switch } from "@headlessui/react";
 import { twMerge } from "tailwind-merge";
 
 interface MyToggleProps {
-    string1?: string
-    string2?: string
-    handelCheck?: any
-    otherclass?: string
-    enabled: boolean
-    setIsEnabled: any
+    string1?: string;
+    string2?: string;
+    handelCheck?: any;
+    otherclass?: string;
+    enabled: boolean;
+    setIsEnabled: any;
 }
 
-function MyToggle({string1, string2, handelCheck, otherclass, enabled, setIsEnabled}: MyToggleProps) {
-    
-
-    const classname = twMerge(`w-[140px] h-[43px] pr-3 flex items-center justify-around ${
-                    !enabled
-                        ? "bg-palette-green border-2 border-greenborder"
-                        : "bg-palette-orange border-2 border-orangeborder"
-                }
-          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-sm transition-colors duration-200 ease-in-out focus-visible:ring-2  focus-visible:ring-white/75`, otherclass)
+function MyToggle({
+    string1,
+    string2,
+    handelCheck,
+    otherclass,
+    enabled,
+    setIsEnabled,
+}: MyToggleProps) {
+    const classname = twMerge(
+        `w-[140px] h-[43px] pr-3 flex items-center justify-around ${
+            !enabled
+                ? "bg-palette-green border-2 border-greenborder"
+                : "bg-palette-orange border-2 border-orangeborder"
+        }
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-sm transition-colors duration-200 ease-in-out focus-visible:ring-2  focus-visible:ring-white/75`,
+        otherclass
+    );
 
     return (
         <div className="">
             <Switch
                 checked={enabled}
                 onChange={() => {
-                    if (enabled === false)
-                        handelCheck();
-                    setIsEnabled(!enabled)
+                    handelCheck();
+                    setIsEnabled(!enabled);
                 }}
                 className={classname}
             >

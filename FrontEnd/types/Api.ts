@@ -10,6 +10,12 @@ export type tfaSendCodeData = {
     valid: boolean;
 };
 
+export type tfaSwitch = boolean;
+
+export type tfaEnable = {
+    img: string
+}
+
 export type userInfo = {
     achievements: [];
     history:  [{}];
@@ -28,8 +34,10 @@ export type userData = {
 //EndPoints
 export const endPoints = {
     signin: "auth/local/signin",
+    getTfaStatus: "auth/getTfaStatus",
     signup: "auth/local/signup",
     tfaSendCode: "auth/twoFactorAuth",
+    userTfaSendCode: "user/tfa/switch",
     tfaSwitch: "user/twoFactorAuth",
     getuser: "user/GetHero",
 };

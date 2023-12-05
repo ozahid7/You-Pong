@@ -1,37 +1,56 @@
 "use client";
 import { MyContainer, TwoFactor } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
 import axios from "axios";
 import withAuth from "@/components/auth/withAuth";
 import { apiHost } from "@/const";
+import { MyContext } from "../layout";
+import { useAxios } from "@/utils";
+import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
 
 const page = () => {
+    const user = useContext(MyContext);
+    const { tfaStatus } = user.userData;
+    
+    console.log('tfa status', tfaStatus)
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);
-    const [enabled, setEnabled] = useState(false);
+    const [enabled, setEnabled] = useState(tfaStatus);
     const [submit, setSubmit] = useState(false);
     const [path, setPath] = useState("/mobile.svg");
 
+    const disableTfa = async () => {
+        try{
+            const response = await useAxios<tfaSwitch>('post', endPoints.userTfaSendCode, {code: "0"})
+            console.log('disable response = ', response)
+        }catch (error){
+            console.log('error = ', error)
+        }
+    }
+
+    const enableTfa = async () => {
+        try {
+            const response = await useAxios<tfaEnable>(
+                "get",
+                endPoints.tfaSwitch
+            );
+            setPath(response.img as string)
+            console.log("enable response = ", response);
+        } catch (error) {
+            console.log("error = ", error);
+        }
+    }
+
     useEffect(() => {
         if (submit) {
-            const apiUrl = `${apiHost}user/twoFactorAuth`;
-            try {
-                axios
-                    .get(apiUrl, { withCredentials: true })
-                    .then((response) => {
-                        console.log('data loaded successfuly : ', response.data);
-                        setPath(response.data.img);
-                    })
-                    .catch((error: any) => {
-                        console.log('.catch error : ', error);
-                    });
-            } catch (e) {
-                console.log("adam throw this : ", e);
-            }
+            if(!enabled)
+                disableTfa()
+            else
+                enableTfa()
             setSubmit(false);
         }
     }, [enabled]);
@@ -74,7 +93,7 @@ const page = () => {
                                     <MyToggle
                                         otherclass="h-[38px]"
                                         handelCheck={() => {
-                                            setTwoFactor(true);
+                                            !enabled ? setTwoFactor(true) : setTwoFactor(false);
                                             setSubmit(true);
                                         }}
                                         enabled={enabled}

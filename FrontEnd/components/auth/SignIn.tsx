@@ -10,7 +10,6 @@ const SignIn = (props: {
     isOpen: boolean;
     closemodal: Function;
     showSignUp: any;
-    showTwoFactor: any
 }) => {
 
     const [email, setEmail] = useState("");
@@ -36,13 +35,7 @@ const SignIn = (props: {
                 toSend
             );
             console.log('response = ', response);
-            if (response.tfaStatus === true){
-                props.closemodal(false);
-                props.showTwoFactor(true);
-            }
-            else{
                 router.replace(myRoutes.dashboard)
-            }
         } catch (error) {
             console.log("error = ", error);
         }

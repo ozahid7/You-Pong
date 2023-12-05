@@ -9,22 +9,20 @@ import {
 import Image from "next/image";
 import "./globals.css";
 import { landing_page_description, myRoutes } from "@/const";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 
 function Home() {
-    let isLogedin: boolean;
     const [valid, setValid] = useState(false)
+    const [isLogedin, setIsLogedIn] = useState(false)
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
-    const [showTwoFactor, setTwoFactor] = useState(false);
-    if (typeof window !== 'undefined') {
-         isLogedin =
-            localStorage.getItem("isLoged") === "true" ? true : false;
-    }
-        
+    
     useLayoutEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.getItem("isLoged") === "true" ? setIsLogedIn(true) : setIsLogedIn(false);
+        }
         if (isLogedin) {
             redirect(myRoutes.dashboard);
         }
@@ -123,13 +121,8 @@ function Home() {
                     isOpen={showSingIn}
                     closemodal={setSingIn}
                     showSignUp={() => setSignUp(!showSignup)}
-                    showTwoFactor={() => setTwoFactor(!showTwoFactor)}
                 />
-                <TwoFactor
-                    isEnabled={true}
-                    isOpen={showTwoFactor}
-                    closemodal={setTwoFactor}
-                />
+                
             </div>
     );
 }

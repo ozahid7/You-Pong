@@ -22,7 +22,7 @@ const NotFound = () => {
                         </span>
                         <div className="w-[70%] lg:w-full h-[30%] pt-2  h:mt-8 make_center">
                             <Link
-                                href="/hero/dashboard"
+                                href="/dashboard"
                                 className="w-full min flex justify-center h-[45px] sm:h-[80px]"
                             >
                                 <CustomButton

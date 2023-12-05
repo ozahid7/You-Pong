@@ -12,9 +12,11 @@ interface TwoFactorProps {
     closemodal: Function;
     isEnabled: boolean;
     path?: string
+    setValid?: any
+    setIsLoged?: any
 }
 
-const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
+const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}: TwoFactorProps) => {
 
    
     const ref1 = useRef<HTMLInputElement>(null);
@@ -23,6 +25,8 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
     const ref4 = useRef<HTMLInputElement>(null);
     const ref5 = useRef<HTMLInputElement>(null);
     const ref6 = useRef<HTMLInputElement>(null);
+
+    const endpoint = isEnabled ? endPoints.tfaSendCode : endPoints.userTfaSendCode
 
     const image = isEnabled
         ? "/mobile.svg"
@@ -67,12 +71,19 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
             code: code
         }
         try{
-            const response = await useAxios<tfaSendCodeData>("post", endPoints.tfaSendCode, toSend);
+            console.log('code = ', code)
+            const response = await useAxios<tfaSendCodeData>("post", endpoint, toSend);
             console.log('response = ', response)
             if (response.valid === false){
                 setIsInvalid(true)
             }else{
+               if(isEnabled) {
+                setValid(true)
+                setIsLoged(true)
                 router.replace(myRoutes.dashboard)
+               }
+               else
+                closemodal(false)
             }
         }catch(error){
             console.log('error = ', error)
