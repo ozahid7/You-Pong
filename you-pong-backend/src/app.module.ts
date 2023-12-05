@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { FileModule } from './file/file.module';
 import { AchievementModule } from './achievement/achievement.module';
+import { FriendModule } from './friend/friend.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AchievementModule } from './achievement/achievement.module';
     UploadModule,
     FileModule,
     AchievementModule,
+    FriendModule
   ],
 })
 export class AppModule {}

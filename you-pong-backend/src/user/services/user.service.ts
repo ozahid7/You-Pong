@@ -1,8 +1,9 @@
-import {  ForbiddenException, Injectable, NotFoundException, Res } from '@nestjs/common';
+import {  ForbiddenException, Injectable, NotAcceptableException, NotFoundException, Res, ServiceUnavailableException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Response } from 'express';
 import { userDto } from '../dto/user.create.dto';
 import { FindUserService } from './find.service';
+import { error } from 'console';
 
 @Injectable()
 export class UserService {
@@ -96,14 +97,6 @@ export class UserService {
   }
 
   //GET
-  async getUser(user: userDto) {
-    const result = await this.prisma.user.findUnique({
-      where: {
-        username: user.username,
-      },
-    });
-    return result;
-  }
 
   //GET MANY
   async getUsers() {
@@ -141,4 +134,48 @@ export class UserService {
 			  throw new ForbiddenException(error);
     	}
 	}
+
+  async findUser(friend: string) {
+    const user = await this.findService.finduserByUserName(friend);
+		if (!user)
+			throw new ServiceUnavailableException("Username not Found!");
+    return {
+      avatar: (await user).avatar,
+      username: user.username,
+      level: user.level,
+      rank: user.rank,
+      wins: user.victory,
+      losts: user.defeats,
+      status: user.status,
+      channels: user.channels,
+    };
+  };
+
+  async updateUsername(userId: string, newName: string) {
+    try {
+      const user = await this.findService.finduserById(userId);
+      const pot = await this.prisma.user.findFirst({
+        where: {
+          username: newName,
+        }
+      })
+      if (pot)
+        throw new NotAcceptableException("username already in use!");
+      await this.prisma.user.update({
+        where: {
+          username: (await user).username,
+        },
+        data: {
+          username: newName,
+        }
+      });
+      } catch (error) {
+        throw new NotAcceptableException("username already in use!"); 
+      }
+  };
+
+  //GET
+  async getUserChannels(id_user: string) {
+    return (await this.findService.finduserById(id_user)).channels;
+  };
 }

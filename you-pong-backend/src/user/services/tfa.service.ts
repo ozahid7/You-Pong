@@ -34,7 +34,7 @@ export class TfaUserService {
                     tfaIsEnable: !(await this.getTfaStatus((await user))),
                 },
             }
-			);
+		);
 		} catch(error){
           throw new ForbiddenException(error);
         }
