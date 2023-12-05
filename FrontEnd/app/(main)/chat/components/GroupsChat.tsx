@@ -15,29 +15,19 @@ interface obj {
 }
 
 const GroupsChat = ({ channels }: obj) => {
-  const [users, setUsers] = useState<User[]>([]);
-  useEffect(() => {
-    const Members = async () => {
-      const result = await getMembers();
-      setUsers(result);
-      return result;
-    };
+  const [user, setUser] = useState<User>();
+  const [online, setOnline] = useState<number>(0);
 
-    Members();
-  }, []);
+  // useEffect(() => {
+  //   const Members = async () => {
+  //     const result = await getMembers();
+  //     setUser(result);
+  //     return result;
+  //   };
 
-  const isThere = (user) => {
-    // user.channels.find((channel) => {
-    //   if (channel.name === channels.name) return true;
-    // });
-    // return false;
-    console.log(user.channels);
-    return true;
-  };
+  //   Members();
+  // }, []);
 
-  const usersOnline = users.filter((user) => {
-    user.status === "ONLINE" && isThere(user) == true;
-  });
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between ">
@@ -55,8 +45,8 @@ const GroupsChat = ({ channels }: obj) => {
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px]">
                 {channels.name}
               </div>
-              <div className="text-[#00993D] font-[500] text-[15px] font-['Estedad'] xs:hidden">
-                online: {usersOnline.length} members
+              <div className="text-[#00993D] font-[500] text-[15px] font-['Estedad'] sm_:block xs:hidden">
+                online: members
               </div>
             </div>
           </div>

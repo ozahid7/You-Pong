@@ -39,35 +39,40 @@ import {
   MyContainer,
 } from "../../../../components";
 import { Channel } from "@/types";
-import { setData, setFile } from "@/app/(main)/chat/data/api";
+import { getChannels, setData, setFile } from "@/app/(main)/chat/data/api";
 import { setDataObj } from "./GroupsModal";
 import { color } from "framer-motion";
 import { MyButton } from ".";
+import useSWR from "swr";
 
 const MembersEdit = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [file, setFilee] = useState<any>(null);
-  const [selected, setSelected] = useState<string>("PUBLIC");
 
-  let imageUrl: any;
-
-  if (file instanceof Blob || file instanceof File) {
+  const fetchData = async () => {
     try {
-      imageUrl = URL.createObjectURL(file);
-    } catch (error) {
-      console.error("Error creating object URL:", error);
-      // Handle the error gracefully or provide a fallback URL
-      imageUrl = groups;
-    }
-  } else {
-    // Fallback to groups or any other default image source if file is not a Blob or File
-    imageUrl = groups;
-  }
+      const result = await getChannels();
+      console.log(result);
 
-  const handleSelectionChange = (newSelection: string) => {
-    setSelected(newSelection);
-    setDataObj.type = newSelection;
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+  const {
+    data: objects,
+    error,
+    isLoading,
+  } = useSWR<Channel[]>("/myChannels", fetchData);
+
+  if (error) return <div>ERROR</div>;
+
+  if (!objects && isLoading)
+    return (
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
+        LOADING
+      </div>
+    );
 
   return (
     <Fragment>
@@ -141,11 +146,11 @@ const MembersEdit = () => {
                         />
                       </TableCell>
                       <TableCell className="font-body font-[500] text-[18px] text-[#424242] border-palette-green">
-                        Oussama Zahid
+                        asmaa
                       </TableCell>
                       <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
                         <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                          Owner
+                          owner
                         </div>
                       </TableCell>
                       <TableCell className="flex flex-row h-full justify-center items-center">
@@ -159,10 +164,11 @@ const MembersEdit = () => {
                               <LuArrowDown />
                             </Button>
                           </DropdownTrigger>
-                          <DropdownMenu className="w-full ">
+                          <DropdownMenu className="w-full" aria-label="DropDownMenu">
                             <DropdownItem
                               className="hover:bg-palette-white border-none"
                               variant="bordered"
+                              aria-label="SetAsAdmin"
                             >
                               <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
                                 <LuStar />
@@ -172,6 +178,7 @@ const MembersEdit = () => {
                             <DropdownItem
                               className="hover:bg-palette-white border-none"
                               variant="bordered"
+                              aria-label="Mute"
                             >
                               <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
                                 <LuBellOff />
@@ -181,6 +188,7 @@ const MembersEdit = () => {
                             <DropdownItem
                               className="hover:bg-palette-white border-none"
                               variant="bordered"
+                              aria-label="Kick"
                             >
                               <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
                                 <LuDoorOpen />
@@ -190,6 +198,7 @@ const MembersEdit = () => {
                             <DropdownItem
                               className="hover:bg-palette-white border-none"
                               variant="bordered"
+                              aria-label="Ban"
                             >
                               <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
                                 <LuBan />

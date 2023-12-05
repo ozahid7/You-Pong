@@ -17,7 +17,7 @@ import {
   SearchChat,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
-import { getData } from "./data/api";
+import { userChannels } from "./data/api";
 import useSWR from "swr";
 import { Channel } from "@/types";
 
@@ -28,8 +28,10 @@ const Chats = () => {
 
   const fetchData = async () => {
     try {
-      const result = await getData();
-      return result.object;
+      const result = await userChannels();
+      console.log(result);
+      
+      return result;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -71,7 +73,7 @@ const Chats = () => {
                 <div className="flex flex-row w-full h-full items-center ">
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid pr-5">
                     <ChatHeading text="Chats" />
-                    <SearchChat object={channel} />
+                    {/* <SearchChat object={channel} /> */}
                     <div className="flex h-full w-full flex-row justify-center items-center">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
@@ -148,7 +150,7 @@ const Chats = () => {
                               ></MyTabs>
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
-                                <JoinModal objects={channel} />
+                                <JoinModal />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

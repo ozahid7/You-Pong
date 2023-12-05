@@ -20,12 +20,18 @@ import groups from "../../../../public/groups.svg";
 import ozahid from "../../../../public/ozahid-.jpeg";
 import { MyInput, Background, Submit } from "../../../../components";
 import { Channel } from "@/types";
-import { setData, setFile } from "@/app/(main)/chat/data/api";
+import {
+  setData,
+  setFile,
+  getChannels,
+  joinChannel,
+} from "@/app/(main)/chat/data/api";
 import {
   IoLockClosedOutline,
   IoLockOpenOutline,
   IoEnterOutline,
 } from "react-icons/io5";
+import useSWR, { mutate } from "swr";
 
 // export var setDataObj: Channel = {
 //   type: "PUBLIC",
@@ -34,17 +40,52 @@ import {
 //   avatar: groups,
 // };
 
-export default function JoinModal({ objects }) {
+export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
     onClose();
   };
 
+  const fetchData = async () => {
+    try {
+      const result = await getChannels();
+      console.log(result);
+
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const {
+    data: objects,
+    error,
+    isLoading,
+  } = useSWR<Channel[]>("/myChannels", fetchData);
+
+  if (error) return <div>ERROR</div>;
+
+  if (!objects && isLoading)
+    return (
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
+        LOADING
+      </div>
+    );
+
+  const handleJoin = (obj: Channel) => {
+    joinChannel(obj.name);
+    mutate("/myData", (cachedData) => [...cachedData, objects], true);
+    close();
+  };
+
   return (
     <Fragment>
       <Button
         size="sm"
+        onClick={() => {
+          mutate("/myChannels", (cachedData) => [...cachedData, objects], true);
+        }}
         onPress={onOpen}
         className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md  orange_button border-none hover:border-none"
       >
@@ -102,7 +143,7 @@ export default function JoinModal({ objects }) {
                               <TableRow key={i}>
                                 <TableCell>
                                   <Image
-                                    src={groups}
+                                    src={`http://178.62.74.69:400/file/${obj.avatar}`}
                                     width={50}
                                     height={50}
                                     className="border-[2px] border-palette-green p-[0.5]"
@@ -126,6 +167,7 @@ export default function JoinModal({ objects }) {
                                   <Button
                                     size="lg"
                                     className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                                    onClick={() => handleJoin(obj)}
                                   >
                                     <IoEnterOutline />
                                     Join

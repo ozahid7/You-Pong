@@ -54,6 +54,7 @@ export interface Channel {
   avatar?: string;
   hash?: string;
   type: string;
+  users?: User[];
 }
 
 export interface User {
@@ -75,7 +76,7 @@ export interface User {
 	// updated_at: DateTime; 
 	// rooms: Room_Chat[]; 
 	// blocked: Room_Chat[];
-	channels: Channel[];
+	channels?: Channel[];
 	// messages: Message[]
 	// notifications Notification[]
 	// freindship_freind: Freindship[];
