@@ -63,4 +63,12 @@ export class friendController{
         .status(200)
         .json(await this.friendService.sort(req.user.sub));
     }
+  
+    @Get('search')
+    @UseGuards(AuthGuard('jwt'))
+    async search(@Req() req, @Res() res) {
+        res
+        .status(200)
+        .json(await this.friendService.search(req.user.sub));
+    }
 }

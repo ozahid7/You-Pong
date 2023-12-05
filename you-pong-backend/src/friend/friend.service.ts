@@ -147,36 +147,28 @@ export class friendService{
 					}
 				});
 			} catch (error) {
+				if (error.code == 'P2002')
+					throw new BadRequestException("You've already blocked this contact");
 				throw new BadRequestException(error);
 			}
 		}
 		else if (req.state == 'BLOCKED')
 		{
 			try {
-				await this.prisma.freindship.create({
+				await this.prisma.freindship.update({
+					where: {
+						id_freindship: init.us.id_user  + init.fr.id_user
+					},
 					data: {
-						id_freindship: init.us.id_user  + init.fr.id_user,
-						id_freind: init.fr.id_user,
-						id_user: init.us.id_user,
 						state: 'BLOCKED'
 					}
 				});
+				return ({satue: 'SUCCESS'});
 			} catch (error) {
+				if (error.code == 'P2002')
+					throw new BadRequestException("You've already blocked this contact");
 				throw new BadRequestException(error);
-			}
-		}
-		try {
-			await this.prisma.freindship.update({
-				where: {
-					id_freindship: init.us.id_user  + init.fr.id_user
-				},
-				data: {
-					state: 'BLOCKED'
-				}
-			});
-			return ({satue: 'SUCCESS'});
-		} catch (error) {
-			throw new BadRequestException(error);
+			};
 		};
 	};
 
@@ -217,6 +209,47 @@ export class friendService{
 		const accepted = await this.fillArr(us, 'ACCEPTED');
 		const pending = await this.fillArr(us, 'PENDING');		
 		return {accepted, pending, blocked};
-		// console.log(accepted);
+	};
+
+	async search(_id: string) {
+		const user = this.findUser.finduserById(_id);
+		
+		const bar = await this.prisma.user.findMany({
+			include : {
+				freindship_freind: {
+					where: {
+						OR: [
+							{id_freind: (await user).id_user},
+							{id_user: (await user).id_user},
+		
+						],
+						AND: [
+							{
+								state: {
+									not : 'BLOCKED' 
+								}
+							}
+						]
+					},
+				},
+				freindship_user: {
+					where: {
+						OR: [
+							{id_freind: (await user).id_user},
+							{id_user: (await user).id_user},
+		
+						],
+						AND: [
+							{
+								state: {
+									not : 'BLOCKED' 
+								}
+							}
+						]
+					},
+				},
+			},
+		});
+		return (bar);
 	};
 }

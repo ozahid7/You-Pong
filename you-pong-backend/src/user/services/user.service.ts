@@ -181,4 +181,13 @@ export class UserService {
         throw new NotAcceptableException("username already in use!"); 
       }
   }
+
+  async findAll(_id: string) {
+      try {
+        const user = await this.findService.finduserById(_id);
+        
+      } catch (error) {
+        
+      }
+  }
 }

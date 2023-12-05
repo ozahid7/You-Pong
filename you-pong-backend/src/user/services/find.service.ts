@@ -10,6 +10,8 @@ export class FindUserService {
                 id_user: _id
             },
             include: {
+                freindship_freind: true,
+                freindship_user: true,
                 channels: true,
             },
         });
@@ -22,6 +24,8 @@ export class FindUserService {
                 username: _username
             },
             include:{
+                freindship_freind: true,
+                freindship_user:true,
                 channels: true,
             },
         });
@@ -34,6 +38,8 @@ export class FindUserService {
                 email: _email
             },
             include:{
+                freindship_freind: true,
+                freindship_user:true,
                 channels: true,
             }
         });

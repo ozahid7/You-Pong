@@ -30,6 +30,13 @@ export class AuthController {
 		return await this.TfaAuthService.validateTfa(dto, _id, res);
 	}
 
+	@UseGuards(AuthGuard('tfa'))
+	@Get('/getTfaStatu/')
+	async getTfaStatus(@Req() req, @Res() res: Response ,@Body() dto:tfaDto) {
+		const _id = req.user.sub;
+		return await this.TfaAuthService.validateTfa(dto, _id, res);
+	}
+
 	@Post('/42')
     @UseGuards(AuthGuard('42'))
 	ftAuth(@Req() req: Request){}
