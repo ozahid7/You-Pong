@@ -22,6 +22,7 @@ import MyTabs from "./tools/Tabs";
 import SwipeableTabs from "./tools/SwipeableTabs";
 import SearchBar from "./bars/SearchBar";
 import ChatHeading from "./tools/Heading";
+import ScoreCard from "./tools/ScoreCard";
 
 export {
   NavBar,
@@ -48,4 +49,5 @@ export {
   SwipeableTabs,
   SearchBar,
   ChatHeading,
+  ScoreCard,
 };

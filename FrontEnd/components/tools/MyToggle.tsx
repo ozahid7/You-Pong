@@ -53,17 +53,17 @@ function MyToggle({
                         enabled ? "translate-x-[8px]" : "translate-x-0"
                     }
                     pointer-events-none inline-block h-[30px] w-[30px] transform rounded-sm bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                />
-                <span
-                    className={` ${
-                        enabled ? "hidden" : "flex"
-                    } font-body font-bold text-white text-lg`}
-                >
-                    {string2}
-                </span>
-            </Switch>
-        </div>
-    );
+        />
+        <span
+          className={` ${
+            enabled ? "hidden" : "flex"
+          } font-body font-bold text-white text-lg`}
+        >
+          {string2}
+        </span>
+      </Switch>
+    </div>
+  );
 }
 
 export default MyToggle;

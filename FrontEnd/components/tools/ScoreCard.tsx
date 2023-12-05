@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-const MyCard = ({ children }: { type?: string; children: ReactNode }) => {
+const ScoreCard = ({ children }: { type?: string; children: ReactNode }) => {
   return (
     <div className="my_score w-[70%] h-full flex justify-center items-center m-auto">
       <div className="center w-[98%] h-[88%] flex justify-center items-center">
@@ -10,4 +10,4 @@ const MyCard = ({ children }: { type?: string; children: ReactNode }) => {
   );
 };
 
-export default MyCard;
+export default ScoreCard;

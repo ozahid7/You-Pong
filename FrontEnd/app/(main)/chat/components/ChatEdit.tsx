@@ -21,6 +21,7 @@ import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import { putData, setData, setFile } from "@/app/(main)/chat/data/api";
+import { mutate } from "swr";
 
 var setDataObj: Channel = {
   type: undefined,
@@ -68,6 +69,8 @@ const ChatEdit = ({ channels }: HomePage) => {
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels.name);
+    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+    mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
     onClose();
   };
 
@@ -80,19 +83,18 @@ const ChatEdit = ({ channels }: HomePage) => {
     <Fragment>
       <Button
         onPress={onOpen}
-        key={"3xl"}
-        className="flex btn bg-palette-green border-none text-[#EFF5F5] rounded-md green_button"
+        className="rounded-none btn green_button"
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{
               size: "25px",
-              className: "text-white border-none",
+              className: "text-palette-white border-none",
             }}
           >
             <LuSettings />
           </IconContext.Provider>
-          <div className="flex text-white font-body font-[600] text-[15px] mt-1">
+          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
             Edit group
           </div>
         </div>
@@ -103,6 +105,8 @@ const ChatEdit = ({ channels }: HomePage) => {
         onClose={onClose}
         size="4xl"
         className=" w-full"
+        backdrop="blur"
+        placement="center"
       >
         <ModalContent className="">
           {(onClose) => (

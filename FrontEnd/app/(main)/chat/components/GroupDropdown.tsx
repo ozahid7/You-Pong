@@ -6,7 +6,7 @@ import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { menuGroupsElements } from "@/const";
 import { renderIcon } from "@/utils";
-import { Channel } from "@/types";
+import { Channel, User } from "@/types";
 import {
   Modal,
   ModalBody,
@@ -16,32 +16,38 @@ import {
   NextUIProvider,
 } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
+import { FiChevronDown } from "react-icons/fi";
+import { leaveChannel, userChannels } from "../data/api";
+import { useSWRConfig } from "swr";
 
 interface HomePage {
   channels: Channel;
 }
 
 const GroupDropdown = ({ channels }: HomePage) => {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { mutate } = useSWRConfig();
+
   return (
     <div className="flex flex-col justify-center relative">
       <div className="dropdown dropdown-bottom dropdown-end">
         <label
           tabIndex={0}
-          className="btn m-1 bg-palette-green border-none hover:bg-palette-green"
+          role="button"
         >
           <IconContext.Provider
             value={{
-              color: "white",
-              size: "20px",
-              className: "hover:text-palette-green border-none test",
+              color: "",
+              size: "25px",
+              className: " text-palette-green border-none test",
             }}
           >
-            <LuSettings2 />
+            <FiChevronDown />
           </IconContext.Provider>
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-46 gap-2"
+          className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
             <MembersEdit></MembersEdit>
@@ -53,6 +59,14 @@ const GroupDropdown = ({ channels }: HomePage) => {
             <Button
               key={"3xl"}
               className="flex btn bg-palette-orange border-none text-[#EFF5F5] rounded-md center orange_button"
+              onClick={() => {
+                leaveChannel(channels.name);
+                mutate(
+                  "/myData",
+                  (cachedData) => [...cachedData, channels],
+                  true
+                );
+              }}
             >
               <div className="flex flex-row gap-2 w-fit h-fit">
                 <IconContext.Provider

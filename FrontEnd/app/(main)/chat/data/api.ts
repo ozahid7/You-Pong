@@ -4,9 +4,45 @@ import { attachReactRefresh } from "next/dist/build/webpack-config";
 // import fs from "fs";
 // import { setDataObj } from "@/components/tools/GroupsModal";
 
-export const getData = async () => {
+export const userChannels = async () => {
+  try {
+    const response = await axios.get("http://178.62.74.69:400/user/channels");
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+// http://178.62.74.69:400/chat/channel/join/name
+export const joinChannel = async(name : string) => {
+  try {
+    const response = await axios.put(`http://178.62.74.69:400/chat/channel/join/${name}`);
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+}
+
+export const leaveChannel = async(name : string) => {
+  try {
+    const response = await axios.put(`http://178.62.74.69:400/chat/channel/leave/${name}`);
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+}
+
+export const getChannels = async () => {
   try {
     const response = await axios.get("http://178.62.74.69:400/chat/channel");
+    console.log(response.data);
+    
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -37,7 +73,7 @@ export const setData = async (data: Channel) => {
   }
 };
 
-export const putData = async (data: Channel, name: string) => {
+export const putData = async (data : Channel, name: string) => {
   try {
     const obj = {
       name: data.name,
@@ -87,6 +123,17 @@ export const getFile = async (pathname: string) => {
       `http://178.62.74.69:400/file/${pathname}`
     );
 
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const getMembers = async () => {
+  try {
+    const response = await axios.get("http://178.62.74.69:400/user");
     return response.data;
   } catch (error) {
     // Handle errors here
