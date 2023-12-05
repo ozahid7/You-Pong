@@ -2,17 +2,21 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
-import axios from "axios";
-import { apiHost } from "@/const";
+import { useAxios } from "@/utils";
+import { redirect, useRouter } from "next/navigation";
+import { endPoints, tfaSendCodeData } from "@/types/Api";
+import { myRoutes } from "@/const";
 
 interface TwoFactorProps {
     isOpen: boolean;
     closemodal: Function;
     isEnabled: boolean;
     path?: string
+    setValid?: any
+    setIsLoged?: any
 }
 
-const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
+const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}: TwoFactorProps) => {
 
    
     const ref1 = useRef<HTMLInputElement>(null);
@@ -22,9 +26,12 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
     const ref5 = useRef<HTMLInputElement>(null);
     const ref6 = useRef<HTMLInputElement>(null);
 
+    const endpoint = isEnabled ? endPoints.tfaSendCode : endPoints.userTfaSendCode
+
     const image = isEnabled
         ? "/mobile.svg"
         : path;
+
     const msg = !isEnabled ? "Scan the Qr code and Enter the OTP from :" : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
@@ -35,10 +42,12 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         input5: "",
         input6: ""
     });
+
     const [code, setCode] = useState('');
     const [key, setKey] = useState('')
     const [IsInvalid, setIsInvalid] = useState(false)
     const [IsSubmited, setIsSubmited] = useState(false)
+    const router = useRouter()
     
     const rgx = /^\d+$/;
     
@@ -57,21 +66,34 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path}: TwoFactorProps) => {
         setIsSubmited(true)
     }
 
+    const SendCode = async () => {
+        const toSend = {
+            code: code
+        }
+        try{
+            console.log('code = ', code)
+            const response = await useAxios<tfaSendCodeData>("post", endpoint, toSend);
+            console.log('response = ', response)
+            if (response.valid === false){
+                setIsInvalid(true)
+            }else{
+               if(isEnabled) {
+                setValid(true)
+                setIsLoged(true)
+                router.replace(myRoutes.dashboard)
+               }
+               else
+                closemodal(false)
+            }
+        }catch(error){
+            console.log('error = ', error)
+        }
+    }
+
     useEffect(() => {
 
         if(IsSubmited && !IsInvalid){
-            const apiUrl =
-                `${apiHost}user/tfa/switch`;
-            try {
-            axios
-                .post(apiUrl, {code: code}, {withCredentials: true})
-                .then((response: any) => {
-                    console.log('data loaded successfuly : ', response.data)
-                })
-                .catch((error) => console.log('.catch error : ', error));
-            }catch(e){
-                console.log('adam throw this : ', e)
-            }
+            SendCode()
         }
         setIsSubmited(false)
     }, [IsInvalid, IsSubmited])

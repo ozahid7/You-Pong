@@ -1,23 +1,17 @@
 "use client";
-import {
-    CustomButton,
-    IntraButton,
-    MyContainer,
-    MyDialog,
-    MyInput,
-} from "@/components";
-import { apiHost } from "@/const";
-import axios from "axios";
-import Link from "next/link";
+import { CustomButton, IntraButton, MyDialog, MyInput } from "@/components";
+import { myRoutes } from "@/const";
+import { endPoints, singInData } from "@/types/Api";
+import { baseURL, useAxios } from "@/utils";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 
 const SignIn = (props: {
     isOpen: boolean;
     closemodal: Function;
     showSignUp: any;
 }) => {
+
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     let [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -26,43 +20,42 @@ const SignIn = (props: {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
+    const test = true
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+    const signIn = async () => {
+        const toSend: object = {
+            email: email,
+            password: pass,
+        };
+        try {
+            const response = await useAxios<singInData>(
+                "post",
+                endPoints.signin,
+                toSend
+            );
+            console.log('response = ', response);
+                router.replace(myRoutes.dashboard)
+        } catch (error) {
+            console.log("error = ", error);
+        }
+    };
+
+    //send the data after validate the input
     useEffect(() => {
         if (!isInvalidEmail && !isInvalidPass && isSubmited) {
-            const toSend: object = {
-                email: email,
-                password: pass,
-            };
-            const apiUrl = `${apiHost}auth/local/signin`;
-            setIsLoading(true)
-            try {
-                axios
-                    .post(apiUrl, toSend, {withCredentials: true})
-                    .then((response: any) => {
-                        console.log('data loaded successfyly :', response.data)
-                        setTimeout(() => {
-                            setIsLoading(false);
-                            redirect("/dashboard");
-                        }, 800);
-                    })
-                    .catch((error) => {
-                        console.log(".catch error : ", error);
-                    });
-                } catch (e) {
-                    console.log("adam throw : ", e);
-                }
+            setIsLoading(true);
             setIsSubmited(false);
+            signIn();
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited]);
 
+    //set loader in the button to the default state
     useEffect(() => {
-
         setTimeout(() => {
-            setIsLoading(false)
-        }, 4000)
-
-    }, [isLoading])
+            setIsLoading(false);
+        }, 3000);
+    }, [isLoading]);
 
     //check regex if it is valid to post the email and pass to the data base
     const handleSubmit = (e: any) => {
@@ -156,7 +149,7 @@ const SignIn = (props: {
                     </form>
                     <form
                         method="post"
-                        action={`${apiHost}auth/42`}
+                        action={`${baseURL}auth/42`}
                         className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
                     >
                         <div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">

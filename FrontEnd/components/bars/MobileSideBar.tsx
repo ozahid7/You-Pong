@@ -12,6 +12,7 @@ import {
     LuSettings,
     LuLogOut,
 } from "react-icons/lu";
+import { myRoutes } from "@/const";
 
 const RenderMobileSidBarElement = (index: number, link: string) => {
     const path = usePathname();
@@ -46,11 +47,11 @@ const MobileSideBar = () => {
     return (
         <aside className=" w-full  flex sm:hidden items-end">
             <div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
-                {RenderMobileSidBarElement(0, "/dashboard")}
-                {RenderMobileSidBarElement(1, "/freinds")}
-                {RenderMobileSidBarElement(2, "/messages")}
+                {RenderMobileSidBarElement(0, myRoutes.dashboard)}
+                {RenderMobileSidBarElement(1, myRoutes.friends)}
+                {RenderMobileSidBarElement(2, myRoutes.chat)}
                 {RenderMobileSidBarElement(3, "/notifications")}
-                {RenderMobileSidBarElement(4, "/settings")}
+                {RenderMobileSidBarElement(4, myRoutes.settings)}
             </div>
         </aside>
     );

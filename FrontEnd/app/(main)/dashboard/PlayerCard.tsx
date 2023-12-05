@@ -1,24 +1,30 @@
 "use client";
 
 import { MiniBanner, MyCard } from "@/components";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ImUserMinus, ImUserPlus } from "react-icons/im";
 import { MdOutlineSettings } from "react-icons/md";
+import { MyContext } from "../layout";
+import { userData,  } from "@/types/Api";
 
 interface PlayerInfoProps {
     userName: string;
 }
 
 const PlayerCard = ({ userName }: PlayerInfoProps) => {
+
+     const user = useContext(MyContext);
+     const {username, rank, level, avatar} = user.userData;
+
     let [Icon, setIcon] = useState(false);
     const [isFriend, setIsFriend] = useState(false);
     const isOnline = false;
-    let name = userName.replace(/[^a-zA-Z]/g, "");
+    let name = username.replace(/[^a-zA-Z]/g, "");
     
-    name = userName.length > 7 ? name.slice(0, 3) +
+    name = username.length > 7 ? name.slice(0, 3) +
               "-" +
-              userName.slice(userName.length - 3)
-            : userName;
+              username.slice(username.length - 3)
+            : username;
 
     const hideIcon = () => {
         setIcon(!Icon);
@@ -35,7 +41,7 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                         <div className="w-[80%] pt-4 md:pt-2 h-[90%] md:w-[60%] md:pb-[60%] xl:w-[80%] xl:h-[80%] relative">
                             <img
                                 className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-                                src="/ozahid-.jpeg"
+                                src={avatar || '/avatar.avif'}
                                 alt="avatar"
                             />
                         </div>
@@ -83,13 +89,13 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                             <div className="flex flex-col justify-between h-auto space-y-3 w-[80%] sm:w-[90%]">
                                 <MiniBanner
                                     isGreen={true}
-                                    value="69"
+                                    value={level.toString()}
                                     name="Level"
                                 />
 
                                 <MiniBanner
                                     isGreen={false}
-                                    value="10"
+                                    value={rank || '0'}
                                     name="Rank"
                                 />
                             </div>

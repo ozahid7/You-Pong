@@ -1,11 +1,12 @@
 "use client";
 
-import { apiHost } from "@/const";
+import { MyContext } from "@/app/(main)/layout";
+import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 
 import {
     LuLayoutDashboard,
@@ -58,6 +59,8 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
 const SideBar = () => {
     const router = useRouter();
+    const user = useContext(MyContext);
+    const { username, avatar } = user.userData;
 
     const handleLogout = async () => {
         const apiUrl = `${apiHost}user/signout`;
@@ -67,7 +70,7 @@ const SideBar = () => {
                 .get(apiUrl, {withCredentials: true} )
                 .then((response) => {
                     console.log("data posted successfuly : ");
-                    localStorage.removeItem("isLogedIn");
+                    localStorage.removeItem("isLoged");
                     router.push("/");
                 })
                 .catch((e) => {
@@ -83,7 +86,7 @@ const SideBar = () => {
             {/* top part */}
 
             <div className=" h-auto py-12 w-full flex justify-around items-center">
-                <Image
+                <img
                     src="/sidebarlogo.png"
                     alt="logo"
                     height={60}
@@ -103,30 +106,30 @@ const SideBar = () => {
             <div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
                 {/* middle part */}
                 <div className="h-auto flex flex-col space-y-5">
-                    {RenderSideBarElements(0, "/dashboard", "Dashboard")}
-                    {RenderSideBarElements(1, "/friends", "Friends")}
-                    {RenderSideBarElements(2, "/messages", "Messages")}
+                    {RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
+                    {RenderSideBarElements(1, myRoutes.friends, "Friends")}
+                    {RenderSideBarElements(2, myRoutes.chat, "Messages")}
                     {RenderSideBarElements(
                         3,
                         "/notifications",
                         "Notifications"
                     )}
-                    {RenderSideBarElements(4, "/settings", "Settings")}
+                    {RenderSideBarElements(4, myRoutes.settings, "Settings")}
                 </div>
                 {/* bottom part */}
 
                 <div className="h-full w-full  pb-6 justify-end flex flex-col space-y-6 items-center px-2">
                     <Link className="h-auto w-[92%] " href="/">
                         <div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
-                            <Image
+                            <img
                                 className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
-                                src="/ozahid-.jpeg"
+                                src={avatar || "avatar.avif"}
                                 alt=""
                                 width={100}
                                 height={100}
                             />
                             <p className="text-gray-500 break-all text-center hidden 2xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
-                                Ozahid-
+                                {username.length > 10 ?  username.slice(0, 8) + "...": username}
                             </p>
                         </div>
                     </Link>

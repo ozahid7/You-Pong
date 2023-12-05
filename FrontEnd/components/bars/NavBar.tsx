@@ -1,17 +1,19 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
+import { MyContext } from "@/app/(main)/layout";
 
 const obj = {
     name: "oussama zahid",
 }
 const NavBar = () => {
-    const name = obj.name;
-    const isMorethan: boolean = name.length > 7 ? true : false;
+    const user = useContext(MyContext);
+    const { username, level, avatar } = user.userData;
+    const isMorethan: boolean = username.length > 7 ? true : false;
     const childcustomClass = `${
         isMorethan ? "animate-marquee" : "animate-m"
     } whitespace-nowrap`;
@@ -25,9 +27,9 @@ const NavBar = () => {
                 <div className="p-2 border-2 border-white rounded-sm">
                     <LuBell className="text-white stroke-white h-5 w-5" />
                 </div>
-                <Image
+                <img
                     className="border-2 hidden s:flex border-white rounded-sm object-contain"
-                    src="/ozahid-.jpeg"
+                    src={avatar || 'avatar.avif'}
                     alt=""
                     width={44}
                     height={44}
@@ -39,12 +41,12 @@ const NavBar = () => {
                         >
                             <div className={childcustomClass}>
                                 <span className="text-white overflow-hidden text-lg font-bold drop-shadow-lg">
-                                    {name}
+                                    {username}
                                 </span>
                             </div>
                         </div>
                         <span className="text-palette-grey font-light">
-                            Lvl: 69
+                            Lvl: {level}
                         </span>
                     </div>
                     <MyDropdown

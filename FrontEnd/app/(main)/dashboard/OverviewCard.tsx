@@ -1,13 +1,16 @@
+'use client'
 import { MiniBanner, MyCard } from "@/components";
-import React from "react";
+import React, { useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
+import { MyContext } from "../layout";
 
 const OverviewCard = () => {
-    const wins = 10;
-    const lose = 8;
+    const user = useContext(MyContext);
+    const { wins, loses } = user.userData;
+    
     let result: number;
 
-    result = wins + lose != 0 ? Math.round((wins * 100) / (wins + lose)) : 50;
+    result = wins + loses != 0 ? Math.round((wins * 100) / (wins + loses)) : 50;
 
     return (
         <div className="flex z-0 justify-center w-[90%] md:w-full max-w-[600px] overflow-hidden min-h-[140px] h:min-h-[200px] lg:min-h-[180px] h-[20%] md:h-[28%] h:h-[24%]">
@@ -22,7 +25,7 @@ const OverviewCard = () => {
                                 isGreen={false}
                                 className="h-[30%] h:w-full justify-around"
                                 name="Lose"
-                                value="20"
+                                value={loses.toString()}
                                 valueStyle="md:text-xl"
                                 nameStyle="md:text-2xl"
                             />
@@ -30,7 +33,7 @@ const OverviewCard = () => {
                                 isGreen={true}
                                 className="h-[30%] h:w-full justify-around"
                                 name="Wins"
-                                value="20"
+                                value={wins.toString()}
                                 valueStyle="md:text-xl"
                                 nameStyle="md:text-2xl"
                             />
@@ -53,13 +56,13 @@ const OverviewCard = () => {
                                     animate={true}
                                     data={[
                                         {
-                                            title: "lose",
-                                            value: lose,
+                                            title: "loses",
+                                            value: loses || 1,
                                             color: "#EB6440",
                                         },
                                         {
                                             title: "wins",
-                                            value: wins,
+                                            value: wins || 1,
                                             color: "#497174",
                                         },
                                     ]}
