@@ -97,14 +97,6 @@ export class UserService {
   }
 
   //GET
-  async getUser(user: userDto) {
-    const result = await this.prisma.user.findUnique({
-      where: {
-        username: user.username,
-      },
-    });
-    return result;
-  }
 
   //GET MANY
   async getUsers() {
@@ -157,7 +149,7 @@ export class UserService {
       status: user.status,
       channels: user.channels,
     };
-  }
+  };
 
   async updateUsername(userId: string, newName: string) {
     try {
@@ -180,14 +172,10 @@ export class UserService {
       } catch (error) {
         throw new NotAcceptableException("username already in use!"); 
       }
-  }
+  };
 
-  async findAll(_id: string) {
-      try {
-        const user = await this.findService.finduserById(_id);
-        
-      } catch (error) {
-        
-      }
-  }
+  //GET
+  async getUserChannels(id_user: string) {
+    return (await this.findService.finduserById(id_user)).channels;
+  };
 }

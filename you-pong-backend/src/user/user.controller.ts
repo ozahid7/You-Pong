@@ -108,7 +108,19 @@ export class UserController {
 		const _id = req.user.sub;
 		res.status(200).json(await this.infosService.getHero(_id));
 	}
-
+	
+	//GET
+    @Get('/channels')
+	@UseGuards(AuthGuard('jwt'))
+    async getUserChannels(@Req() req) {
+      try {
+		const _id = req.user.sub;
+        const result = await this.userService.getUserChannels(_id);
+        return result;
+      } catch (error) {
+        throw new HttpException('Failed to get channels of user', 209);
+      }
+    }
 	// @UseGuards(AuthGuard('jwt'))
 	// @Post('/achievement/unlock')
 	// async setOwned(@Req() req, @Body() dto: unlockAchDto){
