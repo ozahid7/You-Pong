@@ -9,7 +9,11 @@ export class ChannelService {
 
   //GET MANY
   async getChannels() {
-    const result = await this.prisma.channel.findMany();
+    const result = await this.prisma.channel.findMany({
+      include: {
+        users: true
+      }
+    });
     if (!result)
     return {
       message: 'There is no channels !',
@@ -27,6 +31,9 @@ export class ChannelService {
     const result = await this.prisma.channel.findUnique({
       where: {
         name: name,
+      },
+      include: {
+        users: true
       },
     });
     if (!result) 
