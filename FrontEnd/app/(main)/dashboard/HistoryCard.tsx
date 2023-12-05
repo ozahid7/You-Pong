@@ -1,6 +1,8 @@
+'use client'
 import { Banner, MyCard } from "@/components";
-import React from "react";
+import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
+import { MyContext } from "../layout";
 
 interface match {
     avatar: string;
@@ -44,6 +46,8 @@ const matchList: match[] = [
 ]
 
 const HistoryCard = () => {
+    const user = useContext(MyContext);
+    const { history } = user.userData;
     return (
         <div className="flex justify-center z-0 items-center   max-w-[720px] xl:max-h-none max-h-[500px] xl:max-w-[520px] min-w-[256px] w-[90%] xl:w-[92%] h-[94%] xl:h-[90%] ">
             <MyCard type="nocorner" otherclass="max-h-full w-full flex ">

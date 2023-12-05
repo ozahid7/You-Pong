@@ -10,17 +10,19 @@ export type tfaSendCodeData = {
     valid: boolean;
 };
 
+export type userInfo = {
+    achievements: [];
+    history:  [{}];
+    level: number;
+    loses: number;
+    rank: string;
+    tfaStatus: boolean;
+    username: string;
+    wins: number;
+    avatar: string;
+};
 export type userData = {
-    userInfo: {
-        achievements: [];
-        level: number;
-        loses: number;
-        rank: string;
-        tfaStatus: boolean;
-        username: string;
-        wins: number;
-        avatar: string;
-    };
+    userInfo: userInfo
 };
 
 //EndPoints

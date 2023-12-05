@@ -15,7 +15,7 @@ export interface AcheivementProps{
     isOpened: boolean
     classname?: string
     description: string
-  color: string;
+  color?: string;
   otherclass?: string;
   styleclass?: string;
   bordercolor?: string;
@@ -23,10 +23,10 @@ export interface AcheivementProps{
   onclose?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface AcheivementProps {
-  text: string;
-  isOpened: boolean;
-}
+// export interface AcheivementProps {
+//   text: string;
+//   isOpened: boolean;
+// }
 
 export interface AnimatedTextProps {
   text: string;

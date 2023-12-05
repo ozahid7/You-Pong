@@ -25,7 +25,7 @@ import { MyContext } from "../layout";
 
 const page = () => {
     const user = useContext(MyContext)
-    console.log(user)
+
     return (
         <div className="w-full 2xl:w-[92%] xl:min-h-[90vh] pb-24 h-auto  flex flex-col xl:flex-row">
             <div className="w-full flex flex-col md:flex-row xl:w-[66%]">

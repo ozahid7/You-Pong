@@ -8,27 +8,31 @@ import {
 } from "@/components";
 import Image from "next/image";
 import "./globals.css";
-import { landing_page_description } from "@/const";
+import { landing_page_description, myRoutes } from "@/const";
 import { useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 
 function Home() {
+    let isLogedin: boolean;
+    const [valid, setValid] = useState(false)
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
     const [showTwoFactor, setTwoFactor] = useState(false);
-
     if (typeof window !== 'undefined') {
-        const isLogedin =
-            localStorage.getItem("isLogedIn") === "true" ? true : false;
-        useLayoutEffect(() => {
-            if (isLogedin) {
-                redirect("/dashboard");
-            }
-        });
+         isLogedin =
+            localStorage.getItem("isLoged") === "true" ? true : false;
     }
+        
+    useLayoutEffect(() => {
+        if (isLogedin) {
+            redirect(myRoutes.dashboard);
+        }
+        setValid(true)
+    });
 
-    return (
+    if (valid)
+     return (
             <div className="h-full  w-full relative max-w-[1600px] xl:w-[90%]">
                 {/* top part */}
                 <section className="w-ful z-10 h-[16%] flex flex-col sm:flex-row justify-around sm:justify-between items-center relative px-2 sm:px-10">
