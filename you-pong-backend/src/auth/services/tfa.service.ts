@@ -21,4 +21,8 @@ export class TfaAuthService
 		}
 		res.json({valid})
 	}
+	
+	async getTfaStatus(_id: string) {
+		return (await this.findUser.finduserById(_id)).tfaIsEnable;
+	}
 }
