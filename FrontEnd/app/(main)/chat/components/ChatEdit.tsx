@@ -21,6 +21,7 @@ import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import { putData, setData, setFile } from "@/app/(main)/chat/data/api";
+import { mutate } from "swr";
 
 var setDataObj: Channel = {
   type: undefined,
@@ -68,6 +69,8 @@ const ChatEdit = ({ channels }: HomePage) => {
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels.name);
+    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+    mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
     onClose();
   };
 

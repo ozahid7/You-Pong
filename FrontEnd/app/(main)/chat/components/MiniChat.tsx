@@ -17,9 +17,7 @@ const MiniChat = ({ channels }: HomeProps) => {
       />
       <div className="w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block">
         <p className="text-[#424242] font-archivo font-[800] text-[19px]">
-          {channels.name.length > 6
-            ? channels.name.slice(0, 5) + "..."
-            : channels.name}
+          {channels.name}
         </p>
         <div className="text-[#686868] text-[14px] font-[500] w-full h-full">
           {channels.description}
