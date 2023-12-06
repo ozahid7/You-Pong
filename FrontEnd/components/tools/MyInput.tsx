@@ -47,7 +47,7 @@ const MyInput = forwardRef<HTMLInputElement, MyInputProps>(
         >
           <input
             ref={ref}
-            // onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             type={type}
             placeholder={text}
             className={` ${

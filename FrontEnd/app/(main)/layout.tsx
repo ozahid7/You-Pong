@@ -96,7 +96,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     else if (UserQuery.isLoading) return (<Loader/>)
 
-    else if (UserQuery.isSuccess && isLoged && tfaVerified)
+    else if (UserQuery.isSuccess && isLoged && loged && tfaVerified)
     return (
         <MyContext.Provider value={{ userData, isLoged }}>
             <main className="flex h-screen w-full background">

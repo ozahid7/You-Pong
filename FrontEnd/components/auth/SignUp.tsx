@@ -34,6 +34,7 @@ const SignUp = (props: {
                 toSend
             );
             console.log("response = ", response);
+            handleShowSignIn();
         } catch (error) {
             console.log("error = ", error);
         }
@@ -47,8 +48,8 @@ const SignUp = (props: {
             !isInvalidConfirmPass
         ) {
             setIsLoading(true);
-            signUp();
             setIsSubmited(false);
+            signUp();
         }
     }, [isInvalidEmail, isInvalidPass, isSubmited, isInvalidConfirmPass]);
 
