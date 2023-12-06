@@ -71,7 +71,6 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
             code: code
         }
         try{
-            console.log('code = ', code)
             const response = await useAxios<tfaSendCodeData>("post", endpoint, toSend);
             console.log('response = ', response)
             if (response.valid === false){
