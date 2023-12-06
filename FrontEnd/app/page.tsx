@@ -18,12 +18,13 @@ function Home() {
     const [isLogedin, setIsLogedIn] = useState(false)
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
+    let Loged: boolean = false;
+    if (typeof window !== 'undefined') {
+      Loged =  localStorage.getItem("isLoged") === "true" ? true : false;
+    }
     
     useLayoutEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.getItem("isLoged") === "true" ? setIsLogedIn(true) : setIsLogedIn(false);
-        }
-        if (isLogedin) {
+        if (Loged) {
             redirect(myRoutes.dashboard);
         }
         setValid(true)
