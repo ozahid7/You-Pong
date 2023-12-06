@@ -22,6 +22,11 @@ export const MyContext = createContext<myContextProps | undefined>(undefined);
 
 
 function RootLayout({ children }: { children: React.ReactNode }) {
+    let    loged: boolean = false;
+    if (typeof window !== "undefined") {
+       loged = localStorage.getItem("isLoged") === 'true' ? true : false;
+    }
+
     const [checked, setchecked] = useState(false);
     const [tfaVerified, setTfaVerified] = useState(false);
     const [isLoged, setIsLoged] = useState(false)
@@ -33,9 +38,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             const response = await useAxios<userData>("get", endPoints.getuser);
             setUserData(response.userInfo)
             setTfaStatus(response.userInfo.tfaStatus);
-            setIsLoged(true)
             if (typeof window !== "undefined") {
                 localStorage.setItem("isLoged", 'true')
+                localStorage.getItem("isLoged") === "true" ? setIsLoged(true) : setIsLoged(false);
             }
         } catch (error) {
             setchecked(true)
@@ -61,7 +66,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-        getTfa()
+        if(!loged)
+            getTfa()
+        else
+            setTfaVerified(true)
     }, [])
 
     const UserQuery = useQuery({
@@ -71,12 +79,12 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     });
 
     useLayoutEffect(() => {
-        if(!isLoged && checked){
+        if(!loged && checked){
             redirect(myRoutes.root)
         }
     }, [isLoged, checked])
 
-    if(tfaStatus && !tfaVerified && !isLoged ) return (
+    if(tfaStatus && !tfaVerified && !loged ) return (
         <TwoFactor
             isEnabled={true}
             isOpen={true}
