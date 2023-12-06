@@ -21,7 +21,7 @@ export class FtService
 		// generate tfa Cookie
 		else {
 			await this.authService.genCookie(res, user.id_user, 'tfa');
-			return res.status(201).json({tfaStatus});
+			res.redirect('http://localhost:3000/dashboard');
 		}
 	}
 }

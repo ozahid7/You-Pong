@@ -45,7 +45,7 @@ const GroupsChat = ({ channels }: obj) => {
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px]">
                 {channels.name}
               </div>
-              <div className="text-[#00993D] font-[500] text-[15px] font-['Estedad'] sm_:block xs:hidden">
+              <div className="text-[#00993D] font-[700] text-[15px] font-esteban sm_:block xs:hidden">
                 online: members
               </div>
             </div>
