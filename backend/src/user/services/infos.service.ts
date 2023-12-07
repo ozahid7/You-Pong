@@ -43,8 +43,9 @@ export class InfoUserService {
                     tfaStatus: user.tfaIsEnable,
                     achievements: await this.creatAchObj(),
                     avatar: user.avatar,
-                    channels: user.channels
-                }
+                    channels: user.channels,
+                    isIntra: user.hash === null ? true : false
+                },
             };
         } catch(error){
             throw new NotFoundException('user not found');

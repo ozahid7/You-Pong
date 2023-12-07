@@ -212,44 +212,52 @@ export class friendService{
 	};
 
 	async search(_id: string) {
-		const user = this.findUser.finduserById(_id);
-		
-		const bar = await this.prisma.user.findMany({
-			include : {
-				freindship_freind: {
-					where: {
-						OR: [
-							{id_freind: (await user).id_user},
-							{id_user: (await user).id_user},
-		
-						],
-						AND: [
-							{
-								state: {
-									not : 'BLOCKED' 
-								}
-							}
-						]
+		try {
+			const user = this.findUser.finduserById(_id);
+			const bar = await this.prisma.user.findMany({
+				where: {
+					id_user: {
+						not: (await user).id_user
+					},
+					freindship_freind: {
+						every: {
+							OR: [
+								{id_freind: (await user).id_user},
+								{id_user: (await user).id_user},
+							],
+							state: {
+								not : "BLOCKED"
+							} 
+						},
+					},
+					freindship_user: {
+						every: {
+							OR: [
+								{id_freind: (await user).id_user},
+								{id_user: (await user).id_user},
+							],
+							state: {
+								not : "BLOCKED"
+							} 
+						},
 					},
 				},
-				freindship_user: {
-					where: {
-						OR: [
-							{id_freind: (await user).id_user},
-							{id_user: (await user).id_user},
-		
-						],
-						AND: [
-							{
-								state: {
-									not : 'BLOCKED' 
-								}
-							}
-						]
-					},
-				},
-			},
-		});
-		return (bar);
+			});
+			const objArray: {
+				avatar: string;
+				username: string;
+				status: string
+			}[] = [];	
+			for(const i of bar) {
+				objArray.push({
+					avatar: i.avatar,
+					username: i.username,
+					status: i.status
+				});
+			}
+			return (objArray);
+		} catch (error) {
+			throw new BadRequestException(error);
+		}
 	};
 }
