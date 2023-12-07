@@ -148,6 +148,8 @@ export class UserService {
       losts: user.defeats,
       status: user.status,
       channels: user.channels,
+      isIntra: user.hash === null ? true : false   
+
     };
   };
 
