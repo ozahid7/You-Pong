@@ -5,32 +5,38 @@ import React, { useContext, useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
-import axios from "axios";
-import withAuth from "@/components/auth/withAuth";
-import { apiHost } from "@/const";
 import { MyContext } from "../layout";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
+import { useQuery, useQueryClient } from "react-query";
+import Loader from "@/components/tools/Loader";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 const page = () => {
     const user = useContext(MyContext);
+    const userQuery = useQuery('user')
     const { tfaStatus } = user.userData;
+    const queryClient = useQueryClient();
+
     
-    console.log('tfa status', tfaStatus)
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);
     const [enabled, setEnabled] = useState(tfaStatus);
     const [submit, setSubmit] = useState(false);
     const [path, setPath] = useState("/mobile.svg");
 
+    
+
     const disableTfa = async () => {
         try{
             const response = await useAxios<tfaSwitch>('post', endPoints.userTfaSendCode, {code: "0"})
             console.log('disable response = ', response)
+            queryClient.invalidateQueries('user')
         }catch (error){
             console.log('error = ', error)
         }
     }
+
 
     const enableTfa = async () => {
         try {
@@ -46,14 +52,20 @@ const page = () => {
     }
 
     useEffect(() => {
+        setEnabled(tfaStatus);
+    }, [user])
+
+    useEffect(() => {
         if (submit) {
-            if(!enabled)
+            if(!enabled){
                 disableTfa()
+            }
             else
                 enableTfa()
             setSubmit(false);
         }
     }, [enabled]);
+
 
     return (
         <div className="h-full min-h-[600px] w-full make_center">
@@ -89,16 +101,23 @@ const page = () => {
                                 </div>
                                 <div className="w-[94%] flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm">
                                     <span className="sm:text-md md:text-xl xl:text-3xl before:content-['2FA'] sm:before:content-['Two_Step_Verification'] font-body drop-shadow-sm font-semibold text-cardtitle "></span>
+                                    {userQuery.isFetching  ? (
+                                        <MiniLoader />
+                                    ) : (
+                                        <MyToggle
+                                            otherclass="h-[38px]"
+                                            handelCheck={() => {
+                                                !enabled
+                                                    ? setTwoFactor(true)
+                                                    : setTwoFactor(false);
+                                                setSubmit(true);
+                                            }}
+                                            enabled={enabled}
+                                            setIsEnabled={setEnabled}
+                                        />
+                                        
+                                    )}
 
-                                    <MyToggle
-                                        otherclass="h-[38px]"
-                                        handelCheck={() => {
-                                            !enabled ? setTwoFactor(true) : setTwoFactor(false);
-                                            setSubmit(true);
-                                        }}
-                                        enabled={enabled}
-                                        setIsEnabled={setEnabled}
-                                    />
                                 </div>
                             </div>
                         </div>
@@ -107,7 +126,10 @@ const page = () => {
                 <TwoFactor
                     isEnabled={false}
                     isOpen={showTwoFactor}
-                    closemodal={setTwoFactor}
+                    closemodal={() => {
+                        setTwoFactor(false);
+                        setEnabled(tfaStatus);
+                    }}
                     path={path}
                 />
             </div>

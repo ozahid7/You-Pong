@@ -44,6 +44,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             }
         } catch (error) {
             setchecked(true)
+            localStorage.removeItem("isLoged");
+            redirect(myRoutes.root)
             console.log("error = :", error);
         }
         return null;

@@ -19,6 +19,7 @@ function MyToggle({
     otherclass,
     enabled,
     setIsEnabled,
+    
 }: MyToggleProps) {
     const classname = twMerge(
         `w-[140px] h-[43px] pr-3 flex items-center justify-around ${

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
@@ -6,19 +6,25 @@ import { useAxios } from "@/utils";
 import { redirect, useRouter } from "next/navigation";
 import { endPoints, tfaSendCodeData } from "@/types/Api";
 import { myRoutes } from "@/const";
+import { useQueryClient } from "react-query";
 
 interface TwoFactorProps {
     isOpen: boolean;
     closemodal: Function;
     isEnabled: boolean;
-    path?: string
-    setValid?: any
-    setIsLoged?: any
+    path?: string;
+    setValid?: any;
+    setIsLoged?: any;
 }
 
-const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}: TwoFactorProps) => {
-
-   
+const TwoFactor = ({
+    isOpen,
+    closemodal,
+    isEnabled,
+    path,
+    setValid,
+    setIsLoged,
+}: TwoFactorProps) => {
     const ref1 = useRef<HTMLInputElement>(null);
     const ref2 = useRef<HTMLInputElement>(null);
     const ref3 = useRef<HTMLInputElement>(null);
@@ -26,13 +32,17 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
     const ref5 = useRef<HTMLInputElement>(null);
     const ref6 = useRef<HTMLInputElement>(null);
 
-    const endpoint = isEnabled ? endPoints.tfaSendCode : endPoints.userTfaSendCode
+    const queryClient = useQueryClient();
 
-    const image = isEnabled
-        ? "/mobile.svg"
-        : path;
+    const endpoint = isEnabled
+        ? endPoints.tfaSendCode
+        : endPoints.userTfaSendCode;
 
-    const msg = !isEnabled ? "Scan the Qr code and Enter the OTP from :" : "A verfication code has been set in :";
+    const image = isEnabled ? "/mobile.svg" : path;
+
+    const msg = !isEnabled
+        ? "Scan the Qr code and Enter the OTP from :"
+        : "A verfication code has been set in :";
 
     const [Value, setValue] = useState({
         input1: "",
@@ -40,68 +50,83 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
         input3: "",
         input4: "",
         input5: "",
-        input6: ""
+        input6: "",
     });
 
-    const [code, setCode] = useState('');
-    const [key, setKey] = useState('')
-    const [IsInvalid, setIsInvalid] = useState(false)
-    const [IsSubmited, setIsSubmited] = useState(false)
-    const router = useRouter()
-    
+    const [code, setCode] = useState("");
+    const [key, setKey] = useState("");
+    const [IsInvalid, setIsInvalid] = useState(false);
+    const [IsSubmited, setIsSubmited] = useState(false);
+    const router = useRouter();
+
     const rgx = /^\d+$/;
-    
-    const handleSend = () =>{
-        setCode(Value.input1 + Value.input2 + Value.input3 + Value.input4 + Value.input5 + Value.input6);
-         let cod =
-             Value.input1 +
-             Value.input2 +
-             Value.input3 +
-             Value.input4 +
-             Value.input5 +
-             Value.input6;
-        if(cod.length !== 6)
-            setIsInvalid(true)
+
+    const handleSend = () => {
+        setCode(
+            Value.input1 +
+                Value.input2 +
+                Value.input3 +
+                Value.input4 +
+                Value.input5 +
+                Value.input6
+        );
+        let cod =
+            Value.input1 +
+            Value.input2 +
+            Value.input3 +
+            Value.input4 +
+            Value.input5 +
+            Value.input6;
+        if (cod.length !== 6) setIsInvalid(true);
         !rgx.test(cod) ? setIsInvalid(true) : setIsInvalid(false);
-        setIsSubmited(true)
-    }
+        setIsSubmited(true);
+    };
 
     const SendCode = async () => {
         const toSend = {
-            code: code
-        }
-        try{
-            const response = await useAxios<tfaSendCodeData>("post", endpoint, toSend);
-            console.log('response = ', response)
-            if (response.valid === false){
-                setIsInvalid(true)
-            }else{
-               if(isEnabled) {
-                setValid(true)
-                setIsLoged(true)
-                router.replace(myRoutes.dashboard)
-               }
-               else
-                closemodal(false)
+            code: code,
+        };
+        try {
+            const response = await useAxios<tfaSendCodeData>(
+                "post",
+                endpoint,
+                toSend
+            );
+            console.log("response = ", response);
+            if (response.valid === false) {
+                setIsInvalid(true);
+            } else {
+                if (isEnabled) {
+                    setValid(true);
+                    setIsLoged(true);
+                    router.replace(myRoutes.dashboard);
+                } else {
+                    queryClient.invalidateQueries("user");
+                    setValue({
+                        input1: "",
+                        input2: "",
+                        input3: "",
+                        input4: "",
+                        input5: "",
+                        input6: "",
+                    });
+                    closemodal(false);
+                }
             }
-        }catch(error){
-            console.log('error = ', error)
+        } catch (error) {
+            console.log("error = ", error);
         }
-    }
+    };
 
     useEffect(() => {
-
-        if(IsSubmited && !IsInvalid){
-            SendCode()
+        if (IsSubmited && !IsInvalid) {
+            SendCode();
         }
-        setIsSubmited(false)
-    }, [IsInvalid, IsSubmited])
+        setIsSubmited(false);
+    }, [IsInvalid, IsSubmited]);
 
-
-    function FocuseOn  (name: string, value: string){
-
-        if (name === "input1" && key !== "Backspace") 
-            ref2.current?.focus();
+    function FocuseOn(name: string, value: string) {
+        if (name === "input1" && key !== "Backspace") ref2.current?.focus();
         if (name === "input2" && key !== "Backspace") {
             ref3.current?.focus();
         }
@@ -116,7 +141,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
         }
     }
 
-    function clearInputs () {
+    function clearInputs() {
         if (key === "Backspace") {
             setValue({
                 input1: "",
@@ -126,11 +151,11 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
                 input5: "",
                 input6: "",
             });
-            ref1.current?.focus()
+            ref1.current?.focus();
         }
     }
 
-    const renderInputElements = (name: string,  val: string, re?: any) => {
+    const renderInputElements = (name: string, val: string, re?: any) => {
         return (
             <input
                 onChange={(e) => {
@@ -151,7 +176,9 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
                 name={name}
                 placeholder="___"
                 className={`outline-none border ${
-                    IsInvalid ? " border-red-600 animate-shake" : " border-gray-500"
+                    IsInvalid
+                        ? " border-red-600 animate-shake"
+                        : " border-gray-500"
                 } placeholder:text-center text-center text-lg  rounded-sm w-[30%] max-w-[50px] h-[78%] h:h-[88%] sm:h-[94%] md:h-[96%] lg:h-[100%]`}
             />
         );
@@ -170,7 +197,7 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
                     input5: "",
                     input6: "",
                 });
-                setCode("")
+                setCode("");
                 setIsSubmited(false);
                 setIsInvalid(false);
             }}
@@ -230,7 +257,8 @@ const TwoFactor = ({ isOpen, closemodal, isEnabled, path, setValid, setIsLoged}:
                         />
                     </div>
                     <span className="sm:text-lg max-w-[270px] sm:max-w-[320px] mt-2 text-[14px] text-center lg:text-lg text-gray-500">
-                        Don't have the Authenticator app yet ? get it from Google Play
+                        Don't have the Authenticator app yet ? get it from
+                        Google Play
                     </span>
                 </section>
             </div>
