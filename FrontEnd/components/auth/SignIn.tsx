@@ -66,7 +66,6 @@ const SignIn = (props: {
         setIsSubmited(true);
         pass.length < 8 ? setIsInvalidPass(true) : setIsInvalidPass(false);
     };
-
     //remove invalid error msg from inputs while typing
     const handleFocus = () => {
         setIsSubmited(false);
