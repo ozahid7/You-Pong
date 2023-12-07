@@ -243,11 +243,19 @@ export class friendService{
 					},
 				},
 			});
-			for(const i of bar)
-				console.log(i.username);
-			console.log('--------');
-			
-			return (bar);
+			const objArray: {
+				avatar: string;
+				username: string;
+				status: string
+			}[] = [];	
+			for(const i of bar) {
+				objArray.push({
+					avatar: i.avatar,
+					username: i.username,
+					status: i.status
+				});
+			}
+			return (objArray);
 		} catch (error) {
 			throw new BadRequestException(error);
 		}
