@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import FriendBanner from "./FriendBanner";
 import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
+import { MyContext } from "../layout";
 
 interface Friend {
     avatar: string;
@@ -44,30 +45,34 @@ const RequestList: Friend[] = [
 ];
 
 const CustomTabs = (props: { input: string, setInput: any }) => {
+
+    const user = useContext(MyContext);
+    const {blocked, accepted, pending } = user.FriendData;
+    
     const [index, setIndex] = useState(0);
-    const [ListArr, setListArr] = useState(FriendsList);
-    const [RequestArr, setRequestArr] = useState(RequestList);
-    const [BlockArr, setBlockArr] = useState(BlockedList);
+    const [ListArr, setListArr] = useState(accepted);
+    const [RequestArr, setRequestArr] = useState(pending);
+    const [BlockArr, setBlockArr] = useState(blocked);
     
     
     useEffect(() => {
         setListArr(
-            FriendsList.filter((friend) =>
-                friend.userName
+            accepted.filter((friend) =>
+                friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
         );
         setRequestArr(
-            RequestList.filter((friend) =>
-                friend.userName
+            pending.filter((friend) =>
+                friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
         );
         setBlockArr(
-            BlockedList.filter((friend) =>
-                friend.userName
+            blocked.filter((friend) =>
+                friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
@@ -119,8 +124,12 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                         {ListArr.map((e, index) => (
                             <FriendBanner
                                 key={index}
-                                userName={e.userName}
-                                image={renderImage(e.avatar)}
+                                userName={e.username}
+                                image={
+                                    e.avatar
+                                        ? renderImage(e.avatar)
+                                        : renderImage("/avatar.jpeg")
+                                }
                                 status={e.status}
                             />
                         ))}
@@ -130,8 +139,12 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                         {RequestArr.map((e, index) => (
                             <RequestBanner
                                 key={index}
-                                userName={e.userName}
-                                image={renderImage(e.avatar)}
+                                userName={e.username}
+                                image={
+                                    e.avatar
+                                        ? renderImage(e.avatar)
+                                        : renderImage("/avatar.jpeg")
+                                }
                                 status={e.status}
                             />
                         ))}
@@ -141,8 +154,12 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                         {BlockArr.map((e, index) => (
                             <BlockedBanner
                                 key={index}
-                                userName={e.userName}
-                                image={renderImage(e.avatar)}
+                                userName={e.username}
+                                image={
+                                    e.avatar
+                                        ? renderImage(e.avatar)
+                                        : renderImage("/avatar.jpeg")
+                                }
                                 status={e.status}
                             />
                         ))}

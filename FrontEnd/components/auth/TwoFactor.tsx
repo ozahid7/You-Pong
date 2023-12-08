@@ -92,6 +92,7 @@ const TwoFactor = ({
                 endpoint,
                 toSend
             );
+            console.log('code = ', toSend.code)
             console.log("response = ", response);
             if (response.valid === false) {
                 setIsInvalid(true);
@@ -114,6 +115,7 @@ const TwoFactor = ({
                 }
             }
         } catch (error) {
+            setIsInvalid(true)
             console.log("error = ", error);
         }
     };

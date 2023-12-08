@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
+import { useQuery } from "@tanstack/react-query";
+import { QueryClient } from "react-query";
 
 interface friend {
   userName: string;

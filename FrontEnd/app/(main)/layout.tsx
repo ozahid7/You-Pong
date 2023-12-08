@@ -7,17 +7,18 @@ import { myRoutes } from "@/const";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 import { useQuery } from "react-query";
 import { useAxios } from "@/utils";
-import { endPoints, tfaSwitch, userData, userInfo } from "@/types/Api";
+import { FriendArr, endPoints, tfaSwitch, userData, userInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 
 interface myContextProps {
     userData: userInfo;
     isLoged: boolean;
+    FriendData: FriendArr
 }
 
 
-export const MyContext = createContext<myContextProps | undefined>(undefined);
+export  const MyContext = createContext<myContextProps | undefined>(undefined);
 
 
 
@@ -32,6 +33,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     const [isLoged, setIsLoged] = useState(false)
     const [userData, setUserData] = useState(undefined)
     const [tfaStatus, setTfaStatus] = useState(false)
+    const [FriendData, setFriendData] = useState(undefined)
 
     const getUser = async () => {
         try {
@@ -86,6 +88,22 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         }
     }, [isLoged, checked])
 
+    const getFriends = async () => {
+        try{
+            const response = await useAxios<FriendArr>('get', endPoints.getFriend)
+            console.log('response = ', response)
+            setFriendData(response)
+        }catch(error){
+            console.log('error get Friends : ', error)
+        }
+    };
+
+    const FriendsQuery = useQuery({
+        queryKey: ["friends"],
+        queryFn: getFriends,
+        enabled: isLoged
+    });
+
     if(tfaStatus && !tfaVerified && !loged ) return (
         <TwoFactor
             isEnabled={true}
@@ -96,11 +114,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         />
     );
 
-    else if (UserQuery.isLoading) return (<Loader/>)
+    else if (UserQuery.isLoading || FriendsQuery.isLoading) return (<Loader/>)
 
     else if (UserQuery.isSuccess && isLoged && loged && tfaVerified)
     return (
-        <MyContext.Provider value={{ userData, isLoged }}>
+        <MyContext.Provider value={{ userData, isLoged, FriendData }}>
             <main className="flex h-screen w-full background">
                 <SideBar />
                 <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">

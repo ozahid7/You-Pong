@@ -2,7 +2,12 @@
 import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { MyContext } from "../layout";
+import { baseURL, useAxios } from "@/utils";
+import { endPoints } from "@/types/Api";
+import axios from "axios";
+import { setFile } from "../chat/data/api";
 
 interface ProfileSettingsProps {
     isOpen: boolean;
@@ -10,36 +15,62 @@ interface ProfileSettingsProps {
 }
 
 const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
+    const user = useContext(MyContext);
+    const { username, avatar, isIntra } = user.userData;
+
     const [userName, setUserName] = useState("");
     const [currentPass, setCurrentPass] = useState("");
     const [newPass, setNewPass] = useState("");
-    const [selectedFile, setSelectedFile] = useState("/ozahid-.jpeg");
+    const [selectedFile, setSelectedFile] = useState(avatar);
+    const [file, setfile] = useState<any>();
     const [confirmPass, setConfirmPass] = useState("");
-    const [submit, setSubmit] = useState(false)
-    const [invalid, setInvalid] = useState(false)
+    const [submit, setSubmit] = useState(false);
+    const [invalidUser, setInvalidUser] = useState(false);
+    const [invalidNewPass, setInvalidNewPass] = useState(false);
+    const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 
-    const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files![0]
-
-        if (file){
+    const handelFileSelect =  (e: React.ChangeEvent<HTMLInputElement>) => {
+         const file = e.target.files![0];
+        console.log('hel')
+        if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setSelectedFile(e.target?.result as string)
-            }
-            reader.readAsDataURL(file)
+                 setSelectedFile(e.target?.result as string);
+                };
+                reader.readAsDataURL(file);
+                setfile(file)
         }
     };
 
-    useEffect(() => {
-        if(submit){
-            userName.length < 6 ? setInvalid(true) : setInvalid(false)
-            newPass !== confirmPass ? setInvalid(true) : setInvalid(false)
-            currentPass.length === 0 ? setInvalid(true) : setInvalid(false)
-            const ApiUrl = 'api';
-            setSubmit(false);
-        }
-    }, [submit, invalid])
+    const UpdateInfos = async () => {
+        const response = await setFile(file)
+        console.log(response)
+    } 
 
+    useEffect(()  => {
+        if (submit && !invalidNewPass && !invalidUser && !invalidCurrentPass) {
+            console.log(submit, invalidCurrentPass, invalidNewPass, invalidUser)
+            UpdateInfos()
+        }
+        setSubmit(false)
+    }, [submit, invalidUser, invalidCurrentPass, invalidNewPass]);
+
+    const handelSubmit = (e: any) => {
+        e.preventDefault();
+
+        userName.length < 6 && userName.length > 0 ? setInvalidUser(true) : setInvalidUser(false);
+        newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0) ? setInvalidNewPass(true) : setInvalidNewPass(false);
+        currentPass.length === 0 && !isIntra
+            ? setInvalidCurrentPass(true)
+            : setInvalidCurrentPass(false);
+        setSubmit(true);
+    };
+
+    const setToDefault = () => {
+        setInvalidCurrentPass(false)
+        setInvalidNewPass(false)
+        setInvalidUser(false)
+    }
 
     return (
         <MyDialog
@@ -49,15 +80,19 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                 setNewPass("");
                 setUserName("");
                 setSubmit(false);
-                setInvalid(false)
                 setCurrentPass("");
                 setConfirmPass("");
-                setSelectedFile("/ozahid-.jpeg");
+                setSelectedFile(avatar);
+                setToDefault();
             }}
             withCorner={false}
             customClass="absolute h-[64%] w-[90%] sm:w-[66%] max-w-[700px]"
         >
-            <div className="flex items-center flex-col h-full  overflow-y-auto">
+            <form
+                action=""
+                className="flex items-center flex-col h-full  overflow-y-auto"
+                onSubmit={handelSubmit}
+            >
                 <div className="h-[34%] flex flex-col space-y-4 items-center justify-end w-full ">
                     <img
                         src={selectedFile}
@@ -69,7 +104,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                             id="uploadphoto"
                             type="file"
                             onChange={(e) => {
-                                handelFileSelect(e);
+                                handelFileSelect(e)
                             }}
                             accept="image/*"
                             className="min-h-[47px] max-w-[140px] md:max-w-[180px] outline-none  rounded-lg flex pt-[5px] border-2 border-palette-green text-cardtitle"
@@ -85,7 +120,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                         </label>
                     </div>
                 </div>
-                <div className="flex flex-grow  w-full items-center flex-col space-y-4 justify-evenly">
+                <div onFocus={setToDefault} className="flex flex-grow  w-full items-center flex-col space-y-4 justify-evenly">
                     <div className="h-[70%] min-h-[300px]  flex flex-col items-center justify-around w-full">
                         <div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
                             <span className="font-body text-cardtitle font-semibold lg:text-lg">
@@ -93,25 +128,28 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                             </span>
                             <MyInput
                                 setInput={setUserName}
-                                isValid={invalid}
+                                isValid={invalidUser}
                                 type="text"
                                 message="Enter at least 6 characters"
                                 customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
-                                text="ozahid-"
+                                text={username}
                             />
                         </div>
                         <div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
                             <span className="font-body text-cardtitle font-semibold lg:text-lg">
-                                Current Password
+                                Current Passowrd
                             </span>
                             <MyInput
                                 setInput={setCurrentPass}
                                 isPassword={true}
                                 type="password"
-                                isValid={invalid}
+                                isValid={invalidCurrentPass}
                                 message="Required input"
-                                customclass="min-h-[40px]  sm:min-h-[52px] min-w-full"
+                                customclass={`min-h-[40px] ${
+                                    isIntra ? "opacity-30" : "opacity-100"
+                                } sm:min-h-[52px] min-w-full`}
                                 text="●●●●●●●●●●●●"
+                                visible={isIntra}
                             />
                         </div>
                         <div className="w-full h:w-[90%] md:w-[80%] space-x-2  h-1 min-h-[86px] flex justify-end">
@@ -123,20 +161,18 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                                     setInput={setNewPass}
                                     isPassword={true}
                                     type="password"
-                                    isValid={invalid}
-                                    message="Passwords must match"
+                                    isValid={invalidNewPass}
+                                    message="Enter at least 8 characters"
                                     customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
                                     text="●●●●●●●●●●●●"
                                 />
                             </div>
                             <div className="w-[50%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
-                                <span className="font-body before:content-['Confirm_Pass'] h:before:content-['Confirm_Password'] text-cardtitle text-sm font-semibold lg:text-lg">
-                                    
-                                </span>
+                                <span className="font-body before:content-['Confirm_Pass'] h:before:content-['Confirm_Password'] text-cardtitle text-sm font-semibold lg:text-lg"></span>
                                 <MyInput
                                     setInput={setConfirmPass}
                                     isPassword={true}
-                                    isValid={invalid}
+                                    isValid={invalidNewPass}
                                     type="password"
                                     message="Passwords must match"
                                     customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
@@ -150,13 +186,10 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                             text="Update"
                             color="orange"
                             otherclass="max-w-[300px] w-[60%] min-h-[50px]"
-                            handleclick={() => {
-                                setSubmit(true);
-                            }}
                         />
                     </div>
                 </div>
-            </div>
+            </form>
         </MyDialog>
     );
 };

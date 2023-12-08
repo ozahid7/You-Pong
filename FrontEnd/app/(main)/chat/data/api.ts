@@ -101,7 +101,7 @@ export const setFile = async (file: File | null) => {
     formData.append("avatar", file);
 
     const response = await axios.post(
-      "http://178.62.74.69:400/upload",
+      "http://localhost:4000/upload",
       formData,
       {
         headers: {

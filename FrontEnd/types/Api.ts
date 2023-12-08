@@ -13,12 +13,12 @@ export type tfaSendCodeData = {
 export type tfaSwitch = boolean;
 
 export type tfaEnable = {
-    img: string
-}
+    img: string;
+};
 
 export type userInfo = {
     achievements: [];
-    history:  [{}];
+    history: [{}];
     level: number;
     loses: number;
     rank: string;
@@ -26,9 +26,10 @@ export type userInfo = {
     username: string;
     wins: number;
     avatar: string;
+    isIntra: boolean;
 };
 export type userData = {
-    userInfo: userInfo
+    userInfo: userInfo;
 };
 
 //EndPoints
@@ -40,4 +41,20 @@ export const endPoints = {
     userTfaSendCode: "user/tfa/switch",
     tfaSwitch: "user/twoFactorAuth",
     getuser: "user/GetHero",
+    getFriend: "friend/sort",
+    getFile: 'upload',
+};
+
+//friends
+type user = {
+    avatar: string;
+    username: string;
+    status: string;
+}
+
+
+export type FriendArr = {
+    accepted: user[];
+    blocked: user[];
+    pending: user[];
 };

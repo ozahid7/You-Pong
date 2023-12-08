@@ -6,6 +6,7 @@ import CustomTabs from "./CustomTabs";
 
 const page = () => {
     const [Input, setInput] = useState("");
+    
     return (
         <div className="h-full min-h-[600px] w-full make_center">
             <div className="flex justify-center  w-[90%] max-w-[1200px] min-w-[260px] min-h-[600px] h-[90%]">

@@ -12,6 +12,7 @@ interface MyInputProps {
   setInput?: Function;
   isValid?: boolean;
   message?: string;
+  visible?: boolean;
 }
 
 const MyInput = forwardRef<HTMLInputElement, MyInputProps>(
@@ -25,6 +26,7 @@ const MyInput = forwardRef<HTMLInputElement, MyInputProps>(
       setInput,
       isValid,
       message,
+      visible
     },
     ref
   ) => {
@@ -46,6 +48,7 @@ const MyInput = forwardRef<HTMLInputElement, MyInputProps>(
           }  max-w-[400px] overflow-hidden z-10 relative w-full min-w-[120px] p-[2px] max-h-[50px] sm:max-h-[60px]  min-h-[45px] h-[12%] flex justify-center items-center`}
         >
           <input
+            disabled={visible}
             ref={ref}
             onChange={(e) => setInput(e.target.value)}
             type={type}
