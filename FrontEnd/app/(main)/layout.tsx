@@ -10,6 +10,7 @@ import { useAxios } from "@/utils";
 import { FriendArr, endPoints, tfaSwitch, userData, userInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
+import { QueryClient } from "@tanstack/react-query";
 
 interface myContextProps {
     userData: userInfo;
@@ -24,6 +25,7 @@ export  const MyContext = createContext<myContextProps | undefined>(undefined);
 
 function RootLayout({ children }: { children: React.ReactNode }) {
     let    loged: boolean = false;
+    const queryClient = new  QueryClient()
     if (typeof window !== "undefined") {
        loged = localStorage.getItem("isLoged") === 'true' ? true : false;
     }
@@ -47,8 +49,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         } catch (error) {
             setchecked(true)
             localStorage.removeItem("isLoged");
-            redirect(myRoutes.root)
             console.log("error = :", error);
+            redirect(myRoutes.root)
         }
         return null;
     };

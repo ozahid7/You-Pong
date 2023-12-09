@@ -14,8 +14,8 @@ import MiniLoader from "@/components/tools/MiniLoader";
 const page = () => {
     const user = useContext(MyContext);
     const userQuery = useQuery("user");
-    const { tfaStatus } = user.userData;
     const queryClient = useQueryClient();
+    const { tfaStatus } = user.userData;
 
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);

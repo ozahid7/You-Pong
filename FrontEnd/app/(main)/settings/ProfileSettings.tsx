@@ -8,6 +8,8 @@ import { baseURL, useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
 import axios from "axios";
 import { setFile } from "../chat/data/api";
+import { useQuery, useQueryClient } from "react-query";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 interface ProfileSettingsProps {
     isOpen: boolean;
@@ -17,6 +19,8 @@ interface ProfileSettingsProps {
 const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     const user = useContext(MyContext);
     const { username, avatar, isIntra } = user.userData;
+    const userQuery = useQuery("user");
+    const queryClient = useQueryClient();
 
     const [userName, setUserName] = useState("");
     const [currentPass, setCurrentPass] = useState("");
@@ -28,49 +32,88 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     const [invalidUser, setInvalidUser] = useState(false);
     const [invalidNewPass, setInvalidNewPass] = useState(false);
     const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
-
-    const handelFileSelect =  (e: React.ChangeEvent<HTMLInputElement>) => {
-         const file = e.target.files![0];
-        console.log('hel')
+    let photo = null;
+    
+    const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files![0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                 setSelectedFile(e.target?.result as string);
-                };
-                reader.readAsDataURL(file);
-                setfile(file)
+                setSelectedFile(e.target?.result as string);
+            };
+            reader.readAsDataURL(file);
+            setfile(file);
         }
     };
 
     const UpdateInfos = async () => {
-        const response = await setFile(file)
-        console.log(response)
-    } 
-
-    useEffect(()  => {
-        if (submit && !invalidNewPass && !invalidUser && !invalidCurrentPass) {
-            console.log(submit, invalidCurrentPass, invalidNewPass, invalidUser)
-            UpdateInfos()
+        console.log(selectedFile, avatar);
+        if (selectedFile != avatar) photo = await setFile(file);
+        const toSend = {
+            userName: userName,
+            currentPassword: currentPass,
+            newPassword: newPass,
+            confirmPassword: confirmPass,
+            avatar: photo,
+        };
+        if (
+            userName.length === 0 &&
+            newPass.length === 0 &&
+            confirmPass.length === 0 &&
+            photo === null
+        )
+            isItEmpty();
+        else {
+            try {
+                const res = await useAxios(
+                    "post",
+                    endPoints.updateInfo,
+                    toSend
+                );
+                queryClient.invalidateQueries("user");
+            } catch (error) {
+                console.log("error = ", error);
+            }
         }
-        setSubmit(false)
+    };
+
+    useEffect(() => {
+        if (submit && !invalidNewPass && !invalidUser && !invalidCurrentPass) {
+            console.log(
+                submit,
+                invalidCurrentPass,
+                invalidNewPass,
+                invalidUser
+            );
+            UpdateInfos();
+        }
+        setSubmit(false);
     }, [submit, invalidUser, invalidCurrentPass, invalidNewPass]);
 
     const handelSubmit = (e: any) => {
         e.preventDefault();
-
-        userName.length < 6 && userName.length > 0 ? setInvalidUser(true) : setInvalidUser(false);
-        newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0) ? setInvalidNewPass(true) : setInvalidNewPass(false);
-        currentPass.length === 0 && !isIntra
+        userName.length < 6 && userName.length > 0
+            ? setInvalidUser(true)
+            : setInvalidUser(false);
+        newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
+            ? setInvalidNewPass(true)
+            : setInvalidNewPass(false);
+        currentPass.length < 8 && !isIntra
             ? setInvalidCurrentPass(true)
             : setInvalidCurrentPass(false);
         setSubmit(true);
     };
 
+    const isItEmpty = () => {
+        setInvalidNewPass(true);
+        setInvalidUser(true);
+    };
+
     const setToDefault = () => {
-        setInvalidCurrentPass(false)
-        setInvalidNewPass(false)
-        setInvalidUser(false)
-    }
+        setInvalidCurrentPass(false);
+        setInvalidNewPass(false);
+        setInvalidUser(false);
+    };
 
     return (
         <MyDialog
@@ -104,7 +147,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                             id="uploadphoto"
                             type="file"
                             onChange={(e) => {
-                                handelFileSelect(e)
+                                handelFileSelect(e);
                             }}
                             accept="image/*"
                             className="min-h-[47px] max-w-[140px] md:max-w-[180px] outline-none  rounded-lg flex pt-[5px] border-2 border-palette-green text-cardtitle"
@@ -120,7 +163,10 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                         </label>
                     </div>
                 </div>
-                <div onFocus={setToDefault} className="flex flex-grow  w-full items-center flex-col space-y-4 justify-evenly">
+                <div
+                    onFocus={setToDefault}
+                    className="flex flex-grow  w-full items-center flex-col space-y-4 justify-evenly"
+                >
                     <div className="h-[70%] min-h-[300px]  flex flex-col items-center justify-around w-full">
                         <div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
                             <span className="font-body text-cardtitle font-semibold lg:text-lg">

@@ -43,6 +43,7 @@ export const endPoints = {
     getuser: "user/GetHero",
     getFriend: "friend/sort",
     getFile: 'upload',
+    updateInfo: 'update'
 };
 
 //friends
@@ -50,6 +51,10 @@ type user = {
     avatar: string;
     username: string;
     status: string;
+}
+
+export const friendsEndPoint = {
+    block: 'friend/block',
 }
 
 

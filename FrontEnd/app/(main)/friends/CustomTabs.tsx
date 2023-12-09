@@ -6,53 +6,38 @@ import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
 import { MyContext } from "../layout";
-
-interface Friend {
-    avatar: string;
-    status: string;
-    userName: string;
-}
-
-const FriendsList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Adam" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
-];
-const BlockedList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
-];
-const RequestList: Friend[] = [
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "Oussama" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Ahmed" },
-    { avatar: "/ozahid-.jpeg", status: "offline", userName: "mehdi" },
-    { avatar: "/ozahid-.jpeg", status: "in game", userName: "anouar" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "wassim" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "Mohamed" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "yel yahya" },
-    { avatar: "/ozahid-.jpeg", status: "online", userName: "zahid oussama" },
-];
+import { useQuery } from "react-query";
+import MiniLoader from "@/components/tools/MiniLoader";
+import { QueryClient } from "react-query";
 
 const CustomTabs = (props: { input: string, setInput: any }) => {
 
     const user = useContext(MyContext);
     const {blocked, accepted, pending } = user.FriendData;
-    
+    const userQuery = useQuery("friends");
+    const queryClient = new QueryClient()
+
+
     const [index, setIndex] = useState(0);
+    let    test = false;
     const [ListArr, setListArr] = useState(accepted);
     const [RequestArr, setRequestArr] = useState(pending);
     const [BlockArr, setBlockArr] = useState(blocked);
+    const [InvalidData, setInvalidData] = useState(false);
+    
+    useEffect(() => {
+        if (InvalidData){
+            userQuery.refetch();
+        }
+        setInvalidData(false)
+    }, [InvalidData])
+
+    useEffect(() => {
+        setBlockArr(blocked)
+        setRequestArr(pending)
+        setListArr(accepted)
+    }, [blocked, accepted, pending])
+
     
     
     useEffect(() => {
@@ -88,7 +73,8 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
             />
         );
     };
-
+    if (userQuery.isFetching) return (<MiniLoader/>)
+    else if (userQuery.isSuccess){
     return (
         <div className="w-full flex flex-col items-center h-[70%]">
             <Tab.Group
@@ -131,6 +117,7 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                                         : renderImage("/avatar.jpeg")
                                 }
                                 status={e.status}
+                                SetInvalidData={setInvalidData}
                             />
                         ))}
                     </Tab.Panel>
@@ -169,5 +156,6 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
         </div>
     );
 };
+}
 
 export default CustomTabs;

@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 });
 
 export const useAxios = async <T> (
-    method: "get" | "post" | "put" | "delete",
+    method: "get" | "post" | "put" | "delete" | 'patch',
     endpoint: string,
     data?: Record<any, any>
 ): Promise<T> => {

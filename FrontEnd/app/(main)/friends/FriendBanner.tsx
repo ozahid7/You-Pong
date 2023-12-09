@@ -1,12 +1,38 @@
 "use client";
 import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
-import React, { useState } from "react";
+import React, { useContext, useDebugValue, useEffect, useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
+import { MyContext } from "../layout";
+import { useQuery, useQueryClient } from 'react-query'
+import { useAxios } from "@/utils";
+import { friendsEndPoint } from "@/types/Api";
+import { QueryClient } from "react-query";
 
-const FriendBanner = (props: { zindex?: number, image: any, userName: string, status: string }) => {
+const FriendBanner = (props: { zindex?: number, image: any, userName: string, status: string, SetInvalidData: any }) => {
 
     const [enabled, setEnabled] = useState(false);
+    const [block, setBlock] = useState(false);
+    const { FriendData } = useContext(MyContext);
+     
+
+     const blockUser = async () => {
+         try {
+             const response = await useAxios("patch", friendsEndPoint.block, {
+                 friend: props.userName,
+             });
+             console.log("response... = ", response);
+             props.SetInvalidData(true)
+             console.log(FriendData)
+         } catch (error) {
+             console.log("error : ", error);
+         }
+     };
+
+     useEffect(()=> {
+        if (block)
+            blockUser()
+     }, [block])
 
     return (
         <div
@@ -36,7 +62,7 @@ const FriendBanner = (props: { zindex?: number, image: any, userName: string, st
                 />
                 <MyToggle
                     otherclass="h-[38px] hidden sm:flex min-w-[120px]"
-                    handelCheck={() => {}}
+                    handelCheck={() => {setBlock(true)}}
                     string1="unblock"
                     string2="block"
                     enabled={enabled}
