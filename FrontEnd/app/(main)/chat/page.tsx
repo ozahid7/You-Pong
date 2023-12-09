@@ -121,7 +121,7 @@ const Chats = () => {
                                         .map((obj: any, i) => (
                                           <MiniChat channels={obj}></MiniChat>
                                         ))
-                                    : [<div className="w-full h-screen flex self-center debug">NO CHANNELS</div>]
+                                    : [<p> NO DIRECT</p>]
                                 }
                                 indicator={{
                                   className:
@@ -145,7 +145,7 @@ const Chats = () => {
                                         .map((obj: any, i) => (
                                           <MiniChat channels={obj}></MiniChat>
                                         ))
-                                    : [<div className="w-full h-full flex self-center">NO CHANNELS</div>]
+                                    : [<p> NO CHANNELS</p>]
                                 }
                                 indicator={{
                                   className:

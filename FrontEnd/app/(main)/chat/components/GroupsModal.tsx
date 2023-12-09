@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, Fragment } from "react";
-import { Background, MyInput, Submit } from "@/components";
+import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import {
   Modal,
@@ -19,6 +19,7 @@ import Image from "next/image";
 import groups from "../../../../public/groups.svg";
 import { setData, setFile } from "@/app/(main)/chat/data/api";
 import { mutate } from "swr";
+import { GroupsInput } from ".";
 
 export var setDataObj: Channel = {
   type: "PUBLIC",
@@ -184,18 +185,18 @@ export default function GroupsModal() {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <MyInput
+                            <GroupsInput
                               ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
@@ -206,18 +207,18 @@ export default function GroupsModal() {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <MyInput
+                            <GroupsInput
                               ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
@@ -228,30 +229,30 @@ export default function GroupsModal() {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 bg">
-                            <MyInput
+                            <GroupsInput
                               ref={nameRef}
                               text="Channel name"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
                               text="Channel Description"
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={passRef}
                               text="Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
-                            <MyInput
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={passConfRef}
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
-                            ></MyInput>
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
