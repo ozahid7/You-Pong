@@ -52,14 +52,19 @@ type user = {
     username: string;
     status: string;
 }
-
-export const friendsEndPoint = {
-    block: 'friend/block',
-}
-
-
 export type FriendArr = {
     accepted: user[];
     blocked: user[];
     pending: user[];
+};
+
+
+export interface searchUsers extends Array<user> {}
+
+
+export const friendsEndPoint = {
+    block: "friend/block",
+    accept: "friend/accept",
+    decline: "friend/decline",
+    search: 'friend/search'
 };

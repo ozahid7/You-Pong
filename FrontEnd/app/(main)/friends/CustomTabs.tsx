@@ -15,7 +15,6 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
     const user = useContext(MyContext);
     const {blocked, accepted, pending } = user.FriendData;
     const userQuery = useQuery("friends");
-    const queryClient = new QueryClient()
 
 
     const [index, setIndex] = useState(0);
@@ -73,7 +72,7 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
             />
         );
     };
-    if (userQuery.isFetching) return (<MiniLoader/>)
+    if (userQuery.isFetching) return (<MiniLoader customClass="h-[70%]"/>)
     else if (userQuery.isSuccess){
     return (
         <div className="w-full flex flex-col items-center h-[70%]">
@@ -106,7 +105,7 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                 </Tab.List>
                 <Tab.Panels className="mt-4  flex overflow-y-auto  my_scroll_green flex-grow w-[90%]">
                     <MyToolTip id="username" />
-                    <Tab.Panel className="h-[16%] md:h-[18%]  space-y-4 w-full">
+                    <Tab.Panel autoFocus={true}  className="h-[16%] md:h-[18%]  space-y-4 w-full">
                         {ListArr.map((e, index) => (
                             <FriendBanner
                                 key={index}
@@ -133,6 +132,7 @@ const CustomTabs = (props: { input: string, setInput: any }) => {
                                         : renderImage("/avatar.jpeg")
                                 }
                                 status={e.status}
+                                SetInvalidData={setInvalidData}
                             />
                         ))}
                     </Tab.Panel>

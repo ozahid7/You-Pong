@@ -71,6 +71,16 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         }
     }
 
+    const getFriends = async () => {
+        try{
+            const response = await useAxios<FriendArr>('get', endPoints.getFriend)
+            console.log('response = ', response)
+            setFriendData(response)
+        }catch(error){
+            console.log('error get Friends : ', error)
+        }
+    };
+
     useEffect(() => {
         if(!loged)
             getTfa()
@@ -88,17 +98,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         if(!loged && checked){
             redirect(myRoutes.root)
         }
+            
     }, [isLoged, checked])
-
-    const getFriends = async () => {
-        try{
-            const response = await useAxios<FriendArr>('get', endPoints.getFriend)
-            console.log('response = ', response)
-            setFriendData(response)
-        }catch(error){
-            console.log('error get Friends : ', error)
-        }
-    };
 
     const FriendsQuery = useQuery({
         queryKey: ["friends"],

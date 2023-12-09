@@ -1,11 +1,14 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
 import { MyContext } from "@/app/(main)/layout";
+import { useQuery } from "react-query";
+import { friendsEndPoint, searchUsers } from "@/types/Api";
+import { useAxios } from "@/utils";
 
 const obj = {
     name: "oussama zahid",
@@ -13,16 +16,35 @@ const obj = {
 const NavBar = () => {
     const user = useContext(MyContext);
     const { username, level, avatar } = user.userData;
+    const [friends, setFriends] = useState<searchUsers>()
     const isMorethan: boolean = username.length > 7 ? true : false;
     const childcustomClass = `${
         isMorethan ? "animate-marquee" : "animate-m"
     } whitespace-nowrap`;
 
+    const getUsers = async () => {
+        try {
+            const response = await useAxios<searchUsers>(
+                "get",
+                friendsEndPoint.search
+            );
+            console.log("searh response = ", response);
+            setFriends(response)
+        } catch (error) {
+            console.log("search error = ", error);
+        }
+    };
+
+    const searchQuery = useQuery({
+        queryKey: "search",
+        queryFn: getUsers,
+    });
+
     return (
         <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
             <div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
                 {/* input search */}
-                <SearchBar/>
+                <SearchBar FriendsList={friends}/>
 
                 <div className="p-2 border-2 border-white rounded-sm">
                     <LuBell className="text-white stroke-white h-5 w-5" />

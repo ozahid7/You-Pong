@@ -5,7 +5,7 @@ import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { FormEvent, useContext, useState } from "react";
 
 import {
@@ -16,13 +16,11 @@ import {
     LuSettings,
     LuLogOut,
 } from "react-icons/lu";
-import { useQuery, QueryClient } from "react-query";
-
-const queryClient = new QueryClient();
 
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();
+    const router = useRouter()
 
     const Elements = [
         <LuLayoutDashboard size="64" />,
@@ -34,11 +32,15 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
     const elm = Elements[index];
 
+    const goTo = () => {
+        router.push(link);
+    }
+
     return (
 
-        <Link href={link}>
+        <div onClick={goTo} >
             <div
-                className={`flex px-4 items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
+                className={`flex px-4 cursor-pointer items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
                     path === link
                         ? "bg-palette-green text-palette-orange  rounded-md"
                         : "text-white"
@@ -53,7 +55,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
                     {name}
                 </span>
             </div>
-        </Link>
+        </div>
     );
 };
 
