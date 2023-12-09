@@ -29,8 +29,6 @@ const Chats = () => {
   const fetchData = async () => {
     try {
       const result = await userChannels();
-      console.log(result);
-      
       return result;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -115,12 +113,15 @@ const Chats = () => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
-                                  channel &&
-                                  channel
-                                    .filter((obj: any) => obj.type === "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                  channel[0]
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type === "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : [<div className="w-full h-screen flex self-center debug">NO CHANNELS</div>]
                                 }
                                 indicator={{
                                   className:
@@ -136,12 +137,15 @@ const Chats = () => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
-                                  channel &&
-                                  channel
-                                    .filter((obj: any) => obj.type !== "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                  channel[0]
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type !== "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : [<div className="w-full h-full flex self-center">NO CHANNELS</div>]
                                 }
                                 indicator={{
                                   className:
@@ -163,30 +167,26 @@ const Chats = () => {
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
                     >
-                      {channel &&
-                        channel
-                          .filter((obj) => obj.type !== "DIRECT")
-                          .map((obj, i) => (
-                            <GroupsChat
-                              channels={obj}
-                              key={i}
-                            ></GroupsChat>
-                          ))}
+                      {channel[0]
+                        ? channel
+                            .filter((obj) => obj.type !== "DIRECT")
+                            .map((obj, i) => (
+                              <GroupsChat channels={obj} key={i}></GroupsChat>
+                            ))
+                        : ""}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {channel &&
-                        channel
-                          .filter((obj) => obj.type === "DIRECT")
-                          .map((obj, i) => (
-                            <Chat
-                              channels={obj}
-                              key={i}
-                            ></Chat>
-                          ))}
+                      {channel[0]
+                        ? channel
+                            .filter((obj) => obj.type === "DIRECT")
+                            .map((obj, i) => (
+                              <Chat channels={obj} key={i}></Chat>
+                            ))
+                        : ""}
                     </SwipeableTabs>
                   )}
                 </div>

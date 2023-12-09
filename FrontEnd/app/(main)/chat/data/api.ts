@@ -7,6 +7,7 @@ import { attachReactRefresh } from "next/dist/build/webpack-config";
 export const userChannels = async () => {
   try {
     const response = await axios.get("http://178.62.74.69:400/user/channels");
+    console.log(response.data);
     return response.data;
   } catch (error) {
     // Handle errors here
