@@ -13,7 +13,7 @@ const MiniChat = ({ channels }: HomeProps) => {
         radius="sm"
         color="default"
         className="flex w-[44px] h-[44px] "
-        src={`http://178.62.74.69:400/file/${channels.avatar}`}
+        src={channels.avatar}
       />
       <div className="w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block">
         <p className="text-[#424242] font-archivo font-[800] text-[19px]">

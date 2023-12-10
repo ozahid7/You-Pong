@@ -51,11 +51,11 @@ const ChatEdit = ({ channels }: HomePage) => {
     } catch (error) {
       console.error("Error creating object URL:", error);
       // Handle the error gracefully or provide a fallback URL
-      imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+      imageUrl = channels.avatar;
     }
   } else {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
-    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+    imageUrl = channels.avatar;
   }
   var result = undefined;
   const SendDataToLeader = async () => {
@@ -69,7 +69,7 @@ const ChatEdit = ({ channels }: HomePage) => {
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels.name);
-    imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+    imageUrl = channels.avatar;
     mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
     onClose();
   };

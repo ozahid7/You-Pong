@@ -45,9 +45,7 @@ const Chats = () => {
 
   if (!channel && isLoading)
     return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
-        LOADING
-      </div>
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">      </div>
     );
 
   function formatAMPM(date: any) {
@@ -113,14 +111,14 @@ const Chats = () => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
-                                  channel[0]
+                                  channel
                                     ? channel
-                                        .filter(
-                                          (obj: any) => obj.type === "DIRECT"
-                                        )
-                                        .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
-                                        ))
+                                      .filter(
+                                        (obj: any) => obj.type === "DIRECT"
+                                      )
+                                      .map((obj: any, i) => (
+                                        <MiniChat channels={obj}></MiniChat>
+                                      ))
                                     : [<p> NO DIRECT</p>]
                                 }
                                 indicator={{
@@ -137,14 +135,14 @@ const Chats = () => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
-                                  channel[0]
+                                  channel
                                     ? channel
-                                        .filter(
-                                          (obj: any) => obj.type !== "DIRECT"
-                                        )
-                                        .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
-                                        ))
+                                      .filter(
+                                        (obj: any) => obj.type !== "DIRECT"
+                                      )
+                                      .map((obj: any, i) => (
+                                        <MiniChat channels={obj}></MiniChat>
+                                      ))
                                     : [<p> NO CHANNELS</p>]
                                 }
                                 indicator={{
@@ -167,12 +165,12 @@ const Chats = () => {
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
                     >
-                      {channel[0]
+                      {channel
                         ? channel
-                            .filter((obj) => obj.type !== "DIRECT")
-                            .map((obj, i) => (
-                              <GroupsChat channels={obj} key={i}></GroupsChat>
-                            ))
+                          .filter((obj) => obj.type !== "DIRECT")
+                          .map((obj, i) => (
+                            <GroupsChat channels={obj} key={i}></GroupsChat>
+                          ))
                         : ""}
                     </SwipeableTabs>
                   ) : (
@@ -180,12 +178,12 @@ const Chats = () => {
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
                     >
-                      {channel[0]
+                      {channel
                         ? channel
-                            .filter((obj) => obj.type === "DIRECT")
-                            .map((obj, i) => (
-                              <Chat channels={obj} key={i}></Chat>
-                            ))
+                          .filter((obj) => obj.type === "DIRECT")
+                          .map((obj, i) => (
+                            <Chat channels={obj} key={i}></Chat>
+                          ))
                         : ""}
                     </SwipeableTabs>
                   )}

@@ -6,8 +6,7 @@ import { attachReactRefresh } from "next/dist/build/webpack-config";
 
 export const userChannels = async () => {
   try {
-    const response = await axios.get("http://178.62.74.69:400/user/channels");
-    console.log(response.data);
+    const response = await axios.get("http://localhost:4000/user/channels");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -16,10 +15,10 @@ export const userChannels = async () => {
   }
 };
 
-// http://178.62.74.69:400/chat/channel/join/name
+// http://localhost:4000/chat/channel/join/name
 export const joinChannel = async(name : string) => {
   try {
-    const response = await axios.put(`http://178.62.74.69:400/chat/channel/join/${name}`);
+    const response = await axios.put(`http://localhost:4000/chat/channel/join/${name}`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -30,7 +29,7 @@ export const joinChannel = async(name : string) => {
 
 export const leaveChannel = async(name : string) => {
   try {
-    const response = await axios.put(`http://178.62.74.69:400/chat/channel/leave/${name}`);
+    const response = await axios.put(`http://localhost:4000/chat/channel/leave/${name}`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -41,9 +40,7 @@ export const leaveChannel = async(name : string) => {
 
 export const getChannels = async () => {
   try {
-    const response = await axios.get("http://178.62.74.69:400/chat/channel");
-    console.log(response.data);
-    
+    const response = await axios.get("http://localhost:4000/chat/channel");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -63,7 +60,7 @@ export const setData = async (data: Channel) => {
     };
 
     const response = await axios.post(
-      "http://178.62.74.69:400/chat/channel",
+      "http://localhost:4000/chat/channel",
       obj
     );
     return response.data;
@@ -85,7 +82,7 @@ export const putData = async (data : Channel, name: string) => {
     };
 
     const response = await axios.put(
-      `http://178.62.74.69:400/chat/channel/${name}`,
+      `http://localhost:4000/chat/channel/${name}`,
       obj
     );
     return response.data;
@@ -102,7 +99,7 @@ export const setFile = async (file: File | null) => {
     formData.append("avatar", file);
 
     const response = await axios.post(
-      "http://178.62.74.69:400/upload",
+      "http://localhost:4000/upload",
       formData,
       {
         headers: {
@@ -121,7 +118,7 @@ export const setFile = async (file: File | null) => {
 export const getFile = async (pathname: string) => {
   try {
     const response = await axios.get(
-      `http://178.62.74.69:400/file/${pathname}`
+      `http://localhost:4000/file/${pathname}`
     );
 
     return response.data;
@@ -134,7 +131,7 @@ export const getFile = async (pathname: string) => {
 
 export const getMembers = async () => {
   try {
-    const response = await axios.get("http://178.62.74.69:400/user");
+    const response = await axios.get("http://localhost:4000/user");
     return response.data;
   } catch (error) {
     // Handle errors here

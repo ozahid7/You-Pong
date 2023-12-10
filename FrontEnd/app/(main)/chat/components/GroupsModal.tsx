@@ -39,7 +39,7 @@ export default function GroupsModal() {
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
-  var object: { object: any; message: string };
+  var   object: { object: any; message: string };
 
   let imageUrl: any;
 

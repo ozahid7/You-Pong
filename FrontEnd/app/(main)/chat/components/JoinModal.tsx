@@ -50,8 +50,6 @@ export default function JoinModal() {
   const fetchData = async () => {
     try {
       const result = await getChannels();
-      console.log(result);
-
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -143,7 +141,7 @@ export default function JoinModal() {
                               <TableRow key={i}>
                                 <TableCell>
                                   <Image
-                                    src={`http://178.62.74.69:400/file/${obj.avatar}`}
+                                    src={`http://localhost:4000/file/${obj.avatar}`}
                                     width={50}
                                     height={50}
                                     className="border-[2px] border-palette-green p-[0.5]"
