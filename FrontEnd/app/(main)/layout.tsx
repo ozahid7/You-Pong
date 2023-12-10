@@ -2,136 +2,190 @@
 import { SideBar, NavBar, MobileSideBar, TwoFactor } from "@/components";
 import "../globals.css";
 import "../input.css";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { myRoutes } from "@/const";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 import { useQuery } from "react-query";
 import { useAxios } from "@/utils";
-import { FriendArr, endPoints, tfaSwitch, userData, userInfo } from "@/types/Api";
+import {
+    FriendArr,
+    endPoints,
+    tfaSwitch,
+    userData,
+    userInfo,
+    userToShow,
+} from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
-import { QueryClient } from "@tanstack/react-query";
 
 interface myContextProps {
     userData: userInfo;
     isLoged: boolean;
-    FriendData: FriendArr
+    FriendData: FriendArr;
+    usertoshow: userToShow;
 }
 
-
-export  const MyContext = createContext<myContextProps | undefined>(undefined);
-
-
+export const MyContext = createContext<myContextProps | undefined>(undefined);
 
 function RootLayout({ children }: { children: React.ReactNode }) {
-    let    loged: boolean = false;
-    const queryClient = new  QueryClient()
+    let loged: boolean = false;
     if (typeof window !== "undefined") {
-       loged = localStorage.getItem("isLoged") === 'true' ? true : false;
+        loged = localStorage.getItem("isLoged") === "true" ? true : false;
     }
 
     const [checked, setchecked] = useState(false);
     const [tfaVerified, setTfaVerified] = useState(false);
-    const [isLoged, setIsLoged] = useState(false)
-    const [userData, setUserData] = useState(undefined)
-    const [tfaStatus, setTfaStatus] = useState(false)
-    const [FriendData, setFriendData] = useState(undefined)
+    const [isLoged, setIsLoged] = useState(false);
+    const [userData, setUserData] = useState(undefined);
+    const [usertoshow, setUserToshow] = useState(undefined);
+    const [tfaStatus, setTfaStatus] = useState(false);
+    const [FriendData, setFriendData] = useState(undefined);
+    const [activateGetuser, setActivateGetuser] = useState(false)
+    const path = usePathname();
+    console.log("path = ", path);
 
-    const getUser = async () => {
+    const getHero = async () => {
+        setUserToshow(undefined);
         try {
-            const response = await useAxios<userData>("get", endPoints.getuser);
-            setUserData(response.userInfo)
+            const response = await useAxios<userData>("get", endPoints.gethero);
+            console.log("hero response = ", response.userInfo);
+            setUserData(response.userInfo);
             setTfaStatus(response.userInfo.tfaStatus);
             if (typeof window !== "undefined") {
-                localStorage.setItem("isLoged", 'true')
-                localStorage.getItem("isLoged") === "true" ? setIsLoged(true) : setIsLoged(false);
+                localStorage.setItem("isLoged", "true");
+                localStorage.getItem("isLoged") === "true"
+                    ? setIsLoged(true)
+                    : setIsLoged(false);
             }
         } catch (error) {
-            setchecked(true)
+            setchecked(true);
             localStorage.removeItem("isLoged");
-            console.log("error = :", error);
-            redirect(myRoutes.root)
+            console.log("get hero error = :", error);
+            redirect(myRoutes.root);
+        }
+        return null;
+    };
+
+    const getUser = async () => {
+
+        if (path !== "/user/profile") {
+            const user = path.replace("/user/", "");
+            console.log("user = ", user);
+            try {
+                const response = await useAxios<userToShow>(
+                    "post",
+                    endPoints.getuser,
+                    { friend: user }
+                );
+                console.log("get user response = ", response);
+                setUserToshow(response);
+                setActivateGetuser(false)
+            } catch (error) {
+                setActivateGetuser(false)
+                console.log("get user error = :", error);
+            }
         }
         return null;
     };
 
     const getTfa = async () => {
-        try{
+        try {
             const response = await useAxios<tfaSwitch>(
                 "get",
-                endPoints.getTfaStatus,
+                endPoints.getTfaStatus
             );
-            if(response === false)
-                setTfaVerified(true)
-            console.log(response)
-            setTfaStatus(response)
-        }catch(error){
-            setTfaVerified(true)
-            console.log('error : ', error)
+            if (response === false) setTfaVerified(true);
+            console.log(response);
+            setTfaStatus(response);
+        } catch (error) {
+            setTfaVerified(true);
+            console.log("error : ", error);
         }
-    }
+    };
 
     const getFriends = async () => {
-        try{
-            const response = await useAxios<FriendArr>('get', endPoints.getFriend)
-            console.log('response = ', response)
-            setFriendData(response)
-        }catch(error){
-            console.log('error get Friends : ', error)
+        try {
+            const response = await useAxios<FriendArr>(
+                "get",
+                endPoints.getFriend
+            );
+            console.log("response = ", response);
+            setFriendData(response);
+        } catch (error) {
+            console.log("error get Friends : ", error);
         }
     };
 
     useEffect(() => {
-        if(!loged)
-            getTfa()
-        else
-            setTfaVerified(true)
-    }, [])
+        if (!loged) getTfa();
+        else setTfaVerified(true);
+    }, []);
 
-    const UserQuery = useQuery({
+    const heroQuery = useQuery({
         queryKey: ["user"],
-        queryFn:  getUser,
-        enabled: tfaVerified
+        queryFn: getHero,
+        enabled: tfaVerified,
+    });
+
+    useEffect(() => {
+        userQuery.refetch()
+        heroQuery.refetch()
+    }, [path])
+
+    const userQuery = useQuery({
+        queryKey: ["otheruser"],
+        queryFn: getUser,
+        enabled:
+            isLoged &&
+            path !== "/user/profile" &&
+            path !== "/friends" &&
+            path !== "settings" &&
+            path !== "/chat",
     });
 
     useLayoutEffect(() => {
-        if(!loged && checked){
-            redirect(myRoutes.root)
+        if (!loged && checked) {
+            redirect(myRoutes.root);
         }
-            
-    }, [isLoged, checked])
+    }, [isLoged, checked]);
 
     const FriendsQuery = useQuery({
         queryKey: ["friends"],
         queryFn: getFriends,
-        enabled: isLoged
+        enabled: isLoged,
     });
 
-    if(tfaStatus && !tfaVerified && !loged ) return (
-        <TwoFactor
-            isEnabled={true}
-            isOpen={true}
-            closemodal={() => {}}
-            setValid={setTfaVerified}
-            setIsLoged={setIsLoged}
-        />
-    );
-
-    else if (UserQuery.isLoading || FriendsQuery.isLoading) return (<Loader/>)
-
-    else if (UserQuery.isSuccess && isLoged && loged && tfaVerified)
-    return (
-        <MyContext.Provider value={{ userData, isLoged, FriendData }}>
-            <main className="flex h-screen w-full background">
-                <SideBar />
-                <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
-                    <NavBar />
-                    {children}
-                    <MobileSideBar />
+    if (tfaStatus && !tfaVerified && !loged)
+        return (
+            <TwoFactor
+                isEnabled={true}
+                isOpen={true}
+                closemodal={() => {}}
+                setValid={setTfaVerified}
+                setIsLoged={setIsLoged}
+            />
+        );
+    else if (
+        heroQuery.isLoading ||
+        FriendsQuery.isLoading ||
+        userQuery.isLoading
+    )
+        return <Loader />;
+    else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
+        return (
+            <MyContext.Provider
+                value={{ userData, isLoged, FriendData, usertoshow}}
+            >
+                <main className="flex h-screen w-full background">
+                    <SideBar />
+                    <main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
+                        <NavBar />
+                        {children}
+                        <MobileSideBar />
+                    </main>
                 </main>
-            </main>
-        </MyContext.Provider>
-    );
+            </MyContext.Provider>
+        );
 }
 
 export default UseQueryProvider(RootLayout);

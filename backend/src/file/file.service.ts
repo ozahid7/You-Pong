@@ -11,6 +11,9 @@ export class FileService {
     if (filename == 'groups.png') {
       pathname = `./DefaultImages/groups.png`;
     }
+    if (filename == 'avatar.jpeg') {
+      pathname = `./DefaultImages/avatar.jpeg`;
+    }
     res.setHeader('Content-Disposition', `attachement; filename=${pathname}`);
     res.setHeader('Content-Type', 'Application/octet-stream');
     if (!existsSync(pathname)) {

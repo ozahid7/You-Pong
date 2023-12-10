@@ -4,6 +4,7 @@ import React from "react";
 
 import { CustomButton, MyContainer } from "@/components";
 import Link from "next/link";
+import { myRoutes } from "@/const";
 
 const NotFound = () => {
     return (
@@ -22,7 +23,7 @@ const NotFound = () => {
                         </span>
                         <div className="w-[70%] lg:w-full h-[30%] pt-2  h:mt-8 make_center">
                             <Link
-                                href="/dashboard"
+                                href={myRoutes.dashboard}
                                 className="w-full min flex justify-center h-[45px] sm:h-[80px]"
                             >
                                 <CustomButton

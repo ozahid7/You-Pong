@@ -45,7 +45,7 @@ You will provide a nice user interface, a chat, and real-time multiplayer online
 
 export const myRoutes = {
     root: '/',
-    dashboard: '/dashboard',
+    dashboard: '/user/profile',
     settings: '/settings',
     friends: '/friends',
     chat: '/chat'

@@ -4,26 +4,28 @@ import { MiniBanner, MyCard } from "@/components";
 import React, { useContext, useState } from "react";
 import { ImUserMinus, ImUserPlus } from "react-icons/im";
 import { MdOutlineSettings } from "react-icons/md";
-import { MyContext } from "../layout";
-import { userData,  } from "@/types/Api";
+import { MyContext } from "../../layout";
+import { userData } from "@/types/Api";
 
 interface PlayerInfoProps {
     userName: string;
 }
 
 const PlayerCard = ({ userName }: PlayerInfoProps) => {
+    const user = useContext(MyContext);
+    const username = user.usertoshow === undefined ? user.userData.username : user.usertoshow.username
+    const level = user.usertoshow === undefined ? user.userData.level : user.usertoshow.level
+    const rank = user.usertoshow === undefined ? user.userData.rank : user.usertoshow.rank
+    const avatar = user.usertoshow === undefined ? user.userData.avatar : user.usertoshow.avatar
 
-     const user = useContext(MyContext);
-     const {username, rank, level, avatar} = user.userData;
 
     let [Icon, setIcon] = useState(false);
-    const [isFriend, setIsFriend] = useState(false);
-    const isOnline = false;
+    const isOnline = true;
     let name = username.replace(/[^a-zA-Z]/g, "");
-    
-    name = username.length > 7 ? name.slice(0, 3) +
-              "-" +
-              username.slice(username.length - 3)
+
+    name =
+        username.length > 7
+            ? name.slice(0, 3) + "-" + username.slice(username.length - 3)
             : username;
 
     const hideIcon = () => {
@@ -41,7 +43,7 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                         <div className="w-[80%] pt-4 md:pt-2 h-[90%] md:w-[60%] md:pb-[60%] xl:w-[80%] xl:h-[80%] relative">
                             <img
                                 className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-                                src={avatar || '/avatar.avif'}
+                                src={avatar || "/avatar.avif"}
                                 alt="avatar"
                             />
                         </div>
@@ -51,7 +53,8 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                             size={120}
                             className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                         />
-                        {Icon ? (
+                        
+                        { user.usertoshow && (Icon ? (
                             <ImUserMinus
                                 onClick={hideIcon}
                                 size={120}
@@ -63,7 +66,7 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                                 size={120}
                                 className="z-10 h-[14%] w-[14%] absolute h:bottom-6 h:right-2 bottom-4 right-1  text-cardtitle cursor-pointer"
                             />
-                        )}
+                        ))} 
                         <div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
                             <div className=" w-full space-x-1  flex">
                                 <h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
@@ -95,7 +98,7 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
 
                                 <MiniBanner
                                     isGreen={false}
-                                    value={rank || '0'}
+                                    value={rank.toString()}
                                     name="Rank"
                                 />
                             </div>

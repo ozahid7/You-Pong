@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { searchUsers } from "@/types/Api";
+import Link from "next/link";
 
 
 const SearchBar = (props : { FriendsList: searchUsers }) => {
@@ -52,7 +53,7 @@ const SearchBar = (props : { FriendsList: searchUsers }) => {
                                 key={index}
                                 value={person}
                             >
-                                <div className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]">
+                                <Link href={"/user/" + person.username} className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]">
                                     <img
                                         src={person.avatar}
                                         alt="logo"
@@ -64,7 +65,7 @@ const SearchBar = (props : { FriendsList: searchUsers }) => {
                                               "..."
                                             : person.username}
                                     </span>
-                                </div>
+                                </Link>
                             </Combobox.Option>
                         ))}
                     </Combobox.Options>

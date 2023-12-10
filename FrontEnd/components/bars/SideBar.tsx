@@ -16,11 +16,14 @@ import {
     LuSettings,
     LuLogOut,
 } from "react-icons/lu";
-
+import { QueryClient, useQuery } from "react-query";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();
-    const router = useRouter()
+    const router = useRouter();
+    const heroQuery = useQuery("user");
+    const otheruser = useQuery("otheruser");
+    const client = new QueryClient()
 
     const Elements = [
         <LuLayoutDashboard size="64" />,
@@ -34,11 +37,10 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
     const goTo = () => {
         router.push(link);
-    }
+    };
 
     return (
-
-        <div onClick={goTo} >
+        <div onClick={goTo}>
             <div
                 className={`flex px-4 cursor-pointer items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
                     path === link
@@ -67,18 +69,17 @@ const SideBar = () => {
     const handleLogout = async () => {
         const apiUrl = `${apiHost}user/signout`;
 
-            // await new Promise((resolve) => setTimeout(resolve, 1000));
-            await axios
-                .get(apiUrl, {withCredentials: true} )
-                .then((response) => {
-                    console.log("data posted successfuly : ");
-                    localStorage.removeItem("isLoged");
-                    router.push("/");
-                })
-                .catch((e) => {
-                    console.log(".catch error", e);
-                });
-       
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        await axios
+            .get(apiUrl, { withCredentials: true })
+            .then((response) => {
+                console.log("data posted successfuly : ");
+                localStorage.removeItem("isLoged");
+                router.push("/");
+            })
+            .catch((e) => {
+                console.log(".catch error", e);
+            });
     };
 
     return (
@@ -125,13 +126,15 @@ const SideBar = () => {
                         <div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
                             <img
                                 className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
-                                src={avatar || "avatar.avif"}
+                                src={avatar}
                                 alt=""
                                 width={100}
                                 height={100}
                             />
                             <p className="text-gray-500 break-all text-center hidden 2xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
-                                {username.length > 10 ?  username.slice(0, 8) + "...": username}
+                                {username.length > 10
+                                    ? username.slice(0, 8) + "..."
+                                    : username}
                             </p>
                         </div>
                     </Link>

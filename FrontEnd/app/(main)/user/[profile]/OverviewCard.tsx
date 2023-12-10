@@ -1,13 +1,14 @@
-'use client'
+"use client";
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
-import { MyContext } from "../layout";
+import { MyContext } from "../../layout";
 
 const OverviewCard = () => {
     const user = useContext(MyContext);
-    const { wins, loses } = user.userData;
-    
+    const wins = user.usertoshow === undefined ? user.userData.wins : user.usertoshow.wins
+    const loses = user.usertoshow === undefined ? user.userData.loses : user.usertoshow.losts
+
     let result: number;
 
     result = wins + loses != 0 ? Math.round((wins * 100) / (wins + loses)) : 50;

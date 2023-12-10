@@ -1,8 +1,8 @@
-'use client'
+"use client";
 import { Acheivement, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
-import { MyContext } from "../layout";
+import { MyContext } from "../../layout";
 
 interface Achievement {
     title: string;
@@ -37,7 +37,8 @@ const AchievementCard = () => {
                                 isOpened={e.isOwned ? true : false}
                                 text={e.title}
                                 description={e.description}
-                                key={index}                           />
+                                key={index}
+                            />
                         ))}
                     </div>
                 </div>

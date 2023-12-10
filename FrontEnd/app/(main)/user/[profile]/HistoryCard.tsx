@@ -1,14 +1,14 @@
-'use client'
+"use client";
 import { Banner, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
-import { MyContext } from "../layout";
+import { MyContext } from "../../layout";
 
 interface match {
     avatar: string;
     user: string;
-    wins: string | '0';
-    loses: string | '0';
+    wins: string | "0";
+    loses: string | "0";
 }
 
 const matchList: match[] = [
@@ -42,8 +42,7 @@ const matchList: match[] = [
         wins: "9",
         loses: "7",
     },
-    
-]
+];
 
 const HistoryCard = () => {
     const user = useContext(MyContext);
@@ -66,7 +65,11 @@ const HistoryCard = () => {
                         place={"top"}
                     />
                     <div className="w-full xl:h-[90%] h:h-[84%] h-[88%] items-center relative flex justify-center overflow-auto my_scroll_green mb-2">
-                        { matchList.length < 1 && <span className="absolute font-audio text-xl text-cardtitle">No match yet</span>}
+                        {matchList.length < 1 && (
+                            <span className="absolute font-audio text-xl text-cardtitle">
+                                No match yet
+                            </span>
+                        )}
                         <div className=" flex w-[90%] min-w-[180px] h-[100%] flex-col items-center space-y-10">
                             {matchList.map((e, index) => (
                                 <Banner

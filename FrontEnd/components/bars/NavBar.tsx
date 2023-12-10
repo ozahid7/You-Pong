@@ -12,11 +12,11 @@ import { useAxios } from "@/utils";
 
 const obj = {
     name: "oussama zahid",
-}
+};
 const NavBar = () => {
     const user = useContext(MyContext);
     const { username, level, avatar } = user.userData;
-    const [friends, setFriends] = useState<searchUsers>()
+    const [friends, setFriends] = useState<searchUsers>();
     const isMorethan: boolean = username.length > 7 ? true : false;
     const childcustomClass = `${
         isMorethan ? "animate-marquee" : "animate-m"
@@ -29,7 +29,7 @@ const NavBar = () => {
                 friendsEndPoint.search
             );
             console.log("searh response = ", response);
-            setFriends(response)
+            setFriends(response);
         } catch (error) {
             console.log("search error = ", error);
         }
@@ -44,14 +44,14 @@ const NavBar = () => {
         <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
             <div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
                 {/* input search */}
-                <SearchBar FriendsList={friends}/>
+                <SearchBar FriendsList={friends} />
 
                 <div className="p-2 border-2 border-white rounded-sm">
                     <LuBell className="text-white stroke-white h-5 w-5" />
                 </div>
                 <img
                     className="border-2 hidden s:flex border-white rounded-sm object-contain"
-                    src={avatar || 'avatar.avif'}
+                    src={avatar}
                     alt=""
                     width={44}
                     height={44}

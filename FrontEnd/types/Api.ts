@@ -21,15 +21,27 @@ export type userInfo = {
     history: [{}];
     level: number;
     loses: number;
-    rank: string;
+    rank: number;
     tfaStatus: boolean;
     username: string;
     wins: number;
     avatar: string;
     isIntra: boolean;
 };
+
 export type userData = {
     userInfo: userInfo;
+};
+
+export type userToShow = {
+    avatar: string;
+    username: string;
+    level: number;
+    rank: number;
+    wins: number;
+    losts: number;
+    status: string;
+    isIntra: boolean;
 };
 
 //EndPoints
@@ -40,31 +52,31 @@ export const endPoints = {
     tfaSendCode: "auth/twoFactorAuth",
     userTfaSendCode: "user/tfa/switch",
     tfaSwitch: "user/twoFactorAuth",
-    getuser: "user/GetHero",
+    gethero: "user/GetHero",
+    getuser: "user/findUser",
     getFriend: "friend/sort",
-    getFile: 'upload',
-    updateInfo: 'update'
+    getFile: "upload",
+    updateInfo: "update",
 };
 
 //friends
-type user = {
+export type user = {
     avatar: string;
     username: string;
     status: string;
-}
+};
 export type FriendArr = {
     accepted: user[];
     blocked: user[];
     pending: user[];
 };
 
-
 export interface searchUsers extends Array<user> {}
-
 
 export const friendsEndPoint = {
     block: "friend/block",
     accept: "friend/accept",
     decline: "friend/decline",
-    search: 'friend/search'
+    search: "friend/search",
+    remove: "friend/remove",
 };
