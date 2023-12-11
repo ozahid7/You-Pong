@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
 import { MyContext } from "@/app/(main)/layout";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
 
@@ -33,10 +33,11 @@ const NavBar = () => {
         } catch (error) {
             console.log("search error = ", error);
         }
+        return null
     };
 
     const searchQuery = useQuery({
-        queryKey: "search",
+        queryKey: ["search"],
         queryFn: getUsers,
     });
 

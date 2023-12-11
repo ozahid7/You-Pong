@@ -8,7 +8,7 @@ import { baseURL, useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
 import axios from "axios";
 import { setFile } from "../chat/data/api";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 
 interface ProfileSettingsProps {
@@ -19,7 +19,7 @@ interface ProfileSettingsProps {
 const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     const user = useContext(MyContext);
     const { username, avatar, isIntra } = user.userData;
-    const userQuery = useQuery("user");
+    const userQuery = useQuery({queryKey: ['user']});
     const queryClient = useQueryClient();
 
     const [userName, setUserName] = useState("");
@@ -70,7 +70,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                     endPoints.updateInfo,
                     toSend
                 );
-                queryClient.invalidateQueries("user");
+                queryClient.invalidateQueries({queryKey: ['user']});
             } catch (error) {
                 console.log("error = ", error);
             }

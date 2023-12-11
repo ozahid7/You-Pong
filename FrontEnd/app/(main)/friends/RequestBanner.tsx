@@ -6,7 +6,7 @@ import { FaUserCheck } from "react-icons/fa";
 import { FaUserTimes } from "react-icons/fa";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 
 const RequestBanner = (props: {
@@ -32,7 +32,6 @@ const RequestBanner = (props: {
 
     const blockMutaion = useMutation({
         mutationFn: blockUser,
-        mutationKey: "block",
     });
 
     const acceptUser = async () => {
@@ -48,7 +47,6 @@ const RequestBanner = (props: {
     };
 
     const acceptMutation = useMutation({
-        mutationKey: "accept",
         mutationFn: acceptUser,
     });
 
@@ -65,7 +63,6 @@ const RequestBanner = (props: {
     };
 
     const declineMutation = useMutation({
-        mutationKey: "decline",
         mutationFn: declineUser,
     });
 
@@ -77,7 +74,7 @@ const RequestBanner = (props: {
         declineMutation.mutate();
     };
 
-    if (declineMutation.isLoading || acceptMutation.isLoading || blockMutaion.isLoading)
+    if (declineMutation.isPending || acceptMutation.isPending || blockMutaion.isPending)
         return <MiniLoader customClass="m-auto" />;
     return (
         <div

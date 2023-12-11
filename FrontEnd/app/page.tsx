@@ -1,17 +1,13 @@
 "use client";
 import {
     CustomButton,
-    MyContainer,
-    TwoFactor,
     SignIn,
     SignUp,
 } from "@/components";
-import Image from "next/image";
 import "./globals.css";
 import { landing_page_description, myRoutes } from "@/const";
-import { useEffect, useLayoutEffect, useState } from "react";
+import {  useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import UseQueryProvider from "@/providers/UseQueryProvider";
 
 function Home() {
     const [valid, setValid] = useState(false)

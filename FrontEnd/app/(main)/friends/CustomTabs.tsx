@@ -5,15 +5,17 @@ import FriendBanner from "./FriendBanner";
 import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
-import { MyContext } from "../layout";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { QueryClient } from "react-query";
+import { friendContext } from "./page";
 
 const CustomTabs = (props: { input: string; setInput: any }) => {
-    const user = useContext(MyContext);
-    const { blocked, accepted, pending } = user.FriendData;
-    const userQuery = useQuery("friends");
+    const friends = useContext(friendContext)?.friendsData;
+    const accepted = friends?.accepted
+    const pending = friends?.pending
+    const blocked = friends?.blocked
+    
+    const FriendsQuery = useQuery({ queryKey: ["friends"] });
 
     const [index, setIndex] = useState(0);
     const [ListArr, setListArr] = useState(accepted);
@@ -23,7 +25,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
 
     useEffect(() => {
         if (InvalidData) {
-            userQuery.refetch();
+            FriendsQuery.refetch();
         }
         setInvalidData(false);
     }, [InvalidData]);
@@ -36,21 +38,21 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
 
     useEffect(() => {
         setListArr(
-            accepted.filter((friend) =>
+            accepted?.filter((friend) =>
                 friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
         );
         setRequestArr(
-            pending.filter((friend) =>
+            pending?.filter((friend) =>
                 friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
         );
         setBlockArr(
-            blocked.filter((friend) =>
+            blocked?.filter((friend) =>
                 friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
@@ -67,8 +69,8 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
             />
         );
     };
-    if (userQuery.isFetching) return <MiniLoader customClass="h-[70%]" />;
-    else if (userQuery.isSuccess) {
+    if (FriendsQuery.isLoading) return <MiniLoader customClass="h-[70%]" />;
+    else {
         return (
             <div className="w-full flex flex-col items-center h-[70%]">
                 <Tab.Group
@@ -104,7 +106,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                             autoFocus
                             className="h-[16%] md:h-[18%]  space-y-4 w-full"
                         >
-                            {ListArr.map((e, index) => (
+                            {ListArr?.map((e, index) => (
                                 <FriendBanner
                                     key={index}
                                     userName={e.username}
@@ -116,7 +118,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                         </Tab.Panel>
                         {/* Displays this panel by default */}
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {RequestArr.map((e, index) => (
+                            {RequestArr?.map((e, index) => (
                                 <RequestBanner
                                     key={index}
                                     userName={e.username}
@@ -128,7 +130,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                         </Tab.Panel>
 
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {BlockArr.map((e, index) => (
+                            {BlockArr?.map((e, index) => (
                                 <BlockedBanner
                                     key={index}
                                     userName={e.username}

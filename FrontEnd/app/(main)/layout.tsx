@@ -5,7 +5,7 @@ import "../input.css";
 import { redirect, usePathname } from "next/navigation";
 import { myRoutes } from "@/const";
 import UseQueryProvider from "@/providers/UseQueryProvider";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import {
     FriendArr,
@@ -21,31 +21,27 @@ import Loader from "@/components/tools/Loader";
 interface myContextProps {
     userData: userInfo;
     isLoged: boolean;
-    FriendData: FriendArr;
-    usertoshow: userToShow;
+}
+
+interface lyoutProps {
+    children: React.ReactNode
 }
 
 export const MyContext = createContext<myContextProps | undefined>(undefined);
 
-function RootLayout({ children }: { children: React.ReactNode }) {
+function RootLayout({children}: lyoutProps) {
     let loged: boolean = false;
     if (typeof window !== "undefined") {
         loged = localStorage.getItem("isLoged") === "true" ? true : false;
     }
-
     const [checked, setchecked] = useState(false);
     const [tfaVerified, setTfaVerified] = useState(false);
     const [isLoged, setIsLoged] = useState(false);
     const [userData, setUserData] = useState(undefined);
-    const [usertoshow, setUserToshow] = useState(undefined);
     const [tfaStatus, setTfaStatus] = useState(false);
-    const [FriendData, setFriendData] = useState(undefined);
-    const [activateGetuser, setActivateGetuser] = useState(false)
-    const path = usePathname();
-    console.log("path = ", path);
+
 
     const getHero = async () => {
-        setUserToshow(undefined);
         try {
             const response = await useAxios<userData>("get", endPoints.gethero);
             console.log("hero response = ", response.userInfo);
@@ -66,28 +62,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         return null;
     };
 
-    const getUser = async () => {
-
-        if (path !== "/user/profile") {
-            const user = path.replace("/user/", "");
-            console.log("user = ", user);
-            try {
-                const response = await useAxios<userToShow>(
-                    "post",
-                    endPoints.getuser,
-                    { friend: user }
-                );
-                console.log("get user response = ", response);
-                setUserToshow(response);
-                setActivateGetuser(false)
-            } catch (error) {
-                setActivateGetuser(false)
-                console.log("get user error = :", error);
-            }
-        }
-        return null;
-    };
-
     const getTfa = async () => {
         try {
             const response = await useAxios<tfaSwitch>(
@@ -101,21 +75,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             setTfaVerified(true);
             console.log("error : ", error);
         }
+        return null
     };
 
-    const getFriends = async () => {
-        try {
-            const response = await useAxios<FriendArr>(
-                "get",
-                endPoints.getFriend
-            );
-            console.log("response = ", response);
-            setFriendData(response);
-        } catch (error) {
-            console.log("error get Friends : ", error);
-        }
-    };
-
+    
     useEffect(() => {
         if (!loged) getTfa();
         else setTfaVerified(true);
@@ -127,21 +90,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         enabled: tfaVerified,
     });
 
-    useEffect(() => {
-        userQuery.refetch()
-        heroQuery.refetch()
-    }, [path])
-
-    const userQuery = useQuery({
-        queryKey: ["otheruser"],
-        queryFn: getUser,
-        enabled:
-            isLoged &&
-            path !== "/user/profile" &&
-            path !== "/friends" &&
-            path !== "settings" &&
-            path !== "/chat",
-    });
 
     useLayoutEffect(() => {
         if (!loged && checked) {
@@ -149,11 +97,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         }
     }, [isLoged, checked]);
 
-    const FriendsQuery = useQuery({
-        queryKey: ["friends"],
-        queryFn: getFriends,
-        enabled: isLoged,
-    });
+    
 
     if (tfaStatus && !tfaVerified && !loged)
         return (
@@ -166,15 +110,13 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             />
         );
     else if (
-        heroQuery.isLoading ||
-        FriendsQuery.isLoading ||
-        userQuery.isLoading
+        heroQuery.isLoading
     )
         return <Loader />;
     else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
         return (
             <MyContext.Provider
-                value={{ userData, isLoged, FriendData, usertoshow}}
+                value={{ userData, isLoged}}
             >
                 <main className="flex h-screen w-full background">
                     <SideBar />

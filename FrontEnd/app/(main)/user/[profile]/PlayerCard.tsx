@@ -5,18 +5,23 @@ import React, { useContext, useState } from "react";
 import { ImUserMinus, ImUserPlus } from "react-icons/im";
 import { MdOutlineSettings } from "react-icons/md";
 import { MyContext } from "../../layout";
-import { userData } from "@/types/Api";
+import { otherUserContext } from "./page";
 
-interface PlayerInfoProps {
-    userName: string;
-}
 
-const PlayerCard = ({ userName }: PlayerInfoProps) => {
+const PlayerCard = () => {
     const user = useContext(MyContext);
-    const username = user.usertoshow === undefined ? user.userData.username : user.usertoshow.username
-    const level = user.usertoshow === undefined ? user.userData.level : user.usertoshow.level
-    const rank = user.usertoshow === undefined ? user.userData.rank : user.usertoshow.rank
-    const avatar = user.usertoshow === undefined ? user.userData.avatar : user.usertoshow.avatar
+    const otheruser = useContext(otherUserContext)?.otherUser;
+    let username = user.userData.username
+    let level = user.userData.level
+    let rank = user.userData.rank 
+    let avatar = user.userData.avatar 
+
+    if (otheruser !== undefined){
+        username = otheruser.username
+        level = otheruser.level
+        rank = otheruser.rank
+        avatar = otheruser.avatar
+    }
 
 
     let [Icon, setIcon] = useState(false);
@@ -54,7 +59,7 @@ const PlayerCard = ({ userName }: PlayerInfoProps) => {
                             className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                         />
                         
-                        { user.usertoshow && (Icon ? (
+                        { otheruser && (Icon ? (
                             <ImUserMinus
                                 onClick={hideIcon}
                                 size={120}

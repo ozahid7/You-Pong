@@ -6,7 +6,7 @@ import { useAxios } from "@/utils";
 import { redirect, useRouter } from "next/navigation";
 import { endPoints, tfaSendCodeData } from "@/types/Api";
 import { myRoutes } from "@/const";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TwoFactorProps {
     isOpen: boolean;
@@ -102,7 +102,7 @@ const TwoFactor = ({
                     setIsLoged(true);
                     router.replace(myRoutes.dashboard);
                 } else {
-                    queryClient.invalidateQueries("user");
+                    queryClient.invalidateQueries({queryKey: ["user"]});
                     setValue({
                         input1: "",
                         input2: "",

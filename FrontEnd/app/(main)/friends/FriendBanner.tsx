@@ -4,10 +4,9 @@ import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useDebugValue, useEffect, useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { MyContext } from "../layout";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
-import { QueryClient } from "react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 
 const FriendBanner = (props: {
@@ -33,11 +32,10 @@ const FriendBanner = (props: {
 
     const blockMutaion = useMutation({
         mutationFn: blockUser,
-        mutationKey: 'block',
     });
 
     
-    if (blockMutaion.isLoading) return <MiniLoader customClass="m-auto" />;
+    if (blockMutaion.isPending) return <MiniLoader customClass="m-auto" />;
     else
         return (
             <div

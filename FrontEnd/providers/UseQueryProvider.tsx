@@ -6,15 +6,14 @@ import {
     useQueryClient,
     QueryClient,
     QueryClientProvider,
-} from "react-query";
+} from "@tanstack/react-query";
 import { useState } from "react";
-import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 
 const UseQueryProvider = (Component: any) => {
     return function HOC(props: any) {
         const [client] = useState(() => new QueryClient());
         return (
-            <QueryClientProvider client={client} contextSharing={true}>
+            <QueryClientProvider client={client}>
                 <Component {...props} />
             </QueryClientProvider>
         );

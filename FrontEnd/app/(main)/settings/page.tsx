@@ -8,12 +8,12 @@ import ProfileSettings from "./ProfileSettings";
 import { MyContext } from "../layout";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 
 const page = () => {
     const user = useContext(MyContext);
-    const userQuery = useQuery("user");
+    const userQuery = useQuery({queryKey: ["user"]});
     const queryClient = useQueryClient();
     const { tfaStatus } = user.userData;
 
@@ -31,7 +31,7 @@ const page = () => {
                 { code: "0" }
             );
             console.log("disable response = ", response);
-            queryClient.invalidateQueries("user");
+            queryClient.invalidateQueries({queryKey: ['user']});
         } catch (error) {
             console.log("error = ", error);
         }

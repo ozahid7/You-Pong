@@ -2,8 +2,7 @@
 import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useState } from "react";
-import { LuMessageSquarePlus } from "react-icons/lu";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { MyContext } from "../layout";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
@@ -32,10 +31,9 @@ const BlockedBanner = (props: {
 
     const unblockMutaion = useMutation({
         mutationFn: unblockUser,
-        mutationKey: "unblock",
     });
 
-    if (unblockMutaion.isLoading) return <MiniLoader customClass="m-auto" />;
+    if (unblockMutaion.isPending) return <MiniLoader customClass="m-auto" />;
     else
         return (
             <div

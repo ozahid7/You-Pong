@@ -16,13 +16,11 @@ import {
     LuSettings,
     LuLogOut,
 } from "react-icons/lu";
-import { QueryClient, useQuery } from "react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();
     const router = useRouter();
-    const heroQuery = useQuery("user");
-    const otheruser = useQuery("otheruser");
     const client = new QueryClient()
 
     const Elements = [
