@@ -57,12 +57,12 @@ export class ChannelController {
   // }
 
   //POST
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async postChannel(@Req() req, @Body() channel: channelDto) {
     try {
-      // const id_user: string = req.user.sub;
-      const result = await this.channelService.postChannel(channel, "86995bd8-2bdf-4f77-9631-a31a452fe678");
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.postChannel(channel, id_user);
       return result;
     } catch (error) {
       throw new HttpException('Failed to create a channel', 443);

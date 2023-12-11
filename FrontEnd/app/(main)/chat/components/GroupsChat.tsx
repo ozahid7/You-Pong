@@ -16,17 +16,7 @@ interface obj {
 
 const GroupsChat = ({ channels }: obj) => {
   const [user, setUser] = useState<User>();
-  const [online, setOnline] = useState<number>(0);
-
-  // useEffect(() => {
-  //   const Members = async () => {
-  //     const result = await getMembers();
-  //     setUser(result);
-  //     return result;
-  //   };
-
-  //   Members();
-  // }, []);
+  const [online, setOnline] = useState<number>(0);  
 
 
   return (

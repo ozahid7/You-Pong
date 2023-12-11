@@ -111,11 +111,11 @@ export class UserController {
 	
 	//GET
     @Get('/channels')
-	// @UseGuards(AuthGuard('jwt'))
+	@UseGuards(AuthGuard('jwt'))
     async getUserChannels(@Req() req) {
       try {
-		// const _id = req.user.sub;
-        const result = await this.userService.getUserChannels("86995bd8-2bdf-4f77-9631-a31a452fe678");
+		const _id = req.user.sub;
+        const result = await this.userService.getUserChannels(_id);
         return result;
       } catch (error) {
         throw new HttpException('Failed to get channels of user', 209);
