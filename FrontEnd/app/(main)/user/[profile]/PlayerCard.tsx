@@ -1,28 +1,79 @@
 "use client";
 
 import { MiniBanner, MyCard } from "@/components";
-import React, { useContext, useState } from "react";
-import { ImUserMinus, ImUserPlus } from "react-icons/im";
+import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
 import { MyContext } from "../../layout";
 import { otherUserContext } from "./page";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAxios } from "@/utils";
+import { friendsEndPoint } from "@/types/Api";
+import { QueryClient } from "@tanstack/react-query";
+import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
+import { HiBan } from "react-icons/hi";
+import { useRouter } from "next/navigation";
+import { blockUser } from "@/utils/friends";
 
 
 const PlayerCard = () => {
     const user = useContext(MyContext);
+    const friends = user.FriendData;
     const otheruser = useContext(otherUserContext)?.otherUser;
-    let username = user.userData.username
-    let level = user.userData.level
-    let rank = user.userData.rank 
-    let avatar = user.userData.avatar 
+    const [isFriend, setIsFriend] = useState(false);
+    const [isPending, setIsPending] = useState(false);
+    const router = useRouter()
+    let username = user.userData.username;
+    let level = user.userData.level;
+    let rank = user.userData.rank;
+    let avatar = user.userData.avatar;
 
-    if (otheruser !== undefined){
-        username = otheruser.username
-        level = otheruser.level
-        rank = otheruser.rank
-        avatar = otheruser.avatar
+    if (otheruser !== undefined) {
+        username = otheruser.username;
+        level = otheruser.level;
+        rank = otheruser.rank;
+        avatar = otheruser.avatar;
     }
 
+    useEffect(() => {
+        if (otheruser !== undefined) {
+            friends.accepted.map((elm) => {
+                if (username === elm.username) setIsFriend(true);
+            });
+            friends.pending.map((elm) => {
+                if (username === elm.username) setIsPending(true);
+            });
+        }
+    });
+
+    const freindsQuery = new QueryClient();
+
+    const addUser = async () => {
+        try {
+            const response = await useAxios("post", friendsEndPoint.add, {
+                friend: username,
+            });
+            console.log("add user response = ", response);
+            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+        } catch (error) {
+            console.log("add user error = ", error);
+        }
+    };
+
+    const addMutation = useMutation({ mutationFn: addUser });
+
+    const removeUser = async () => {
+        try {
+            const response = await useAxios("delete", friendsEndPoint.remove, {
+                friend: username,
+            });
+            console.log("remove user response = ", response);
+            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+        } catch (error) {
+            console.log("remove user error =", error);
+        }
+    };
+
+    const removeMutation = useMutation({ mutationFn: removeUser });
 
     let [Icon, setIcon] = useState(false);
     const isOnline = true;
@@ -33,7 +84,9 @@ const PlayerCard = () => {
             ? name.slice(0, 3) + "-" + username.slice(username.length - 3)
             : username;
 
-    const hideIcon = () => {
+    const hideIcon = (cmd: string) => {
+        if (cmd === "remove") removeMutation.mutate();
+        else addMutation.mutate();
         setIcon(!Icon);
     };
 
@@ -54,24 +107,48 @@ const PlayerCard = () => {
                         </div>
                     </div>
                     <div className="w-[62%] h-full pr-1 sm:pr-0 flex flex-col items-center justify-center pt-1 sm:pt-2 relative">
-                        <MdOutlineSettings
-                            size={120}
-                            className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
-                        />
-                        
-                        { otheruser && (Icon ? (
-                            <ImUserMinus
-                                onClick={hideIcon}
+                        {otheruser === undefined ? (
+                            <MdOutlineSettings
+                                onClick={() => {
+                                    router.push('/settings')
+                                }}
                                 size={120}
-                                className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-2 bottom-3 right-3  text-cardtitle cursor-pointer"
+                                className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                             />
                         ) : (
-                            <ImUserPlus
-                                onClick={hideIcon}
+                            <HiBan
+                                onClick={() => {
+                                    blockUser(username)
+                                }}
                                 size={120}
-                                className="z-10 h-[14%] w-[14%] absolute h:bottom-6 h:right-2 bottom-4 right-1  text-cardtitle cursor-pointer"
+                                className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                             />
-                        ))} 
+                        )}
+
+                        {otheruser &&
+                            (!Icon && !isFriend && !isPending ? (
+                                <FaUserPlus
+                                    onClick={() => {
+                                        hideIcon("add");
+                                    }}
+                                    size={100}
+                                    className="z-10 h-[14%] w-[14%] absolute sm:bottom-6 h:right-3 bottom-4 right-4  text-cardtitle cursor-pointer"
+                                />
+                            ) : isPending ? (
+                                <FaUserClock
+                                    onClick={() => {}}
+                                    size={100}
+                                    className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-3 bottom-4 right-4  text-cardtitle"
+                                />
+                            ) : (
+                                <FaUserMinus
+                                    onClick={() => {
+                                        hideIcon("remove");
+                                    }}
+                                    size={100}
+                                    className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-3 bottom-4 right-4  text-cardtitle cursor-pointer"
+                                />
+                            ))}
                         <div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
                             <div className=" w-full space-x-1  flex">
                                 <h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">

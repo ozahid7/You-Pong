@@ -65,7 +65,7 @@ const BlockedBanner = (props: {
                 </div>
                 <div className="flex space-x-2 md:space-x-8">
                     <MyToggle
-                        otherclass="h-[38px] hidden sm:flex min-w-[120px]"
+                        otherclass="h-[38px] flex min-w-[120px]"
                         handelCheck={() => {
                             unblockMutaion.mutate();
                         }}

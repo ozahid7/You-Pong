@@ -12,9 +12,8 @@ import { MyContext } from "../layout";
 const CustomTabs = (props: { input: string; setInput: any }) => {
     const friends = useContext(MyContext);
     const FriendsQuery = useQuery({ queryKey: ["friends"] });
-    const {accepted, blocked, pending} = friends?.FriendData
-    
-    
+    const { accepted, blocked, pending } = friends?.FriendData;
+
     const [index, setIndex] = useState(0);
     const [ListArr, setListArr] = useState(accepted);
     const [RequestArr, setRequestArr] = useState(pending);
@@ -104,31 +103,57 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                             autoFocus
                             className="h-[16%] md:h-[18%]  space-y-4 w-full"
                         >
-                            {ListArr.map((e, index) => (
-                                <FriendBanner
-                                    key={index}
-                                    userName={e.username}
-                                    image={renderImage(e.avatar)}
-                                    status={e.status}
-                                    SetInvalidData={setInvalidData}
-                                />
-                            ))}
+                            {ListArr.length === 0 ? (
+                                <div className="make_center h-full">
+                                    {" "}
+                                    <span className="font-body font-bold text-cardtitle">
+                                        No Friends Yet
+                                    </span>
+                                </div>
+                            ) : (
+                                ListArr.map((e, index) => (
+                                    <FriendBanner
+                                        key={index}
+                                        userName={e.username}
+                                        image={renderImage(e.avatar)}
+                                        status={e.status}
+                                        SetInvalidData={setInvalidData}
+                                    />
+                                ))
+                            )}
                         </Tab.Panel>
                         {/* Displays this panel by default */}
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {RequestArr.map((e, index) => (
-                                <RequestBanner
-                                    key={index}
-                                    userName={e.username}
-                                    image={renderImage(e.avatar)}
-                                    status={e.status}
-                                    SetInvalidData={setInvalidData}
-                                />
-                            ))}
+                            {RequestArr.length === 0 ? (
+                                <div className="make_center h-full">
+                                    {" "}
+                                    <span className="font-body font-bold text-cardtitle">
+                                        No Friends Yet
+                                    </span>
+                                </div>
+                            ) : (
+                                RequestArr.map((e, index) => (
+                                    <RequestBanner
+                                        key={index}
+                                        userName={e.username}
+                                        image={renderImage(e.avatar)}
+                                        status={e.status}
+                                        SetInvalidData={setInvalidData}
+                                    />
+                                ))
+                            )}
                         </Tab.Panel>
 
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {BlockArr.map((e, index) => (
+                            {
+                            BlockArr.length === 0 ? (
+                                <div className="make_center h-full">
+                                    {" "}
+                                    <span className="font-body font-bold text-cardtitle">
+                                        No Friends Yet
+                                    </span>
+                                </div>
+                            ) : (BlockArr.map((e, index) => (
                                 <BlockedBanner
                                     key={index}
                                     userName={e.username}
@@ -136,7 +161,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                                     status={e.status}
                                     SetInvalidData={setInvalidData}
                                 />
-                            ))}
+                            )))}
                         </Tab.Panel>
                     </Tab.Panels>
                 </Tab.Group>

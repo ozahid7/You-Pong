@@ -79,4 +79,5 @@ export const friendsEndPoint = {
     decline: "friend/decline",
     search: "friend/search",
     remove: "friend/remove",
+    add: "friend/send"
 };
