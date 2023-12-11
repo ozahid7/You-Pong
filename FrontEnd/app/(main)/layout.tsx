@@ -2,7 +2,7 @@
 import { SideBar, NavBar, MobileSideBar, TwoFactor } from "@/components";
 import "../globals.css";
 import "../input.css";
-import { redirect, usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
 import { myRoutes } from "@/const";
 import UseQueryProvider from "@/providers/UseQueryProvider";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +21,7 @@ import Loader from "@/components/tools/Loader";
 interface myContextProps {
     userData: userInfo;
     isLoged: boolean;
+    FriendData: FriendArr;
 }
 
 interface lyoutProps {
@@ -39,6 +40,7 @@ function RootLayout({children}: lyoutProps) {
     const [isLoged, setIsLoged] = useState(false);
     const [userData, setUserData] = useState(undefined);
     const [tfaStatus, setTfaStatus] = useState(false);
+    const [FriendData, setFriendData] = useState(undefined);
 
 
     const getHero = async () => {
@@ -62,6 +64,8 @@ function RootLayout({children}: lyoutProps) {
         return null;
     };
 
+    
+
     const getTfa = async () => {
         try {
             const response = await useAxios<tfaSwitch>(
@@ -78,7 +82,20 @@ function RootLayout({children}: lyoutProps) {
         return null
     };
 
-    
+    const getFriends = async () => {
+        try {
+            const response = await useAxios<FriendArr>(
+                "get",
+                endPoints.getFriend
+            );
+            console.log("response = ", response);
+            setFriendData(response);
+        } catch (error) {
+            console.log("error get Friends : ", error);
+        }
+        return null 
+    };
+
     useEffect(() => {
         if (!loged) getTfa();
         else setTfaVerified(true);
@@ -97,7 +114,11 @@ function RootLayout({children}: lyoutProps) {
         }
     }, [isLoged, checked]);
 
-    
+    const FriendsQuery = useQuery({
+        queryKey: ["friends"],
+        queryFn: getFriends,
+        enabled: isLoged,
+    });
 
     if (tfaStatus && !tfaVerified && !loged)
         return (
@@ -110,13 +131,14 @@ function RootLayout({children}: lyoutProps) {
             />
         );
     else if (
-        heroQuery.isLoading
+        heroQuery.isLoading ||
+        FriendsQuery.isLoading
     )
         return <Loader />;
     else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
         return (
             <MyContext.Provider
-                value={{ userData, isLoged}}
+                value={{ userData, isLoged, FriendData}}
             >
                 <main className="flex h-screen w-full background">
                     <SideBar />

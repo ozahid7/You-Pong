@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { menuChatElements, menuUserElements } from "@/const";
 
 const FriendBanner = (props: {
     zindex?: number;
@@ -46,6 +47,9 @@ const FriendBanner = (props: {
                         icon=""
                         image={props.image}
                         placement="left-0"
+                        menuElements={menuUserElements}
+                        user={props.userName}
+                        setDataInvalid={props.SetInvalidData}
                     />
                     <div className="flex flex-col">
                         <span

@@ -3,10 +3,10 @@ import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { MyContext } from "../layout";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { menuUserElements } from "@/const";
 
 const BlockedBanner = (props: {
     zindex?: number;
@@ -44,6 +44,9 @@ const BlockedBanner = (props: {
                         icon=""
                         image={props.image}
                         placement="left-0"
+                        menuElements={menuUserElements}
+                        user={props.userName}
+                        setDataInvalid={props.SetInvalidData}
                     />
                     <div className="flex flex-col">
                         <span
@@ -63,7 +66,9 @@ const BlockedBanner = (props: {
                 <div className="flex space-x-2 md:space-x-8">
                     <MyToggle
                         otherclass="h-[38px] hidden sm:flex min-w-[120px]"
-                        handelCheck={() => {unblockMutaion.mutate()}}
+                        handelCheck={() => {
+                            unblockMutaion.mutate();
+                        }}
                         string1="unblock"
                         string2="block"
                         enabled={enabled}

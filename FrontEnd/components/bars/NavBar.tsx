@@ -9,6 +9,7 @@ import { MyContext } from "@/app/(main)/layout";
 import { useQuery } from "@tanstack/react-query";
 import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
+import { menuElements } from "@/const";
 
 const obj = {
     name: "oussama zahid",
@@ -77,6 +78,7 @@ const NavBar = () => {
                         style="text-white cursor-pointer"
                         size={25}
                         placement="right-0"
+                        menuElements={menuElements}
                     />
                 </div>
             </div>

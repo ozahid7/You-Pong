@@ -8,6 +8,7 @@ import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
 import { useMutation } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { menuUserElements } from "@/const";
 
 const RequestBanner = (props: {
     zindex?: number;
@@ -74,14 +75,25 @@ const RequestBanner = (props: {
         declineMutation.mutate();
     };
 
-    if (declineMutation.isPending || acceptMutation.isPending || blockMutaion.isPending)
+    if (
+        declineMutation.isPending ||
+        acceptMutation.isPending ||
+        blockMutaion.isPending
+    )
         return <MiniLoader customClass="m-auto" />;
     return (
         <div
             className={`h-full w-full min-h-[70px] shadow-lg bg-palette-white rounded-sm flex justify-around items-center`}
         >
             <div className="h-full items-center space-x-2 md:space-x-4 flex">
-                <MyDropdown icon="" image={props.image} placement="left-0" />
+                <MyDropdown
+                    icon=""
+                    image={props.image}
+                    placement="left-0"
+                    menuElements={menuUserElements}
+                    user={props.userName}
+                    setDataInvalid={props.SetInvalidData}
+                />
                 <div className="flex flex-col">
                     <span
                         data-tooltip-id="username"
@@ -112,7 +124,9 @@ const RequestBanner = (props: {
                 </div>
                 <MyToggle
                     otherclass="h-[38px] hidden lg:flex min-w-[120px]"
-                    handelCheck={() => {blockMutaion.mutate()}}
+                    handelCheck={() => {
+                        blockMutaion.mutate();
+                    }}
                     string1="unblock"
                     string2="block"
                     enabled={enabled}

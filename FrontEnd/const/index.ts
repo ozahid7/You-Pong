@@ -24,6 +24,13 @@ export const menuChatElements = [
   { href: "/block", label: "Block", icon: renderIcon(LuUserX) },
 ];
 
+
+export const menuUserElements = [
+  { href: "/user/", label: "Profile", icon: renderIcon(LuUser) },
+  { href: "/game", label: "Play With", icon: renderIcon(LuGamepad2) },
+  { href: "block", label: "Block", icon: renderIcon(LuUserX) },
+];
+
 export const apiHost = "http://localhost:4000/";
 
 export const menuGroupsElements = [

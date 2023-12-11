@@ -7,16 +7,14 @@ import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
 import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { friendContext } from "./page";
+import { MyContext } from "../layout";
 
 const CustomTabs = (props: { input: string; setInput: any }) => {
-    const friends = useContext(friendContext)?.friendsData;
-    const accepted = friends?.accepted
-    const pending = friends?.pending
-    const blocked = friends?.blocked
-    
+    const friends = useContext(MyContext);
     const FriendsQuery = useQuery({ queryKey: ["friends"] });
-
+    const {accepted, blocked, pending} = friends?.FriendData
+    
+    
     const [index, setIndex] = useState(0);
     const [ListArr, setListArr] = useState(accepted);
     const [RequestArr, setRequestArr] = useState(pending);
@@ -45,14 +43,14 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
             )
         );
         setRequestArr(
-            pending?.filter((friend) =>
+            pending.filter((friend) =>
                 friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
             )
         );
         setBlockArr(
-            blocked?.filter((friend) =>
+            blocked.filter((friend) =>
                 friend.username
                     .toLowerCase()
                     .includes(props.input.toLowerCase())
@@ -106,7 +104,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                             autoFocus
                             className="h-[16%] md:h-[18%]  space-y-4 w-full"
                         >
-                            {ListArr?.map((e, index) => (
+                            {ListArr.map((e, index) => (
                                 <FriendBanner
                                     key={index}
                                     userName={e.username}
@@ -118,7 +116,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                         </Tab.Panel>
                         {/* Displays this panel by default */}
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {RequestArr?.map((e, index) => (
+                            {RequestArr.map((e, index) => (
                                 <RequestBanner
                                     key={index}
                                     userName={e.username}
@@ -130,7 +128,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
                         </Tab.Panel>
 
                         <Tab.Panel className="h-[16%] md:h-[18%] space-y-4 w-full">
-                            {BlockArr?.map((e, index) => (
+                            {BlockArr.map((e, index) => (
                                 <BlockedBanner
                                     key={index}
                                     userName={e.username}
