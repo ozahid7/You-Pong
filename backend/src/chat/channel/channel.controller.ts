@@ -24,10 +24,12 @@ export class ChannelController {
   ) {}
 
   //Get MANY
+  @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getChannels() {
+  async getChannels(@Req() req) {
     try {
-      const result = await this.channelService.getChannels();
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.getChannels(id_user);
       return result;
     } catch (error) {
       throw new HttpException('Failed to find a channel', 444);
@@ -35,6 +37,7 @@ export class ChannelController {
   }
 
   //Get
+  @UseGuards(AuthGuard('jwt'))
   @Get(':name')
   async getChannel(@Param('name') name: string) {
     try {
@@ -70,6 +73,7 @@ export class ChannelController {
   }
 
   //DELETE MANY
+  @UseGuards(AuthGuard('jwt'))
   @Delete()
   async deleteChannels() {
     try {
@@ -81,9 +85,11 @@ export class ChannelController {
   }
 
   //DELETE
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':name')
-  async deleteChannel(@Param('name') name: string) {
+  async deleteChannel(@Param('name') name: string, @Req() req) {
     try {
+      const id_user: string = req.user.sub;
       const result = await this.channelService.deleteChannel(name);
       return result;
     } catch (error) {
