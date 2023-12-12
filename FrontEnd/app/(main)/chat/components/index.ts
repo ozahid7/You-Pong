@@ -11,6 +11,7 @@ import MembersEdit from "./MembersEdit";
 import MiniChat from "./MiniChat";
 import SearchChat from "./SearchChat";
 import MyButton from "./MyButton";
+import GroupsInput from "./GroupsInput";
 
 export {
     Chat,
@@ -25,5 +26,6 @@ export {
     MembersEdit,
     MiniChat,
     SearchChat,
-    MyButton
+    MyButton,
+    GroupsInput
 }

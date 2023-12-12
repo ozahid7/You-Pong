@@ -45,34 +45,34 @@ const ChatEdit = ({ channels }: HomePage) => {
 
     let imageUrl: any;
 
-    if (file instanceof Blob || file instanceof File) {
-        try {
-            imageUrl = URL.createObjectURL(file);
-        } catch (error) {
-            console.error("Error creating object URL:", error);
-            // Handle the error gracefully or provide a fallback URL
-            imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
-        }
-    } else {
-        // Fallback to channels.avatar or any other default image source if file is not a Blob or File
-        imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
+  if (file instanceof Blob || file instanceof File) {
+    try {
+      imageUrl = URL.createObjectURL(file);
+    } catch (error) {
+      console.error("Error creating object URL:", error);
+      // Handle the error gracefully or provide a fallback URL
+      imageUrl = channels.avatar;
     }
-    var result = undefined;
-    const SendDataToLeader = async () => {
-        if (imgRef.current.value !== "") {
-            result = await setFile(imgRef.current.files[0]);
-        }
-        if (channels.name !== nameRef.current.value)
-            setDataObj.name = nameRef.current.value;
-        if (channels.description !== descRef.current.value)
-            setDataObj.description = descRef.current.value;
-        setDataObj.type = channels.type;
-        setDataObj.avatar = result;
-        result = await putData(setDataObj, channels.name);
-        imageUrl = `http://178.62.74.69:400/file/${channels.avatar}`;
-        mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
-        onClose();
-    };
+  } else {
+    // Fallback to channels.avatar or any other default image source if file is not a Blob or File
+    imageUrl = channels.avatar;
+  }
+  var result = undefined;
+  const SendDataToLeader = async () => {
+    if (imgRef.current.value !== "") {
+      result = await setFile(imgRef.current.files[0]);
+    }
+    if (channels.name !== nameRef.current.value)
+      setDataObj.name = nameRef.current.value;
+    if (channels.description !== descRef.current.value)
+      setDataObj.description = descRef.current.value;
+    setDataObj.type = channels.type;
+    setDataObj.avatar = result;
+    result = await putData(setDataObj, channels.name);
+    imageUrl = channels.avatar;
+    mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
+    onClose();
+  };
 
     const handleSelectionChange = (newSelection: string) => {
         setSelected(newSelection);

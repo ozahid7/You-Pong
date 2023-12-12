@@ -110,6 +110,7 @@ model Channel {
 	updated_at DateTime @updatedAt
 	users User[]
 	rooms Room_Chat[] @relation(name: "room")
+	messages Message[]@relation(name: "message")
 }
 
 //ROOM_CHAT MODEL
@@ -119,7 +120,7 @@ model Room_Chat {
 	member_status member_status @default(NONE)
 	time_muted DateTime?
 	joined_at DateTime @default(now())
-	lefted Boolean @default(true)
+	lefted Boolean @default(false)
 	lefted_at DateTime?
 	blocked_users User[] @relation("blocked")
 	id_user String
@@ -137,8 +138,10 @@ model Message {
 	created_at DateTime @default(now())
 	id_sender String
 	user User @relation(fields: [id_sender], references: [id_user])
-	name String
-	room Room_Chat @relation(fields: [name], references: [name])
+	name_room String
+	room Room_Chat @relation(fields: [name_room], references: [name])
+	id_channel String
+	channel Channel @relation(name: "message",fields: [id_channel], references: [id_channel])
 }
 
 // //NOTIFICATION MODEL

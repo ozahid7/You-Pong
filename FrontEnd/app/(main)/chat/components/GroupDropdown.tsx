@@ -28,13 +28,16 @@ const GroupDropdown = ({ channels }: HomePage) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { mutate } = useSWRConfig();
 
+  const Leaving = () => {
+    const result = leaveChannel(channels.name);
+    console.log(result);
+    mutate("/myData", (cachedData) => [...cachedData, channels], true);
+  };
+
   return (
     <div className="flex flex-col justify-center relative">
       <div className="dropdown dropdown-bottom dropdown-end">
-        <label
-          tabIndex={0}
-          role="button"
-        >
+        <label tabIndex={0} role="button">
           <IconContext.Provider
             value={{
               color: "",
@@ -60,12 +63,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
               key={"3xl"}
               className="flex btn bg-palette-orange border-none text-[#EFF5F5] rounded-md center orange_button"
               onClick={() => {
-                leaveChannel(channels.name);
-                mutate(
-                  "/myData",
-                  (cachedData) => [...cachedData, channels],
-                  true
-                );
+                Leaving();
               }}
             >
               <div className="flex flex-row gap-2 w-fit h-fit">

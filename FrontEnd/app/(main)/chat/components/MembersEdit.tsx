@@ -48,10 +48,9 @@ import useSWR from "swr";
 const MembersEdit = () => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-    const fetchData = async () => {
-        try {
-            const result = await getChannels();
-            console.log(result);
+  const fetchData = async () => {
+    try {
+      const result = await getChannels();
 
             return result.object;
         } catch (error) {
