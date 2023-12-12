@@ -12,9 +12,10 @@ interface MyDialogProps {
     withCorner?: boolean;
     customClass?: string;
     withClose?: boolean
+    conClass?: string
 }
 
-function MyDialog({ isOpen, closemodal, children, withCorner, customClass, withClose }: MyDialogProps) {
+function MyDialog({ isOpen, closemodal, children, withCorner, customClass, withClose, conClass }: MyDialogProps) {
     const classname = twMerge("flex justify-center", customClass);
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -37,8 +38,8 @@ function MyDialog({ isOpen, closemodal, children, withCorner, customClass, withC
                 </Transition.Child>
                 <div className="fixed h-full w-full max-h-screen flex justify-center items-center inset-0 overflow-auto">
                     <div className={classname}>
-                        <MyContainer isLoader={withClose} withCorners={withCorner} closeModal={closemodal} isModal={true}>
-                            <div className=" make_center h-[100%] overflow-auto">
+                        <MyContainer isLoader={withClose} costumClass={conClass} withCorners={withCorner} closeModal={closemodal} isModal={true}>
+                            <div className=" make_center h-[100%]">
                                 <Transition.Child
                                     as={Fragment}
                                     enter="ease-out duration-300"

@@ -1,7 +1,10 @@
 import { CustomButton, MyCard } from '@/components';
+import { myRoutes } from '@/const';
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const NewGameCard = () => {
+    const router = useRouter()
   return (
       <div className="flex z-0 justify-center w-[90%] md:w-full max-w-[600px] overflow-hidden min-h-[120px] h:min-h-[150px] h:max-h-[160px] md:max-h-[200px]  md:h-[24%] h:h-[20%]">
           <MyCard otherclass="">
@@ -14,6 +17,9 @@ const NewGameCard = () => {
                           color="green"
                           text="New Game"
                           otherclass="min-w-[100px] max-w-[200px] sm:max-w-[360px]"
+                          handleclick={() => {
+                            router.push(myRoutes.game)
+                          }}
                       />
                   </div>
               </div>

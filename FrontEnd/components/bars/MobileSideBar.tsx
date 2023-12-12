@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { IoGameControllerOutline } from "react-icons/io5";
 
 import {
     LuLayoutDashboard,
@@ -19,10 +20,10 @@ const RenderMobileSidBarElement = (index: number, link: string) => {
     const customclass = "h-[30px] sm:h-[40px]";
 
     const Elements = [
-        <LuLayoutDashboard size="40" className={customclass}/>,
+        <LuLayoutDashboard size="40" className={customclass} />,
         <LuUsers size="40" className={customclass} />,
         <LuMessageSquare size="40" className={customclass} />,
-        <LuBell size="40" className={customclass} />,
+        <IoGameControllerOutline size="40" className={customclass} />,
         <LuSettings size="40" className={customclass} />,
     ];
 
@@ -50,7 +51,7 @@ const MobileSideBar = () => {
                 {RenderMobileSidBarElement(0, myRoutes.dashboard)}
                 {RenderMobileSidBarElement(1, myRoutes.friends)}
                 {RenderMobileSidBarElement(2, myRoutes.chat)}
-                {RenderMobileSidBarElement(3, "/notifications")}
+                {RenderMobileSidBarElement(3, myRoutes.game)}
                 {RenderMobileSidBarElement(4, myRoutes.settings)}
             </div>
         </aside>

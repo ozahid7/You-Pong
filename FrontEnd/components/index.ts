@@ -22,6 +22,8 @@ import MyTabs from "./tools/Tabs";
 import SwipeableTabs from "./tools/SwipeableTabs";
 import SearchBar from "./bars/SearchBar";
 import ChatHeading from "./tools/Heading";
+import Map from "./buttons/Map";
+import Mode from "./tools/Mode";
 import ScoreCard from "./tools/ScoreCard";
 
 export {
@@ -39,6 +41,7 @@ export {
   MyDropdown,
   MyDialog,
   TwoFactor,
+  Map,
   SignUp,
   SignIn,
   MiniBanner,
@@ -50,4 +53,5 @@ export {
   SearchBar,
   ChatHeading,
   ScoreCard,
+  Mode,
 };

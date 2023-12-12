@@ -1,21 +1,30 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MyContainer, ScoreCard } from "@/components";
 import Matter from "matter-js";
 import Image from "next/image";
 import ozahid from "../../../public/ozahid-.jpeg";
+import GameSettings from "./GameOptions";
+import PlayerLoader from "./PlayerLoader";
 
 export default function game() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const paddleRef = useRef(null);
+  const [state, setState] = useState(false)
+  const [map, setMap] = useState("orange");
+  const [mode, setMode] = useState("easy");
+  const [showPlayerLoader, setShowPlayerLoder] = useState(false)
+
+  console.log('map = ', map, mode)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !state) {
+      setState(true)
       let WIDTH: number = sceneRef.current!.clientWidth;
       let HEIGHT: number = sceneRef.current!.clientHeight;
       // Your client-side code here
 
-      // console.log(sceneRef.current?.clientHeight, HEIGHT);
+      console.log(sceneRef.current?.clientHeight, HEIGHT);
       var Engine = Matter.Engine,
         Render = Matter.Render,
         Bodies = Matter.Bodies,
@@ -139,9 +148,9 @@ export default function game() {
       // }, 2000);
 
       var runner = Runner.create();
-      Runner.run(runner, engine);
+      // Runner.run(runner, engine);
 
-      render.mouse = mouse;
+      // render.mouse = mouse;
 
       Render.run(render);
 
@@ -156,48 +165,16 @@ export default function game() {
       <div className="flex w-[88%] h-[90%]">
         <MyContainer>
           <div className="flex flex-col w-full h-full">
-            <div className="flex w-full h-[8%]">
-              <ScoreCard>
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={ozahid}
-                    className="w-[55px] h-[55px] border-white border-[2px]"
-                    alt="player"
-                  ></Image>
-                  <div className="text-white font-body font-[700] text-[30px]">
-                    <p>Ozahid-</p>
-                  </div>
-                </div>
-                <div className="w-[40%] h-full flex justify-center items-center ">
-                  <div className="w-[80%] h-[90%] flex flex-row justify-evenly items-center">
-                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
-                      1
-                    </div>
-                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
-                      :
-                    </div>
-                    <div className="w-fit h-fit font-['Digital_Numbers'] text-palette-orange text-[46px] ">
-                      2
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="text-white font-body font-[700] text-[30px]">
-                    <p>Ozahid-</p>
-                  </div>
-                  <Image
-                    src={ozahid}
-                    className="w-[55px] h-[55px] border-white border-[2px]"
-                    alt="player"
-                  ></Image>
-                </div>
-              </ScoreCard>
+            <div className="flex justify-center w-full min-h-[60px] h-[7.5%]">
+              <ScoreCard/>
             </div>
             <div
               ref={sceneRef}
-              className="flex w-full h-full"
+              className="flex min-w-full w-full h-[92%]"
             ></div>
           </div>
+          <GameSettings showPlayerLoader={setShowPlayerLoder} setMode={setMode} setMap={setMap}/>
+          <PlayerLoader isOpen={showPlayerLoader} />
         </MyContainer>
       </div>
     </div>

@@ -50,7 +50,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       this.addUser(id_user, socket.id);
     }
     console.log(this.users);
-    socket.on('receiveMessage', this.receiveMessage);
+    // socket.on('receiveMessage', this.receiveMessage);
   }
   handleDisconnect(socket: Socket) {
     this.removeUser(socket.id);
@@ -105,37 +105,37 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       if (room && room.member_status !== 'BANNED' && !room.lefted) {
         console.log(room.name);
 
-        const message = await this.prisma.message.create({
-          data: {
-            content: info.message,
-            id_sender: sender.id_user,
-            name_room: room.name,
-            id_channel: info.id_channel,
-          },
-        });
-        let users = this.users.filter(
-          (user) =>
-            channel.users.some(
-              (userChan) =>
-                user.id_user === userChan.id_user &&
-                user.id_user !== sender.id_user,
-            ) &&
-            !bannedUser.some((userBlock) => user.id_user === userBlock.id_user),
-        );
-        if (message) {
-          console.log('send message');
-          info.id_sender = sender.id_user;
-          users.map((user) => {
-            this.server.to(user.id_socket).emit('receiveMessage', info);
-          });
+        // const message = await this.prisma.message.create({
+        //   data: {
+        //     content: info.message,
+        //     id_sender: sender.id_user,
+        //     // name_room: room.name,
+        //     id_channel: info.id_channel,
+        //   },
+        // });
+        // let users = this.users.filter(
+        //   (user) =>
+        //     channel.users.some(
+        //       (userChan) =>
+        //         user.id_user === userChan.id_user &&
+        //         user.id_user !== sender.id_user,
+        //     ) &&
+        //     !bannedUser.some((userBlock) => user.id_user === userBlock.id_user),
+        // );
+        // if (message) {
+        //   console.log('send message');
+        //   info.id_sender = sender.id_user;
+        //   users.map((user) => {
+        //     this.server.to(user.id_socket).emit('receiveMessage', info);
+        //   });
         }
       }
     }
   }
-  @SubscribeMessage('receiveMessage')
-  async receiveMessage(socket: Socket, info: infoType) {
-    const user = this.users.filter((user) => user.id_socket === socket.id);
-    console.log('user => ', user);
-    console.log('info => ', info);
-  }
-}
+  // @SubscribeMessage('receiveMessage')
+//   async receiveMessage(socket: Socket, info: infoType) {
+//     const user = this.users.filter((user) => user.id_socket === socket.id);
+//     console.log('user => ', user);
+//     console.log('info => ', info);
+//   }
+// }

@@ -16,7 +16,7 @@ export class MessageService {
     });
     if (channel && channel.users.find((user) => user.id_user === id_user)) {
       const messages = await this.prisma.message.findMany({
-        where: { id_channel: channel.id_channel },
+        // where: { id_channel: channel.id_channel },
         orderBy: {
           created_at: 'desc',
         },
