@@ -13,46 +13,53 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { MessageService } from './message.service';
 import { messageDto } from '../dto/message.create.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { SocketService } from './socket.service';
+import { JsonObject } from '@prisma/client/runtime/library';
 
-@Controller('message')
+export interface nameChannel {
+  name: string;
+}
+
+@Controller('chat/message')
 export class MessageController {
   constructor(
     private prisma: PrismaService,
     private messageService: MessageService,
+    private socketService: SocketService,
   ) {}
 
   //POST MANY
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  async postMessages(@Body() name: string, message: messageDto[], @Req() req) {
-    try {
-      const id_user = req.user.sub;
-      const result = await this.messageService.postMessages(
-        name,
-        message,
-        id_user,
-      );
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to create messages', 403);
-    }
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Post()
+  // async postMessages(@Body() name: string, message: messageDto[], @Req() req) {
+  //   try {
+  //     const id_user = req.user.sub;
+  //     const result = await this.messageService.postMessages(
+  //       name,
+  //       message,
+  //       id_user,
+  //     );
+  //     return result;
+  //   } catch (error) {
+  //     throw new HttpException('Failed to create messages', 403);
+  //   }
+  // }
   //POST
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  async postMessage(@Body() name: string, message: messageDto, @Req() req) {
-    try {
-      const id_user = req.user.sub;
-      const result = await this.messageService.postMessage(
-        name,
-        message,
-        id_user,
-      );
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to create a message', 403);
-    }
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Post()
+  // async postMessage(@Body() name: string, message: messageDto, @Req() req) {
+  //   try {
+  //     const id_user = req.user.sub;
+  //     const result = await this.messageService.postMessage(
+  //       name,
+  //       message,
+  //       id_user,
+  //     );
+  //     return result;
+  //   } catch (error) {
+  //     throw new HttpException('Failed to create a message', 403);
+  //   }
+  // }
 
   //DELETE MANY
   @Delete()
@@ -76,10 +83,12 @@ export class MessageController {
   }
 
   //GET MANY
+  @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getMessages(@Body() name: string) {
+  async getMessages(@Body() name: nameChannel, @Req() req) {
     try {
-      const result = await this.messageService.getMessages(name);
+      const id_user = req.user.sub;
+      const result = await this.messageService.getMessages(name.name, id_user);
       return result;
     } catch (error) {
       throw new HttpException('Failed to find messages', 403);
