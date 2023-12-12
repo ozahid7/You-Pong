@@ -1,37 +1,32 @@
 "use client";
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../components";
-import { Channel, User } from "@/types";
+import { Channel } from "@/types";
+import { getChannels, joinChannel } from "@/app/(main)/chat/data/api";
 import {
-  setData,
-  setFile,
-  getChannels,
-  joinChannel,
-  userChannels,
-} from "@/app/(main)/chat/data/api";
-import {
-    IoLockClosedOutline,
-    IoLockOpenOutline,
-    IoEnterOutline,
+  IoLockClosedOutline,
+  IoLockOpenOutline,
+  IoEnterOutline,
 } from "react-icons/io5";
 import useSWR from "swr";
 import groups from "../../../../public/groups.svg";
+import { InputGroupPass } from ".";
 
 export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -63,10 +58,69 @@ export default function JoinModal() {
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
     );
 
-  const handleJoin = (name: string) => {
-    joinChannel(name);
-    // mutate("/myData", );
-    close();
+  const showModal = (obj: Channel) => {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [open, setOpen] = useState<() => void>();
+    const passRef = useRef<HTMLInputElement>();
+
+    const close = () => {
+      onClose();
+    };
+
+    const OpenModal = () => {
+      if (obj.type === "PROTECTED") setOpen(onOpen);
+      else if (obj.type === "PUBLIC") {
+        joinChannel(obj.name, null);
+        close();
+      }
+    };
+
+    const join = () => {
+      if (obj.type === "PROTECTED") {
+        console.log(passRef.current.value);
+        joinChannel(obj.name, passRef.current.value);
+      }
+      close();
+    };
+
+    return (
+      <>
+        <Button
+          size="lg"
+          className={`flex mt-1 text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+          onClick={OpenModal}
+          onPress={open}
+        >
+          <IoEnterOutline />
+          Join
+        </Button>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(close) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Set password
+                </ModalHeader>
+                <ModalBody>
+                  <InputGroupPass
+                    ref={passRef}
+                    text="Password"
+                    type="password"
+                    customclass="w-full h-[3rem] self-center"
+                    isPassword={true}
+                  ></InputGroupPass>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={join}>
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
   };
 
   return (
@@ -152,14 +206,7 @@ export default function JoinModal() {
                                   </div>
                                 </TableCell>
                                 <TableCell className="flex flex-row">
-                                  <Button
-                                    size="lg"
-                                    className={`flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                    onClick={() => handleJoin(obj.name)}
-                                  >
-                                    <IoEnterOutline />
-                                    Join
-                                  </Button>
+                                  {showModal(obj)}
                                 </TableCell>
                               </TableRow>
                             ))}

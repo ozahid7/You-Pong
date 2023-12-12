@@ -3,17 +3,17 @@ import { useState, useRef, Fragment } from "react";
 import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    Tabs,
-    Tab,
-    Card,
-    CardBody,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Tabs,
+  Tab,
+  Card,
+  CardBody,
 } from "@nextui-org/react";
 import Image from "next/image";
 import groups from "../../../../public/groups.svg";
@@ -22,101 +22,96 @@ import { mutate } from "swr";
 import { GroupsInput } from ".";
 
 export var setDataObj: Channel = {
-    type: "PUBLIC",
-    name: "Channel",
-    description: "Change this description",
-    avatar: null,
+  type: "PUBLIC",
+  name: "Channel",
+  description: "Change this description",
+  avatar: null,
 };
 
 export default function GroupsModal() {
-    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-    const [selected, setSelected] = useState<string>("PUBLIC");
-    const [file, setFilee] = useState<any>(null);
+  const [selected, setSelected] = useState<string>("PUBLIC");
+  const [file, setFilee] = useState<any>(null);
 
   const imgRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
-  var   object: { object: any; message: string };
+  var object: { object: any; message: string };
 
-    let imageUrl: any;
+  let imageUrl: any;
 
-    if (file instanceof Blob || file instanceof File) {
-        try {
-            imageUrl = URL.createObjectURL(file);
-        } catch (error) {
-            console.error("Error creating object URL:", error);
-            // Handle the error gracefully or provide a fallback URL
-            imageUrl = groups;
-        }
-    } else {
-        // Fallback to groups or any other default image source if file is not a Blob or File
-        imageUrl = groups;
+  if (file instanceof Blob || file instanceof File) {
+    try {
+      imageUrl = URL.createObjectURL(file);
+    } catch (error) {
+      console.error("Error creating object URL:", error);
+      // Handle the error gracefully or provide a fallback URL
+      imageUrl = groups;
     }
-    const CreateGroupDATA = async () => {
-        var result = null;
+  } else {
+    // Fallback to groups or any other default image source if file is not a Blob or File
+    imageUrl = groups;
+  }
+  const CreateGroupDATA = async () => {
+    var result = null;
 
-        setDataObj.name = nameRef.current.value;
-        if (nameRef.current.value) {
-            if (descRef.current.value)
-                setDataObj.description = descRef.current.value;
-            if (setDataObj.type == "PROTECTED") {
-                if (
-                    passRef.current.value &&
-                    passConfRef.current.value === passRef.current.value
-                )
-                    setDataObj.hash = passRef.current.value;
-                else setDataObj.hash = null;
-            }
-            if (
-                (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
-                setDataObj.type != "PROTECTED"
-            ) {
-                if (imgRef.current.value !== "") {
-                    result = await setFile(imgRef.current.files[0]);
-                } else result = await setFile(null);
+    setDataObj.name = nameRef.current.value;
+    if (nameRef.current.value) {
+      if (descRef.current.value) setDataObj.description = descRef.current.value;
+      if (setDataObj.type == "PROTECTED") {
+        if (
+          passRef.current.value &&
+          passConfRef.current.value === passRef.current.value
+        )
+          setDataObj.hash = passRef.current.value;
+        else setDataObj.hash = null;
+      }
+      if (
+        (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
+        setDataObj.type != "PROTECTED"
+      ) {
+        if (imgRef.current.value !== "") {
+          result = await setFile(imgRef.current.files[0]);
+        } else result = await setFile(null);
 
-                setDataObj.avatar = result;
+        setDataObj.avatar = result;
 
-                onClose();
-                // CLOSE THE MODAL Function :)
-                object = await setData(setDataObj);
-                // SEND DATA TO HAMID RIGHT HERE
-                if (object.object !== null)
-                    mutate(
-                        "/myData",
-                        (cachedData) => [...cachedData, setDataObj],
-                        true
-                    );
-            }
-            clean();
-        }
-    };
-
-    const handleSelectionChange = (newSelection: string) => {
-        setSelected(newSelection);
-        setDataObj.type = newSelection;
-    };
-
-    const clean = () => {
-        setFilee(groups);
-        setDataObj.description = "Change this description";
-        setDataObj.avatar = null;
-        // if (descRef.current.value !== null)
-        //   descRef.current.value = null;
-        // nameRef.current.value = null;
-        // imgRef.current.value = null;
-        // if (setDataObj.type == "PROTECTED") {
-        //   passRef.current.value = null;
-        //   passConfRef.current.value = null;
-        // }
-    };
-    const close = () => {
         onClose();
-        clean();
-    };
+        // CLOSE THE MODAL Function :)
+        object = await setData(setDataObj);
+        // SEND DATA TO HAMID RIGHT HERE
+        if (object.object !== null)
+          mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
+      }
+      clean();
+    }
+  };
+
+  const handleSelectionChange = (newSelection: string) => {
+    setSelected(newSelection);
+    setDataObj.type = newSelection;
+  };
+
+  const clean = () => {
+    setFilee(groups);
+    setDataObj.description = "Change this description";
+    setDataObj.avatar = null;
+    // if (descRef.current.value !== null)
+    //   descRef.current.value = null;
+    // nameRef.current.value = null;
+    // imgRef.current.value = null;
+    // if (setDataObj.type == "PROTECTED") {
+    //   passRef.current.value = null;
+    //   passConfRef.current.value = null;
+    // }
+  };
+  const close = () => {
+    onClose();
+    clean();
+  };
 
   return (
     <Fragment>
@@ -134,6 +129,9 @@ export default function GroupsModal() {
         onClose={close}
         size="4xl"
         className=" w-full"
+        scrollBehavior="inside"
+        backdrop="blur"
+        placement="center"
       >
         <ModalContent className="">
           {(close) => (

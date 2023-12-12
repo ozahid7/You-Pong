@@ -46,7 +46,6 @@ function RootLayout({children}: lyoutProps) {
     const getHero = async () => {
         try {
             const response = await useAxios<userData>("get", endPoints.gethero);
-            console.log("hero response = ", response.userInfo);
             setUserData(response.userInfo);
             setTfaStatus(response.userInfo.tfaStatus);
             if (typeof window !== "undefined") {
@@ -58,7 +57,6 @@ function RootLayout({children}: lyoutProps) {
         } catch (error) {
             setchecked(true);
             localStorage.removeItem("isLoged");
-            console.log("get hero error = :", error);
             redirect(myRoutes.root);
         }
         return null;
@@ -73,11 +71,9 @@ function RootLayout({children}: lyoutProps) {
                 endPoints.getTfaStatus
             );
             if (response === false) setTfaVerified(true);
-            console.log(response);
             setTfaStatus(response);
         } catch (error) {
             setTfaVerified(true);
-            console.log("error : ", error);
         }
         return null
     };
@@ -88,10 +84,8 @@ function RootLayout({children}: lyoutProps) {
                 "get",
                 endPoints.getFriend
             );
-            console.log("response = ", response);
             setFriendData(response);
         } catch (error) {
-            console.log("error get Friends : ", error);
         }
         return null 
     };

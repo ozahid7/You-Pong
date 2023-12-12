@@ -15,8 +15,9 @@ interface obj {
 }
 
 const GroupsChat = ({ channels }: obj) => {
-  const [user, setUser] = useState<User>();
-  const [online, setOnline] = useState<number>(0);  
+
+  console.log("GroupsChat: users", channels.users);
+  
 
 
   return (
