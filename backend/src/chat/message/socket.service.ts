@@ -96,13 +96,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (
           room &&
-          (room.member_status === 'BANNED' ||
+          (room.member_status !== 'NONE' ||
             room.lefted ||
             room.blocked_users[info.id_sender])
         )
           bannedUser.push(user.id_user);
       });
-      if (room && room.member_status !== 'BANNED' && !room.lefted) {
+      if (room && room.member_status === 'NONE' && !room.lefted) {
         console.log(room.name);
 
         const message = await this.prisma.message.create({
