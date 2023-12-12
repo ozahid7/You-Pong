@@ -4,11 +4,11 @@ import { attachReactRefresh } from "next/dist/build/webpack-config";
 // import fs from "fs";
 // import { setDataObj } from "@/components/tools/GroupsModal";
 
+axios.defaults.withCredentials = true;
+
 export const userChannels = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/user/channels", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/user/channels");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -21,8 +21,7 @@ export const userChannels = async () => {
 export const joinChannel = async (name: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/join/${name}`,
-      { withCredentials: true }
+      `http://localhost:4000/chat/channel/join/${name}`
     );
     return response.data;
   } catch (error) {
@@ -32,13 +31,11 @@ export const joinChannel = async (name: string) => {
   }
 };
 
+// http://localhost:4000/chat/channel/leave/name
 export const leaveChannel = async (name: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/leave/${name}`,
-      {
-        withCredentials: true,
-      }
+      `http://localhost:4000/chat/channel/leave/${name}`
     );
     return response.data;
   } catch (error) {
@@ -50,9 +47,7 @@ export const leaveChannel = async (name: string) => {
 
 export const getChannels = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/chat/channel", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/chat/channel");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -73,8 +68,7 @@ export const setData = async (data: Channel) => {
 
     const response = await axios.post(
       "http://localhost:4000/chat/channel",
-      obj,
-      { withCredentials: true }
+      obj
     );
     return response.data;
   } catch (error) {
@@ -96,8 +90,7 @@ export const putData = async (data: Channel, name: string) => {
 
     const response = await axios.put(
       `http://localhost:4000/chat/channel/${name}`,
-      obj,
-      { withCredentials: true }
+      obj
     );
     return response.data;
   } catch (error) {
@@ -143,9 +136,7 @@ export const getFile = async (pathname: string) => {
 
 export const getMembers = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/user", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/user");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -156,9 +147,7 @@ export const getMembers = async () => {
 
 export const getMainUser = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/user/GetHero", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/user/GetHero");
     return response.data;
   } catch (error) {
     // Handle errors here

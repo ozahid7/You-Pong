@@ -262,24 +262,39 @@ export class ChannelService {
   }
 
   //JOIN CHANNEL
-  async joinChannel(id_user: string, name: string) {
+  async joinChannel(id_user: string, name: string, password: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         name: name,
       },
       include: { users: true },
     });
-    if (!channel) return 'No such Channel !';
+    if (!channel)
+      return {
+        message: 'No such Channel !',
+        object: null,
+      };
     const user = await this.prisma.user.findUnique({
       where: {
         id_user: id_user,
       },
     });
-    if (!user) return 'No such User !';
+    if (!user)
+      return {
+        message: 'No such User !',
+        object: null,
+      };
     const joined = channel.users.some((user) => {
       return user.id_user === id_user;
     });
     if (joined) return 'Already joined !';
+    if (channel.type === 'PROTECTED') {
+      if (channel.hash !== password)
+        return {
+          message: 'Password Incorrect',
+          object: null,
+        };
+    }
     const result = await this.prisma.channel.update({
       where: {
         name: name,
@@ -297,8 +312,15 @@ export class ChannelService {
         user_role: 'MEMBER',
       },
     });
-    if (!room) console.log("Can't create a room chat !");
-    return result;
+    if (!room)
+      return {
+        message: "Can't create a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //leave channel
@@ -309,11 +331,19 @@ export class ChannelService {
       },
       include: { users: true },
     });
-    if (!channel) return 'No such Channel !';
+    if (!channel)
+      return {
+        message: 'No such Channel !',
+        object: null,
+      };
     const joined = channel.users.some((user) => {
       return user.id_user === id_user;
     });
-    if (!joined) return 'The user is not a member in this Channel !';
+    if (!joined)
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const result = await this.prisma.channel.update({
       where: {
         name: name,
@@ -332,8 +362,15 @@ export class ChannelService {
         },
       },
     });
-    if (!room) console.log("Can't delete a room chat !");
-    return result;
+    if (!room)
+      return {
+        message: "Can't delete a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //kick User
@@ -349,8 +386,16 @@ export class ChannelService {
         username: username,
       },
     });
-    if (!user) return 'No such username !';
-    if (!channel) return 'No such channel !';
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     const iskicker = channel.users.some((user) => {
       return user.id_user === id_user;
     });
@@ -358,7 +403,10 @@ export class ChannelService {
       return user.username === username;
     });
     if (!iskicker || !iskicked)
-      return 'The user is not a member in this Channel !';
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const kicker = await this.prisma.room_Chat.findUnique({
       where: {
         id_channel_id_user: {
@@ -375,10 +423,21 @@ export class ChannelService {
         },
       },
     });
-    if (kicked.user_role === 'OWNER') return "You can't kick the owner !";
-    if (kicker.user_role === 'MEMBER') return "You can't kick !";
+    if (kicked.user_role === 'OWNER')
+      return {
+        message: "You can't kick the owner !",
+        object: null,
+      };
+    if (kicker.user_role === 'MEMBER')
+      return {
+        message: "You can't kick !",
+        object: null,
+      };
     if (kicked.user_role === 'ADMIN' && kicker.user_role !== 'OWNER')
-      return "You can't kick the admin !";
+      return {
+        message: "You can't kick the admin !",
+        object: null,
+      };
     const result = await this.prisma.channel.update({
       where: {
         name: name,
@@ -397,8 +456,15 @@ export class ChannelService {
         },
       },
     });
-    if (!room) console.log("Can't delete a room chat !");
-    return result;
+    if (!room)
+      return {
+        message: "Can't delete a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //SET ADMIN
@@ -414,8 +480,16 @@ export class ChannelService {
         username: username,
       },
     });
-    if (!user) return 'No such username !';
-    if (!channel) return 'No such channel !';
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     const isOwner = channel.users.some((user) => {
       return user.id_user === id_user;
     });
@@ -423,7 +497,10 @@ export class ChannelService {
       return user.username === username;
     });
     if (!isOwner || !isMember)
-      return 'The user is not a member in this Channel !';
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const owner = await this.prisma.room_Chat.findUnique({
       where: {
         id_channel_id_user: {
@@ -441,8 +518,15 @@ export class ChannelService {
       },
     });
     if (owner.user_role === 'MEMBER')
-      return "You can't set a member as admin !";
-    if (member.user_role !== 'MEMBER') return 'the user is an admin !';
+      return {
+        message: "You can't set a member as admin !",
+        object: null,
+      };
+    if (member.user_role !== 'MEMBER')
+      return {
+        message: 'The user is an admin !',
+        object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -454,8 +538,15 @@ export class ChannelService {
         user_role: 'ADMIN',
       },
     });
-    if (!result) console.log("Can't update a room chat !");
-    return result;
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //SET MEMBER
@@ -471,8 +562,16 @@ export class ChannelService {
         username: username,
       },
     });
-    if (!user) return 'No such username !';
-    if (!channel) return 'No such channel !';
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     const isOwner = channel.users.some((user) => {
       return user.id_user === id_user;
     });
@@ -480,7 +579,10 @@ export class ChannelService {
       return user.username === username;
     });
     if (!isOwner || !idAdmin)
-      return 'The user is not a member in this Channel !';
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const owner = await this.prisma.room_Chat.findUnique({
       where: {
         id_channel_id_user: {
@@ -497,9 +599,21 @@ export class ChannelService {
         },
       },
     });
-    if (owner.user_role !== 'OWNER') return "You can't set a admin as member !";
-    if (admin.user_role === 'OWNER') return 'You are the owner !';
-    if (admin.user_role !== 'ADMIN') return 'the user is a member !';
+    if (owner.user_role !== 'OWNER')
+      return {
+        message: "You can't set a admin as member !",
+        object: null,
+      };
+    if (admin.user_role === 'OWNER')
+      return {
+        message: 'You are the owner !',
+        object: null,
+      };
+    if (admin.user_role !== 'ADMIN')
+      return {
+        message: 'The user is a member !',
+        object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -511,8 +625,15 @@ export class ChannelService {
         user_role: 'MEMBER',
       },
     });
-    if (!result) console.log("Can't update a room chat !");
-    return result;
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //BAN MEMBER
@@ -528,8 +649,16 @@ export class ChannelService {
         username: username,
       },
     });
-    if (!user) return 'No such username !';
-    if (!channel) return 'No such channel !';
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     const isAdmin = channel.users.some((user) => {
       return user.id_user === id_user;
     });
@@ -537,7 +666,10 @@ export class ChannelService {
       return user.username === username;
     });
     if (!isAdmin || !isMember)
-      return 'The user is not a member in this Channel !';
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const admin = await this.prisma.room_Chat.findUnique({
       where: {
         id_channel_id_user: {
@@ -554,8 +686,21 @@ export class ChannelService {
         },
       },
     });
-    if (admin.user_role === 'MEMBER') return "You can't ban any member !";
-    if (member.user_role === 'OWNER') return 'You are the owner !';
+    if (admin.user_role === 'MEMBER')
+      return {
+        message: "You can't ban any member !",
+        object: null,
+      };
+    if (member.user_role === 'OWNER')
+      return {
+        message: 'You are the owner !',
+        object: null,
+      };
+    if (member.member_status === 'MUTED')
+      return {
+        message: 'The user is muted !',
+        object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -567,8 +712,15 @@ export class ChannelService {
         member_status: 'BANNED',
       },
     });
-    if (!result) console.log("Can't update a room chat !");
-    return result;
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 
   //UNBAN MEMBER
@@ -584,8 +736,16 @@ export class ChannelService {
         username: username,
       },
     });
-    if (!user) return 'No such username !';
-    if (!channel) return 'No such channel !';
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     const isAdmin = channel.users.some((user) => {
       return user.id_user === id_user;
     });
@@ -593,7 +753,10 @@ export class ChannelService {
       return user.username === username;
     });
     if (!isAdmin || !isMember)
-      return 'The user is not a member in this Channel !';
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
     const admin = await this.prisma.room_Chat.findUnique({
       where: {
         id_channel_id_user: {
@@ -610,8 +773,16 @@ export class ChannelService {
         },
       },
     });
-    if (admin.user_role === 'MEMBER') return "You can't unban any member !";
-    if (member.member_status !== 'BANNED') return "The user isn't banned !";
+    if (admin.user_role === 'MEMBER')
+      return {
+        message: "You can't unban any member !",
+        object: null,
+      };
+    if (member.member_status !== 'BANNED')
+      return {
+        message: "The user isn't banned !",
+        object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -623,7 +794,201 @@ export class ChannelService {
         member_status: 'NONE',
       },
     });
-    if (!result) console.log("Can't update a room chat !");
-    return result;
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
+  }
+
+  //MUTE MEMBER
+  async muteMember(
+    id_user: string,
+    username: string,
+    name: string,
+    muteTime: number,
+  ) {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        name: name,
+      },
+      include: { users: true },
+    });
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
+    const isAdmin = channel.users.some((user) => {
+      return user.id_user === id_user;
+    });
+    const isMember = channel.users.some((user) => {
+      return user.username === username;
+    });
+    if (!isAdmin || !isMember)
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
+    const admin = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: id_user,
+        },
+      },
+    });
+    const member = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+        },
+      },
+    });
+    if (admin.user_role === 'MEMBER')
+      return {
+        message: "You can't Mute any member !",
+        object: null,
+      };
+    if (member.member_status === 'MUTED')
+      return {
+        message: 'The user is muted !',
+        object: null,
+      };
+    if (member.member_status === 'BANNED')
+      return {
+        message: 'The user is banned !',
+        object: null,
+      };
+    const result = await this.prisma.room_Chat.update({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+        },
+      },
+      data: {
+        member_status: 'MUTED',
+        time_muted: new Date(),
+      },
+    });
+    setTimeout(async () => {
+      await this.prisma.room_Chat.update({
+        where: {
+          id_channel_id_user: {
+            id_channel: channel.id_channel,
+            id_user: user.id_user,
+          },
+        },
+        data: {
+          member_status: 'NONE',
+        },
+      });
+    }, muteTime);
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
+  }
+
+  async unmuteMember(id_user: string, username: string, name: string) {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        name: name,
+      },
+      include: { users: true },
+    });
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+    if (!user)
+      return {
+        message: 'No such username !',
+        object: null,
+      };
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
+    const isAdmin = channel.users.some((user) => {
+      return user.id_user === id_user;
+    });
+    const isMember = channel.users.some((user) => {
+      return user.username === username;
+    });
+    if (!isAdmin || !isMember)
+      return {
+        message: 'The user is not a member in this Channel !',
+        object: null,
+      };
+    const admin = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: id_user,
+        },
+      },
+    });
+    const member = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+        },
+      },
+    });
+    if (admin.user_role === 'MEMBER')
+      return {
+        message: "You can't Unmute any member ",
+        object: null,
+      };
+    if (member.member_status !== 'MUTED')
+      return {
+        message: "The user isn't muted !",
+        object: null,
+      };
+    const result = await this.prisma.room_Chat.update({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+        },
+      },
+      data: {
+        member_status: 'NONE',
+      },
+    });
+    if (!result)
+      return {
+        message: "Can't update a room chat !",
+        object: null,
+      };
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
   }
 }

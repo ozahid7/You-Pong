@@ -29,9 +29,9 @@ const GroupDropdown = ({ channels }: HomePage) => {
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
-    const result = leaveChannel(channels.name);
-    console.log(result);
-    mutate("/myData", (cachedData) => [...cachedData, channels], true);
+    leaveChannel(channels.name);
+    // console.log(result);
+    // mutate("/myData", (cachedData) => [...cachedData, channels], true);
   };
 
   return (

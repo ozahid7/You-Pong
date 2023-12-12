@@ -23,18 +23,19 @@ import {
   setFile,
   getChannels,
   joinChannel,
-  getMainUser,
+  userChannels,
 } from "@/app/(main)/chat/data/api";
 import {
     IoLockClosedOutline,
     IoLockOpenOutline,
     IoEnterOutline,
 } from "react-icons/io5";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
+import groups from "../../../../public/groups.svg";
 
 export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  
+
   const close = () => {
     onClose();
   };
@@ -42,65 +43,36 @@ export default function JoinModal() {
   const fetchData = async () => {
     try {
       const result = await getChannels();
+
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   const {
     data: channels,
     error,
     isLoading,
   } = useSWR<Channel[]>("/myChannels", fetchData);
-  
-  const [data, setData] = useState<Channel[]>(channels);
-  const { data: myUser } = useSWR<User>("/myUser", getMainUser);
-  
+
   if (error) return <div>ERROR</div>;
 
   if (!channels && isLoading)
     return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
-        LOADING
-      </div>
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
     );
 
-  const handleJoin = (obj: Channel) => {
-    joinChannel(obj.name);
-    mutate("/myData", (cachedData) => [...cachedData, channels], true);
+  const handleJoin = (name: string) => {
+    joinChannel(name);
+    // mutate("/myData", );
     close();
   };
 
-  const removeChannel = (name: string) => {
-    const index = channels.findIndex((item) => item.name === name);
-    if (index !== -1) {
-      const newData = [...channels];
-      newData.splice(index, 1);
-      setData(newData);
-    }
-  };
-
-  const filterChannels = (myUser) => {
-    myUser.channels.map((obj : Channel) => {
-      removeChannel(obj.name);
-    })
-  };
-
-  filterChannels(myUser);
-  console.log(data);
-  
   return (
     <Fragment>
       <Button
         size="sm"
-        onClick={() => {
-          mutate(
-            "/myChannels",
-            (cachedData) => [...cachedData, channels],
-            true
-          );
-        }}
         onPress={onOpen}
         className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md  orange_button border-none hover:border-none"
       >
@@ -113,6 +85,7 @@ export default function JoinModal() {
         onClose={close}
         size="2xl"
         scrollBehavior="inside"
+        backdrop="blur"
         placement="center"
       >
         <ModalContent className="">
@@ -158,9 +131,9 @@ export default function JoinModal() {
                               <TableRow key={i}>
                                 <TableCell>
                                   <Image
-                                    src={obj.avatar}
-                                    width={50}
-                                    height={50}
+                                    src={obj.avatar || groups}
+                                    width={60}
+                                    height={60}
                                     className="border-[2px] border-palette-green p-[0.5]"
                                     alt="image"
                                   />
@@ -182,7 +155,7 @@ export default function JoinModal() {
                                   <Button
                                     size="lg"
                                     className={`flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                    onClick={() => handleJoin(obj)}
+                                    onClick={() => handleJoin(obj.name)}
                                   >
                                     <IoEnterOutline />
                                     Join
