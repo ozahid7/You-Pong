@@ -64,7 +64,7 @@
 //               >
 //                 <div className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]">
 //                   <img
-//                     src={`http://178.62.74.69:400/file/${channel.avatar}`}
+//                     src={`http://localhost:4000/file/${channel.avatar}`}
 //                     alt="logo"
 //                     className="h-8   object-contain border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
 //                   />

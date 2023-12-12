@@ -16,17 +16,7 @@ interface obj {
 
 const GroupsChat = ({ channels }: obj) => {
   const [user, setUser] = useState<User>();
-  const [online, setOnline] = useState<number>(0);
-
-  // useEffect(() => {
-  //   const Members = async () => {
-  //     const result = await getMembers();
-  //     setUser(result);
-  //     return result;
-  //   };
-
-  //   Members();
-  // }, []);
+  const [online, setOnline] = useState<number>(0);  
 
 
   return (
@@ -39,7 +29,7 @@ const GroupsChat = ({ channels }: obj) => {
               radius="sm"
               color="default"
               className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px]"
-              src={`http://178.62.74.69:400/file/${channels.avatar}`}
+              src={channels.avatar}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px]">

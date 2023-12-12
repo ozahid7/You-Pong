@@ -51,7 +51,6 @@ const MembersEdit = () => {
   const fetchData = async () => {
     try {
       const result = await getChannels();
-      console.log(result);
 
       return result.object;
     } catch (error) {

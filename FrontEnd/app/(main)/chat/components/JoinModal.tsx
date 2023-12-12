@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 import {
   Modal,
   ModalContent,
@@ -16,15 +16,14 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import Image from "next/image";
-import groups from "../../../../public/groups.svg";
-import ozahid from "../../../../public/ozahid-.jpeg";
-import { MyInput, Background, Submit } from "../../../../components";
-import { Channel } from "@/types";
+import { Background } from "../../../../components";
+import { Channel, User } from "@/types";
 import {
   setData,
   setFile,
   getChannels,
   joinChannel,
+  getMainUser,
 } from "@/app/(main)/chat/data/api";
 import {
   IoLockClosedOutline,
@@ -33,16 +32,9 @@ import {
 } from "react-icons/io5";
 import useSWR, { mutate } from "swr";
 
-// export var setDataObj: Channel = {
-//   type: "PUBLIC",
-//   name: "Channel",
-//   description: "Change this description",
-//   avatar: groups,
-// };
-
 export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
+  
   const close = () => {
     onClose();
   };
@@ -50,23 +42,24 @@ export default function JoinModal() {
   const fetchData = async () => {
     try {
       const result = await getChannels();
-      console.log(result);
-
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   const {
-    data: objects,
+    data: channels,
     error,
     isLoading,
   } = useSWR<Channel[]>("/myChannels", fetchData);
-
+  
+  const [data, setData] = useState<Channel[]>(channels);
+  const { data: myUser } = useSWR<User>("/myUser", getMainUser);
+  
   if (error) return <div>ERROR</div>;
 
-  if (!objects && isLoading)
+  if (!channels && isLoading)
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
         LOADING
@@ -75,16 +68,38 @@ export default function JoinModal() {
 
   const handleJoin = (obj: Channel) => {
     joinChannel(obj.name);
-    mutate("/myData", (cachedData) => [...cachedData, objects], true);
+    mutate("/myData", (cachedData) => [...cachedData, channels], true);
     close();
   };
 
+  const removeChannel = (name: string) => {
+    const index = channels.findIndex((item) => item.name === name);
+    if (index !== -1) {
+      const newData = [...channels];
+      newData.splice(index, 1);
+      setData(newData);
+    }
+  };
+
+  const filterChannels = (myUser) => {
+    myUser.channels.map((obj : Channel) => {
+      removeChannel(obj.name);
+    })
+  };
+
+  filterChannels(myUser);
+  console.log(data);
+  
   return (
     <Fragment>
       <Button
         size="sm"
         onClick={() => {
-          mutate("/myChannels", (cachedData) => [...cachedData, objects], true);
+          mutate(
+            "/myChannels",
+            (cachedData) => [...cachedData, channels],
+            true
+          );
         }}
         onPress={onOpen}
         className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md  orange_button border-none hover:border-none"
@@ -133,8 +148,8 @@ export default function JoinModal() {
                         emptyContent={"No channels to display."}
                         className=""
                       >
-                        {objects &&
-                          objects
+                        {channels &&
+                          channels
                             .filter(
                               (obj: any) =>
                                 obj.type !== "DIRECT" && obj.type !== "PRIVATE"
@@ -143,7 +158,7 @@ export default function JoinModal() {
                               <TableRow key={i}>
                                 <TableCell>
                                   <Image
-                                    src={`http://178.62.74.69:400/file/${obj.avatar}`}
+                                    src={obj.avatar}
                                     width={50}
                                     height={50}
                                     className="border-[2px] border-palette-green p-[0.5]"
@@ -166,7 +181,7 @@ export default function JoinModal() {
                                 <TableCell className="flex flex-row">
                                   <Button
                                     size="lg"
-                                    className="flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                                    className={`flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
                                     onClick={() => handleJoin(obj)}
                                   >
                                     <IoEnterOutline />
