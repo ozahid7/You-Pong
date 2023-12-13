@@ -46,6 +46,7 @@ export default function GameSettings(props: {
                                         props.setMap("orange");
                                     }}
                                 ></Map>
+                                
                                 <Map
                                     elements="white"
                                     border="white"

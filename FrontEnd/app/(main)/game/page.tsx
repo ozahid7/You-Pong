@@ -6,6 +6,7 @@ import Image from "next/image";
 import ozahid from "../../../public/ozahid-.jpeg";
 import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
+import MyCountDown from "./CountDown";
 
 export default function game() {
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -14,6 +15,7 @@ export default function game() {
   const [map, setMap] = useState("orange");
   const [mode, setMode] = useState("easy");
   const [showPlayerLoader, setShowPlayerLoder] = useState(false)
+  const [showCounter, setShowCounter] = useState(false)
 
   console.log('map = ', map, mode)
 
@@ -161,22 +163,36 @@ export default function game() {
     }
   }, []);
   return (
-    <div className="flex w-full h-[90%] justify-center items-center ">
-      <div className="flex w-[88%] h-[90%]">
-        <MyContainer>
-          <div className="flex flex-col w-full h-full">
-            <div className="flex justify-center w-full min-h-[60px] h-[7.5%]">
-              <ScoreCard/>
-            </div>
-            <div
-              ref={sceneRef}
-              className="flex min-w-full w-full h-[92%]"
-            ></div>
+      <div className="flex w-full h-[90%] justify-center items-center ">
+          <div className="flex w-[88%] h-[90%]">
+              <MyContainer>
+                  <div className="flex flex-col w-full h-full">
+                      <div className="flex justify-center w-full min-h-[60px] h-[7.5%]">
+                          <ScoreCard />
+                      </div>
+                      <div
+                          ref={sceneRef}
+                          className="flex min-w-full w-full h-[92%]"
+                      ></div>
+                  </div>
+                  <MyCountDown
+                      isOpen={showCounter}
+                      setIsOpen={setShowCounter}
+                  />
+                  <GameSettings
+                      showPlayerLoader={setShowPlayerLoder}
+                      setMode={setMode}
+                      setMap={setMap}
+                  />
+                  {showPlayerLoader && (
+                      <PlayerLoader
+                          isOpen={showPlayerLoader}
+                          showCounter={setShowCounter}
+                          showLoader={setShowPlayerLoder}
+                      />
+                  )}
+              </MyContainer>
           </div>
-          <GameSettings showPlayerLoader={setShowPlayerLoder} setMode={setMode} setMap={setMap}/>
-          <PlayerLoader isOpen={showPlayerLoader} />
-        </MyContainer>
       </div>
-    </div>
   );
 }

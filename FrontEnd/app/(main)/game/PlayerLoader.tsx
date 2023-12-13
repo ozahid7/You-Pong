@@ -3,14 +3,16 @@ import { MyDialog } from "@/components";
 import MiniLoader from "@/components/tools/MiniLoader";
 import React, { useEffect, useState } from "react";
 
-const PlayerLoader = (props: { isOpen: boolean }) => {
+const PlayerLoader = (props: { isOpen: boolean, showCounter: any, showLoader: any }) => {
     const [isMatched, setIsmatched] = useState(false);
 
     useEffect(() => {
         if (!isMatched) {
             setTimeout(() => {
                 setIsmatched(true);
-            }, 8000);
+                props.showLoader(false)
+                props.showCounter(true)
+            }, 5000);
         }
     }, [isMatched]);
     return (
