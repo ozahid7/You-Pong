@@ -57,7 +57,7 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
-            <MembersEdit></MembersEdit>
+            <MembersEdit users={users}></MembersEdit>
           </li>
           <li>
             <ChatEdit channels={channels} users={users}></ChatEdit>
