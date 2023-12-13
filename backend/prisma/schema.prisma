@@ -82,12 +82,14 @@ model User {
 	victory Int @default(0)
 	defeats Int @default(0)
 	level Float @default(0.0)
-	rank Int?
+	rank Int? @default(0)
 	status user_status @default(OFFLINE)
 	created_at DateTime @default(now())
 	updated_at DateTime @updatedAt
 	rooms Room_Chat[] @relation(name: "users")
 	blocked Room_Chat[] @relation(name: "blocked")
+	blocked_user User[] @relation("blocking_users")
+	blocked_from User[] @relation("blocking_users")
 	channels Channel[]
 	messages Message[]
 	// notifications Notification[]
@@ -105,7 +107,7 @@ model Channel {
 	description String?
 	avatar String?
 	hash String?
-	type channel_type @default(DIRECT)
+	type channel_type @default(PUBLIC)
 	created_at DateTime @default(now())
 	updated_at DateTime @updatedAt
 	users User[]
