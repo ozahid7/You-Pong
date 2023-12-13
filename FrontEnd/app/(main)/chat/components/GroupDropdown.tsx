@@ -19,6 +19,8 @@ import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import { leaveChannel, userChannels } from "../data/api";
 import { useSWRConfig } from "swr";
+import { fetchData_userChannels } from "../page";
+import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {
   channels: Channel;
@@ -32,7 +34,8 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
   const Leaving = () => {
     leaveChannel(channels.name);
     // console.log(result);
-    // mutate("/myData", (cachedData) => [...cachedData, channels], true);
+    mutate(fetchData_userChannels);
+    mutate(fetchData_getChannels);
   };
 
   return (

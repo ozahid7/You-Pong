@@ -18,7 +18,11 @@ import {
 import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel } from "@/types";
-import { getChannels, joinChannel } from "@/app/(main)/chat/data/api";
+import {
+  getChannels,
+  joinChannel,
+  userChannels,
+} from "@/app/(main)/chat/data/api";
 import {
   IoLockClosedOutline,
   IoLockOpenOutline,
@@ -27,29 +31,30 @@ import {
 import useSWR from "swr";
 import groups from "../../../../public/groups.svg";
 import { InputGroupPass } from ".";
+import { fetchData_userChannels } from "../page";
 
-export default function JoinModal() {
+export const fetchData_getChannels = async () => {
+  try {
+    const result = await getChannels();
+
+    return result.object;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export default function JoinModal({ mutate }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
     onClose();
   };
 
-  const fetchData = async () => {
-    try {
-      const result = await getChannels();
-
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const {
     data: channels,
     error,
     isLoading,
-  } = useSWR<Channel[]>("/myChannels", fetchData);
+  } = useSWR<Channel[]>("/myChannels", fetchData_getChannels);
 
   if (error) return <div>ERROR</div>;
 
@@ -67,10 +72,11 @@ export default function JoinModal() {
       onClose();
     };
 
-    const OpenModal = () => {
+    const OpenModal = async () => {
       if (obj.type === "PROTECTED") setOpen(onOpen);
       else if (obj.type === "PUBLIC") {
         joinChannel(obj.name, null);
+        mutate(fetchData_userChannels);
         close();
       }
     };
@@ -80,6 +86,7 @@ export default function JoinModal() {
         console.log(passRef.current.value);
         joinChannel(obj.name, passRef.current.value);
       }
+      mutate(fetchData_userChannels);
       close();
     };
 
