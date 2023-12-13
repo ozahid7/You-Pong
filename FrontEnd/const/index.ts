@@ -12,10 +12,21 @@ import {
 } from "react-icons/lu";
 import { renderIcon } from "@/utils";
 
+export const myRoutes = {
+    root: "/",
+    dashboard: "/user/profile",
+    settings: "/settings",
+    friends: "/friends",
+    chat: "/chat",
+    game: "/game",
+};
+
+
 //render react icons
-export const menuElements = [
-  { href: "/login", label: "Logout", icon: renderIcon(LuLogOut) },
-  { href: "/settings", label: "Setting", icon: renderIcon(LuSettings) },
+export const navMenuElements = [
+  { href: myRoutes.dashboard, label: "Profile", icon: renderIcon(LuUser) },
+  { href: myRoutes.settings, label: "Setting", icon: renderIcon(LuSettings) },
+  { href: "logout", label: "Logout", icon: renderIcon(LuLogOut) },
 ];
 
 export const menuChatElements = [
@@ -50,10 +61,3 @@ export const landing_page_description =
  the mighty Pong contest! Thanks to your website, users will play Pong with others.\
 You will provide a nice user interface, a chat, and real-time multiplayer online games!";
 
-export const myRoutes = {
-    root: '/',
-    dashboard: '/user/profile',
-    settings: '/settings',
-    friends: '/friends',
-    chat: '/chat'
-}

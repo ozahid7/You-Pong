@@ -9,13 +9,12 @@ import { MyContext } from "@/app/(main)/layout";
 import { useQuery } from "@tanstack/react-query";
 import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
-import { menuElements } from "@/const";
+import { myRoutes, navMenuElements } from "@/const";
+import { useRouter } from "next/navigation";
 
-const obj = {
-    name: "oussama zahid",
-};
 const NavBar = () => {
     const user = useContext(MyContext);
+    const router = useRouter()
     const { username, level, avatar } = user.userData;
     const [friends, setFriends] = useState<searchUsers>();
     const isMorethan: boolean = username.length > 7 ? true : false;
@@ -41,18 +40,17 @@ const NavBar = () => {
     });
 
     return (
-        <nav className="flex justify-end w-full items-center px-2 sm:px-14 py-6">
+        <nav className="flex justify-end w-full items-center px-4 h:px-8 sm:px-14 py-6">
             <div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
                 {/* input search */}
                 <SearchBar FriendsList={friends} />
-
-                <div className="p-2 border-2 border-white rounded-sm">
-                    <LuBell className="text-white stroke-white h-5 w-5" />
-                </div>
                 <img
-                    className="border-2 hidden s:flex border-white rounded-sm object-contain"
+                    className="border-2 hidden cursor-pointer s:flex border-white rounded-sm object-contain"
                     src={avatar}
                     alt=""
+                    onClick={() => {
+                        router.push(myRoutes.dashboard);
+                    }}
                     width={44}
                     height={44}
                 />
@@ -76,7 +74,7 @@ const NavBar = () => {
                         style="text-white cursor-pointer"
                         size={25}
                         placement="right-0"
-                        menuElements={menuElements}
+                        menuElements={navMenuElements}
                     />
                 </div>
             </div>

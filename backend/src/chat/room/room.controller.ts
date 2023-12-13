@@ -22,14 +22,14 @@ export class RoomController {
   @Post()
   async postRoom(
     @Query('username') username: string,
-    @Query('channel_name') channel_name: string,
+    @Query('id_channel') id_channel: string,
     @Query('room_name') room_name: string,
   ) {
     try {
       const result = await this.roomService.postRoom(
         username,
         room_name,
-        channel_name,
+        id_channel,
       );
       return result;
     } catch (error) {

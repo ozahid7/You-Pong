@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect, usePathname, useRouter } from "next/navigation";
 import { FormEvent, useContext, useState } from "react";
-
+import { IoGameControllerOutline } from "react-icons/io5";
 import {
     LuLayoutDashboard,
     LuUsers,
@@ -27,7 +27,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
         <LuLayoutDashboard size="64" />,
         <LuUsers size="64" />,
         <LuMessageSquare size="64" />,
-        <LuBell size="64" />,
+        <IoGameControllerOutline size="64" />,
         <LuSettings size="64" />,
     ];
 
@@ -67,7 +67,7 @@ const SideBar = () => {
     const handleLogout = async () => {
         const apiUrl = `${apiHost}user/signout`;
 
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         await axios
             .get(apiUrl, { withCredentials: true })
             .then((response) => {
@@ -112,15 +112,15 @@ const SideBar = () => {
                     {RenderSideBarElements(2, myRoutes.chat, "Messages")}
                     {RenderSideBarElements(
                         3,
-                        "/notifications",
-                        "Notifications"
+                        myRoutes.game,
+                        "Game"
                     )}
                     {RenderSideBarElements(4, myRoutes.settings, "Settings")}
                 </div>
                 {/* bottom part */}
 
                 <div className="h-full w-full  pb-6 justify-end flex flex-col space-y-6 items-center px-2">
-                    <Link className="h-auto w-[92%] " href="/">
+                    <Link className="h-auto w-[92%] " href={myRoutes.dashboard}>
                         <div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
                             <img
                                 className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
@@ -130,8 +130,8 @@ const SideBar = () => {
                                 height={100}
                             />
                             <p className="text-gray-500 break-all text-center hidden 2xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
-                                {username.length > 10
-                                    ? username.slice(0, 8) + "..."
+                                {username.length > 9
+                                    ? username.slice(0, 7) + "..."
                                     : username}
                             </p>
                         </div>

@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { blockUser } from "@/utils/friends";
 import { QueryClient, useQuery } from "@tanstack/react-query";
+import { apiHost, myRoutes } from "@/const";
+import axios from "axios";
 
 const MyDropdown = (props: {
     icon: any;
@@ -20,6 +22,23 @@ const MyDropdown = (props: {
 }) => {
     const router = useRouter();
     const friendsQuery = new QueryClient()
+
+    const handleLogout = async () => {
+        const apiUrl = `${apiHost}user/signout`;
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        await axios
+            .get(apiUrl, { withCredentials: true })
+            .then((response) => {
+                console.log("data posted successfuly : ");
+                localStorage.removeItem("isLoged");
+                router.push("/");
+            })
+            .catch((e) => {
+                console.log(".catch error", e);
+            });
+    };
+
     const handelClick = (e: string) => {
         if (e === "/user/") router.push(e + props.user);
         else if (e === "/game") router.push(e);
@@ -28,6 +47,14 @@ const MyDropdown = (props: {
                 props.setDataInvalid(true)
             })
         }
+        else if (e === '/settings'){
+            router.push(e)
+        }
+        else if (e === 'logout'){
+            handleLogout()
+        }
+        else if (e === '/user/profile')
+            router.push(myRoutes.dashboard)
     };
 
     return (

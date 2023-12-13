@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { messageDto } from '../dto/message.create.dto';
+import { use } from 'passport';
 
 @Injectable()
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
   //GET MANY
-  async getMessages(name: string, id_user: string) {
+  async getMessages(id_channel: string, id_user: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
-        name: name,
+        id_channel: id_channel,
       },
       include: { users: true },
     });
@@ -21,14 +22,35 @@ export class MessageService {
           created_at: 'desc',
         },
       });
-      if (messages.length !== 0)
+      const room = await this.prisma.room_Chat.findUnique({
+        where: {
+          id_channel_id_user: {
+            id_channel: channel.id_channel,
+            id_user: id_user,
+          },
+        },
+        include: { blocked_users: true },
+      });
+      if (!room)
+        return {
+          message: 'No room chat !',
+          object: null,
+        };
+      const blockedUsers = room.blocked_users.map((user) => user.id_user);
+      const messagesFiltered = await Promise.all(
+        messages.map(async (message) => {
+          if (!blockedUsers.includes(message.id_sender)) return message;
+        }),
+      );
+      const result = messagesFiltered.filter((message) => message);
+      if (result.length !== 0)
         return {
           message: 'Messages founded successfully',
-          object: messages,
+          object: result,
         };
       return {
         message: 'No Messages to display !',
-        object: messages,
+        object: result,
       };
     }
     return {
@@ -47,6 +69,15 @@ export class MessageService {
     return result;
   }
 
+  //DELETE CHANNEL MANY
+  async deleteChannelMessages(id_channel: string) {
+    const result = await this.prisma.message.deleteMany({
+      where: {
+        id_channel: id_channel,
+      },
+    });
+    return result;
+  }
   //DELETE MANY
   async deleteMessages() {
     const result = await this.prisma.message.deleteMany();
