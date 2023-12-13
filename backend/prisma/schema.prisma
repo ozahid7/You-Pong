@@ -101,7 +101,7 @@ model User {
 //CHANNEL MODEL
 model Channel {
 	id_channel String @id @default(uuid())
-	name String @unique @default(uuid())
+	name String @default(uuid())
 	description String?
 	avatar String?
 	hash String?
