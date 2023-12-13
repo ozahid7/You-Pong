@@ -5,20 +5,37 @@ import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { GroupDropdown } from ".";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { getMembers } from "../data/api";
+import { getChannel, getMembers } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
+import useSWR from "swr";
 
 interface obj {
   channels: Channel;
 }
 
 const GroupsChat = ({ channels }: obj) => {
+  const [members, setMembers] = useState<number>(0);
 
-  console.log("GroupsChat: users", channels.users);
-  
+  const fetchData_Channel = async () => {
+    try {
+      const result = await getChannel(channels.name);
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  const {
+    data: channel,
+    error,
+    isLoading,
+  } = useSWR<Channel>("/myChannel", fetchData_Channel);
+
+  useEffect(() => {
+    if (channel && !isLoading && !error) setMembers(channel.users.length);
+  }, [channel, members]);
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between ">
@@ -36,8 +53,8 @@ const GroupsChat = ({ channels }: obj) => {
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px]">
                 {channels.name}
               </div>
-              <div className="text-[#00993D] font-[700] text-[15px] font-esteban sm_:block xs:hidden">
-                online: members
+              <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm_:block xs:hidden">
+                online: {members} {members > 1 ? "members" : "member"}
               </div>
             </div>
           </div>

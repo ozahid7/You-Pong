@@ -56,6 +56,17 @@ export const getChannels = async () => {
   }
 };
 
+export const getChannel = async (name: string) => {
+  try {
+    const response = await axios.get(`http://localhost:4000/chat/channel/${name}`);
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
 export const setData = async (data: Channel) => {
   try {
     const obj = {
