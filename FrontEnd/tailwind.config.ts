@@ -81,6 +81,7 @@ const config: Config = {
                 arimo: ["Arimo"],
                 archivo: ["Archivo"],
                 esteban: ["Esteban"],
+                number: ["Black Ops One"],
             },
             backgroundImage: {
                 background: "url('/background.png')",
