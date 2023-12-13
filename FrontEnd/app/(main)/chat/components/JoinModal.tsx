@@ -1,60 +1,60 @@
 "use client";
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../components";
-import { Channel, User } from "@/types";
+import { Channel } from "@/types";
 import {
-  setData,
-  setFile,
   getChannels,
   joinChannel,
   userChannels,
 } from "@/app/(main)/chat/data/api";
 import {
-    IoLockClosedOutline,
-    IoLockOpenOutline,
-    IoEnterOutline,
+  IoLockClosedOutline,
+  IoLockOpenOutline,
+  IoEnterOutline,
 } from "react-icons/io5";
 import useSWR from "swr";
 import groups from "../../../../public/groups.svg";
+import { InputGroupPass } from ".";
+import { fetchData_userChannels } from "../page";
 
-export default function JoinModal() {
+export const fetchData_getChannels = async () => {
+  try {
+    const result = await getChannels();
+
+    return result.object;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+export default function JoinModal({ mutate }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
     onClose();
   };
 
-  const fetchData = async () => {
-    try {
-      const result = await getChannels();
-
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const {
     data: channels,
     error,
     isLoading,
-  } = useSWR<Channel[]>("/myChannels", fetchData);
+  } = useSWR<Channel[]>("/myChannels", fetchData_getChannels);
 
   if (error) return <div>ERROR</div>;
 
@@ -63,10 +63,71 @@ export default function JoinModal() {
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
     );
 
-  const handleJoin = (name: string) => {
-    joinChannel(name);
-    // mutate("/myData", );
-    close();
+  const showModal = (obj: Channel) => {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [open, setOpen] = useState<() => void>();
+    const passRef = useRef<HTMLInputElement>();
+
+    const close = () => {
+      onClose();
+    };
+
+    const OpenModal = async () => {
+      if (obj.type === "PROTECTED") setOpen(onOpen);
+      else if (obj.type === "PUBLIC") {
+        joinChannel(obj.name, null);
+        mutate(fetchData_userChannels);
+        close();
+      }
+    };
+
+    const join = () => {
+      if (obj.type === "PROTECTED") {
+        console.log(passRef.current.value);
+        joinChannel(obj.name, passRef.current.value);
+      }
+      mutate(fetchData_userChannels);
+      close();
+    };
+
+    return (
+      <>
+        <Button
+          size="lg"
+          className={`flex mt-1 text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+          onClick={OpenModal}
+          onPress={open}
+        >
+          <IoEnterOutline />
+          Join
+        </Button>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(close) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Set password
+                </ModalHeader>
+                <ModalBody>
+                  <InputGroupPass
+                    ref={passRef}
+                    text="Password"
+                    type="password"
+                    customclass="w-full h-[3rem] self-center"
+                    isPassword={true}
+                  ></InputGroupPass>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={join}>
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
   };
 
   return (
@@ -152,14 +213,7 @@ export default function JoinModal() {
                                   </div>
                                 </TableCell>
                                 <TableCell className="flex flex-row">
-                                  <Button
-                                    size="lg"
-                                    className={`flex text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                    onClick={() => handleJoin(obj.name)}
-                                  >
-                                    <IoEnterOutline />
-                                    Join
-                                  </Button>
+                                  {showModal(obj)}
                                 </TableCell>
                               </TableRow>
                             ))}

@@ -8,9 +8,7 @@ axios.defaults.withCredentials = true;
 
 export const userChannels = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/user/channels", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/user/channels");
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -20,12 +18,10 @@ export const userChannels = async () => {
 };
 
 // http://localhost:4000/chat/channel/join/name
-export const joinChannel = async (name: string) => {
+export const joinChannel = async (name: string, password: string) => {
   try {
-    const password = "null";
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/join?name=${name}&password=${password}`,
-      { withCredentials: true }
+      `http://localhost:4000/chat/channel/join?name=${name}&password=${password}`
     );
     return response.data;
   } catch (error) {
@@ -39,8 +35,7 @@ export const joinChannel = async (name: string) => {
 export const leaveChannel = async (name: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/leave?name=${name}`,
-      { withCredentials: true }
+      `http://localhost:4000/chat/channel/leave?name=${name}`
     );
     return response.data;
   } catch (error) {
@@ -52,9 +47,18 @@ export const leaveChannel = async (name: string) => {
 
 export const getChannels = async () => {
   try {
-    const response = await axios.get("http://localhost:4000/chat/channel", {
-      withCredentials: true,
-    });
+    const response = await axios.get("http://localhost:4000/chat/channel");
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const getChannel = async (name: string) => {
+  try {
+    const response = await axios.get(`http://localhost:4000/chat/channel/${name}`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -75,8 +79,7 @@ export const setData = async (data: Channel) => {
 
     const response = await axios.post(
       "http://localhost:4000/chat/channel",
-      obj,
-      { withCredentials: true }
+      obj
     );
     return response.data;
   } catch (error) {

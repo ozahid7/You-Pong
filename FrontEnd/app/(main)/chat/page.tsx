@@ -21,21 +21,22 @@ import { userChannels } from "./data/api";
 import useSWR from "swr";
 import { Channel } from "@/types";
 
+export const fetchData_userChannels = async () => {
+  try {
+    const result = await userChannels();
+    console.log("userChannels", result);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-  const fetchData_userChannels = async () => {
-    try {
-      const result = await userChannels();
-      console.log("userChannels", result);
-
-      return result;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   const {
     data: channel,
@@ -151,7 +152,7 @@ const Chats = () => {
                               ></MyTabs>
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
-                                <JoinModal />
+                                <JoinModal mutate={mutate} />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

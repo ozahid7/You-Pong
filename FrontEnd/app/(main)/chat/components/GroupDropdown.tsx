@@ -19,19 +19,23 @@ import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import { leaveChannel, userChannels } from "../data/api";
 import { useSWRConfig } from "swr";
+import { fetchData_userChannels } from "../page";
+import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {
   channels: Channel;
+  users: User[];
 }
 
-const GroupDropdown = ({ channels }: HomePage) => {
+const GroupDropdown = ({ channels, users }: HomePage) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
     leaveChannel(channels.name);
     // console.log(result);
-    // mutate("/myData", (cachedData) => [...cachedData, channels], true);
+    mutate(fetchData_userChannels);
+    mutate(fetchData_getChannels);
   };
 
   return (
@@ -53,10 +57,10 @@ const GroupDropdown = ({ channels }: HomePage) => {
           className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
-            <MembersEdit></MembersEdit>
+            <MembersEdit users={users}></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels}></ChatEdit>
+            <ChatEdit channels={channels} users={users}></ChatEdit>
           </li>
           <li>
             <Button
