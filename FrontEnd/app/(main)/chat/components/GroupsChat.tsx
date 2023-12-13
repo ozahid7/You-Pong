@@ -17,6 +17,7 @@ interface obj {
 
 const GroupsChat = ({ channels }: obj) => {
   const [members, setMembers] = useState<number>(0);
+  var m: number = 0;
 
   const fetchData_Channel = async () => {
     try {
@@ -34,7 +35,11 @@ const GroupsChat = ({ channels }: obj) => {
   } = useSWR<Channel>("/myChannel", fetchData_Channel);
 
   useEffect(() => {
-    if (channel && !isLoading && !error) setMembers(channel.users.length);
+    if (channel && !isLoading && !error)
+      channel.users.map((obj) => {
+        obj.status === "ONLINE" ? (m += 1) : (m += 0);
+      });
+    setMembers(m);
   }, [channel, members]);
 
   return (
@@ -59,7 +64,10 @@ const GroupsChat = ({ channels }: obj) => {
             </div>
           </div>
           <div>
-            <GroupDropdown channels={channels}></GroupDropdown>
+            <GroupDropdown
+              channels={channels}
+              users={channel?.users || []}
+            ></GroupDropdown>
           </div>
         </div>
       </div>

@@ -22,9 +22,10 @@ import { useSWRConfig } from "swr";
 
 interface HomePage {
   channels: Channel;
+  users: User[];
 }
 
-const GroupDropdown = ({ channels }: HomePage) => {
+const GroupDropdown = ({ channels, users }: HomePage) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { mutate } = useSWRConfig();
 
@@ -56,7 +57,7 @@ const GroupDropdown = ({ channels }: HomePage) => {
             <MembersEdit></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels}></ChatEdit>
+            <ChatEdit channels={channels} users={users}></ChatEdit>
           </li>
           <li>
             <Button
