@@ -8,6 +8,7 @@ import {
   Param,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MessageService } from './message.service';
@@ -71,6 +72,18 @@ export class MessageController {
       throw new HttpException('Failed to delete messages', 403);
     }
   }
+
+  //DELETE CHANNEL MANY
+  @Delete()
+  async deleteChannelMessages(@Query('id_channel') id_channel: string) {
+    try {
+      const result =
+        await this.messageService.deleteChannelMessages(id_channel);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to delete channel messages', 403);
+    }
+  }
   //DELETE
   @Delete(':id_message')
   async deleteMessage(@Param('id_message') id_message: string) {
@@ -85,10 +98,10 @@ export class MessageController {
   //GET MANY
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getMessages(@Body() name: nameChannel, @Req() req) {
+  async getMessages(@Query('id_channel') id_channel: string, @Req() req) {
     try {
       const id_user = req.user.sub;
-      const result = await this.messageService.getMessages(name.name, id_user);
+      const result = await this.messageService.getMessages(id_channel, id_user);
       return result;
     } catch (error) {
       throw new HttpException('Failed to find messages', 403);

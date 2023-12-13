@@ -32,16 +32,16 @@ export class ChannelController {
       const result = await this.channelService.getChannels(id_user);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to find a channel', 444);
+      throw new HttpException('Failed to find channels', 444);
     }
   }
 
   //Get
   @UseGuards(AuthGuard('jwt'))
-  @Get(':name')
-  async getChannel(@Param('name') name: string) {
+  @Get(':id_channel')
+  async getChannel(@Param('id_channel') id_channel: string) {
     try {
-      const result = await this.channelService.getChannel(name);
+      const result = await this.channelService.getChannel(id_channel);
       return result;
     } catch (error) {
       throw new HttpException('Failed to find a channel', 444);
@@ -72,6 +72,38 @@ export class ChannelController {
     }
   }
 
+  //POST DIRECT
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/direct/')
+  async postChannelDirect(@Req() req, @Query('username') username: string) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.postChannelDirect(
+        id_user,
+        username,
+      );
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to create a direct channel', 443);
+    }
+  }
+
+  //DELETE DIRECT
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('/direct/')
+  async deleteChannelDirect(@Req() req, @Query('username') username: string) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.deleteChannelDirect(
+        id_user,
+        username,
+      );
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to delete a direct channel', 443);
+    }
+  }
+
   //DELETE MANY
   @UseGuards(AuthGuard('jwt'))
   @Delete()
@@ -86,11 +118,11 @@ export class ChannelController {
 
   //DELETE
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':name')
-  async deleteChannel(@Param('name') name: string, @Req() req) {
+  @Delete(':id_channel')
+  async deleteChannel(@Param('id_channel') id_channel: string, @Req() req) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.deleteChannel(name);
+      const result = await this.channelService.deleteChannel(id_channel);
       return result;
     } catch (error) {
       throw new HttpException('Failed to delete a channel', 444);
@@ -100,9 +132,12 @@ export class ChannelController {
   //PUT MODIFY
   @UseGuards(AuthGuard('jwt'))
   @Put('/update/')
-  async putChannel(@Query('name') name: string, @Body() channel: Channel) {
+  async putChannel(
+    @Query('id_channel') id_channel: string,
+    @Body() channel: Channel,
+  ) {
     try {
-      const result = await this.channelService.putchannel(name, channel);
+      const result = await this.channelService.putchannel(id_channel, channel);
       return result;
     } catch (error) {
       throw new HttpException('Failed to update a channel', 444);
@@ -113,7 +148,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/join/')
   async putChannel_join(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('password') password: string,
     @Req() req,
   ) {
@@ -121,7 +156,7 @@ export class ChannelController {
       const id_user: string = req.user.sub;
       const result = await this.channelService.joinChannel(
         id_user,
-        name,
+        id_channel,
         password,
       );
       return result;
@@ -132,10 +167,13 @@ export class ChannelController {
   //PUT LEAVE
   @UseGuards(AuthGuard('jwt'))
   @Put('/leave/')
-  async putChannel_left(@Query('name') name: string, @Req() req) {
+  async putChannel_left(@Query('id_channel') id_channel: string, @Req() req) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.leaveChannel(id_user, name);
+      const result = await this.channelService.leaveChannel(
+        id_user,
+        id_channel,
+      );
       return result;
     } catch (error) {
       throw new HttpException('Failed to leave a channel', 444);
@@ -145,7 +183,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/kick/')
   async putChannel_kick(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Req() req,
   ) {
@@ -154,7 +192,7 @@ export class ChannelController {
       const result = await this.channelService.kickUser(
         id_user,
         username,
-        name,
+        id_channel,
       );
       return result;
     } catch (error) {
@@ -166,7 +204,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/admin/')
   async putChannel_admin(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Req() req,
   ) {
@@ -175,7 +213,7 @@ export class ChannelController {
       const result = await this.channelService.setAdmin(
         id_user,
         username,
-        name,
+        id_channel,
       );
       return result;
     } catch (error) {
@@ -187,7 +225,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/ban/')
   async putChannel_ban(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Req() req,
   ) {
@@ -196,7 +234,7 @@ export class ChannelController {
       const result = await this.channelService.banMember(
         id_user,
         username,
-        name,
+        id_channel,
       );
       return result;
     } catch (error) {
@@ -208,7 +246,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/unban/')
   async putChannel_unban(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Req() req,
   ) {
@@ -217,7 +255,7 @@ export class ChannelController {
       const result = await this.channelService.unbanMember(
         id_user,
         username,
-        name,
+        id_channel,
       );
       return result;
     } catch (error) {
@@ -229,7 +267,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/mute/')
   async putChannel_mute(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Query('time') muteTime: number,
     @Req() req,
@@ -239,7 +277,7 @@ export class ChannelController {
       const result = await this.channelService.muteMember(
         id_user,
         username,
-        name,
+        id_channel,
         muteTime,
       );
       return result;
@@ -252,7 +290,7 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/unmute/')
   async putChannel_unmute(
-    @Query('name') name: string,
+    @Query('id_channel') id_channel: string,
     @Query('username') username: string,
     @Req() req,
   ) {
@@ -261,7 +299,7 @@ export class ChannelController {
       const result = await this.channelService.unmuteMember(
         id_user,
         username,
-        name,
+        id_channel,
       );
       return result;
     } catch (error) {
