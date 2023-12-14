@@ -21,7 +21,7 @@ const GroupsChat = ({ channels }: obj) => {
 
   const fetchData_Channel = async () => {
     try {
-      const result = await getChannel(channels.name);
+      const result = await getChannel(channels.id_channel);
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);

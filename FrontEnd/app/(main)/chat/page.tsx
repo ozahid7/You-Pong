@@ -37,7 +37,6 @@ const Chats = () => {
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-
   const {
     data: channel,
     error,
@@ -49,9 +48,7 @@ const Chats = () => {
 
   if (!channel && isLoading)
     return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
-        {" "}
-      </div>
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
     );
 
   function formatAMPM(date: any) {

@@ -32,7 +32,7 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
-    leaveChannel(channels.name);
+    leaveChannel(channels.id_channel);
     // console.log(result);
     mutate(fetchData_userChannels);
     mutate(fetchData_getChannels);
@@ -57,7 +57,7 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
-            <MembersEdit users={users}></MembersEdit>
+            <MembersEdit channel={channels}></MembersEdit>
           </li>
           <li>
             <ChatEdit channels={channels} users={users}></ChatEdit>

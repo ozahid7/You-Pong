@@ -1,6 +1,5 @@
 import { Channel } from "@/types";
 import axios from "axios";
-import { attachReactRefresh } from "next/dist/build/webpack-config";
 // import fs from "fs";
 // import { setDataObj } from "@/components/tools/GroupsModal";
 
@@ -18,10 +17,10 @@ export const userChannels = async () => {
 };
 
 // http://localhost:4000/chat/channel/join/name
-export const joinChannel = async (name: string, password: string) => {
+export const joinChannel = async (id_channel: string, password: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/join?name=${name}&password=${password}`
+      `http://localhost:4000/chat/channel/join?id_channel=${id_channel}&password=${password}`
     );
     return response.data;
   } catch (error) {
@@ -32,10 +31,10 @@ export const joinChannel = async (name: string, password: string) => {
 };
 
 // http://localhost:4000/chat/channel/leave/name
-export const leaveChannel = async (name: string) => {
+export const leaveChannel = async (id_channel: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/leave?name=${name}`
+      `http://localhost:4000/chat/channel/leave?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -56,9 +55,9 @@ export const getChannels = async () => {
   }
 };
 
-export const getChannel = async (name: string) => {
+export const getChannel = async (id_channel: string) => {
   try {
-    const response = await axios.get(`http://localhost:4000/chat/channel/${name}`);
+    const response = await axios.get(`http://localhost:4000/chat/channel/${id_channel}`);
     return response.data;
   } catch (error) {
     // Handle errors here

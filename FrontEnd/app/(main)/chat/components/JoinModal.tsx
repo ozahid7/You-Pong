@@ -75,7 +75,7 @@ export default function JoinModal({ mutate }) {
     const OpenModal = async () => {
       if (obj.type === "PROTECTED") setOpen(onOpen);
       else if (obj.type === "PUBLIC") {
-        joinChannel(obj.name, null);
+        joinChannel(obj.id_channel, null);
         mutate(fetchData_userChannels);
         close();
       }
@@ -84,7 +84,7 @@ export default function JoinModal({ mutate }) {
     const join = () => {
       if (obj.type === "PROTECTED") {
         console.log(passRef.current.value);
-        joinChannel(obj.name, passRef.current.value);
+        joinChannel(obj.id_channel, passRef.current.value);
       }
       mutate(fetchData_userChannels);
       close();

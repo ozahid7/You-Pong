@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, Fragment, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -21,8 +21,6 @@ import {
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
 import {
-  LuSettings,
-  LuUser,
   LuUsers,
   LuArrowDown,
   LuStar,
@@ -30,18 +28,41 @@ import {
   LuBellOff,
   LuDoorOpen,
 } from "react-icons/lu";
-import groups from "../../../../public/groups.svg";
 import Image from "next/image";
-import {
-  MyInput,
-  Background,
-  Submit,
-  MyContainer,
-} from "../../../../components";
-import { User } from "@/types";
+import { Background } from "../../../../components";
+import { Channel, User } from "@/types";
+import useSWR from "swr";
+import { getChannel, getMainUser } from "../data/api";
 
-const MembersEdit = ({ users }) => {
+interface Props {
+  channel: Channel;
+}
+
+const MembersEdit = ({ channel }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  var disable: string = "";
+
+  const fetchData_getChannel = async () => {
+    try {
+      const result = await getChannel(channel.id_channel);
+      return result.object.users;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchData_getMainUser = async () => {
+    try {
+      const result = await getMainUser();
+
+      return result.userInfo;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const { data: Users } = useSWR<User[]>("/Users", fetchData_getChannel);
+  const { data: MainUser } = useSWR<User>("/MainUser", fetchData_getMainUser);
 
   return (
     <Fragment>
@@ -79,107 +100,107 @@ const MembersEdit = ({ users }) => {
                 }}
               >
                 Members
-                <div></div>
               </ModalHeader>
               <ModalBody className="w-[90%]">
-                <Table aria-label="Example empty table" hideHeader>
-                  <TableHeader>
-                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                      AVATAR
-                    </TableColumn>
-                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                      NAME
-                    </TableColumn>
-                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                      TYPE
-                    </TableColumn>
-                    <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                      ACTIONS
-                    </TableColumn>
-                  </TableHeader>
-                  <TableBody emptyContent={"No channels to display."}>
-                    {users &&
-                      users?.map((user: User) => {
-                        <TableRow className="flex items-center justify-evenly border-palette-green rounded-lg border-b-[1px] border-t-[1px]">
-                          <TableCell>
-                            <Image
-                              src={user.avatar}
-                              width={50}
-                              height={50}
-                              className="border-[2px] border-palette-green p-[0.5]"
-                              alt="image"
-                            />
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[18px] text-[#424242] border-palette-green">
-                            {user.username}
-                          </TableCell>
-                          <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
-                            <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                              owner
-                            </div>
-                          </TableCell>
-                          <TableCell className="flex flex-row h-full justify-center items-center">
-                            <Dropdown className="bg-palette-white self-center">
-                              <DropdownTrigger className="w-fit">
-                                <Button
-                                  size="lg"
-                                  className="flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green"
+                <table className="table table-lg">
+                  <thead>
+                    <tr className="text-[20px] font-body shadow-sm">
+                      <th></th>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <>
+                      {Users.map((user: User) => {
+                        if (user.username === MainUser.username)
+                          disable = "btn-disabled";
+                        else
+                          disable = "";
+                        return (
+                          <tr key={user.username}>
+                            <th>
+                              <Image
+                                src={user.avatar}
+                                width={50}
+                                height={50}
+                                className="border-[2px] border-palette-green p-[0.5]"
+                                alt="image"
+                              />
+                            </th>
+                            <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
+                              {user.username}
+                            </td>
+                            <td className="font-body font-[500] text-[18px] text-[#424242]">
+                              <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
+                                owner
+                              </div>
+                            </td>
+                            <td className="flex flex-row h-full justify-center items-center">
+                              <Dropdown className="bg-palette-white self-center">
+                                <DropdownTrigger className="w-fit">
+                                  <Button
+                                    size="lg"
+                                    className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+                                  >
+                                    Action
+                                    <LuArrowDown />
+                                  </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu
+                                  className="w-full"
+                                  aria-label="DropDownMenu"
                                 >
-                                  Action
-                                  <LuArrowDown />
-                                </Button>
-                              </DropdownTrigger>
-                              <DropdownMenu
-                                className="w-full"
-                                aria-label="DropDownMenu"
-                              >
-                                <DropdownItem
-                                  className="hover:bg-palette-white border-none"
-                                  variant="bordered"
-                                  aria-label="SetAsAdmin"
-                                >
-                                  <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                    <LuStar />
-                                    Set as admin
-                                  </button>
-                                </DropdownItem>
-                                <DropdownItem
-                                  className="hover:bg-palette-white border-none"
-                                  variant="bordered"
-                                  aria-label="Mute"
-                                >
-                                  <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                    <LuBellOff />
-                                    Mute
-                                  </button>
-                                </DropdownItem>
-                                <DropdownItem
-                                  className="hover:bg-palette-white border-none"
-                                  variant="bordered"
-                                  aria-label="Kick"
-                                >
-                                  <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                    <LuDoorOpen />
-                                    Kick
-                                  </button>
-                                </DropdownItem>
-                                <DropdownItem
-                                  className="hover:bg-palette-white border-none"
-                                  variant="bordered"
-                                  aria-label="Ban"
-                                >
-                                  <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                    <LuBan />
-                                    Ban
-                                  </button>
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </Dropdown>
-                          </TableCell>
-                        </TableRow>;
+                                  <DropdownItem
+                                    className="hover:bg-palette-white border-none"
+                                    variant="bordered"
+                                    aria-label="SetAsAdmin"
+                                  >
+                                    <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                      <LuStar />
+                                      Set as admin
+                                    </button>
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    className="hover:bg-palette-white border-none"
+                                    variant="bordered"
+                                    aria-label="Mute"
+                                  >
+                                    <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                      <LuBellOff />
+                                      Mute
+                                    </button>
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    className="hover:bg-palette-white border-none"
+                                    variant="bordered"
+                                    aria-label="Kick"
+                                  >
+                                    <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                      <LuDoorOpen />
+                                      Kick
+                                    </button>
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    className="hover:bg-palette-white border-none"
+                                    variant="bordered"
+                                    aria-label="Ban"
+                                  >
+                                    <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
+                                      <LuBan />
+                                      Ban
+                                    </button>
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        );
                       })}
-                  </TableBody>
-                </Table>
+                    </>
+                  </tbody>
+                </table>
               </ModalBody>
               <ModalFooter></ModalFooter>
             </Background>
