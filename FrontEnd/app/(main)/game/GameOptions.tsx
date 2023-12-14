@@ -7,25 +7,34 @@ import {
     Mode,
     MyDialog,
 } from "@/components";
+import { myRoutes } from "@/const";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MdCancelPresentation } from "react-icons/md";
 
 export default function GameSettings(props: {
     setMap: any;
     setMode: any;
     showPlayerLoader: any;
 }) {
+    const router = useRouter()
     const [isOpen, setIsOpen] = useState(true);
 
     return (
         <>
             <MyDialog
                 isOpen={isOpen}
-                closemodal={() => {}}
+                closemodal={() => {router.push(myRoutes.dashboard);}}
                 withCorner={true}
                 withClose={true}
                 customClass="absolute h-[40%] md:h-[60%] min-h-[600px] lg-h-[64%] w-[80%] max-w-[1100px]"
                 conClass="bg-palette-grey border-4 rounded-md border-palette-white "
             >
+                <MdCancelPresentation
+                    size={25}
+                    onClick={() =>{router.push(myRoutes.dashboard)}}
+                    className="absolute z-10 text-gray-400  cursor-pointer  top-0 right-0  rounded-sm"
+                />
                 <div className="flex items-center  flex-col h-full">
                     <div className="w-full h-[10%]">
                         <h1 className="text-cardtitle pb-8 sm:pb-0 font-['Chakra_Petch']  font-extrabold text-lg sm:text-2xl h:text-xl md:text-4xl">

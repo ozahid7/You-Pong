@@ -2,16 +2,15 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
-import { otherUserContext } from "./page";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
+import { UserToShow } from "@/types/Api";
 
-const OverviewCard = () => {
-    const user = useContext(MyContext);
-    const otheruser = useContext(otherUserContext)?.otherUser;
+const OverviewCard = ({ otheruser }: { otheruser: UserToShow }) => {
+    const user = useUser();
     let wins = user.userData.wins;
     let loses = user.userData.loses;
 
-    if (otheruser !== undefined) {
+    if (otheruser !== undefined && otheruser) {
         wins = otheruser.wins;
         loses = otheruser.losts;
     }

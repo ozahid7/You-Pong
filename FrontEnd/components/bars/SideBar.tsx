@@ -16,7 +16,7 @@ import {
     LuLogOut,
 } from "react-icons/lu";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();
@@ -61,7 +61,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
 const SideBar = () => {
     const router = useRouter();
-    const user = useContext(MyContext);
+    const user = useUser()
     const { username, avatar } = user.userData;
 
     const handleLogout = async () => {

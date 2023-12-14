@@ -16,7 +16,7 @@ export type tfaEnable = {
     img: string;
 };
 
-export type userInfo = {
+export type UserInfo = {
     achievements: [];
     history: [{}];
     level: number;
@@ -29,11 +29,11 @@ export type userInfo = {
     isIntra: boolean;
 };
 
-export type userData = {
-    userInfo: userInfo;
+export type UserData = {
+    userInfo: UserInfo;
 };
 
-export type userToShow = {
+export type UserToShow = {
     avatar: string;
     username: string;
     level: number;
@@ -79,5 +79,5 @@ export const friendsEndPoint = {
     decline: "friend/decline",
     search: "friend/search",
     remove: "friend/remove",
-    add: "friend/send"
+    add: "friend/send",
 };

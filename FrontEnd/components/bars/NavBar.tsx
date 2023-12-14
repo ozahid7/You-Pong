@@ -10,11 +10,11 @@ import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 
 const NavBar = () => {
-    const user = useContext(MyContext);
-    const router = useRouter()
+    const user = useUser();
+    const router = useRouter();
     const { username, level, avatar } = user.userData;
     const [friends, setFriends] = useState<searchUsers>();
     const isMorethan: boolean = username.length > 7 ? true : false;
@@ -33,7 +33,7 @@ const NavBar = () => {
         } catch (error) {
             console.log("search error = ", error);
         }
-        return null
+        return null;
     };
 
     const searchQuery = useQuery({

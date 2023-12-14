@@ -4,16 +4,16 @@ import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
-import ProfileSettings from "./ProfileSettings";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
+import ProfileSettings from "./ProfileSettings";
 
 const page = () => {
-    const user = useContext(MyContext);
-    const userQuery = useQuery({queryKey: ["user"]});
+    const user = useUser();
+    const userQuery = useQuery({ queryKey: ["user"] });
     const queryClient = useQueryClient();
     const { tfaStatus } = user.userData;
 
@@ -31,7 +31,7 @@ const page = () => {
                 { code: "0" }
             );
             console.log("disable response = ", response);
-            queryClient.invalidateQueries({queryKey: ['user']});
+            queryClient.invalidateQueries({ queryKey: ["user"] });
         } catch (error) {
             console.log("error = ", error);
         }

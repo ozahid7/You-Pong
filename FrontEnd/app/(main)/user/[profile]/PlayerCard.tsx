@@ -3,7 +3,6 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { otherUserContext } from "./page";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
@@ -11,23 +10,24 @@ import { QueryClient } from "@tanstack/react-query";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
+import { UserToShow } from "@/types/Api";
+
 import { blockUser } from "@/utils/friends";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 
-
-const PlayerCard = () => {
-    const user = useContext(MyContext);
+const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
+    const user = useUser();
     const friends = user.FriendData;
-    const otheruser = useContext(otherUserContext)?.otherUser;
+
     const [isFriend, setIsFriend] = useState(false);
     const [isPending, setIsPending] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
     let username = user.userData.username;
     let level = user.userData.level;
     let rank = user.userData.rank;
     let avatar = user.userData.avatar;
 
-    if (otheruser !== undefined) {
+    if (otheruser && otheruser !== undefined) {
         username = otheruser.username;
         level = otheruser.level;
         rank = otheruser.rank;
@@ -36,7 +36,7 @@ const PlayerCard = () => {
 
     useEffect(() => {
         if (otheruser !== undefined) {
-            friends.accepted.map((elm) => {
+            friends.accepted.map((elm: any) => {
                 if (username === elm.username) setIsFriend(true);
             });
             friends.pending.map((elm) => {
@@ -110,7 +110,7 @@ const PlayerCard = () => {
                         {otheruser === undefined ? (
                             <MdOutlineSettings
                                 onClick={() => {
-                                    router.push('/settings')
+                                    router.push("/settings");
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
@@ -118,7 +118,7 @@ const PlayerCard = () => {
                         ) : (
                             <HiBan
                                 onClick={() => {
-                                    blockUser(username)
+                                    blockUser(username);
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"

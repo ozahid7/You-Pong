@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MyContainer } from "..";
@@ -17,9 +17,11 @@ interface MyDialogProps {
 
 function MyDialog({ isOpen, closemodal, children, withCorner, customClass, withClose, conClass }: MyDialogProps) {
     const classname = twMerge("flex justify-center", customClass);
+    const dialogRef = useRef()
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
+                initialFocus={dialogRef}
                 as="div"
                 className="relative z-10"
                 open={isOpen}

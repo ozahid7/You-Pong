@@ -17,8 +17,6 @@ export default function game() {
   const [showPlayerLoader, setShowPlayerLoder] = useState(false)
   const [showCounter, setShowCounter] = useState(false)
 
-  console.log('map = ', map, mode)
-
   useEffect(() => {
     if (typeof window !== "undefined" && !state) {
       setState(true)
@@ -26,7 +24,6 @@ export default function game() {
       let HEIGHT: number = sceneRef.current!.clientHeight;
       // Your client-side code here
 
-      console.log(sceneRef.current?.clientHeight, HEIGHT);
       var Engine = Matter.Engine,
         Render = Matter.Render,
         Bodies = Matter.Bodies,

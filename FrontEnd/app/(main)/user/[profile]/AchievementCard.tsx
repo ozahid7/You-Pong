@@ -1,6 +1,6 @@
 "use client";
 import { Acheivement, MyCard } from "@/components";
-import { MyContext } from "@/providers/UserContextProvider";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
 
@@ -11,7 +11,7 @@ interface Achievement {
 }
 
 const AchievementCard = () => {
-    const user = useContext(MyContext);
+    const user = useUser();
     const { achievements } = user.userData;
     return (
         <div className="flex z-0 min-w-[240px] xl:min-w-[280px] xl:max-w-[360px] xl:max-h-none md:max-h-[800px] max-h-[500px] md:w-[80%] w-[90%] h-[80%] md:h-[90%] ">

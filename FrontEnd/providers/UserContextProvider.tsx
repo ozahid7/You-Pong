@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { SideBar, NavBar, MobileSideBar, TwoFactor } from "@/components";
 import { redirect } from "next/navigation";
 import { myRoutes } from "@/const";
@@ -9,15 +9,15 @@ import {
     FriendArr,
     endPoints,
     tfaSwitch,
-    userData,
-    userInfo,
+    UserData,
+    UserInfo,
 } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 import UseQueryProvider from "./UseQueryProvider";
 
 interface myContextProps {
-    userData: userInfo;
+    userData: UserInfo;
     isLoged: boolean;
     FriendData: FriendArr;
 }
@@ -37,7 +37,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getHero = async () => {
         try {
-            const response = await useAxios<userData>("get", endPoints.gethero);
+            const response = await useAxios<UserData>("get", endPoints.gethero);
             console.log("hero response = ", response.userInfo);
             setUserData(response.userInfo);
             setTfaStatus(response.userInfo.tfaStatus);
@@ -125,6 +125,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                 {children}
             </MyContext.Provider>
         );
+};
+
+export const useUser = () => {
+    const user = useContext(MyContext);
+    return user;
 };
 
 export default UserContextProvider;

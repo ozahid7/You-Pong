@@ -3,7 +3,6 @@ import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useDebugValue, useEffect, useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
-import { MyContext } from "../layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
