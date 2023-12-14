@@ -7,7 +7,7 @@ import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
 import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { MyContext } from "../layout";
+import { MyContext } from "@/providers/UserContextProvider";
 
 const CustomTabs = (props: { input: string; setInput: any }) => {
     const friends = useContext(MyContext);

@@ -5,12 +5,12 @@ import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
-import { MyContext } from "@/app/(main)/layout";
 import { useQuery } from "@tanstack/react-query";
 import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
+import { MyContext } from "@/providers/UserContextProvider";
 
 const NavBar = () => {
     const user = useContext(MyContext);

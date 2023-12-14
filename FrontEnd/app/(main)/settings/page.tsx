@@ -5,11 +5,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import ProfileSettings from "./ProfileSettings";
-import { MyContext } from "../layout";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { MyContext } from "@/providers/UserContextProvider";
 
 const page = () => {
     const user = useContext(MyContext);

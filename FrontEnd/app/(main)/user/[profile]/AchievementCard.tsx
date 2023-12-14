@@ -1,8 +1,8 @@
 "use client";
 import { Acheivement, MyCard } from "@/components";
+import { MyContext } from "@/providers/UserContextProvider";
 import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
-import { MyContext } from "../../layout";
 
 interface Achievement {
     title: string;

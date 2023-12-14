@@ -1,6 +1,5 @@
 "use client";
 
-import { MyContext } from "@/app/(main)/layout";
 import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import Image from "next/image";
@@ -17,6 +16,7 @@ import {
     LuLogOut,
 } from "react-icons/lu";
 import { QueryClient, useQuery } from "@tanstack/react-query";
+import { MyContext } from "@/providers/UserContextProvider";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
     const path = usePathname();

@@ -63,12 +63,3 @@ export const landing_page_description =
  the mighty Pong contest! Thanks to your website, users will play Pong with others.\
 You will provide a nice user interface, a chat, and real-time multiplayer online games!";
 
-
-interface myContextProps {
-    userData: userInfo;
-    isLoged: boolean;
-    FriendData: FriendArr;
-}
-
-
-export const MyContext = createContext<myContextProps | undefined>(undefined);

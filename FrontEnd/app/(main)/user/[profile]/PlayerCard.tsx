@@ -3,7 +3,6 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { MyContext } from "../../layout";
 import { otherUserContext } from "./page";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
@@ -13,6 +12,7 @@ import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { blockUser } from "@/utils/friends";
+import { MyContext } from "@/providers/UserContextProvider";
 
 
 const PlayerCard = () => {

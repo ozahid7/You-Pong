@@ -3,13 +3,13 @@ import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
 
 import React, { useContext, useEffect, useState } from "react";
-import { MyContext } from "../layout";
 import { baseURL, useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
 import axios from "axios";
 import { setFile } from "../chat/data/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { MyContext } from "@/providers/UserContextProvider";
 
 interface ProfileSettingsProps {
     isOpen: boolean;

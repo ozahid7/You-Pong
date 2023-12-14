@@ -2,8 +2,8 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
-import { MyContext } from "../../layout";
 import { otherUserContext } from "./page";
+import { MyContext } from "@/providers/UserContextProvider";
 
 const OverviewCard = () => {
     const user = useContext(MyContext);
