@@ -32,7 +32,7 @@ export function Mode({ text, handelClick }: Props) {
                     }}
                     className={`flex ${
                         selectedMode === elm.text
-                            ? "bg-palette-orange border-none scale-125"
+                            ? "bg-palette-orange border-none scale-105"
                             : ""
                     }  w-[30%]  max-w-[200px] md:w-[40%] h-fit border-[2px] sm:min-h-[50px] min-h-[40px] border-palette-green rounded-sm justify-evenly items-center`}
                 >

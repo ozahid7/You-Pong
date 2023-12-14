@@ -163,7 +163,7 @@ export default function game() {
     }
   }, []);
   return (
-      <div className="flex w-full h-[90%] justify-center items-center ">
+      <div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
           <div className="flex w-[88%] h-[90%]">
               <MyContainer>
                   <div className="flex flex-col w-full h-full">
