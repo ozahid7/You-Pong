@@ -6,13 +6,13 @@ export class RoomService {
   constructor(private prisma: PrismaService) {}
 
   //POST
-  async postRoom(username: string, room_name: string, channel_name: string) {
+  async postRoom(username: string, room_name: string, id_channel: string) {
     const user = await this.prisma.user.findUnique({
       where: { username: username },
     });
     const channel = await this.prisma.channel.findUnique({
       where: {
-        name: channel_name,
+        id_channel: id_channel,
       },
     });
     if (!channel || !user) return 'user or channel unknown !';
@@ -28,6 +28,15 @@ export class RoomService {
     return result;
   }
 
+  //DELETE CHANNEL MANY
+  async deleteChannelRooms(id_channel: string) {
+    const result = await this.prisma.room_Chat.deleteMany({
+      where: {
+        id_channel: id_channel,
+      },
+    });
+    return result;
+  }
   //DELETE MANY
   async deleteRooms() {
     const result = await this.prisma.room_Chat.deleteMany();

@@ -12,7 +12,6 @@ import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { UserToShow } from "@/types/Api";
 
-import { blockUser } from "@/utils/friends";
 import { MyContext, useUser } from "@/providers/UserContextProvider";
 
 const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
@@ -49,9 +48,10 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
 
     const addUser = async () => {
         try {
-            const response = await useAxios("post", friendsEndPoint.add, {
-                friend: username,
-            });
+            const response = await useAxios(
+                "post",
+                friendsEndPoint.add + "?username=" + username
+            );
             console.log("add user response = ", response);
             freindsQuery.invalidateQueries({ queryKey: ["friends"] });
         } catch (error) {
@@ -63,17 +63,32 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
 
     const removeUser = async () => {
         try {
-            const response = await useAxios("delete", friendsEndPoint.remove, {
-                friend: username,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.decline + "?username=" + username
+            );
             console.log("remove user response = ", response);
             freindsQuery.invalidateQueries({ queryKey: ["friends"] });
         } catch (error) {
             console.log("remove user error =", error);
         }
     };
+    
+    const blockUser = async () => {
+        try {
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.block + "?username=" + username
+                );
+                freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+             console.log("response... = ", response);
+         } catch (error) {
+             console.log("error : ", error);
+         }
+     };
 
     const removeMutation = useMutation({ mutationFn: removeUser });
+    const blockMutation = useMutation({ mutationFn: blockUser });
 
     let [Icon, setIcon] = useState(false);
     const isOnline = true;
@@ -118,7 +133,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                         ) : (
                             <HiBan
                                 onClick={() => {
-                                    blockUser(username);
+                                    blockMutation.mutate()
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"

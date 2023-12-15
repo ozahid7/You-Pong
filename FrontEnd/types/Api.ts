@@ -16,9 +16,23 @@ export type tfaEnable = {
     img: string;
 };
 
+
+export interface Achievement {
+    title: string;
+    description: string;
+    isOwned: boolean;
+}
+
+export interface match {
+    avatar: string;
+    user: string;
+    wins: string | "0";
+    loses: string | "0";
+}
+
 export type UserInfo = {
-    achievements: [];
-    history: [{}];
+    owned: Achievement[];
+    matchs: match[];
     level: number;
     loses: number;
     rank: number;
@@ -41,6 +55,8 @@ export type UserToShow = {
     wins: number;
     losts: number;
     status: string;
+    owned: Achievement[];
+    matchs: match[];
     isIntra: boolean;
 };
 
@@ -54,7 +70,7 @@ export const endPoints = {
     tfaSwitch: "user/twoFactorAuth",
     gethero: "user/GetHero",
     getuser: "user/findUser",
-    getFriend: "friend/sort",
+    getFriend: "friend",
     getFile: "upload",
     updateInfo: "update",
 };
@@ -71,13 +87,18 @@ export type FriendArr = {
     pending: user[];
 };
 
+export type FriendsReturn = {
+    message: string;
+    Object: FriendArr;
+};
+
 export interface searchUsers extends Array<user> {}
 
 export const friendsEndPoint = {
     block: "friend/block",
     accept: "friend/accept",
-    decline: "friend/decline",
+    decline: "friend/refuse",
     search: "friend/search",
-    remove: "friend/remove",
-    add: "friend/send",
+    unblock: "friend/unblock",
+    add: "friend",
 };

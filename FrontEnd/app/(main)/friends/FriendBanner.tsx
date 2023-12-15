@@ -20,9 +20,10 @@ const FriendBanner = (props: {
 
     const blockUser = async () => {
         try {
-            const response = await useAxios("patch", friendsEndPoint.block, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.block + "?username=" + props.userName,
+            );
             props.SetInvalidData(true);
             console.log("response... = ", response);
         } catch (error) {
@@ -34,7 +35,6 @@ const FriendBanner = (props: {
         mutationFn: blockUser,
     });
 
-    
     if (blockMutaion.isPending) return <MiniLoader customClass="m-auto" />;
     else
         return (

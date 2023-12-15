@@ -21,9 +21,10 @@ const RequestBanner = (props: {
 
     const blockUser = async () => {
         try {
-            const response = await useAxios("patch", friendsEndPoint.block, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.block + "?username=" + props.userName
+            );
             props.SetInvalidData(true);
             console.log("response... = ", response);
         } catch (error) {
@@ -37,9 +38,10 @@ const RequestBanner = (props: {
 
     const acceptUser = async () => {
         try {
-            const response = await useAxios("post", friendsEndPoint.accept, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.accept + "?username=" + props.userName
+            );
             console.log("accept user response = ", response);
             props.SetInvalidData(true);
         } catch (error) {
@@ -53,9 +55,10 @@ const RequestBanner = (props: {
 
     const declineUser = async () => {
         try {
-            const response = await useAxios("delete", friendsEndPoint.decline, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.decline + "?username=" + props.userName
+            );
             console.log("accept user response = ", response);
             props.SetInvalidData(true);
         } catch (error) {

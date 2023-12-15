@@ -11,6 +11,7 @@ import {
     tfaSwitch,
     UserData,
     UserInfo,
+    FriendsReturn,
 } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
@@ -74,12 +75,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getFriends = async () => {
         try {
-            const response = await useAxios<FriendArr>(
+            const response = await useAxios<FriendsReturn>(
                 "get",
                 endPoints.getFriend
             );
             console.log("response = ", response);
-            setFriendData(response);
+            setFriendData(response.Object);
         } catch (error) {
             console.log("error get Friends : ", error);
         }

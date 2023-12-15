@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -21,31 +21,37 @@ import { userChannels } from "./data/api";
 import useSWR from "swr";
 import { Channel } from "@/types";
 
+export const fetchData_userChannels = async () => {
+  try {
+    const result = await userChannels();
+    console.log("userChannels", result);
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-  const fetchData = async () => {
-    try {
-      const result = await userChannels();
-      return result;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   const {
     data: channel,
     error,
     isLoading,
-  } = useSWR<Channel[]>("/myData", fetchData);
+    mutate,
+  } = useSWR<Channel[]>("/myData", fetchData_userChannels);
 
   if (error) return <div>ERROR</div>;
 
   if (!channel && isLoading)
     return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">      </div>
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
+        {" "}
+      </div>
     );
 
   function formatAMPM(date: any) {
@@ -111,15 +117,12 @@ const Chats = () => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
+                                  channel &&
                                   channel
-                                    ? channel
-                                      .filter(
-                                        (obj: any) => obj.type === "DIRECT"
-                                      )
-                                      .map((obj: any, i) => (
-                                        <MiniChat channels={obj}></MiniChat>
-                                      ))
-                                    : [<p> NO DIRECT</p>]
+                                    .filter((obj: any) => obj.type === "DIRECT")
+                                    .map((obj: any, i) => (
+                                      <MiniChat channels={obj}></MiniChat>
+                                    ))
                                 }
                                 indicator={{
                                   className:
@@ -135,15 +138,12 @@ const Chats = () => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
+                                  channel &&
                                   channel
-                                    ? channel
-                                      .filter(
-                                        (obj: any) => obj.type !== "DIRECT"
-                                      )
-                                      .map((obj: any, i) => (
-                                        <MiniChat channels={obj}></MiniChat>
-                                      ))
-                                    : [<p> NO CHANNELS</p>]
+                                    .filter((obj: any) => obj.type !== "DIRECT")
+                                    .map((obj: any, i) => (
+                                      <MiniChat channels={obj}></MiniChat>
+                                    ))
                                 }
                                 indicator={{
                                   className:
@@ -152,7 +152,7 @@ const Chats = () => {
                               ></MyTabs>
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
-                                <JoinModal />
+                                <JoinModal mutate={mutate} />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>
@@ -167,10 +167,10 @@ const Chats = () => {
                     >
                       {channel
                         ? channel
-                          .filter((obj) => obj.type !== "DIRECT")
-                          .map((obj, i) => (
-                            <GroupsChat channels={obj} key={i}></GroupsChat>
-                          ))
+                            .filter((obj) => obj.type !== "DIRECT")
+                            .map((obj, i) => (
+                              <GroupsChat channels={obj} key={i}></GroupsChat>
+                            ))
                         : ""}
                     </SwipeableTabs>
                   ) : (
@@ -180,10 +180,10 @@ const Chats = () => {
                     >
                       {channel
                         ? channel
-                          .filter((obj) => obj.type === "DIRECT")
-                          .map((obj, i) => (
-                            <Chat channels={obj} key={i}></Chat>
-                          ))
+                            .filter((obj) => obj.type === "DIRECT")
+                            .map((obj, i) => (
+                              <Chat channels={obj} key={i}></Chat>
+                            ))
                         : ""}
                     </SwipeableTabs>
                   )}

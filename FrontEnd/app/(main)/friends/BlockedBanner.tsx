@@ -19,9 +19,10 @@ const BlockedBanner = (props: {
 
     const unblockUser = async () => {
         try {
-            const response = await useAxios("delete", friendsEndPoint.remove, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.unblock + "?username=" + props.userName
+            );
             props.SetInvalidData(true);
             console.log("unblock response... = ", response);
         } catch (error) {

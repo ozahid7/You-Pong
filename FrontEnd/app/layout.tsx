@@ -21,11 +21,9 @@ export default function RootLayout({
             </head>
             <body className="flex h-screen min-w-[280px] min-body  background">
                 <UseQueryProvider>
-                    <UserContextProvider>
                         <main className="flex flex-col h-full overflow-y-auto my_scroll_orange items-center justify-between w-full">
                             {children}
                         </main>
-                    </UserContextProvider>
                 </UseQueryProvider>
             </body>
         </html>

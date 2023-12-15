@@ -148,8 +148,9 @@ export class UserService {
       losts: user.defeats,
       status: user.status,
       channels: user.channels,
-      isIntra: user.hash === null ? true : false   
-
+      isIntra: user.hash === null ? true : false,
+      matchs: user.matchs,
+      owned: user.owned,
     };
   };
 
