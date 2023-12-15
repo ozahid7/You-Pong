@@ -15,10 +15,10 @@ import { UserToShow } from "@/types/Api";
 import { MyContext, useUser } from "@/providers/UserContextProvider";
 import Loader from "@/components/tools/Loader";
 import { myRoutes } from "@/const";
+import useFriends from "@/api/useFriends";
 
 const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     const user = useUser();
-    const friends = user.FriendData;
 
     const [isFriend, setIsFriend] = useState(false);
     const [isPending, setIsPending] = useState(false);
@@ -27,16 +27,18 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     let level = user.userData.level;
     let rank = user.userData.rank;
     let avatar = user.userData.avatar;
+    let friends;
 
     if (otheruser && otheruser !== undefined) {
+        friends  = useFriends().data;
         username = otheruser.username;
         level = otheruser.level;
         rank = otheruser.rank;
         avatar = otheruser.avatar;
     }
-
+    
     useEffect(() => {
-        if (otheruser !== undefined) {
+        if (otheruser !== undefined && otheruser && friends) {
             friends.accepted.map((elm: any) => {
                 if (username === elm.username) setIsFriend(true);
             });
@@ -75,20 +77,20 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
             console.log("remove user error =", error);
         }
     };
-    
+
     const blockUser = async () => {
         try {
             const response = await useAxios(
                 "put",
                 friendsEndPoint.block + "?username=" + username
-                );
-                freindsQuery.invalidateQueries({ queryKey: ["friends"] });
-                console.log("response... = ", response);
-                router.push(myRoutes.dashboard)
-         } catch (error) {
-             console.log("error : ", error);
-         }
-     };
+            );
+            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+            console.log("response... = ", response);
+            router.push(myRoutes.dashboard);
+        } catch (error) {
+            console.log("error : ", error);
+        }
+    };
 
     const removeMutation = useMutation({ mutationFn: removeUser });
     const blockMutation = useMutation({ mutationFn: blockUser });
@@ -135,7 +137,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                         ) : (
                             <HiBan
                                 onClick={() => {
-                                    blockMutation.mutate()
+                                    blockMutation.mutate();
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"

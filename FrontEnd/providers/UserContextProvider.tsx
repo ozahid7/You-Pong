@@ -20,7 +20,6 @@ import UseQueryProvider from "./UseQueryProvider";
 interface myContextProps {
     userData: UserInfo;
     isLoged: boolean;
-    FriendData: FriendArr;
 }
 export const MyContext = createContext<myContextProps | undefined>(undefined);
 
@@ -34,7 +33,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoged, setIsLoged] = useState(false);
     const [userData, setUserData] = useState(undefined);
     const [tfaStatus, setTfaStatus] = useState(false);
-    const [FriendData, setFriendData] = useState(undefined);
 
     const getHero = async () => {
         try {
@@ -72,21 +70,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return null;
     };
-
-    const getFriends = async () => {
-        try {
-            const response = await useAxios<FriendsReturn>(
-                "get",
-                endPoints.getFriend
-            );
-            console.log("response = ", response);
-            setFriendData(response.Object);
-        } catch (error) {
-            console.log("error get Friends : ", error);
-        }
-        return null;
-    };
-
+    
     useEffect(() => {
         if (!loged) getTfa();
         else setTfaVerified(true);
@@ -104,11 +88,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [isLoged, checked]);
 
-    const FriendsQuery = useQuery({
-        queryKey: ["friends"],
-        queryFn: getFriends,
-        enabled: isLoged,
-    });
     if (tfaStatus && !tfaVerified && !loged)
         return (
             <TwoFactor
@@ -119,10 +98,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsLoged={setIsLoged}
             />
         );
-    else if (heroQuery.isLoading || FriendsQuery.isLoading) return <Loader />;
+    else if (heroQuery.isLoading) return <Loader />;
     else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
         return (
-            <MyContext.Provider value={{ userData, isLoged, FriendData }}>
+            <MyContext.Provider value={{ userData, isLoged}}>
                 {children}
             </MyContext.Provider>
         );

@@ -8,11 +8,11 @@ import RequestBanner from "./RequestBanner";
 import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { MyContext } from "@/providers/UserContextProvider";
+import { FriendArr, FriendsReturn } from "@/types/Api";
 
-const CustomTabs = (props: { input: string; setInput: any }) => {
-    const friends = useContext(MyContext);
+const CustomTabs = (props: { input: string; setInput: any, friends: FriendArr }) => {
     const FriendsQuery = useQuery({ queryKey: ["friends"] });
-    const { accepted, blocked, pending } = friends?.FriendData;
+    const { accepted, blocked, pending } = props.friends;
 
     const [index, setIndex] = useState(0);
     const [ListArr, setListArr] = useState(accepted);
@@ -66,7 +66,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
             />
         );
     };
-    if (FriendsQuery.isLoading || FriendsQuery.isFetching) return <MiniLoader customClass="h-[70%]" />;
+    if (FriendsQuery.isRefetching) return <MiniLoader customClass="h-[70%]" />;
     else {
         return (
             <div className="w-full flex flex-col items-center h-[70%]">

@@ -25,7 +25,6 @@ const useOtherUser = (username: string) => {
         queryFn: getUser,
         enabled: username !== "profile",
     });
-    console.log('other user ', otheruser)
     return otheruser
 };
 
