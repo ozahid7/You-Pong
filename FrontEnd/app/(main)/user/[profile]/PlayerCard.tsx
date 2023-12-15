@@ -30,7 +30,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     let friends;
 
     if (otheruser && otheruser !== undefined) {
-        friends  = useFriends().data;
+        friends  = useFriends();
         username = otheruser.username;
         level = otheruser.level;
         rank = otheruser.rank;
@@ -39,10 +39,10 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     
     useEffect(() => {
         if (otheruser !== undefined && otheruser && friends) {
-            friends.accepted.map((elm: any) => {
+            friends.data.accepted.map((elm: any) => {
                 if (username === elm.username) setIsFriend(true);
             });
-            friends.pending.map((elm) => {
+            friends.data.pending.map((elm) => {
                 if (username === elm.username) setIsPending(true);
             });
         }
@@ -57,7 +57,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                 friendsEndPoint.add + "?username=" + username
             );
             console.log("add user response = ", response);
-            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+            friends.refetch()
         } catch (error) {
             console.log("add user error = ", error);
         }
@@ -84,8 +84,8 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                 "put",
                 friendsEndPoint.block + "?username=" + username
             );
-            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
             console.log("response... = ", response);
+            friends.refetch();
             router.push(myRoutes.dashboard);
         } catch (error) {
             console.log("error : ", error);
