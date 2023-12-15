@@ -21,7 +21,8 @@ interface otherUserProps {
 
 const page = ({ params }: pageProps) => {
     const {data, isLoading, isFetching} = useOtherUser(params.profile);
-    if (isLoading || isFetching)
+    const userQuery = useQuery({queryKey: ['user']})
+    if (isLoading || isFetching || userQuery.isFetching)
         return <Loader />;
     else
         return (

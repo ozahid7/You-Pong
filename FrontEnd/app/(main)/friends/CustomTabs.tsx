@@ -66,7 +66,7 @@ const CustomTabs = (props: { input: string; setInput: any }) => {
             />
         );
     };
-    if (FriendsQuery.isLoading) return <MiniLoader customClass="h-[70%]" />;
+    if (FriendsQuery.isLoading || FriendsQuery.isFetching) return <MiniLoader customClass="h-[70%]" />;
     else {
         return (
             <div className="w-full flex flex-col items-center h-[70%]">

@@ -12,24 +12,24 @@ const arrayMap: Props[] = [
         elements: "#EB6440",
         border: "#EB6440",
         background: "white",
-        name: "orange",
+        name: "Orange",
     },
     {
         elements: "white",
         border: "white",
         background: "black",
-        name: "black",
+        name: "Classic",
     },
     {
         elements: "#497174",
         border: "#D6E4E5",
         background: "#EFF5F5",
-        name: "green",
+        name: "Green",
     },
 ];
 
 function Map(props: { handelClick: any }) {
-    const [selected, setSelected] = useState("orange");
+    const [selected, setSelected] = useState("Classic");
     return (
         <>
             {(arrayMap as Props[]).map((items: Props, index: number) => (
@@ -42,6 +42,7 @@ function Map(props: { handelClick: any }) {
                     className="flex h-1 min-h-[110px] space-y-2 sm:min-h-[160px] s:max-w-[160px] sm:max-w-none lg:min-h-[200px] h:w-[50%]  w-[70%] md:w-[30%] md max-w-[300px] justify-center flex-col items-center"
                 >
                     <div
+                        id={items.name}
                         style={{ background: `${items.background}` }}
                         className={`flex w-[85%] ${
                             selected === items.name
@@ -69,9 +70,12 @@ function Map(props: { handelClick: any }) {
                             </div>
                         </button>
                     </div>
-                    <div className="font-['Chakra_Petch'] text-[11px] s:text-[13px] sm_:text-[15px] md_:text-[16px] lg_:text-[18px] xl_:text-[20px] 2xl_:text-[22px] text-[#686868] font-[700] w-fit h-fit underline">
+                    <label
+                        htmlFor={items.name}
+                        className="font-['Chakra_Petch'] cursor-pointer text-[11px] s:text-[13px] sm_:text-[15px] md_:text-[16px] lg_:text-[18px] xl_:text-[20px] 2xl_:text-[22px] text-[#686868] font-[700] w-fit h-fit underline"
+                    >
                         {items.name} map
-                    </div>
+                    </label>
                 </div>
             ))}
         </>

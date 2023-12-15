@@ -34,7 +34,7 @@ export function Mode({ text, handelClick }: Props) {
                         selectedMode === elm.text
                             ? "bg-palette-orange border-none scale-105"
                             : ""
-                    }  w-[30%]  max-w-[200px] md:w-[40%] h-fit border-[2px] sm:min-h-[50px] min-h-[40px] border-palette-green rounded-sm justify-evenly items-center`}
+                    }  w-[30%] cursor-pointer  max-w-[200px] md:w-[40%] h-fit border-[2px] sm:min-h-[50px] min-h-[40px] border-palette-green rounded-sm justify-evenly items-center`}
                 >
                     <span
                         className={`font-['Chakra_Petch'] ${

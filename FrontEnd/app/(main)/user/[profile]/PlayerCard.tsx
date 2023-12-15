@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import { UserToShow } from "@/types/Api";
 
 import { MyContext, useUser } from "@/providers/UserContextProvider";
+import Loader from "@/components/tools/Loader";
+import { myRoutes } from "@/const";
 
 const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     const user = useUser();
@@ -81,7 +83,8 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                 friendsEndPoint.block + "?username=" + username
                 );
                 freindsQuery.invalidateQueries({ queryKey: ["friends"] });
-             console.log("response... = ", response);
+                console.log("response... = ", response);
+                router.push(myRoutes.dashboard)
          } catch (error) {
              console.log("error : ", error);
          }
@@ -104,7 +107,6 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
         else addMutation.mutate();
         setIcon(!Icon);
     };
-
     return (
         <div className="flex justify-center z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
