@@ -58,6 +58,17 @@ export interface Channel {
   id_channel?: string;
 }
 
+export interface Room_Chat {
+	name: String;
+	user_role: "ADMIN" | "MEMBER" | "OWNER";
+	member_status: "MUTED" | "BANNED" | "NONE";
+	lefted: Boolean; 
+	blocked_users: User[];
+	id_user: String;
+	user: User; 
+	id_channel: String;
+}
+
 export interface User {
   id_user: string;
   username: string;
@@ -75,8 +86,8 @@ export interface User {
   status: "ONLINE" | "OFFLINE" | "INGAME";
   // created_at: DateTime;
   // updated_at: DateTime;
-  // rooms: Room_Chat[];
-  // blocked: Room_Chat[];
+  rooms: Room_Chat[];
+  blocked: Room_Chat[];
   channels?: Channel[];
   // messages: Message[]
   // notifications Notification[]

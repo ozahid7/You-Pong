@@ -57,7 +57,9 @@ export const getChannels = async () => {
 
 export const getChannel = async (id_channel: string) => {
   try {
-    const response = await axios.get(`http://localhost:4000/chat/channel/${id_channel}`);
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/${id_channel}`
+    );
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -113,7 +115,8 @@ export const putData = async (data: Channel, name: string) => {
 export const setFile = async (file: File | null) => {
   try {
     const formData = new FormData();
-    formData.append("avatar", file);
+    if (file !== null)
+      formData.append("avatar", file);
 
     const response = await axios.post(
       "http://localhost:4000/upload",

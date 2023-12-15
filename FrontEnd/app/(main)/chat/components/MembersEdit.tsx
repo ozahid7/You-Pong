@@ -31,38 +31,21 @@ import {
 import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel, User } from "@/types";
+import groups from "../../../../public/groups.svg";
 import useSWR from "swr";
 import { getChannel, getMainUser } from "../data/api";
 
 interface Props {
-  channel: Channel;
+  Users: User[];
+  MainUser: User | undefined;
+  Channel: Channel;
 }
 
-const MembersEdit = ({ channel }: Props) => {
+const MembersEdit = ({ Users, MainUser, Channel }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   var disable: string = "";
 
-  const fetchData_getChannel = async () => {
-    try {
-      const result = await getChannel(channel.id_channel);
-      return result.object.users;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchData_getMainUser = async () => {
-    try {
-      const result = await getMainUser();
-
-      return result.userInfo;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const { data: Users } = useSWR<User[]>("/Users", fetchData_getChannel);
-  const { data: MainUser } = useSWR<User>("/MainUser", fetchData_getMainUser);
+  console.log(Channel.id_channel);
 
   return (
     <Fragment>
@@ -114,15 +97,14 @@ const MembersEdit = ({ channel }: Props) => {
                   <tbody>
                     <>
                       {Users.map((user: User) => {
-                        if (user.username === MainUser.username)
+                        if (user.username === MainUser?.username)
                           disable = "btn-disabled";
-                        else
-                          disable = "";
+                        else disable = "";
                         return (
                           <tr key={user.username}>
                             <th>
                               <Image
-                                src={user.avatar}
+                                src={user.avatar || groups}
                                 width={50}
                                 height={50}
                                 className="border-[2px] border-palette-green p-[0.5]"

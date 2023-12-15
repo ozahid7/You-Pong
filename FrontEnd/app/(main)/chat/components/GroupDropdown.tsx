@@ -17,8 +17,13 @@ import {
 } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
-import { leaveChannel, userChannels } from "../data/api";
-import { useSWRConfig } from "swr";
+import {
+  getChannel,
+  getMainUser,
+  leaveChannel,
+  userChannels,
+} from "../data/api";
+import useSWR, { useSWRConfig } from "swr";
 import { fetchData_userChannels } from "../page";
 import { fetchData_getChannels } from "./JoinModal";
 
@@ -32,11 +37,32 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
-    leaveChannel(channels.id_channel);
-    // console.log(result);
+    leaveChannel(channels.id_channel || "");
     mutate(fetchData_userChannels);
     mutate(fetchData_getChannels);
   };
+
+  const fetchData_getChannel = async () => {
+    try {
+      const result = await getChannel(channels.id_channel || "");
+      return result.object.users;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchData_getMainUser = async () => {
+    try {
+      const result = await getMainUser();
+
+      return result.userInfo;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const { data: Users } = useSWR<User[]>("/Users", fetchData_getChannel);
+  const { data: MainUser } = useSWR<User>("/MainUser", fetchData_getMainUser);
 
   return (
     <div className="flex flex-col justify-center relative">
@@ -57,10 +83,14 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
-            <MembersEdit channel={channels}></MembersEdit>
+            <MembersEdit
+              MainUser={MainUser}
+              Users={Users || []}
+              Channel={channels}
+            ></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels} users={users}></ChatEdit>
+            <ChatEdit channels={channels} users={Users || []}></ChatEdit>
           </li>
           <li>
             <Button

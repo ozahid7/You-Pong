@@ -9,10 +9,7 @@ const ChatDropdown = (icon: { icon: any; style: string; size: number }) => {
   return (
     <div className="flex flex-col justify-center relative">
       <Menu>
-        <Menu.Button
-          as="div"
-          className=""
-        >
+        <Menu.Button as="div" className="">
           {renderIcon(icon.icon, icon.style, icon.size)}
         </Menu.Button>
         <Menu.Items
@@ -20,10 +17,7 @@ const ChatDropdown = (icon: { icon: any; style: string; size: number }) => {
           className="flex flex-col h-auto outline-none w-auto rounded-sm drop-shadow-lg bg-palette-white overflow-hidden top-full right-0 absolute z-10"
         >
           {menuChatElements.map((elm) => (
-            <Menu.Item
-              key={elm.href}
-              as={Fragment}
-            >
+            <Menu.Item key={elm.href} as={Fragment}>
               {({ active }) => (
                 <a
                   href={elm.href}

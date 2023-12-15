@@ -114,12 +114,15 @@ const Chats = () => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
-                                  channel &&
                                   channel
-                                    .filter((obj: any) => obj.type === "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type === "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : []
                                 }
                                 indicator={{
                                   className:
@@ -135,12 +138,15 @@ const Chats = () => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
-                                  channel &&
                                   channel
-                                    .filter((obj: any) => obj.type !== "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type !== "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : []
                                 }
                                 indicator={{
                                   className:
