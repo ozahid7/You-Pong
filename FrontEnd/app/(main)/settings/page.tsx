@@ -96,7 +96,7 @@ const page = () => {
                                     />
                                 </div>
                                 <div className="w-[94%] flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm">
-                                    <span className="sm:text-md md:text-xl xl:text-3xl before:content-['2FA'] sm:before:content-['Two_Step_Verification'] font-body drop-shadow-sm font-semibold text-cardtitle "></span>
+                                    <span className="sm:text-md md:text-xl xl:text-3xl before:content-['2FA'] md:before:content-['Two_Step_Verification'] font-body drop-shadow-sm font-semibold text-cardtitle "></span>
                                     {userQuery.isFetching ? (
                                         <MiniLoader />
                                     ) : (

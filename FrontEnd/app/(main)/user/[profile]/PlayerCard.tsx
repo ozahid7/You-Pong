@@ -38,7 +38,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     }
     
     useEffect(() => {
-        if (otheruser !== undefined && otheruser && friends) {
+        if (otheruser !== undefined && otheruser && friends.data) {
             friends.data.accepted.map((elm: any) => {
                 if (username === elm.username) setIsFriend(true);
             });

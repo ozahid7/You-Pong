@@ -36,6 +36,7 @@ export type UserInfo = {
     level: number;
     loses: number;
     rank: number;
+    isFirstTime: boolean;
     tfaStatus: boolean;
     username: string;
     wins: number;

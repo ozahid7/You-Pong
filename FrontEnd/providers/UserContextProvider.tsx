@@ -46,6 +46,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                     ? setIsLoged(true)
                     : setIsLoged(false);
             }
+            return response.userInfo
         } catch (error) {
             setchecked(true);
             localStorage.removeItem("isLoged");

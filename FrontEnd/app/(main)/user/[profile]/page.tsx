@@ -5,11 +5,13 @@ import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
 import OverviewCard from "./OverviewCard";
 import NewGameCard from "./NewGameCard";
-import { endPoints, UserToShow } from "@/types/Api";
+import { endPoints, UserInfo, UserToShow } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
+import ProfileSettings from "../../settings/ProfileSettings";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 
 interface pageProps {
     params: { profile: string };
@@ -22,7 +24,11 @@ interface otherUserProps {
 const page = ({ params }: pageProps) => {
     const {data, isLoading, isFetching} = useOtherUser(params.profile);
     const userQuery = useQuery({queryKey: ['user']})
-    if (isLoading || isFetching || userQuery.isFetching)
+    const user = useUser();
+    const isFirstTime = user.userData.isFirstTime;
+
+    if (isFirstTime) return <ProfileSettings isOpen={true} setIsOpen={() => {}} />;
+    else if (isLoading || isFetching || userQuery.isFetching)
         return <Loader />;
     else
         return (

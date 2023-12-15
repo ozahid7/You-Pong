@@ -45,7 +45,6 @@ const BlockedBanner = (props: {
                         icon=""
                         image={props.image}
                         placement="left-0"
-                        menuElements={menuUserElements}
                         user={props.userName}
                         setDataInvalid={props.SetInvalidData}
                     />

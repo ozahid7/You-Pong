@@ -35,7 +35,7 @@ const HistoryCard = ({ otheruser }: { otheruser: UserToShow }) => {
                     />
                     <div className="w-full xl:h-[90%] h:h-[84%] h-[88%] items-center relative flex justify-center overflow-auto my_scroll_green mb-2">
                         {matchs.length < 1 && (
-                            <span className="absolute font-audio text-xl text-cardtitle">
+                            <span className="absolute font-audio text-xl text-gray-400">
                                 No match yet
                             </span>
                         )}

@@ -16,7 +16,7 @@ const MyDropdown = (props: {
     size?: number;
     image?: any;
     placement: string;
-    menuElements: any;
+    menuElements?: any;
     user?: string;
     setDataInvalid?: any
 }) => {

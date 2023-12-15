@@ -10,6 +10,8 @@ import { setFile } from "../chat/data/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { useUser } from "@/providers/UserContextProvider";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
 
 interface ProfileSettingsProps {
     isOpen: boolean;
@@ -20,6 +22,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     const user = useUser()
     const { username, avatar, isIntra } = user.userData;
     const userQuery = useQuery({ queryKey: ["user"] });
+    const router = useRouter()
     const queryClient = useQueryClient();
 
     const [userName, setUserName] = useState("");
@@ -71,6 +74,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                     toSend
                 );
                 queryClient.invalidateQueries({ queryKey: ["user"] });
+                router.push(myRoutes.dashboard)
             } catch (error) {
                 console.log("error = ", error);
             }
