@@ -90,12 +90,14 @@ model User {
 	blocked Room_Chat[] @relation(name: "blocked")
 	blocked_user User[] @relation("blocking_users")
 	blocked_from User[] @relation("blocking_users")
+	friend_user User[] @relation("friend_users")
+	friend_from User[] @relation("friend_users")
 	channels Channel[]
 	messages Message[]
 	// notifications Notification[]
-	freindship_freind Freindship[] @relation("freindship_freind")
-	freindship_user Freindship[] @relation("freindship_user")
-	// matchs Match_History[]
+	friendship_friend Friendship[] @relation("friendship_friend")
+	friendship_user Friendship[] @relation("friendship_user")
+	matchs Match_History[]
 	owned Owned[] @relation(name:"owned")
 	@@map("user")
 }
@@ -155,23 +157,24 @@ model Message {
 // 	user User @relation(fields: [id_user], references: I[id_user])
 // }
 
-// //MATCH_HISTORY MODEL
-// model Match_History {
-// 	id_match String @id @default(uuid())
-// 	my_score Int
-// 	freind_score Int
-// 	status match_status
-// 	users User[] 
-// }
+//MATCH_HISTORY MODEL
+model Match_History {
+	id_match String @id @default(uuid())
+	my_score Int
+	friend_score Int
+	status match_status
+	users User[] 
+}
 
-// FREINDSHIP MODEL
-model Freindship {
-	id_freindship String @id
+// FRIENDSHIP MODEL
+model Friendship {
+	id_friendship String @id @default(uuid())
 	id_user String
-	user User @relation("freindship_user", fields: [id_user], references: [id_user])
-	id_freind String
-	freind User @relation("freindship_freind", fields: [id_freind], references: [id_user])
-	state state
+	user User @relation("friendship_user", fields: [id_user], references: [id_user])
+	id_friend String
+	friend User @relation("friendship_friend", fields: [id_friend], references: [id_user])
+	state state @default(PENDING)
+	blocker_User String?
 }
 
 //ACHIEVEMENT MODEL
