@@ -3,8 +3,6 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { MyContext } from "../../layout";
-import { otherUserContext } from "./page";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
@@ -12,34 +10,39 @@ import { QueryClient } from "@tanstack/react-query";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { blockUser } from "@/utils/friends";
+import { UserToShow } from "@/types/Api";
 
+import { MyContext, useUser } from "@/providers/UserContextProvider";
+import Loader from "@/components/tools/Loader";
+import { myRoutes } from "@/const";
+import useFriends from "@/api/useFriends";
 
-const PlayerCard = () => {
-    const user = useContext(MyContext);
-    const friends = user.FriendData;
-    const otheruser = useContext(otherUserContext)?.otherUser;
+const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
+    const user = useUser();
+
     const [isFriend, setIsFriend] = useState(false);
     const [isPending, setIsPending] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
     let username = user.userData.username;
     let level = user.userData.level;
     let rank = user.userData.rank;
     let avatar = user.userData.avatar;
+    let friends;
 
-    if (otheruser !== undefined) {
+    if (otheruser && otheruser !== undefined) {
+        friends  = useFriends();
         username = otheruser.username;
         level = otheruser.level;
         rank = otheruser.rank;
         avatar = otheruser.avatar;
     }
-
+    
     useEffect(() => {
-        if (otheruser !== undefined) {
-            friends.accepted.map((elm) => {
+        if (otheruser !== undefined && otheruser && friends.data) {
+            friends.data.accepted.map((elm: any) => {
                 if (username === elm.username) setIsFriend(true);
             });
-            friends.pending.map((elm) => {
+            friends.data.pending.map((elm) => {
                 if (username === elm.username) setIsPending(true);
             });
         }
@@ -49,11 +52,12 @@ const PlayerCard = () => {
 
     const addUser = async () => {
         try {
-            const response = await useAxios("post", friendsEndPoint.add, {
-                friend: username,
-            });
+            const response = await useAxios(
+                "post",
+                friendsEndPoint.add + "?username=" + username
+            );
             console.log("add user response = ", response);
-            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
+            friends.refetch()
         } catch (error) {
             console.log("add user error = ", error);
         }
@@ -63,9 +67,10 @@ const PlayerCard = () => {
 
     const removeUser = async () => {
         try {
-            const response = await useAxios("delete", friendsEndPoint.remove, {
-                friend: username,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.decline + "?username=" + username
+            );
             console.log("remove user response = ", response);
             freindsQuery.invalidateQueries({ queryKey: ["friends"] });
         } catch (error) {
@@ -73,7 +78,22 @@ const PlayerCard = () => {
         }
     };
 
+    const blockUser = async () => {
+        try {
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.block + "?username=" + username
+            );
+            console.log("response... = ", response);
+            friends.refetch();
+            router.push(myRoutes.dashboard);
+        } catch (error) {
+            console.log("error : ", error);
+        }
+    };
+
     const removeMutation = useMutation({ mutationFn: removeUser });
+    const blockMutation = useMutation({ mutationFn: blockUser });
 
     let [Icon, setIcon] = useState(false);
     const isOnline = true;
@@ -89,7 +109,6 @@ const PlayerCard = () => {
         else addMutation.mutate();
         setIcon(!Icon);
     };
-
     return (
         <div className="flex justify-center z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
@@ -110,7 +129,7 @@ const PlayerCard = () => {
                         {otheruser === undefined ? (
                             <MdOutlineSettings
                                 onClick={() => {
-                                    router.push('/settings')
+                                    router.push("/settings");
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
@@ -118,7 +137,7 @@ const PlayerCard = () => {
                         ) : (
                             <HiBan
                                 onClick={() => {
-                                    blockUser(username)
+                                    blockMutation.mutate();
                                 }}
                                 size={120}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"

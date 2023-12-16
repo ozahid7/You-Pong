@@ -7,39 +7,58 @@ import { use } from 'passport';
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
-  //GET MANY
+  // GET MANY
   async getMessages(id_channel: string, id_user: string) {
+    const me = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_user,
+      },
+      include: { blocked_from: true, blocked_user: true, bannedChannels: true },
+    });
+    if (!me)
+      return {
+        message: 'No such user !',
+        object: null,
+      };
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
       },
-      include: { users: true },
+      include: { users: true, bannedUsers: true },
     });
-    if (channel && channel.users.find((user) => user.id_user === id_user)) {
+    if (
+      channel.bannedUsers.find((user) => user.id_user === id_user) ||
+      channel.users.find((user) => user.id_user === id_user) === undefined
+    ) {
+      return {
+        message: 'Your not a member in this channel !',
+        object: null,
+      };
+    }
+    if (channel) {
       const messages = await this.prisma.message.findMany({
         where: { id_channel: channel.id_channel },
         orderBy: {
           created_at: 'desc',
         },
       });
-      const room = await this.prisma.room_Chat.findUnique({
-        where: {
-          id_channel_id_user: {
-            id_channel: channel.id_channel,
-            id_user: id_user,
-          },
-        },
-        include: { blocked_users: true },
-      });
-      if (!room)
-        return {
-          message: 'No room chat !',
-          object: null,
-        };
-      const blockedUsers = room.blocked_users.map((user) => user.id_user);
+      const users = await Promise.all(
+        channel.users.map(async (user) => {
+          if (
+            me.blocked_from.find((block) => user.id_user === block.id_user) ===
+              undefined &&
+            me.blocked_user.find((block) => user.id_user === block.id_user) ===
+              undefined
+          ) {
+            return user;
+          }
+        }),
+      );
+      const filtredUsers = await Promise.all(users.filter((user) => user));
       const messagesFiltered = await Promise.all(
         messages.map(async (message) => {
-          if (!blockedUsers.includes(message.id_sender)) return message;
+          if (filtredUsers.find((user) => user.id_user === message.id_sender))
+            return message;
         }),
       );
       const result = messagesFiltered.filter((message) => message);
