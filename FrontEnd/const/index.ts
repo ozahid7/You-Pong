@@ -21,6 +21,7 @@ export const myRoutes = {
     friends: "/friends",
     chat: "/chat",
     game: "/game",
+    notfound: "/user",
 };
 
 //render react icons

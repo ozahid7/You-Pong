@@ -19,12 +19,12 @@ const NotFound = () => {
                             404
                         </span>
                         <span className="text-xs md:text-2xl text-gray-500 text-center text">
-                            This page could not be found
+                            User could not be found
                         </span>
                         <div className="w-[70%] lg:w-full h-[30%] pt-2  h:mt-8 make_center">
                             <Link
                                 href={myRoutes.dashboard}
-                                className="w-full min flex justify-center h-[45px] sm:h-[80px]"
+                                className="w-full min flex justify-center h-[40px] sm:h-[70px]"
                             >
                                 <CustomButton
                                     color="orange"
