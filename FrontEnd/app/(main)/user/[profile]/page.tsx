@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -12,6 +12,8 @@ import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import ProfileSettings from "../../settings/ProfileSettings";
 import { MyContext, useUser } from "@/providers/UserContextProvider";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
 
 interface pageProps {
     params: { profile: string };
@@ -25,9 +27,14 @@ const page = ({ params }: pageProps) => {
     const {data, isLoading, isFetching} = useOtherUser(params.profile);
     const userQuery = useQuery({queryKey: ['user']})
     const user = useUser();
-    const isFirstTime = user.userData.isFirstTime;
+    const router = useRouter()
+    const [isOpen, setIsOpen] = useState(true);
 
-    if (isFirstTime) return <ProfileSettings isOpen={true} setIsOpen={() => {}} />;
+    useEffect(() => {
+
+    }, [isOpen])
+
+    if (isOpen && !data) return <ProfileSettings isOpen={isOpen} setIsOpen={setIsOpen} />;
     else if (isLoading || isFetching || userQuery.isFetching)
         return <Loader />;
     else

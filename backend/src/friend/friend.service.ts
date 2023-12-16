@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ChannelService } from 'src/chat/channel/channel.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FindUserService } from 'src/user/services';
 
@@ -6,7 +7,7 @@ import { FindUserService } from 'src/user/services';
 export class friendService {
   constructor(
     private prisma: PrismaService,
-    private findUser: FindUserService,
+    private channel: ChannelService,
   ) {}
 
   //GET MANY
@@ -371,7 +372,11 @@ export class friendService {
         friend_user: { disconnect: { id_user: friend.id_user } },
       },
     });
-    if (!result || !updateUser)
+    const deleteDirect = await this.channel.deleteChannelDirect(
+      id_user,
+      friend.username,
+    );
+    if (!result || !updateUser || !deleteDirect)
       return {
         message: "Can't update a friendship !",
         Object: null,
@@ -410,21 +415,21 @@ export class friendService {
         message: 'There is no friendship !',
         Object: null,
       };
-    const result = await this.prisma.friendship.delete({
-      where: {
-        id_friendship: duplicate.id_friendship,
-      },
-    });
     const updateUser = await this.prisma.user.update({
       where: {
-        id_user: duplicate.id_user,
+        id_user: id_user,
       },
       data: {
         blocked_user: {
           disconnect: {
-            id_user: duplicate.id_friend,
+            id_user: friend.id_user,
           },
         },
+      },
+    });
+    const result = await this.prisma.friendship.delete({
+      where: {
+        id_friendship: duplicate.id_friendship,
       },
     });
     if (!result || !updateUser)

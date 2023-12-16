@@ -3,40 +3,39 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAxios } from "@/utils";
-import { friendsEndPoint } from "@/types/Api";
-import { QueryClient } from "@tanstack/react-query";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { UserToShow } from "@/types/Api";
-
-import { MyContext, useUser } from "@/providers/UserContextProvider";
-import Loader from "@/components/tools/Loader";
+import { useUser } from "@/providers/UserContextProvider";
 import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
+import { adduser, blockuser, removeuser } from "@/api/friendShip";
 
 const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     const user = useUser();
-
+    const userIconStyle =
+        "z-10 h-[14%] w-[14%]  absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1  text-cardtitle cursor-pointer";
     const [isFriend, setIsFriend] = useState(false);
     const [isPending, setIsPending] = useState(false);
     const router = useRouter();
+    const isOnline = true;
     let username = user.userData.username;
     let level = user.userData.level;
     let rank = user.userData.rank;
     let avatar = user.userData.avatar;
-    let friends;
 
     if (otheruser && otheruser !== undefined) {
-        friends  = useFriends();
+        var friends = useFriends();
         username = otheruser.username;
         level = otheruser.level;
         rank = otheruser.rank;
         avatar = otheruser.avatar;
+        var Block = blockuser(otheruser.username, friends, undefined);
+        var Add = adduser(otheruser.username, friends);
+        var Remove = removeuser(otheruser.username, friends);
     }
-    
+
     useEffect(() => {
         if (otheruser !== undefined && otheruser && friends.data) {
             friends.data.accepted.map((elm: any) => {
@@ -47,56 +46,6 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
             });
         }
     });
-
-    const freindsQuery = new QueryClient();
-
-    const addUser = async () => {
-        try {
-            const response = await useAxios(
-                "post",
-                friendsEndPoint.add + "?username=" + username
-            );
-            console.log("add user response = ", response);
-            friends.refetch()
-        } catch (error) {
-            console.log("add user error = ", error);
-        }
-    };
-
-    const addMutation = useMutation({ mutationFn: addUser });
-
-    const removeUser = async () => {
-        try {
-            const response = await useAxios(
-                "put",
-                friendsEndPoint.decline + "?username=" + username
-            );
-            console.log("remove user response = ", response);
-            freindsQuery.invalidateQueries({ queryKey: ["friends"] });
-        } catch (error) {
-            console.log("remove user error =", error);
-        }
-    };
-
-    const blockUser = async () => {
-        try {
-            const response = await useAxios(
-                "put",
-                friendsEndPoint.block + "?username=" + username
-            );
-            console.log("response... = ", response);
-            friends.refetch();
-            router.push(myRoutes.dashboard);
-        } catch (error) {
-            console.log("error : ", error);
-        }
-    };
-
-    const removeMutation = useMutation({ mutationFn: removeUser });
-    const blockMutation = useMutation({ mutationFn: blockUser });
-
-    let [Icon, setIcon] = useState(false);
-    const isOnline = true;
     let name = username.replace(/[^a-zA-Z]/g, "");
 
     name =
@@ -104,11 +53,47 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
             ? name.slice(0, 3) + "-" + username.slice(username.length - 3)
             : username;
 
-    const hideIcon = (cmd: string) => {
-        if (cmd === "remove") removeMutation.mutate();
-        else addMutation.mutate();
-        setIcon(!Icon);
-    };
+    const pendingIcon = (
+        <FaUserClock
+            onClick={() => {
+                Remove.mutate();
+                setIcon(addIcon);
+            }}
+            size={100}
+            className={userIconStyle}
+        />
+    );
+    const addIcon = (
+        <FaUserPlus
+            onClick={() => {
+                Add.mutate();
+                setIcon(pendingIcon);
+            }}
+            size={100}
+            className={userIconStyle}
+        />
+    );
+
+    const removeIcon = (
+        <FaUserMinus
+            onClick={() => {
+                Remove.mutate();
+                setIcon(addIcon);
+            }}
+            size={100}
+            className={userIconStyle}
+        />
+    );
+
+    const [Icon, setIcon] = useState(FaUserClock);
+    useEffect(() => {
+        otheruser &&
+            (!isFriend && !isPending && !otheruser.isPending
+                ? setIcon(addIcon)
+                : isPending || otheruser.isPending
+                ? setIcon(pendingIcon)
+                : setIcon(removeIcon));
+    }, [isFriend, isPending]);
     return (
         <div className="flex justify-center z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
             <MyCard otherclass="">
@@ -137,37 +122,15 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                         ) : (
                             <HiBan
                                 onClick={() => {
-                                    blockMutation.mutate();
+                                    Block.mutate();
+                                    router.push(myRoutes.dashboard);
                                 }}
-                                size={120}
+                                size={100}
                                 className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
                             />
                         )}
 
-                        {otheruser &&
-                            (!Icon && !isFriend && !isPending ? (
-                                <FaUserPlus
-                                    onClick={() => {
-                                        hideIcon("add");
-                                    }}
-                                    size={100}
-                                    className="z-10 h-[14%] w-[14%] absolute sm:bottom-6 h:right-3 bottom-4 right-4  text-cardtitle cursor-pointer"
-                                />
-                            ) : isPending ? (
-                                <FaUserClock
-                                    onClick={() => {}}
-                                    size={100}
-                                    className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-3 bottom-4 right-4  text-cardtitle"
-                                />
-                            ) : (
-                                <FaUserMinus
-                                    onClick={() => {
-                                        hideIcon("remove");
-                                    }}
-                                    size={100}
-                                    className="z-10 h-[20%] w-[20%] s:h-[14%] s:w-[14%] absolute sm:bottom-6 sm:right-3 bottom-4 right-4  text-cardtitle cursor-pointer"
-                                />
-                            ))}
+                        {otheruser && Icon}
                         <div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
                             <div className=" w-full space-x-1  flex">
                                 <h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">

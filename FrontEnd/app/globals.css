@@ -76,7 +76,7 @@
     top: 15px;
     width: 12px;
     height: 12px;
-    background-color: #eb6440;
+    background-color: #fff;
     border-radius: 50%;
     animation: ballbounce 0.6s ease-out infinite;
 }

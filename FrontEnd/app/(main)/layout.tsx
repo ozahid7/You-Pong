@@ -3,7 +3,8 @@ import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
 import UseQueryProvider from "@/providers/UseQueryProvider";
-import UserContextProvider from "@/providers/UserContextProvider";
+import UserContextProvider, { useUser } from "@/providers/UserContextProvider";
+import { QueryClient } from "@tanstack/react-query";
 
 interface lyoutProps {
     children: React.ReactNode;

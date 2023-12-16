@@ -9,6 +9,7 @@ import { blockUser } from "@/utils/friends";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
+import { blockuser } from "@/api/friendShip";
 
 const MyDropdown = (props: {
     icon: any;
@@ -22,6 +23,7 @@ const MyDropdown = (props: {
 }) => {
     const router = useRouter();
     const friendsQuery = new QueryClient()
+    const block = blockuser(props.user, undefined, props.setDataInvalid);
 
     const handleLogout = async () => {
         const apiUrl = `${apiHost}user/signout`;
@@ -43,9 +45,7 @@ const MyDropdown = (props: {
         if (e === "/user/") router.push(e + props.user);
         else if (e === "/game") router.push(e);
         else if (e === "block") {
-            blockUser(props.user).then(() => {
-                props.setDataInvalid(true)
-            })
+            block.mutate()
         }
         else if (e === '/settings'){
             router.push(e)

@@ -9,7 +9,6 @@ import Loader from "@/components/tools/Loader";
 const page = () => {
     const [Input, setInput] = useState("");
     const friends = useFriends();
-    console.log('friends data = ', friends.data)
     
     if(friends.isLoading) return (<Loader/>)
     else
@@ -39,7 +38,7 @@ const page = () => {
                                     />
                                 </div>
                             </div>
-                            <CustomTabs input={Input} setInput={setInput} friends={friends.data} />
+                            <CustomTabs input={Input} setInput={setInput} friends={friends} />
                         </div>
                     </div>
                 </MyContainer>
