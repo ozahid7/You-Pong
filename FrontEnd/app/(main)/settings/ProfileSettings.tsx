@@ -50,7 +50,6 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     };
 
     const UpdateInfos = async () => {
-        console.log(selectedFile, avatar);
         if (selectedFile != avatar) photo = await setFile(file);
         const toSend = {
             userName: userName,

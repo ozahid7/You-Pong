@@ -46,7 +46,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                     ? setIsLoged(true)
                     : setIsLoged(false);
             }
-            return response.userInfo
+            return response.userInfo;
         } catch (error) {
             setchecked(true);
             localStorage.removeItem("isLoged");
@@ -71,7 +71,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return null;
     };
-    
+
     useEffect(() => {
         if (!loged) getTfa();
         else setTfaVerified(true);
@@ -102,7 +102,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     else if (heroQuery.isLoading) return <Loader />;
     else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
         return (
-            <MyContext.Provider value={{ userData, isLoged}}>
+            <MyContext.Provider value={{ userData, isLoged }}>
                 {children}
             </MyContext.Provider>
         );

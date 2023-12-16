@@ -11,7 +11,6 @@ import { useUser } from "@/providers/UserContextProvider";
 import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser } from "@/api/friendShip";
-import { IconType } from "react-icons";
 
 const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
     const user = useUser();

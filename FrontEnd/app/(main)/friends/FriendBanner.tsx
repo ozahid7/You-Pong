@@ -8,7 +8,7 @@ import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { menuChatElements, menuUserElements } from "@/const";
-import { blockuser } from "@/api/friendShip";
+import { blockuser, todirect } from "@/api/friendShip";
 
 const FriendBanner = (props: {
     zindex?: number;
@@ -19,8 +19,9 @@ const FriendBanner = (props: {
 }) => {
     const [enabled, setEnabled] = useState(false);
     const block = blockuser(props.userName, undefined, props.SetInvalidData)
+    const direct = todirect(props.userName)
 
-    if (block.isPending) return <MiniLoader customClass="m-auto" />;
+    if (block.isPending || direct.isPending) return <MiniLoader customClass="m-auto" />;
     else
         return (
             <div
@@ -52,6 +53,7 @@ const FriendBanner = (props: {
                 </div>
                 <div className="flex space-x-2 md:space-x-8">
                     <LuMessageSquarePlus
+                        onClick={() => {direct.mutate()}}
                         size={35}
                         className="cursor-pointer mt-1 text-palette-green"
                     />
