@@ -11,17 +11,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ChannelService } from './channel.service';
 import { channelDto } from '../dto/channel.create.dto';
 import { Channel } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('chat/channel')
 export class ChannelController {
-  constructor(
-    private prisma: PrismaService,
-    private channelService: ChannelService,
-  ) {}
+  constructor(private channelService: ChannelService) {}
 
   //Get MANY
   @UseGuards(AuthGuard('jwt'))
@@ -38,7 +34,7 @@ export class ChannelController {
 
   //Get
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id_channel')
+  @Get('/myChannel/:id_channel')
   async getChannel(@Param('id_channel') id_channel: string) {
     try {
       const result = await this.channelService.getChannel(id_channel);
@@ -47,17 +43,18 @@ export class ChannelController {
       throw new HttpException('Failed to find a channel', 444);
     }
   }
-
-  // //POST MANY
-  // @Post('/many')
-  // async postChannels(@Body() channels: channelDto[]) {
-  //   try {
-  //     const result = await this.channelService.postChannels(channels);
-  //     return result;
-  //   } catch (error) {
-  //     throw new HttpException('Failed to create channels', 444);
-  //   }
-  // }
+  //Get
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/members/')
+  async getMembers(@Query('id_channel') id_channel: string, @Req() req) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.getMembers(id_user, id_channel);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to find members of channel', 444);
+    }
+  }
 
   //POST
   @UseGuards(AuthGuard('jwt'))
@@ -164,6 +161,7 @@ export class ChannelController {
       throw new HttpException('Failed to join a channel', 444);
     }
   }
+
   //PUT LEAVE
   @UseGuards(AuthGuard('jwt'))
   @Put('/leave/')
@@ -179,6 +177,7 @@ export class ChannelController {
       throw new HttpException('Failed to leave a channel', 444);
     }
   }
+
   //PUT KICK
   @UseGuards(AuthGuard('jwt'))
   @Put('/kick/')

@@ -1,26 +1,36 @@
-import {  ForbiddenException, Injectable, NotAcceptableException, NotFoundException, Res, ServiceUnavailableException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+  Res,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Response } from 'express';
 import { userDto } from '../dto/user.create.dto';
 import { FindUserService } from './find.service';
 import { error } from 'console';
+import { AchievementService } from 'src/achievement/achievement.service';
 
 @Injectable()
 export class UserService {
-  
-  private id:number = 157;
+  private id: number = 157;
 
-  async generateUser(usename: string):  Promise<string> {
-      let res:string = usename + (this.id).toString().padStart(3, '0');
-      if ((await this.findService.finduserByUserName(res) == null)){
-          return res;
-      }
-      this.id++;
-      return await this.generateUser(usename);
+  async generateUser(usename: string): Promise<string> {
+    let res: string = usename + this.id.toString().padStart(3, '0');
+    if ((await this.findService.finduserByUserName(res)) == null) {
+      return res;
+    }
+    this.id++;
+    return await this.generateUser(usename);
   }
 
-  constructor(private prisma: PrismaService,
-              private findService: FindUserService) {}
+  constructor(
+    private prisma: PrismaService,
+    private findService: FindUserService,
+    private achievementService: AchievementService,
+  ) {}
 
   //POST
   async postUser(user: userDto) {
@@ -103,42 +113,52 @@ export class UserService {
     const result = await this.prisma.user.findMany();
     return result;
   }
-    // create a user
-    async create(obj: any){
-        try {
-            const newUser = await this.prisma.user.create({
-                data:
-                {
-                    username: await this.generateUser(obj.username),
-                    email: obj.email,
-                    hash: obj.hash,
-                    lastname: obj.familyName,
-                    firstname: obj.givenName,
-                    avatar: obj.avatar
-                }
-            })
-            return newUser;
-        } catch (error) {
-            if (error.code === 'P2002') {
-                throw new ForbiddenException('Email Already in use');
-            }
-            throw(error)
-        }
+  // create a user
+  async create(obj: any) {
+    try {
+      const newUser = await this.prisma.user.create({
+        data: {
+          username: await this.generateUser(obj.username),
+          email: obj.email,
+          hash: obj.hash,
+          lastname: obj.familyName,
+          firstname: obj.givenName,
+          avatar: obj.avatar,
+        },
+      });
+      const achievements = await this.achievementService.createAchievements(
+        newUser.id_user,
+      );
+      return newUser;
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Email Already in use');
+      }
+      throw error;
     }
+  }
 
-    async signout(@Res() res: Response){
-    	try {
-			res.clearCookie('access_token');
-			res.status(200).json({})
-    	} catch(error) {
-			  throw new ForbiddenException(error);
-    	}
-	}
+  async signout(@Res() res: Response) {
+    try {
+      res.clearCookie('access_token');
+      res.status(200).json({});
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
+  }
 
-  async findUser(friend: string) {
+  async findUser(friend: string, id_user: string) {
     const user = await this.findService.finduserByUserName(friend);
-		if (!user)
-			throw new ServiceUnavailableException("Username not Found!");
+    let isPending: boolean = false;
+    if (
+      id_user &&
+      user &&
+      user.friendship_friend.find(
+        (user) => user.id_user === id_user && user.state === 'PENDING',
+      )
+    )
+      isPending = true;
+    if (!user) throw new ServiceUnavailableException('Username not Found!');
     return {
       avatar: (await user).avatar,
       username: user.username,
@@ -150,9 +170,10 @@ export class UserService {
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
       matchs: user.matchs,
-      owned: user.owned,
+      achievements: user.achievements,
+      isPending: isPending,
     };
-  };
+  }
 
   async updateUsername(userId: string, newName: string) {
     try {
@@ -160,25 +181,24 @@ export class UserService {
       const pot = await this.prisma.user.findFirst({
         where: {
           username: newName,
-        }
-      })
-      if (pot)
-        throw new NotAcceptableException("username already in use!");
+        },
+      });
+      if (pot) throw new NotAcceptableException('username already in use!');
       await this.prisma.user.update({
         where: {
           username: (await user).username,
         },
         data: {
           username: newName,
-        }
+        },
       });
-      } catch (error) {
-        throw new NotAcceptableException("username already in use!"); 
-      }
-  };
+    } catch (error) {
+      throw new NotAcceptableException('username already in use!');
+    }
+  }
 
   //GET
   async getUserChannels(id_user: string) {
     return (await this.findService.finduserById(id_user)).channels;
-  };
+  }
 }

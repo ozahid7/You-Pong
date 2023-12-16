@@ -143,8 +143,9 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/findUser')
-  async findUser(@Body() dto: friendDto, @Res() res) {
-    const val = await this.userService.findUser(dto.friend);
+  async findUser(@Body() dto: friendDto, @Res() res, @Req() req) {
+    const _id = req.user.sub;
+    const val = await this.userService.findUser(dto.friend, _id);
     res.status(201).json(val);
   }
 

@@ -9,11 +9,22 @@ export class ChannelService {
 
   //GET MANY
   async getChannels(id_user: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_user,
+      },
+    });
+    if (!user)
+      return {
+        message: 'No such user !',
+        object: null,
+      };
     const channels = await this.prisma.channel.findMany({
       include: {
         users: true,
         messages: true,
         rooms: true,
+        bannedUsers: true,
       },
     });
     if (!channels)
@@ -21,9 +32,14 @@ export class ChannelService {
         message: 'There is no channels !',
         object: null,
       };
-    const result = channels.filter(
-      (channel) => !channel.users.find((user) => user.id_user === id_user),
-    );
+    const channelsFiltred = channels.map((channel) => {
+      if (
+        !channel.users.find((user) => user.id_user === id_user) &&
+        !channel.bannedUsers.find((user) => user.id_user === id_user)
+      )
+        return channel;
+    });
+    const result = channelsFiltred.filter((channel) => channel);
     if (result.length === 0)
       return {
         message: 'There is no channels to join !',
@@ -32,6 +48,58 @@ export class ChannelService {
 
     return {
       message: 'Channels found',
+      object: result,
+    };
+  }
+
+  //GET MEMBERS
+  async getMembers(id_user: string, id_channel: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_user,
+      },
+    });
+    if (!user)
+      return {
+        message: 'No such user !',
+        object: null,
+      };
+    const rooms = await this.prisma.room_Chat.findMany({
+      where: {
+        id_channel: id_channel,
+        NOT: { member_status: 'BANNED' },
+        lefted: false,
+      },
+    });
+    if (!rooms)
+      return {
+        message: 'There is no room chat !',
+        object: null,
+      };
+    const usersFiltred = await Promise.all(
+      rooms.map(async (room) => {
+        const user = await this.prisma.user.findUnique({
+          where: { id_user: room.id_user },
+          select: {
+            id_user: true,
+            username: true,
+            avatar: true,
+            status: true,
+          },
+        });
+        if (user) {
+          return { user, user_role: room.user_role };
+        }
+      }),
+    );
+    const result = await Promise.all(usersFiltred.filter((user) => user));
+    if (!result)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
+    return {
+      message: 'Channel found',
       object: result,
     };
   }
@@ -46,6 +114,7 @@ export class ChannelService {
         users: true,
         rooms: true,
         messages: true,
+        bannedUsers: true,
       },
     });
     if (!result)
@@ -61,6 +130,12 @@ export class ChannelService {
 
   //DELETE MANY
   async deleteChannels() {
+    const rooms = await this.prisma.room_Chat.deleteMany();
+    if (!rooms)
+      return {
+        message: "Can't delete rooms !",
+        object: null,
+      };
     const result = await this.prisma.channel.deleteMany();
     return {
       message: 'Channels Deleted Succesfully',
@@ -73,6 +148,14 @@ export class ChannelService {
     if (!id_channel)
       return {
         message: 'No such channel !',
+        object: null,
+      };
+    const rooms = await this.prisma.room_Chat.deleteMany({
+      where: { id_channel: id_channel },
+    });
+    if (!rooms)
+      return {
+        message: "Can't delete rooms !",
         object: null,
       };
     const result = await this.prisma.channel.delete({
@@ -184,6 +267,7 @@ export class ChannelService {
         id_channel: result.id_channel,
         id_user: id_user,
         user_role: 'OWNER',
+        lefted: false,
       },
     });
     if (!room)
@@ -251,14 +335,16 @@ export class ChannelService {
       data: {
         id_channel: newchannel.id_channel,
         id_user: id_user,
-        user_role: 'OWNER',
+        user_role: 'MEMBER',
+        lefted: false,
       },
     });
     const room = await this.prisma.room_Chat.create({
       data: {
         id_channel: newchannel.id_channel,
         id_user: freind.id_user,
-        user_role: 'OWNER',
+        user_role: 'MEMBER',
+        lefted: false,
       },
     });
     if (!room || !myroom)
@@ -378,7 +464,11 @@ export class ChannelService {
     const joined = channel.users.some((user) => {
       return user.id_user === id_user;
     });
-    if (joined) return 'Already joined !';
+    if (joined)
+      return {
+        message: 'Already joined !',
+        object: null,
+      };
     if (channel.type === 'PROTECTED') {
       if (channel.hash !== password)
         return {
@@ -386,6 +476,29 @@ export class ChannelService {
           object: null,
         };
     }
+    const room = await this.prisma.room_Chat.upsert({
+      where: {
+        id_channel_id_user: {
+          id_channel: id_channel,
+          id_user: id_user,
+        },
+      },
+      update: {
+        user_role: 'MEMBER',
+        lefted: false,
+      },
+      create: {
+        id_channel: id_channel,
+        id_user: id_user,
+        user_role: 'MEMBER',
+        lefted: false,
+      },
+    });
+    if (!room)
+      return {
+        message: "Can't upsert a room chat !",
+        object: null,
+      };
     const result = await this.prisma.channel.update({
       where: {
         id_channel: id_channel,
@@ -394,20 +507,13 @@ export class ChannelService {
         users: {
           connect: { id_user: id_user },
         },
+        rooms: {
+          connect: {
+            id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+          },
+        },
       },
     });
-    const room = await this.prisma.room_Chat.create({
-      data: {
-        id_channel: result.id_channel,
-        id_user: id_user,
-        user_role: 'MEMBER',
-      },
-    });
-    if (!room)
-      return {
-        message: "Can't create a room chat !",
-        object: null,
-      };
     return {
       message: 'Channel Updated Succefully',
       object: result,
@@ -443,16 +549,27 @@ export class ChannelService {
         users: {
           disconnect: { id_user: id_user },
         },
+        rooms: {
+          disconnect: {
+            id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+          },
+        },
       },
       include: { users: true, rooms: true },
     });
 
-    const room = await this.prisma.room_Chat.delete({
+    const room = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
           id_channel: result.id_channel,
           id_user: id_user,
         },
+        lefted: false,
+      },
+      data: {
+        lefted: true,
+        user_role: 'MEMBER',
+        lefted_at: new Date(),
       },
     });
     if (!room)
@@ -514,6 +631,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const kicked = await this.prisma.room_Chat.findUnique({
@@ -522,6 +640,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (kicked.user_role === 'OWNER')
@@ -547,19 +666,33 @@ export class ChannelService {
         users: {
           disconnect: { id_user: user.id_user },
         },
+        rooms: {
+          disconnect: {
+            id_channel_id_user: {
+              id_channel: id_channel,
+              id_user: user.id_user,
+            },
+          },
+        },
       },
     });
-    const room = await this.prisma.room_Chat.delete({
+    const room = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
           id_channel: result.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
+      },
+      data: {
+        lefted: true,
+        user_role: 'MEMBER',
+        lefted_at: new Date(),
       },
     });
     if (!room)
       return {
-        message: "Can't delete a room chat !",
+        message: "Can't update a room chat !",
         object: null,
       };
     return {
@@ -608,6 +741,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const member = await this.prisma.room_Chat.findUnique({
@@ -616,6 +750,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (owner.user_role === 'MEMBER')
@@ -639,6 +774,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
       data: {
         user_role: 'ADMIN',
@@ -695,6 +831,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const admin = await this.prisma.room_Chat.findUnique({
@@ -703,6 +840,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (owner.user_role !== 'OWNER')
@@ -731,6 +869,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
       data: {
         user_role: 'MEMBER',
@@ -787,6 +926,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const member = await this.prisma.room_Chat.findUnique({
@@ -795,6 +935,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (admin.user_role === 'MEMBER')
@@ -823,14 +964,30 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
       data: {
         member_status: 'BANNED',
+        lefted: true,
+        lefted_at: new Date(),
       },
     });
-    if (!result)
+    const channelUpdated = await this.prisma.channel.update({
+      where: {
+        id_channel: id_channel,
+      },
+      include: {
+        users: true,
+        bannedUsers: true,
+      },
+      data: {
+        users: { disconnect: { id_user: member.id_user } },
+        bannedUsers: { connect: { id_user: member.id_user } },
+      },
+    });
+    if (!result || !channelUpdated)
       return {
-        message: "Can't update a room chat !",
+        message: "Can't update a room chat / channel !",
         object: null,
       };
     return {
@@ -879,6 +1036,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const member = await this.prisma.room_Chat.findUnique({
@@ -887,6 +1045,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (admin.user_role === 'MEMBER')
@@ -913,11 +1072,24 @@ export class ChannelService {
       },
       data: {
         member_status: 'NONE',
+        lefted: true,
       },
     });
-    if (!result)
+    const channelUpdated = await this.prisma.channel.update({
+      where: {
+        id_channel: id_channel,
+      },
+      include: {
+        users: true,
+        bannedUsers: true,
+      },
+      data: {
+        bannedUsers: { disconnect: { id_user: member.id_user } },
+      },
+    });
+    if (!result || !channelUpdated)
       return {
-        message: "Can't update a room chat !",
+        message: "Can't update a room chat / channel !",
         object: null,
       };
     return {
@@ -971,6 +1143,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const member = await this.prisma.room_Chat.findUnique({
@@ -979,6 +1152,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (admin.user_role === 'MEMBER')
@@ -1007,6 +1181,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
       data: {
         member_status: 'MUTED',
@@ -1020,6 +1195,7 @@ export class ChannelService {
             id_channel: channel.id_channel,
             id_user: user.id_user,
           },
+          lefted: false,
         },
         data: {
           member_status: 'NONE',
@@ -1077,6 +1253,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: id_user,
         },
+        lefted: false,
       },
     });
     const member = await this.prisma.room_Chat.findUnique({
@@ -1085,6 +1262,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
     });
     if (admin.user_role === 'MEMBER')
@@ -1108,6 +1286,7 @@ export class ChannelService {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
+        lefted: false,
       },
       data: {
         member_status: 'NONE',
