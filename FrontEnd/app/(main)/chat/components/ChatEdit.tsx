@@ -19,7 +19,7 @@ import groups from "../../../../public/groups.svg";
 import Image from "next/image";
 import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
-import { Channel } from "@/types";
+import { Channel, Member } from "@/types";
 import {
   putData,
   setData,
@@ -39,7 +39,7 @@ var setDataObj: Channel = {
 
 interface HomePage {
   channels: Channel;
-  users: User[];
+  users: Member[];
 }
 
 const ChatEdit = ({ channels, users }: HomePage) => {
@@ -93,7 +93,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
   useEffect(() => {
     if (users)
       users.map((obj) => {
-        obj.status === "ONLINE" ? (m += 1) : (m += 0);
+        obj.user.status === "ONLINE" ? (m += 1) : (m += 0);
       });
     setMembers(m);
   }, [users]);

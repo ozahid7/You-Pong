@@ -10,7 +10,6 @@ const useFriends = () => {
                 "get",
                 endPoints.getFriend
             );
-            console.log("friends response = ", response);
             return response.Object
         } catch (error) {
             console.log("error get Friends : ", error);

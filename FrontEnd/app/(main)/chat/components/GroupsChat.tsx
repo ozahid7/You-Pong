@@ -64,10 +64,7 @@ const GroupsChat = ({ channels }: obj) => {
             </div>
           </div>
           <div>
-            <GroupDropdown
-              channels={channels}
-              users={channel?.users || []}
-            ></GroupDropdown>
+            <GroupDropdown channels={channels}></GroupDropdown>
           </div>
         </div>
       </div>

@@ -56,18 +56,18 @@ export interface Channel {
   type: string;
   users?: User[];
   id_channel?: string;
-  rooms?: Room_Chat[]
+  rooms?: Room_Chat[];
 }
 
 export interface Room_Chat {
-	name: String;
-	user_role: "ADMIN" | "MEMBER" | "OWNER";
-	member_status: "MUTED" | "BANNED" | "NONE";
-	lefted: Boolean; 
-	blocked_users: User[];
-	id_user: String;
-	user: User; 
-	id_channel: String;
+  name: String;
+  user_role: "ADMIN" | "MEMBER" | "OWNER";
+  member_status: "MUTED" | "BANNED" | "NONE";
+  lefted: Boolean;
+  blocked_users: User[];
+  id_user: String;
+  user: User;
+  id_channel: String;
 }
 
 export interface User {
@@ -124,4 +124,9 @@ export interface User_Hero {
   // freindship_user: Freindship[];
   // matchs Match_History[]
   // owned: Owned[]
+}
+
+export interface Member {
+  user: User;
+  user_role: "ADMIN" | "MEMBER" | "OWNER";
 }

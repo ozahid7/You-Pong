@@ -1,25 +1,15 @@
 "use client";
-import { Menu } from "@headlessui/react";
-import { Fragment, useState, useRef } from "react";
 import React from "react";
 import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
-import { menuGroupsElements } from "@/const";
-import { renderIcon } from "@/utils";
-import { Channel, User, User_Hero } from "@/types";
-import {
-  Modal,
-  ModalBody,
-  Button,
-  useDisclosure,
-  ModalContent,
-  NextUIProvider,
-} from "@nextui-org/react";
+import { Channel, Member, User, User_Hero } from "@/types";
+import { Button } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
   getChannel,
   getMainUser,
+  getMembers,
   leaveChannel,
   userChannels,
 } from "../data/api";
@@ -29,11 +19,9 @@ import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {
   channels: Channel;
-  users: User[];
 }
 
-const GroupDropdown = ({ channels, users }: HomePage) => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+const GroupDropdown = ({ channels }: HomePage) => {
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
@@ -42,9 +30,9 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
     mutate(fetchData_getChannels);
   };
 
-  const fetchData_getChannel_Users = async () => {
+  const fetchData_getMembers = async () => {
     try {
-      const result = await getChannel(channels.id_channel || "");
+      const result = await getMembers(channels.id_channel || "");
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -61,8 +49,11 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
     }
   };
 
-  const { data: Users } = useSWR<Channel>("/Users", fetchData_getChannel_Users);
-  const { data: MainUser } = useSWR<User_Hero>("/MainUser", fetchData_getMainUser);
+  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
+  const { data: MainUser } = useSWR<User_Hero>(
+    "/MainUser",
+    fetchData_getMainUser
+  );
 
   return (
     <div className="flex flex-col justify-center relative">
@@ -85,12 +76,12 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           <li>
             <MembersEdit
               MainUser={MainUser}
-              Users={Users?.users || []}
-              Channel_={Users || null}
+              Users={Users || []}
+              Channel_={channels || null}
             ></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels} users={Users?.users || []}></ChatEdit>
+            <ChatEdit channels={channels} users={Users || []}></ChatEdit>
           </li>
           <li>
             <Button

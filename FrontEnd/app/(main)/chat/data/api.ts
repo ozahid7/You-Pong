@@ -34,7 +34,7 @@ export const joinChannel = async (id_channel: string, password: string) => {
 export const leaveChannel = async (id_channel: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/leave?id_channel=${id_channel}`
+      `http://localhost:4000/chat/channel/leave/?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -58,7 +58,21 @@ export const getChannels = async () => {
 export const getChannel = async (id_channel: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:4000/chat/channel/${id_channel}`
+      `http://localhost:4000/chat/channel/myChannel/${id_channel}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+// return object, USERS+USER_ROLE+STATUS
+export const getMembers = async (id_channel: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/members/?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -101,7 +115,7 @@ export const putData = async (data: Channel, name: string) => {
     };
 
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/update?name=${name}`,
+      `http://localhost:4000/chat/channel/update/?name=${name}`,
       obj
     );
     return response.data;
@@ -139,17 +153,6 @@ export const getFile = async (pathname: string) => {
   try {
     const response = await axios.get(`http://localhost:4000/file/${pathname}`);
 
-    return response.data;
-  } catch (error) {
-    // Handle errors here
-    console.error(error);
-    return null;
-  }
-};
-
-export const getMembers = async () => {
-  try {
-    const response = await axios.get("http://localhost:4000/user");
     return response.data;
   } catch (error) {
     // Handle errors here
