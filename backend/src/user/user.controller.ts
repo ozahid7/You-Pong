@@ -152,13 +152,6 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch('/updateUsername')
-  async updateUsername(@Req() req, @Body() dto: friendDto) {
-    const _id = req.user.sub;
-    await this.userService.updateUsername(_id, dto.friend);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
   @Post('incMatchRes')
   async incMatchRes(@Body() dto: friendDto, @Req() req) {
     const _id = req.user.sub;
