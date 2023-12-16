@@ -6,7 +6,7 @@ import {
 import { FindUserService } from './find.service';
 import { use } from 'passport';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Owned } from '@prisma/client';
+import { Achievement } from '@prisma/client';
 import { AchievementService } from 'src/achievement/achievement.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class InfoUserService {
     const objArray: { isOwned: boolean; title: string; description: string }[] =
       [];
     for (const achievemennt of ach) {
-      let val = await this.prisma.owned.findUnique({
+      let val = await this.prisma.achievement.findUnique({
         where: {
           id_achievement: await achievemennt.id_achievement,
         },
@@ -47,11 +47,11 @@ export class InfoUserService {
           loses: user.defeats,
           wins: user.victory,
           tfaStatus: user.tfaIsEnable,
-          achievements: await this.creatAchObj(),
+          // achievements: await this.creatAchObj(),
           avatar: user.avatar,
           channels: user.channels,
           matchs: user.matchs,
-          owned: user.owned,
+          achievements: user.achievements,
           isIntra: user.hash === null ? true : false,
         },
       };

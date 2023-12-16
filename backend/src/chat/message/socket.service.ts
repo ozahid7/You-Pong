@@ -1,21 +1,15 @@
-import { Injectable, OnModuleInit, Req, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
-import { AuthGuard } from '@nestjs/passport';
-import { disconnect } from 'process';
-import { JsonObject } from '@prisma/client/runtime/library';
-import { time } from 'console';
-import { use } from 'passport';
 
 export interface infoType {
   id_channel: string;
@@ -28,7 +22,6 @@ export interface infoType {
 export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private prisma: PrismaService) {}
   private users: { id_user: string; id_socket: string }[] = [];
-  private infos: infoType;
   async addUser(id_user: string, id_socket: string) {
     await this.users.push({ id_user, id_socket });
   }
@@ -41,7 +34,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   handleConnection(socket: Socket) {
     const id_user = socket.handshake.headers['id_user'].toString();
     console.log('connected: ', socket.id);
-    // console.log('id_user: ', id_user);
     if (
       !this.users.find(
         (user) => user.id_user === id_user && user.id_socket === socket.id,
@@ -71,64 +63,64 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         where: {
           id_channel: info.id_channel,
         },
-        include: { users: true },
+        include: { users: true, bannedUsers: true },
+      });
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: info.id_sender,
+        },
+        include: {
+          blocked_user: true,
+          blocked_from: true,
+        },
       });
       const room = await this.prisma.room_Chat.findUnique({
         where: {
           id_channel_id_user: {
             id_channel: info.id_channel,
-            id_user: info.id_sender,
+            id_user: my_user.id_user,
           },
-        },
-        include: {
-          blocked_users: true,
         },
       });
-      let bannedUserd = channel.users.forEach(async (user) => {
-        const room = await this.prisma.room_Chat.findUnique({
-          where: {
-            id_channel_id_user: {
-              id_channel: info.id_channel,
-              id_user: user.id_user,
-            },
-          },
-          include: { blocked_users: true },
-        });
+      let users = channel.users.map(async (user) => {
         if (
-          room &&
-          (room.member_status !== 'NONE' ||
-            room.lefted ||
-            room.blocked_users[info.id_sender])
+          !channel.bannedUsers.find(
+            (banned) => user.id_user === banned.id_user,
+          ) &&
+          !my_user.blocked_from.find(
+            (banned) => user.id_user === banned.id_user,
+          ) &&
+          !my_user.blocked_user.find(
+            (banned) => user.id_user === banned.id_user,
+          )
         )
-          bannedUser.push(user.id_user);
+          return user;
       });
-      if (room && room.member_status === 'NONE' && !room.lefted) {
-        console.log(room.name);
+      const filtredUsers = await Promise.all(users.filter((user) => user));
 
-        const message = await this.prisma.message.create({
-          data: {
-            content: info.message,
-            id_sender: sender.id_user,
-            name_room: room.name,
-            id_channel: info.id_channel,
-          },
+      const message = await this.prisma.message.create({
+        data: {
+          content: info.message,
+          id_sender: sender.id_user,
+          name_room: room.name,
+          id_channel: info.id_channel,
+        },
+      });
+      let us = this.users.map((user) => {
+        if (
+          filtredUsers.filter((filtred) => {
+            filtred.id_user === user.id_user;
+          })
+        )
+          return user;
+      });
+      const result = await Promise.all(us.filter((user) => user));
+      if (message) {
+        console.log('send message');
+        info.id_sender = sender.id_user;
+        result.map((user) => {
+          this.server.to(user.id_socket).emit('receiveMessage', info);
         });
-        let users = this.users.filter(
-          (user) =>
-            channel.users.some(
-              (userChan) =>
-                user.id_user === userChan.id_user &&
-                user.id_user !== sender.id_user,
-            ) &&
-            !bannedUser.some((userBlock) => user.id_user === userBlock.id_user),
-        );
-        if (message) {
-          console.log('send message');
-          info.id_sender = sender.id_user;
-          users.map((user) => {
-            this.server.to(user.id_socket).emit('receiveMessage', info);
-          });
-        }
       }
     }
   }

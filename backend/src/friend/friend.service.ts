@@ -125,14 +125,18 @@ export class friendService {
       include: { blocked_user: true, blocked_from: true },
     });
 
-    const filtredUsers = await Promise.all(
-      allUsers.filter(
-        (user) => !my_user.blocked_user.includes(user),
-        //   !my_user.blocked_from.includes(user),
-      ),
+    const users = await Promise.all(
+      allUsers.map((user) => {
+        if (
+          user.blocked_user.filter((block) => block.id_user === my_user.id_user)
+            .length != 1 &&
+          user.blocked_from.filter((block) => block.id_user === my_user.id_user)
+            .length != 1
+        )
+          return user;
+      }),
     );
-    console.log(filtredUsers);
-
+    const filtredUsers = users.filter((user) => user);
     const result = filtredUsers.map((user) => {
       return {
         username: user.username,
@@ -140,17 +144,6 @@ export class friendService {
         status: user.status,
       };
     });
-    // const result = await Promise.all(
-    //   friends.map(async (friend) => {
-    //     let id = friend.id_user;
-    //     if (id === id_user) id = friend.id_friend;
-    //     return await this.prisma.user.findUnique({
-    //       where: { id_user: id },
-    //       select: { username: true, avatar: true, status: true },
-    //     });
-    //   }),
-    // );
-
     if (!result)
       return {
         message: 'There is no friends !',
