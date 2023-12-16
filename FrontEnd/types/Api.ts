@@ -1,105 +1,104 @@
 export type singInData = {
-    tfaStatus: boolean;
+  tfaStatus: boolean;
 };
 
 export type singUpData = {
-    tfaStatus: any;
+  tfaStatus: any;
 };
 
 export type tfaSendCodeData = {
-    valid: boolean;
+  valid: boolean;
 };
 
 export type tfaSwitch = boolean;
 
 export type tfaEnable = {
-    img: string;
+  img: string;
 };
 
-
 export interface Achievement {
-    title: string;
-    description: string;
-    isOwned: boolean;
+  title: string;
+  description: string;
+  isOwned: boolean;
 }
 
 export interface match {
-    avatar: string;
-    user: string;
-    wins: string | "0";
-    loses: string | "0";
+  avatar: string;
+  user: string;
+  wins: string | "0";
+  loses: string | "0";
 }
 
 export type UserInfo = {
-    owned: Achievement[];
-    matchs: match[];
-    level: number;
-    loses: number;
-    rank: number;
-    isFirstTime: boolean;
-    tfaStatus: boolean;
-    username: string;
-    wins: number;
-    avatar: string;
-    isIntra: boolean;
+  achievements: Achievement[];
+  matchs: match[];
+  level: number;
+  loses: number;
+  rank: number;
+  isFirstTime: boolean;
+  tfaStatus: boolean;
+  username: string;
+  wins: number;
+  avatar: string;
+  isIntra: boolean;
 };
 
 export type UserData = {
-    userInfo: UserInfo;
+  userInfo: UserInfo;
 };
 
 export type UserToShow = {
-    avatar: string;
-    username: string;
-    level: number;
-    rank: number;
-    wins: number;
-    losts: number;
-    status: string;
-    owned: Achievement[];
-    matchs: match[];
-    isIntra: boolean;
+  avatar: string;
+  username: string;
+  level: number;
+  rank: number;
+  wins: number;
+  losts: number;
+  status: string;
+  achievements: Achievement[];
+  matchs: match[];
+  isIntra: boolean;
 };
 
 //EndPoints
 export const endPoints = {
-    signin: "auth/local/signin",
-    getTfaStatus: "auth/getTfaStatus",
-    signup: "auth/local/signup",
-    tfaSendCode: "auth/twoFactorAuth",
-    userTfaSendCode: "user/tfa/switch",
-    tfaSwitch: "user/twoFactorAuth",
-    gethero: "user/GetHero",
-    getuser: "user/findUser",
-    getFriend: "friend",
-    getFile: "upload",
-    updateInfo: "update",
+  signin: "auth/local/signin",
+  getTfaStatus: "auth/getTfaStatus",
+  signup: "auth/local/signup",
+  tfaSendCode: "auth/twoFactorAuth",
+  userTfaSendCode: "user/tfa/switch",
+  tfaSwitch: "user/twoFactorAuth",
+  gethero: "user/GetHero",
+  getuser: "user/findUser",
+  getFriend: "friend",
+  getFile: "upload",
+  updateInfo: "update",
 };
 
 //friends
 export type user = {
-    avatar: string;
-    username: string;
-    status: string;
+  avatar: string;
+  username: string;
+  status: string;
 };
 export type FriendArr = {
-    accepted: user[];
-    blocked: user[];
-    pending: user[];
+  accepted: user[];
+  blocked: user[];
+  pending: user[];
 };
 
 export type FriendsReturn = {
-    message: string;
-    Object: FriendArr;
+  message: string;
+  Object: FriendArr;
 };
 
 export interface searchUsers extends Array<user> {}
 
 export const friendsEndPoint = {
-    block: "friend/block",
-    accept: "friend/accept",
-    decline: "friend/refuse",
-    search: "friend/search",
-    unblock: "friend/unblock",
-    add: "friend",
+  block: "friend/block",
+  accept: "friend/accept",
+  decline: "friend/refuse",
+  search: "friend/search",
+  unblock: "friend/unblock",
+  add: "friend",
 };
