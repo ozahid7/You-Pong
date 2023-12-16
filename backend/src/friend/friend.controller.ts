@@ -8,6 +8,7 @@ import {
   Query,
   Put,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { friendService } from './friend.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -30,17 +31,17 @@ export class friendController {
     }
   }
   //GET MANY
-  @UseGuards(AuthGuard('jwt'))
-  @Get('/search/')
-  async searchFriends(@Req() req) {
-    try {
-      const id_user: string = req.user.sub;
-      const result = await this.friendService.searchFriends(id_user);
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to find friends', 444);
-    }
-  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get('/search/')
+  // async searchFriends(@Req() req) {
+  //   try {
+  //     const id_user: string = req.user.sub;
+  //     const result = await this.friendService.searchFriends(id_user);
+  //     return result;
+  //   } catch (error) {
+  //     throw new HttpException('Failed to find friends', 444);
+  //   }
+  // }
 
   //POST
   @UseGuards(AuthGuard('jwt'))
@@ -175,11 +176,11 @@ export class friendController {
   //     .json(await this.friendService.sort(req.user.sub));
   // }
 
-  // @Get('search')
-  // @UseGuards(AuthGuard('jwt'))
-  // async search(@Req() req, @Res() res) {
-  //     res
-  //     .status(200)
-  //     .json(await this.friendService.search(req.user.sub));
-  // }
+  @Get('search')
+  @UseGuards(AuthGuard('jwt'))
+  async search(@Req() req, @Res() res) {
+      res
+      .status(200)
+      .json(await this.friendService.search(req.user.sub));
+  }
 }

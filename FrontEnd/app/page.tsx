@@ -23,10 +23,7 @@ function Home() {
         if (Loged) {
             redirect(myRoutes.dashboard);
         }
-        setValid(true)
     });
-
-    if (valid)
      return (
             <div className="h-full  w-full relative max-w-[1600px] xl:w-[90%]">
                 {/* top part */}

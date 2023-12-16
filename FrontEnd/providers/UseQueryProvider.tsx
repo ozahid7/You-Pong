@@ -9,15 +9,11 @@ import {
 } from "@tanstack/react-query";
 import { useState } from "react";
 
-const UseQueryProvider = (Component: any) => {
-    return function HOC(props: any) {
-        const [client] = useState(() => new QueryClient());
-        return (
-            <QueryClientProvider client={client}>
-                <Component {...props} />
-            </QueryClientProvider>
-        );
-    };
+const UseQueryProvider = ({ children }: { children: React.ReactNode }) => {
+    const [client] = useState(() => new QueryClient());
+    return (
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    );
 };
 
 export default UseQueryProvider;

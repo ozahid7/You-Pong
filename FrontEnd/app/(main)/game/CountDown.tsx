@@ -6,22 +6,19 @@ import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 
 const MyCountDown = (props: { isOpen: boolean; setIsOpen: any}) => {
-    let counter = 6;
-
+    let [counter, setCounter] = useState(3)
     useEffect(() => {
         if (props.isOpen) {
             const time = setInterval(() => {
-                if (counter > 0) {
-                    counter--;
+                if (counter >= 0) {
+                    setCounter(counter--);
                 }
-                const elm = document.getElementById("counterElement");
-                if (elm !== null)
-                    elm.style.setProperty("--value", counter.toString());
             }, 1000);
 
             setTimeout(() => {
               props.setIsOpen(false)
-            }, 7000)
+            }, 5000)
+            return () => clearInterval(time)
         }
     }, [props.isOpen]);
 
@@ -35,8 +32,8 @@ const MyCountDown = (props: { isOpen: boolean; setIsOpen: any}) => {
             conClass=" rounded-md bg- border-palette-white "
         >
             <div className="flex items-center justify-center flex-col h-full">
-                <span className="countdown font-body font-extrabold drop-shadow-lg text-palette-white text-[100px]   sm:text-[200px]">
-                    <span id="counterElement"></span>
+                <span className=" font-body font-extrabold drop-shadow-lg text-palette-white text-[100px]   sm:text-[200px]">
+                    <span >{counter}</span>
                 </span>
             </div>
         </MyDialog>

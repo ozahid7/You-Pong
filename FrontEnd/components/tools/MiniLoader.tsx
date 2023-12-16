@@ -1,14 +1,16 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-function MiniLoader(props: {customClass?: string}) {
-
+function MiniLoader(props: { customClass?: string }) {
     const classname = twMerge(
-        "flex text-[100px] items-center h-full loading text-palette-orange loading-lg", props.customClass
+        "flex items-center h-full justify-center items-center",
+        props.customClass
     );
 
     return (
-        <div className={classname}></div>
+        <div className={classname}>
+            <span className="mini-loader"></span>
+        </div>
     );
 }
 
