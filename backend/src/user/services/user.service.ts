@@ -16,6 +16,7 @@ import { AchievementService } from 'src/achievement/achievement.service';
 @Injectable()
 export class UserService {
 	private id: number = 157;
+	private rank: number = 1;
 
 	async generateUser(usename: string): Promise<string> {
 		let res: string = usename + this.id.toString().padStart(3, '0');
@@ -124,8 +125,10 @@ export class UserService {
 					lastname: obj.familyName,
 					firstname: obj.givenName,
 					avatar: obj.avatar,
+					rank: this.rank,
 				},
 			});
+			this.rank++;
 			return newUser;
 		} catch (error) {
 			if (error.code === 'P2002') {
