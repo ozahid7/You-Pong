@@ -32,9 +32,9 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
         level = otheruser.level;
         rank = otheruser.rank;
         avatar = otheruser.avatar;
-        var Block = blockuser(otheruser.username);
-        var Add = adduser(otheruser.username);
-        var Remove = removeuser(otheruser.username);
+        var Block = blockuser(otheruser.username, friends, undefined);
+        var Add = adduser(otheruser.username, friends);
+        var Remove = removeuser(otheruser.username, friends);
     }
 
     useEffect(() => {

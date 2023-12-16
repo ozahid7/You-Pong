@@ -7,6 +7,8 @@ import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { menuUserElements } from "@/const";
+import { unblockuser } from "@/api/friendShip";
+import useFriends from "@/api/useFriends";
 
 const BlockedBanner = (props: {
     zindex?: number;
@@ -14,27 +16,12 @@ const BlockedBanner = (props: {
     userName: string;
     status: string;
     SetInvalidData: any;
+    friends: any;
 }) => {
     const [enabled, setEnabled] = useState(true);
+    const unblock = unblockuser(props.userName, props.SetInvalidData);
 
-    const unblockUser = async () => {
-        try {
-            const response = await useAxios(
-                "put",
-                friendsEndPoint.unblock + "?username=" + props.userName
-            );
-            props.SetInvalidData(true);
-            console.log("unblock response... = ", response);
-        } catch (error) {
-            console.log("unblock error : ", error);
-        }
-    };
-
-    const unblockMutaion = useMutation({
-        mutationFn: unblockUser,
-    });
-
-    if (unblockMutaion.isPending) return <MiniLoader customClass="m-auto" />;
+    if (unblock.isPending || props.friends.isFetching) return <MiniLoader customClass="m-auto" />;
     else
         return (
             <div
@@ -67,7 +54,7 @@ const BlockedBanner = (props: {
                     <MyToggle
                         otherclass="h-[38px] flex min-w-[120px]"
                         handelCheck={() => {
-                            unblockMutaion.mutate();
+                            unblock.mutate()
                         }}
                         string1="unblock"
                         string2="block"

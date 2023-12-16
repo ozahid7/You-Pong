@@ -6,8 +6,7 @@ import { QueryClient, useMutation } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
-export const blockuser = (username: string) => {
-    const friends = useFriends();
+export const blockuser = (username: string, friends: any, setInvalid: any) => {
     const blockUser = async () => {
         try {
             const response = await useAxios(
@@ -15,7 +14,10 @@ export const blockuser = (username: string) => {
                 friendsEndPoint.block + "?username=" + username
             );
             console.log("response... = ", response);
-            friends.refetch();
+            if (friends !== undefined)
+                friends.refetch();
+            if (setInvalid !== undefined)
+                setInvalid(true)
             return response;
         } catch (error) {
             console.log("error : ", error);
@@ -24,8 +26,7 @@ export const blockuser = (username: string) => {
     return useMutation({ mutationFn: blockUser });
 };
 
-export const adduser = (username: string) => {
-    const friends = useFriends();
+export const adduser = (username: string, friends: any) => {
     const addUser = async () => {
         try {
             const response = await useAxios(
@@ -42,8 +43,7 @@ export const adduser = (username: string) => {
     return useMutation({ mutationFn: addUser });
 };
 
-export const removeuser = (username: string) => {
-    const friends = useFriends();
+export const removeuser = (username: string, friends: any) => {
     const removeUser = async () => {
         try {
             const response = await useAxios(
@@ -61,15 +61,14 @@ export const removeuser = (username: string) => {
     return useMutation({ mutationFn: removeUser });
 };
 
-export const unblockuser = (username: string) => {
-    const friends = useFriends();
+export const unblockuser = (username: string, setInvalid: any) => {
     const unblockUser = async () => {
         try {
             const response = await useAxios(
                 "put",
                 friendsEndPoint.unblock + "?username=" + username
             );
-            friends.refetch();
+            setInvalid(true)
             console.log("unblock response... = ", response);
             return response;
         } catch (error) {
@@ -79,8 +78,7 @@ export const unblockuser = (username: string) => {
     return useMutation({ mutationFn: unblockUser });
 };
 
-export const acceptuser = (username: string) => {
-    const friends = useFriends();
+export const acceptuser = (username: string, setInvalid: any) => {
     const acceptkUser = async () => {
         try {
             const response = await useAxios(
@@ -88,7 +86,7 @@ export const acceptuser = (username: string) => {
                 friendsEndPoint.accept + "?username=" + username
             );
             console.log("accept user response = ", response);
-            friends.refetch();
+            setInvalid(true)
             return response;
         } catch (error) {
             console.log("accept user error = ", error);
@@ -97,8 +95,7 @@ export const acceptuser = (username: string) => {
     return useMutation({ mutationFn: acceptkUser });
 };
 
-export const declineuser = (username: string) => {
-    const friends = useFriends();
+export const declineuser = (username: string, setInvalid: any) => {
     const declineUser = async () => {
         try {
             const response = await useAxios(
@@ -106,7 +103,7 @@ export const declineuser = (username: string) => {
                 friendsEndPoint.decline + "?username=" + username
             );
             console.log("accept user response = ", response);
-            friends.refetch()
+            setInvalid(true)
             return response;
         } catch (error) {
             console.log("accept user error = ", error);

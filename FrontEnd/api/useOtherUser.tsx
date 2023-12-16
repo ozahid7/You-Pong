@@ -1,8 +1,11 @@
-import { endPoints, UserToShow } from "@/types/Api";
+import { myRoutes } from "@/const";
+import { endPoints, friendsEndPoint, UserToShow } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
+import { redirect, useRouter } from "next/navigation";
 
 const useOtherUser = (username: string) => {
+    const router = useRouter()
     const getUser = async () => {
         try {
             const response = await useAxios<UserToShow>(
@@ -11,11 +14,10 @@ const useOtherUser = (username: string) => {
                 { friend: username }
             );
             console.log("get user response = ", response);
-            return response
+            return response;
         } catch (error) {
             console.log("get user error = :", error);
         }
-
         return null;
     };
 
@@ -24,7 +26,7 @@ const useOtherUser = (username: string) => {
         queryFn: getUser,
         enabled: username !== "profile",
     });
-    return otheruser
+    return otheruser;
 };
 
 export default useOtherUser;
