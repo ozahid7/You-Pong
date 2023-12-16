@@ -54,6 +54,7 @@ export type UserToShow = {
   rank: number;
   wins: number;
   losts: number;
+  ispending: boolean;
   status: string;
   achievements: Achievement[];
   matchs: match[];
@@ -94,6 +95,10 @@ export type FriendsReturn = {
 
 export interface searchUsers extends Array<user> {}
 
+export type searchBarReturn  {
+
+}
+
 export const friendsEndPoint = {
   block: "friend/block",
   accept: "friend/accept",
@@ -102,3 +107,8 @@ export const friendsEndPoint = {
   unblock: "friend/unblock",
   add: "friend",
 };
+
+
+export const chatEndPoint = {
+  direct: "chat/channel/direct"
+}

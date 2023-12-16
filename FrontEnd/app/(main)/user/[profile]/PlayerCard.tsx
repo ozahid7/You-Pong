@@ -153,7 +153,7 @@ const PlayerCard = ({ otheruser }: { otheruser: UserToShow }) => {
                                     size={100}
                                     className="z-10 h-[14%] w-[14%] absolute sm:bottom-6 h:right-3 bottom-4 right-4  text-cardtitle cursor-pointer"
                                 />
-                            ) : isPending ? (
+                            ) : isPending || otheruser.ispending ? (
                                 <FaUserClock
                                     onClick={() => {}}
                                     size={100}

@@ -28,6 +28,7 @@ const NavBar = () => {
                 "get",
                 friendsEndPoint.search
             );
+            console.log('search response = ', response)
             setFriends(response);
         } catch (error) {
         }
