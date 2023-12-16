@@ -169,6 +169,8 @@ export class UserService {
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
+      matchs: user.matchs,
+      achievements: user.achievements,
       isPending: isPending,
     };
   }

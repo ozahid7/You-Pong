@@ -5,16 +5,16 @@ import { LuSearch, LuBell } from "react-icons/lu";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
-import { MyContext } from "@/app/(main)/layout";
 import { useQuery } from "@tanstack/react-query";
 import { friendsEndPoint, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
 
 const NavBar = () => {
-    const user = useContext(MyContext);
-    const router = useRouter()
+    const user = useUser();
+    const router = useRouter();
     const { username, level, avatar } = user.userData;
     const [friends, setFriends] = useState<searchUsers>();
     const isMorethan: boolean = username.length > 7 ? true : false;
@@ -31,7 +31,7 @@ const NavBar = () => {
             setFriends(response);
         } catch (error) {
         }
-        return null
+        return null;
     };
 
     const searchQuery = useQuery({

@@ -3,13 +3,15 @@ import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
 
 import React, { useContext, useEffect, useState } from "react";
-import { MyContext } from "../layout";
 import { baseURL, useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
 import axios from "axios";
 import { setFile } from "../chat/data/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { useUser } from "@/providers/UserContextProvider";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
 
 interface ProfileSettingsProps {
     isOpen: boolean;
@@ -17,9 +19,10 @@ interface ProfileSettingsProps {
 }
 
 const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
-    const user = useContext(MyContext);
+    const user = useUser()
     const { username, avatar, isIntra } = user.userData;
-    const userQuery = useQuery({queryKey: ['user']});
+    const userQuery = useQuery({ queryKey: ["user"] });
+    const router = useRouter()
     const queryClient = useQueryClient();
 
     const [userName, setUserName] = useState("");
@@ -33,7 +36,7 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
     const [invalidNewPass, setInvalidNewPass] = useState(false);
     const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
     let photo = null;
-    
+
     const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         if (file) {
@@ -70,7 +73,8 @@ const ProfileSettings = ({ isOpen, setIsOpen }: ProfileSettingsProps) => {
                     endPoints.updateInfo,
                     toSend
                 );
-                queryClient.invalidateQueries({queryKey: ['user']});
+                queryClient.invalidateQueries({ queryKey: ["user"] });
+                router.push(myRoutes.dashboard)
             } catch (error) {
                 console.log("error = ", error);
             }

@@ -1,18 +1,16 @@
 "use client";
 import { Acheivement, MyCard } from "@/components";
+import { MyContext, useUser } from "@/providers/UserContextProvider";
+import { Achievement, UserToShow } from "@/types/Api";
 import React, { useContext } from "react";
 import { Tooltip } from "react-tooltip";
-import { MyContext } from "../../layout";
 
-interface Achievement {
-    title: string;
-    description: string;
-    isOwned: boolean;
-}
-
-const AchievementCard = () => {
-    const user = useContext(MyContext);
-    const { achievements } = user.userData;
+const AchievementCard = ({ otheruser }: { otheruser: UserToShow }) => {
+    const user = useUser();
+    let owned = user.userData.owned;
+    if (otheruser && otheruser !== undefined) {
+        owned = otheruser.owned;
+    }
     return (
         <div className="flex z-0 min-w-[240px] xl:min-w-[280px] xl:max-w-[360px] xl:max-h-none md:max-h-[800px] max-h-[500px] md:w-[80%] w-[90%] h-[80%] md:h-[90%] ">
             <MyCard type="nocorner" otherclass="max-h-full flex">
@@ -31,7 +29,7 @@ const AchievementCard = () => {
                         place={"top-start"}
                     />
                     <div className=" flex w-full overflow-y-auto my_scroll_green  md:h-[90%] h:h-[84%] h-[86%] space-y-20 flex-col items-center mb-2">
-                        {achievements.map((e: Achievement, index) => (
+                        {owned.map((e: Achievement, index) => (
                             <Acheivement
                                 classname=""
                                 isOpened={e.isOwned ? true : false}

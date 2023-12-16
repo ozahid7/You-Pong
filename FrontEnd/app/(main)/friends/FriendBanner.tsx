@@ -3,7 +3,6 @@ import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useContext, useDebugValue, useEffect, useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
-import { MyContext } from "../layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { friendsEndPoint } from "@/types/Api";
@@ -21,9 +20,10 @@ const FriendBanner = (props: {
 
     const blockUser = async () => {
         try {
-            const response = await useAxios("patch", friendsEndPoint.block, {
-                friend: props.userName,
-            });
+            const response = await useAxios(
+                "put",
+                friendsEndPoint.block + "?username=" + props.userName,
+            );
             props.SetInvalidData(true);
             console.log("response... = ", response);
         } catch (error) {
@@ -35,7 +35,6 @@ const FriendBanner = (props: {
         mutationFn: blockUser,
     });
 
-    
     if (blockMutaion.isPending) return <MiniLoader customClass="m-auto" />;
     else
         return (

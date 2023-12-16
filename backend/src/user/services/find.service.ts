@@ -29,6 +29,8 @@ export class FindUserService {
         friendship_friend: true,
         friendship_user: true,
         channels: true,
+        achievements: true,
+        matchs: true,
       },
     });
     return user;

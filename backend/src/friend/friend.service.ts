@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FindUserService } from 'src/user/services';
 
 @Injectable()
 export class friendService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private findUser: FindUserService,
+  ) {}
 
   //GET MANY
   //   async getFriends(id_user: string) {
@@ -55,7 +59,6 @@ export class friendService {
     const pendingFriends = await this.prisma.friendship.findMany({
       where: {
         id_friend: user.id_user,
-        // OR: [{ id_user: user.id_user }, { id_friend: user.id_user }],
         state: 'PENDING',
       },
     });
@@ -261,48 +264,7 @@ export class friendService {
     };
   }
 
-  //   //DELETE REFUSED
-  //   async refuseFriend(id_user: string, username: string) {
-  //     const user = await this.prisma.user.findUnique({
-  //       where: { id_user: id_user },
-  //     });
-  //     const friend = await this.prisma.user.findUnique({
-  //       where: { username: username },
-  //     });
-  //     if (!user || !friend || user.id_user === friend.id_user)
-  //       return {
-  //         message: 'No such User !',
-  //         Object: null,
-  //       };
-  //     const duplicate = await this.prisma.friendship.findFirst({
-  //       where: {
-  //         id_user: friend.id_user,
-  //         id_friend: user.id_user,
-  //         state: { in: ['ACCEPTED', 'PENDING'] },
-  //       },
-  //     });
-  //     if (!duplicate)
-  //       return {
-  //         message: 'There is no friendship !',
-  //         Object: null,
-  //       };
-  //     const result = await this.prisma.friendship.delete({
-  //       where: {
-  //         id_friendship: duplicate.id_friendship,
-  //       },
-  //     });
-  //     if (!result)
-  //       return {
-  //         message: "Can't delete a friendship !",
-  //         Object: null,
-  //       };
-  //     return {
-  //       message: 'Friendship Deleted Succefully',
-  //       Object: result,
-  //     };
-  //   }
-
-  //PUT REFUSED
+  //DELETE REFUSED
   async refuseFriend(id_user: string, username: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
@@ -317,9 +279,17 @@ export class friendService {
       };
     const duplicate = await this.prisma.friendship.findFirst({
       where: {
-        id_user: friend.id_user,
-        id_friend: user.id_user,
-        state: 'PENDING',
+        OR: [
+          {
+            id_user: user.id_user,
+            id_friend: friend.id_user,
+          },
+          {
+            id_user: friend.id_user,
+            id_friend: user.id_user,
+          },
+        ],
+        state: { in: ['ACCEPTED', 'PENDING'] },
       },
     });
     if (!duplicate)
@@ -327,21 +297,18 @@ export class friendService {
         message: 'There is no friendship !',
         Object: null,
       };
-    const result = await this.prisma.friendship.update({
+    const result = await this.prisma.friendship.delete({
       where: {
         id_friendship: duplicate.id_friendship,
-      },
-      data: {
-        state: 'REFUSED',
       },
     });
     if (!result)
       return {
-        message: "Can't update a friendship !",
+        message: "Can't delete a friendship !",
         Object: null,
       };
     return {
-      message: 'Friendship Updated Succefully',
+      message: 'Friendship Deleted Succefully',
       Object: result,
     };
   }
@@ -365,34 +332,43 @@ export class friendService {
           { id_user: user.id_user, id_friend: friend.id_user },
           { id_user: friend.id_user, id_friend: user.id_user },
         ],
-        state: 'ACCEPTED',
       },
     });
-    if (!duplicate)
-      return {
-        message: 'There is no friendship !',
-        Object: null,
-      };
-    const result = await this.prisma.friendship.update({
-      where: {
-        id_friendship: duplicate.id_friendship,
-      },
-      data: {
-        state: 'BLOCKED',
-        blocker_User: id_user,
-      },
-    });
+
+    let result;
+    if (!duplicate) {
+      result = await this.prisma.friendship.create({
+        data: {
+          id_user: id_user,
+          blocker_User: id_user,
+          id_friend: friend.id_user,
+          state: 'BLOCKED',
+        },
+      });
+    } else {
+      if (duplicate.state === 'BLOCKED') return;
+      result = await this.prisma.friendship.update({
+        where: {
+          id_friendship: duplicate.id_friendship,
+        },
+        data: {
+          state: 'BLOCKED',
+          blocker_User: id_user,
+        },
+      });
+    }
+
     const updateUser = await this.prisma.user.update({
       where: {
-        id_user: duplicate.id_user,
+        id_user: id_user,
       },
       data: {
         blocked_user: {
           connect: {
-            id_user: duplicate.id_friend,
+            id_user: friend.id_user,
           },
         },
-        friend_user: { disconnect: { id_user: duplicate.id_friend } },
+        friend_user: { disconnect: { id_user: friend.id_user } },
       },
     });
     if (!result || !updateUser)
@@ -434,13 +410,9 @@ export class friendService {
         message: 'There is no friendship !',
         Object: null,
       };
-    const result = await this.prisma.friendship.update({
+    const result = await this.prisma.friendship.delete({
       where: {
         id_friendship: duplicate.id_friendship,
-      },
-      data: {
-        state: 'ACCEPTED',
-        blocker_User: null,
       },
     });
     const updateUser = await this.prisma.user.update({
@@ -450,11 +422,6 @@ export class friendService {
       data: {
         blocked_user: {
           disconnect: {
-            id_user: duplicate.id_friend,
-          },
-        },
-        friend_user: {
-          connect: {
             id_user: duplicate.id_friend,
           },
         },
@@ -727,53 +694,53 @@ export class friendService {
   // 		return {accepted, pending, blocked};
   // 	};
 
-  // 	async search(_id: string) {
-  // 		try {
-  // 			const user = this.findUser.finduserById(_id);
-  // 			const bar = await this.prisma.user.findMany({
-  // 				where: {
-  // 					id_user: {
-  // 						not: (await user).id_user
-  // 					},
-  // 					freindship_freind: {
-  // 						every: {
-  // 							OR: [
-  // 								{id_freind: (await user).id_user},
-  // 								{id_user: (await user).id_user},
-  // 							],
-  // 							state: {
-  // 								not : "BLOCKED"
-  // 							}
-  // 						},
-  // 					},
-  // 					freindship_user: {
-  // 						every: {
-  // 							OR: [
-  // 								{id_freind: (await user).id_user},
-  // 								{id_user: (await user).id_user},
-  // 							],
-  // 							state: {
-  // 								not : "BLOCKED"
-  // 							}
-  // 						},
-  // 					},
-  // 				},
-  // 			});
-  // 			const objArray: {
-  // 				avatar: string;
-  // 				username: string;
-  // 				status: string
-  // 			}[] = [];
-  // 			for(const i of bar) {
-  // 				objArray.push({
-  // 					avatar: i.avatar,
-  // 					username: i.username,
-  // 					status: i.status
-  // 				});
-  // 			}
-  // 			return (objArray);
-  // 		} catch (error) {
-  // 			throw new BadRequestException(error);
-  // 		}
-  // 	};
+  // async search(_id: string) {
+  //   try {
+  //     const user = this.findUser.finduserById(_id);
+  //     const bar = await this.prisma.user.findMany({
+  //       where: {
+  //         id_user: {
+  //           not: (await user).id_user,
+  //         },
+  //         friendship_friend: {
+  //           every: {
+  //             OR: [
+  //               { id_friend: (await user).id_user },
+  //               { id_user: (await user).id_user },
+  //             ],
+  //             state: {
+  //               not: 'BLOCKED',
+  //             },
+  //           },
+  //         },
+  //         friendship_user: {
+  //           every: {
+  //             OR: [
+  //               { id_friend: (await user).id_user },
+  //               { id_user: (await user).id_user },
+  //             ],
+  //             state: {
+  //               not: 'BLOCKED',
+  //             },
+  //           },
+  //         },
+  //       },
+  //     });
+  //     const objArray: {
+  //       avatar: string;
+  //       username: string;
+  //       status: string;
+  //     }[] = [];
+  //     for (const i of bar) {
+  //       objArray.push({
+  //         avatar: i.avatar,
+  //         username: i.username,
+  //         status: i.status,
+  //       });
+  //     }
+  //     return objArray;
+  //   } catch (error) {
+  //     throw new BadRequestException(error);
+  //   }
+  // }
 }

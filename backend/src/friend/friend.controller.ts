@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { friendService } from './friend.service';
 import { AuthGuard } from '@nestjs/passport';
-import { friendDto } from './dto';
 
 @Controller('friend')
 export class friendController {
@@ -29,6 +28,7 @@ export class friendController {
       throw new HttpException('Failed to find friends', 444);
     }
   }
+
   //GET MANY
   @UseGuards(AuthGuard('jwt'))
   @Get('/search/')

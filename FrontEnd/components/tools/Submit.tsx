@@ -8,7 +8,6 @@ const Submit = ({
   otherclass,
   styleclass,
   handleclick,
-  bordercolor,
 }: CustomButtonProps) => {
   const customclass =
     color === "orange"
