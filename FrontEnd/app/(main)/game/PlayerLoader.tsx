@@ -1,5 +1,6 @@
 "use client";
 import { MyDialog } from "@/components";
+import Loader from "@/components/tools/Loader";
 import MiniLoader from "@/components/tools/MiniLoader";
 import React, { useEffect, useState } from "react";
 
@@ -26,7 +27,7 @@ const PlayerLoader = (props: { isOpen: boolean, showCounter: any, showLoader: an
         >
             <div className="flex items-center justify-center flex-col h-full">
                 <div className="w-full flex flex-col h:flex-row h-full">
-                    <div className="flex-1 flex flex-col justify-center items-center w-full">
+                    <div className="flex-1 flex dred flex-col justify-center items-center w-full">
                         <img
                             className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
                             src={"/avatar.jpeg"}
@@ -67,7 +68,7 @@ const PlayerLoader = (props: { isOpen: boolean, showCounter: any, showLoader: an
                                     </span>
                                 </div>
                             </div>
-                            : <MiniLoader/>
+                            : <Loader/>
                         }
                     </div>
                 </div>

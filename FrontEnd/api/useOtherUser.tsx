@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const useOtherUser = (username: string) => {
     const getUser = async () => {
-        console.log("user = ", username);
         try {
             const response = await useAxios<UserToShow>(
                 "post",

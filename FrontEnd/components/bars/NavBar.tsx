@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatedText, MyDropdown } from "..";
 import SearchBar from "./SearchBar";
 import { useQuery } from "@tanstack/react-query";
-import { friendsEndPoint, searchUsers } from "@/types/Api";
+import { friendsEndPoint, searchBarReturn, searchUsers } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
@@ -24,12 +24,12 @@ const NavBar = () => {
 
     const getUsers = async () => {
         try {
-            const response = await useAxios<searchUsers>(
+            const response = await useAxios<searchBarReturn>(
                 "get",
                 friendsEndPoint.search
             );
             console.log('search response = ', response)
-            setFriends(response);
+            setFriends(response.Object);
         } catch (error) {
         }
         return null;
