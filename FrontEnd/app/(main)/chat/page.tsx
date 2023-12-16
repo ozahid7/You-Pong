@@ -24,8 +24,6 @@ import { Channel } from "@/types";
 export const fetchData_userChannels = async () => {
   try {
     const result = await userChannels();
-    console.log("userChannels", result);
-
     return result;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -155,7 +153,7 @@ const Chats = () => {
                               ></MyTabs>
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
-                                <JoinModal mutate={mutate} />
+                                <JoinModal />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

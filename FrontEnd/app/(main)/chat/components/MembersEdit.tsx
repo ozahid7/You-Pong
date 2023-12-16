@@ -30,22 +30,24 @@ import {
 } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../components";
-import { Channel, User } from "@/types";
+import { Channel, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../public/groups.svg";
 import useSWR from "swr";
 import { getChannel, getMainUser } from "../data/api";
 
 interface Props {
   Users: User[];
-  MainUser: User | undefined;
-  Channel: Channel;
+  MainUser: User_Hero | undefined;
+  Channel_: Channel | null;
 }
 
-const MembersEdit = ({ Users, MainUser, Channel }: Props) => {
+const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  var disable: string = "";
-
-  console.log(Channel.id_channel);
+  var Infos = {
+    disabled: "",
+    role: "",
+  };
+  var num: any = Channel_?.rooms?.length;
 
   return (
     <Fragment>
@@ -97,9 +99,25 @@ const MembersEdit = ({ Users, MainUser, Channel }: Props) => {
                   <tbody>
                     <>
                       {Users.map((user: User) => {
-                        if (user.username === MainUser?.username)
-                          disable = "btn-disabled";
-                        else disable = "";
+                        Infos.role = "";
+                        if (user.username === MainUser?.username) {
+                          Infos.disabled = "btn-disabled";
+                        } else Infos.disabled = "";
+                        for (let index = 0; index < num; index++) {
+                          if (
+                            Channel_?.rooms![index].id_channel ===
+                              Channel_?.id_channel &&
+                            Channel_?.rooms![index].id_user === user.id_user
+                          )
+                            Infos.role = Channel_.rooms[index].user_role;
+                        }
+                        // Channel_?.rooms?.filter((Room) => {
+                        //   Room.id_channel === Channel_.id_channel &&
+                        //     Room.id_user === user.id_user;
+                        //     console.log(Room.user_role);
+                        //   Infos.role = Room.user_role;
+                        // });
+
                         return (
                           <tr key={user.username}>
                             <th>
@@ -115,16 +133,24 @@ const MembersEdit = ({ Users, MainUser, Channel }: Props) => {
                               {user.username}
                             </td>
                             <td className="font-body font-[500] text-[18px] text-[#424242]">
-                              <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                owner
-                              </div>
+                              {Infos.role == "OWNER" ? (
+                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
+                                  OWNER
+                                </div>
+                              ) : Infos.role == "MEMBER" ? (
+                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
+                                  MEMBER
+                                </div>
+                              ) : (
+                                <div>Admin</div>
+                              )}
                             </td>
                             <td className="flex flex-row h-full justify-center items-center">
                               <Dropdown className="bg-palette-white self-center">
                                 <DropdownTrigger className="w-fit">
                                   <Button
                                     size="lg"
-                                    className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+                                    className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
                                   >
                                     Action
                                     <LuArrowDown />

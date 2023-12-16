@@ -6,7 +6,7 @@ import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { menuGroupsElements } from "@/const";
 import { renderIcon } from "@/utils";
-import { Channel, User } from "@/types";
+import { Channel, User, User_Hero } from "@/types";
 import {
   Modal,
   ModalBody,
@@ -42,10 +42,10 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
     mutate(fetchData_getChannels);
   };
 
-  const fetchData_getChannel = async () => {
+  const fetchData_getChannel_Users = async () => {
     try {
       const result = await getChannel(channels.id_channel || "");
-      return result.object.users;
+      return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -61,8 +61,8 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
     }
   };
 
-  const { data: Users } = useSWR<User[]>("/Users", fetchData_getChannel);
-  const { data: MainUser } = useSWR<User>("/MainUser", fetchData_getMainUser);
+  const { data: Users } = useSWR<Channel>("/Users", fetchData_getChannel_Users);
+  const { data: MainUser } = useSWR<User_Hero>("/MainUser", fetchData_getMainUser);
 
   return (
     <div className="flex flex-col justify-center relative">
@@ -85,12 +85,12 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           <li>
             <MembersEdit
               MainUser={MainUser}
-              Users={Users || []}
-              Channel={channels}
+              Users={Users?.users || []}
+              Channel_={Users || null}
             ></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels} users={Users || []}></ChatEdit>
+            <ChatEdit channels={channels} users={Users?.users || []}></ChatEdit>
           </li>
           <li>
             <Button

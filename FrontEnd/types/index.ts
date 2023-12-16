@@ -56,6 +56,7 @@ export interface Channel {
   type: string;
   users?: User[];
   id_channel?: string;
+  rooms?: Room_Chat[]
 }
 
 export interface Room_Chat {
@@ -71,6 +72,34 @@ export interface Room_Chat {
 
 export interface User {
   id_user: string;
+  username: string;
+  firstname?: string;
+  lastname?: string;
+  avatar?: string;
+  hash?: string;
+  email: string;
+  two_fact_auth?: string;
+  tfaIsEnable: Boolean;
+  victory: number;
+  defeats: number;
+  level: number;
+  rank?: number;
+  status: "ONLINE" | "OFFLINE" | "INGAME";
+  // created_at: DateTime;
+  // updated_at: DateTime;
+  rooms: Room_Chat[];
+  blocked: Room_Chat[];
+  channels?: Channel[];
+  // messages: Message[]
+  // notifications Notification[]
+  // freindship_freind: Freindship[];
+  // freindship_user: Freindship[];
+  // matchs Match_History[]
+  // owned: Owned[]
+}
+
+export interface User_Hero {
+  uid: string;
   username: string;
   firstname?: string;
   lastname?: string;

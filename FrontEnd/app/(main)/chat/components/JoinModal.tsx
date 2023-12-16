@@ -44,11 +44,7 @@ export const fetchData_getChannels = async () => {
   }
 };
 
-interface Props {
-  mutate: KeyedMutator<Channel[]>;
-}
-
-export default function JoinModal({ mutate }: Props) {
+export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
@@ -70,7 +66,7 @@ export default function JoinModal({ mutate }: Props) {
 
   const showModal = (obj: Channel) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [open, setOpen] = useState<() => void>();
+    var open: () => void = () => {};
     const passRef = useRef<HTMLInputElement>(null);
 
     const close = () => {
@@ -78,7 +74,7 @@ export default function JoinModal({ mutate }: Props) {
     };
 
     const OpenModal = async () => {
-      if (obj.type === "PROTECTED") setOpen(onOpen);
+      if (obj.type === "PROTECTED") open = onOpen;
       else if (obj.type === "PUBLIC") {
         joinChannel(obj.id_channel || "", null || "");
         mutate(fetchData_userChannels);
