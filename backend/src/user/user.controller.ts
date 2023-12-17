@@ -22,8 +22,9 @@ import { tfaDto } from 'src/auth/dto';
 import * as qrocode from 'qrcode';
 import { achievUserService } from './services/achievemennt.service';
 import { title } from 'process';
-import { unlockAchDto } from './dto';
+import { UpdateUserDto, unlockAchDto } from './dto';
 import { friendDto } from 'src/friend/dto';
+import { UpdateService } from './services/update.service';
 
 // @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -34,6 +35,7 @@ export class UserController {
     private infosService: InfoUserService,
     private achUserService: achievUserService,
     private findService: FindUserService,
+    private updateService: UpdateService,
   ) {}
 
   //POST MANY
@@ -150,13 +152,6 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch('/updateUsername')
-  async updateUsername(@Req() req, @Body() dto: friendDto) {
-    const _id = req.user.sub;
-    await this.userService.updateUsername(_id, dto.friend);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
   @Post('incMatchRes')
   async incMatchRes(@Body() dto: friendDto, @Req() req) {
     const _id = req.user.sub;
@@ -164,5 +159,12 @@ export class UserController {
     else if (dto.friend == 'defeat')
       return await this.infosService.incDefeat(_id);
     throw new ServiceUnavailableException('Unvalide match result');
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('/update')
+  async update(@Req() req, @Body() dto: UpdateUserDto) {
+    const _id = req.user.sub;
+    return await this.updateService.update(_id, dto);
   }
 }

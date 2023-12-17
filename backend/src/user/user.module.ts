@@ -6,6 +6,7 @@ import { achievUserService } from './services/achievemennt.service';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { UserStatusGateway } from './user.gateway';
 import { UserController } from './user.controller';
+import { UpdateService } from './services/update.service';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { UserController } from './user.controller';
     secret : process.env.TFA_JWT_SECRET,
     global: true
   })], 
-  providers: [UserService, TfaUserService, FindUserService, AuthService, InfoUserService, achievUserService, AchievementService, UserStatusGateway],
+  providers: [UserService, TfaUserService, FindUserService, AuthService, InfoUserService, achievUserService, AchievementService, UserStatusGateway, UpdateService],
   exports: [UserService, TfaUserService, FindUserService, InfoUserService, achievUserService, InfoUserService, UserStatusGateway],
   controllers: [UserController]
 })
