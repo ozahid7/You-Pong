@@ -79,7 +79,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
       setDataObj.description = descRef.current?.value;
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
-    result = await putData(setDataObj, channels.name);
+    result = await putData(setDataObj, channels?.id_channel);
     imageUrl = channels.avatar;
     mutate(fetchData_getChannels);
     onClose();
@@ -100,7 +100,10 @@ const ChatEdit = ({ channels, users }: HomePage) => {
 
   return (
     <Fragment>
-      <Button onPress={onOpen} className="rounded-none btn green_button">
+      <Button
+        onPress={onOpen}
+        className="rounded-none btn green_button"
+      >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{

@@ -10,7 +10,6 @@ import {
   LuArrowDown,
   LuStar,
   LuUser,
-  LuBellOff,
   LuDoorOpen,
   LuBan,
 } from "react-icons/lu";
@@ -20,7 +19,6 @@ import {
   BanMember,
   KickMember,
   SetAdmin,
-  SetAdminMember,
   SetMember,
   getMembers,
 } from "../data/api";
@@ -42,12 +40,17 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
     }
   };
 
-  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
+  const { error } = useSWR<Member[]>("/Users", fetchData_getMembers);
+
+  if (error) return <div>useSWR: Error found, Fetching data failed!</div>;
+
   const HandleKick = () => {
     KickMember(channel?.id_channel, user.user.username);
+    mutate(fetchData_getMembers);
   };
   const HandleBan = () => {
     BanMember(channel?.id_channel, user.user.username);
+    mutate(fetchData_getMembers);
   };
 
   const HandleAdmin = () => {
@@ -58,7 +61,10 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
   };
   return (
     <Fragment>
-      <Dropdown className="bg-palette-white self-center" type="listbox">
+      <Dropdown
+        className="bg-palette-white self-center"
+        type="listbox"
+      >
         <DropdownTrigger className="w-fit">
           <Button
             size="lg"
@@ -68,7 +74,10 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
             <LuArrowDown />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu className="w-full" aria-label="DropDownMenu">
+        <DropdownMenu
+          className="w-full"
+          aria-label="DropDownMenu"
+        >
           <DropdownItem
             className="hover:bg-palette-white border-none"
             variant="bordered"
@@ -88,7 +97,10 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
             aria-label="Mute"
             isReadOnly
           >
-            <MuteDropDown user={user} channel={channel}></MuteDropDown>
+            <MuteDropDown
+              user={user}
+              channel={channel}
+            ></MuteDropDown>
           </DropdownItem>
           <DropdownItem
             className="hover:bg-palette-white border-none"

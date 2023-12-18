@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
-import { LuBellOff } from "react-icons/lu";
+import { LuBellOff, LuTimer } from "react-icons/lu";
 import { Channel, Member } from "@/types";
 import { MuteMember, UnMuteMember, getMembers } from "../data/api";
 import useSWR, { mutate } from "swr";
@@ -11,9 +11,9 @@ interface Props {
 }
 
 export default function MuteDropDown({ user, channel }: Props) {
-  const muteRef1 = useRef<HTMLAnchorElement>(null);
-  const muteRef5 = useRef<HTMLAnchorElement>(null);
-  const muteRef15 = useRef<HTMLAnchorElement>(null);
+  const muteRef1 = useRef<HTMLButtonElement>(null);
+  const muteRef5 = useRef<HTMLButtonElement>(null);
+  const muteRef15 = useRef<HTMLButtonElement>(null);
 
   console.log(user.member_status);
 
@@ -49,7 +49,11 @@ export default function MuteDropDown({ user, channel }: Props) {
     }
   };
   return (
-    <Popover placement="bottom" showArrow aria-label="Mute">
+    <Popover
+      placement="bottom"
+      showArrow
+      aria-label="Mute"
+    >
       <PopoverTrigger>
         <button
           className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
@@ -61,15 +65,31 @@ export default function MuteDropDown({ user, channel }: Props) {
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (
-          <ul className="menu bg-base-200 w-56 rounded-box">
+          <ul className="menu bg-base-200 w-40 rounded-box gap-1">
             <li onClick={Handle_1Minute}>
-              <a ref={muteRef1}>1 Minute</a>
+              <button
+                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                ref={muteRef1}
+              >
+                <LuTimer />1 Minute
+              </button>
             </li>
             <li onClick={Handle_5Minutes}>
-              <a ref={muteRef5}>5 Minutes</a>
+              <button
+                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                ref={muteRef5}
+              >
+                <LuTimer />5 Minutes
+              </button>
             </li>
             <li onClick={Handle_15Minutes}>
-              <a ref={muteRef15}>15 Minutes</a>
+              <button
+                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                ref={muteRef15}
+              >
+                <LuTimer />
+                15 Minutes
+              </button>
             </li>
           </ul>
         ) : (

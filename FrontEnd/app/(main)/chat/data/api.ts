@@ -44,7 +44,11 @@ export const leaveChannel = async (id_channel: string) => {
   }
 };
 
-export const MuteMember = async (id_channel: string | undefined, username:string, time: number) => {
+export const MuteMember = async (
+  id_channel: string | undefined,
+  username: string,
+  time: number
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/mute/?id_channel=${id_channel}&username=${username}&time=${time}`
@@ -57,7 +61,10 @@ export const MuteMember = async (id_channel: string | undefined, username:string
   }
 };
 
-export const UnMuteMember = async (id_channel: string | undefined, username:string) => {
+export const UnMuteMember = async (
+  id_channel: string | undefined,
+  username: string
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/unmute/?id_channel=${id_channel}&username=${username}`
@@ -70,7 +77,10 @@ export const UnMuteMember = async (id_channel: string | undefined, username:stri
   }
 };
 
-export const KickMember = async (id_channel: string | undefined, username:string) => {
+export const KickMember = async (
+  id_channel: string | undefined,
+  username: string
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/kick/?id_channel=${id_channel}&username=${username}`
@@ -83,7 +93,10 @@ export const KickMember = async (id_channel: string | undefined, username:string
   }
 };
 
-export const BanMember = async (id_channel: string | undefined, username:string) => {
+export const BanMember = async (
+  id_channel: string | undefined,
+  username: string
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/ban/?id_channel=${id_channel}&username=${username}`
@@ -96,7 +109,10 @@ export const BanMember = async (id_channel: string | undefined, username:string)
   }
 };
 
-export const SetAdmin = async (id_channel: string | undefined, username:string) => {
+export const SetAdmin = async (
+  id_channel: string | undefined,
+  username: string
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/admin/?id_channel=${id_channel}&username=${username}`
@@ -109,7 +125,10 @@ export const SetAdmin = async (id_channel: string | undefined, username:string) 
   }
 };
 
-export const SetMember = async (id_channel: string | undefined, username:string) => {
+export const SetMember = async (
+  id_channel: string | undefined,
+  username: string
+) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/member/?id_channel=${id_channel}&username=${username}`
@@ -182,7 +201,7 @@ export const setData = async (data: Channel) => {
   }
 };
 
-export const putData = async (data: Channel, name: string) => {
+export const putData = async (data: Channel, id_channel: string) => {
   try {
     const obj = {
       name: data.name,
@@ -193,7 +212,7 @@ export const putData = async (data: Channel, name: string) => {
     };
 
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/update/?name=${name}`,
+      `http://localhost:4000/chat/channel/update/?id_channel=${id_channel}`,
       obj
     );
     return response.data;
@@ -207,8 +226,7 @@ export const putData = async (data: Channel, name: string) => {
 export const setFile = async (file: File | null) => {
   try {
     const formData = new FormData();
-    if (file !== null)
-      formData.append("avatar", file);
+    if (file !== null) formData.append("avatar", file);
 
     const response = await axios.post(
       "http://localhost:4000/upload",
