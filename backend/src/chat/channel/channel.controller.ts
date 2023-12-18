@@ -12,12 +12,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ChannelService } from './channel.service';
+import { ChannelUpdateService } from './channel.update.service';
 import { channelDto } from '../dto/channel.create.dto';
 import { Channel } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('chat/channel')
 export class ChannelController {
-  constructor(private channelService: ChannelService) {}
+  constructor(
+    private channelService: ChannelService,
+    private channelUpdateService: ChannelUpdateService,
+  ) {}
 
   //Get MANY
   @UseGuards(AuthGuard('jwt'))
@@ -134,7 +138,10 @@ export class ChannelController {
     @Body() channel: Channel,
   ) {
     try {
-      const result = await this.channelService.putchannel(id_channel, channel);
+      const result = await this.channelUpdateService.putchannel(
+        id_channel,
+        channel,
+      );
       return result;
     } catch (error) {
       throw new HttpException('Failed to update a channel', 444);
@@ -151,7 +158,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.joinChannel(
+      const result = await this.channelUpdateService.joinChannel(
         id_user,
         id_channel,
         password,
@@ -168,7 +175,7 @@ export class ChannelController {
   async putChannel_left(@Query('id_channel') id_channel: string, @Req() req) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.leaveChannel(
+      const result = await this.channelUpdateService.leaveChannel(
         id_user,
         id_channel,
       );
@@ -188,7 +195,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.kickUser(
+      const result = await this.channelUpdateService.kickUser(
         id_user,
         username,
         id_channel,
@@ -209,7 +216,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.setAdmin(
+      const result = await this.channelUpdateService.setAdmin(
         id_user,
         username,
         id_channel,
@@ -230,7 +237,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.setMember(
+      const result = await this.channelUpdateService.setMember(
         id_user,
         username,
         id_channel,
@@ -251,7 +258,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.banMember(
+      const result = await this.channelUpdateService.banMember(
         id_user,
         username,
         id_channel,
@@ -272,7 +279,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.unbanMember(
+      const result = await this.channelUpdateService.unbanMember(
         id_user,
         username,
         id_channel,
@@ -294,7 +301,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.muteMember(
+      const result = await this.channelUpdateService.muteMember(
         id_user,
         username,
         id_channel,
@@ -316,7 +323,7 @@ export class ChannelController {
   ) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.channelService.unmuteMember(
+      const result = await this.channelUpdateService.unmuteMember(
         id_user,
         username,
         id_channel,
