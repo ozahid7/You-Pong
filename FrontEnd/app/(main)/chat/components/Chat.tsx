@@ -1,13 +1,11 @@
 import React from "react";
-import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDropdown } from ".";
 import { Channel } from "@/types";
-import { getFile } from "@/app/(main)/chat/data/api";
 import { Avatar } from "@nextui-org/react";
 
 interface HomePage {
-    channels: Channel;
+  channels: Channel;
 }
 
 const Chat = ({ channels }: HomePage) => {

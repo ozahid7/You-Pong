@@ -22,7 +22,7 @@ export class AchievementService {
       };
     const achievements = [
       {
-        title: 'Play & Win',
+        title: 'Play your first',
         description:
           'Experience the wonder and excitement of gaming for the first time',
         avatar: 'http://localhost:4000/file/Badge.png',
@@ -30,7 +30,7 @@ export class AchievementService {
         id_user: id_user,
       },
       {
-        title: 'New Experience',
+        title: 'Play ranked game',
         description:
           'Play your first ranked game and prove your skills in the competitive arena',
         avatar: 'http://localhost:4000/file/Badge.png',
@@ -38,7 +38,7 @@ export class AchievementService {
         id_user: id_user,
       },
       {
-        title: 'Play & Win',
+        title: 'Win your first game',
         description:
           'Achieve your first victory by eliminating an opponent in your first game',
         avatar: 'http://localhost:4000/file/Badge.png',
@@ -46,14 +46,14 @@ export class AchievementService {
         id_user: id_user,
       },
       {
-        title: 'Hat Trick',
+        title: 'Hat Trick Hero',
         description: 'Achieve three victories in a short span of time',
         avatar: 'http://localhost:4000/file/Badge.png',
         isOwned: false,
         id_user: id_user,
       },
       {
-        title: 'Level Up',
+        title: 'Reach level 5',
         description:
           'Congratulations on surpassing the initial challenges and becoming a seasoned adventurer!',
         avatar: 'http://localhost:4000/file/Badge.png',

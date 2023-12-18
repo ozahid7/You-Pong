@@ -7,149 +7,149 @@
 @tailwind utilities;
 
 * {
-    @apply select-none;
+  @apply select-none;
 }
 
 .my_scroll_green {
-    @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
+  @apply scrollbar-thin scrollbar-track-[#ADCDCF] z-0 scrollbar-corner-[#ADCDCF] scrollbar-thumb-palette-green;
 }
 
 .my_scroll_orange {
-    @apply scrollbar-thin scrollbar-track-orange-100  z-0 scrollbar-corner-orange-100 scrollbar-thumb-palette-orange;
+  @apply scrollbar-thin scrollbar-track-orange-100  z-0 scrollbar-corner-orange-100 scrollbar-thumb-palette-orange;
 }
 
 .text_stroke {
-    -webkit-text-stroke: 1px white;
+  -webkit-text-stroke: 1px white;
 }
 
 .dblue {
-    @apply border-blue-700;
+  @apply border-blue-700;
 }
 .dred {
-    @apply border-2 border-red-700;
+  @apply border-2 border-red-700;
 }
 .dgreen {
-    @apply border-2 border-green-700;
+  @apply border-2 border-green-700;
 }
 
 .debug {
-    @apply border-2 border-red-700;
+  @apply border-2 border-red-700;
 }
 .debug > * {
-    @apply border-2 border-green-700;
+  @apply border-2 border-green-700;
 }
 .debug > * > * {
-    @apply border-2 border-blue-700;
+  @apply border-2 border-blue-700;
 }
 
 /* my aliases */
 
 .make_center {
-    @apply flex justify-center items-center;
+  @apply flex justify-center items-center;
 }
 
 .background {
-    @apply bg-background bg-no-repeat bg-origin-content bg-cover;
+  @apply bg-background bg-no-repeat bg-origin-content bg-cover;
 }
 
 @layer base {
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .loader {
-    position: relative;
-    height: 40px;
-    width: 6px;
-    color: #fff;
-    animation: paddles 0.75s ease-out infinite;
+  position: relative;
+  height: 40px;
+  width: 6px;
+  color: #fff;
+  animation: paddles 0.75s ease-out infinite;
 }
 .loader:before {
-    content: "";
-    position: absolute;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    top: 15px;
-    width: 12px;
-    height: 12px;
-    background-color: #fff;
-    border-radius: 50%;
-    animation: ballbounce 0.6s ease-out infinite;
+  content: "";
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 15px;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  animation: ballbounce 0.6s ease-out infinite;
 }
 
 @keyframes paddles {
-    0% {
-        box-shadow: -25px -10px, 25px 10px;
-    }
-    50% {
-        box-shadow: -25px 8px, 25px -10px;
-    }
-    100% {
-        box-shadow: -25px -10px, 25px 10px;
-    }
+  0% {
+    box-shadow: -25px -10px, 25px 10px;
+  }
+  50% {
+    box-shadow: -25px 8px, 25px -10px;
+  }
+  100% {
+    box-shadow: -25px -10px, 25px 10px;
+  }
 }
 @keyframes ballbounce {
-    0% {
-        transform: translateX(-20px) scale(1, 1.2);
-    }
-    25% {
-        transform: scale(1.2, 1);
-    }
-    50% {
-        transform: translateX(15px) scale(1, 1.2);
-    }
-    75% {
-        transform: scale(1.2, 1);
-    }
-    100% {
-        transform: translateX(-20px);
-    }
+  0% {
+    transform: translateX(-20px) scale(1, 1.2);
+  }
+  25% {
+    transform: scale(1.2, 1);
+  }
+  50% {
+    transform: translateX(15px) scale(1, 1.2);
+  }
+  75% {
+    transform: scale(1.2, 1);
+  }
+  100% {
+    transform: translateX(-20px);
+  }
 }
 
 .mini-loader {
-    width: 82px;
-    height: 18px;
-    position: relative;
+  width: 82px;
+  height: 18px;
+  position: relative;
 }
 .mini-loader::before,
 .mini-loader::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 10%);
-    top: 0;
-    background: #eb6440;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    animation: jump 0.5s ease-in infinite alternate;
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  top: 0;
+  background: #eb6440;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: jump 0.5s ease-in infinite alternate;
 }
 
 .mini-loader::after {
-    background: #0000;
-    color: #497174;
-    top: 100%;
-    box-shadow: 32px -20px, -32px -20px;
-    animation: split 0.5s ease-out infinite alternate;
+  background: #0000;
+  color: #497174;
+  top: 100%;
+  box-shadow: 32px -20px, -32px -20px;
+  animation: split 0.5s ease-out infinite alternate;
 }
 
 @keyframes split {
-    0% {
-        box-shadow: 8px -20px, -8px -20px;
-    }
-    100% {
-        box-shadow: 32px -20px, -32px -20px;
-    }
+  0% {
+    box-shadow: 8px -20px, -8px -20px;
+  }
+  100% {
+    box-shadow: 32px -20px, -32px -20px;
+  }
 }
 @keyframes jump {
-    0% {
-        transform: translate(-50%, -150%);
-    }
-    100% {
-        transform: translate(-50%, 10%);
-    }
+  0% {
+    transform: translate(-50%, -150%);
+  }
+  100% {
+    transform: translate(-50%, 10%);
+  }
 }

@@ -1,20 +1,20 @@
 import { MouseEventHandler } from "react";
 
 export interface CustomButtonProps {
-    color: string;
-    text: string;
-    otherclass?: string;
-    styleclass?: string;
-    handleclick?: any;
-    btnType?: "button" | "submit";
-    isLoading?: boolean
+  color: string;
+  text: string;
+  otherclass?: string;
+  styleclass?: string;
+  handleclick?: any;
+  btnType?: "button" | "submit";
+  isLoading?: boolean;
 }
 
-export interface AcheivementProps{
-    text: string
-    isOpened: boolean
-    classname?: string
-    description: string
+export interface AcheivementProps {
+  text: string;
+  isOpened: boolean;
+  classname?: string;
+  description: string;
   color?: string;
   otherclass?: string;
   styleclass?: string;
@@ -55,32 +55,79 @@ export interface Channel {
   hash?: string;
   type: string;
   users?: User[];
+  id_channel?: string;
+  rooms?: Room_Chat[];
+}
+
+export interface Room_Chat {
+  name: String;
+  user_role: "ADMIN" | "MEMBER" | "OWNER";
+  member_status: "MUTED" | "BANNED" | "NONE";
+  lefted: Boolean;
+  blocked_users: User[];
+  id_user: String;
+  user: User;
+  id_channel: String;
 }
 
 export interface User {
-	id_user: string;
-	username: string;
-	firstname?: string;
-	lastname?: string;
-	avatar?: string;
-	hash?: string;
-	email: string;
-	two_fact_auth?: string
-	tfaIsEnable: Boolean 
-	victory: number;
-	defeats: number;
-	level: number;
-	rank?: number;
-	status: "ONLINE" | "OFFLINE" | "INGAME"; 
-	// created_at: DateTime; 
-	// updated_at: DateTime; 
-	// rooms: Room_Chat[]; 
-	// blocked: Room_Chat[];
-	channels?: Channel[];
-	// messages: Message[]
-	// notifications Notification[]
-	// freindship_freind: Freindship[];
-	// freindship_user: Freindship[];
-	// matchs Match_History[]
-	// owned: Owned[]
+  id_user: string;
+  username: string;
+  firstname?: string;
+  lastname?: string;
+  avatar?: string;
+  hash?: string;
+  email: string;
+  two_fact_auth?: string;
+  tfaIsEnable: Boolean;
+  victory: number;
+  defeats: number;
+  level: number;
+  rank?: number;
+  status: "ONLINE" | "OFFLINE" | "INGAME";
+  // created_at: DateTime;
+  // updated_at: DateTime;
+  rooms: Room_Chat[];
+  blocked: Room_Chat[];
+  channels?: Channel[];
+  // messages: Message[]
+  // notifications Notification[]
+  // freindship_freind: Freindship[];
+  // freindship_user: Freindship[];
+  // matchs Match_History[]
+  // owned: Owned[]
+}
+
+export interface User_Hero {
+  uid: string;
+  username: string;
+  firstname?: string;
+  lastname?: string;
+  avatar?: string;
+  hash?: string;
+  email: string;
+  two_fact_auth?: string;
+  tfaIsEnable: Boolean;
+  victory: number;
+  defeats: number;
+  level: number;
+  rank?: number;
+  status: "ONLINE" | "OFFLINE" | "INGAME";
+  // created_at: DateTime;
+  // updated_at: DateTime;
+  rooms: Room_Chat[];
+  blocked: Room_Chat[];
+  channels?: Channel[];
+  // messages: Message[]
+  // notifications Notification[]
+  // freindship_freind: Freindship[];
+  // freindship_user: Freindship[];
+  // matchs Match_History[]
+  // owned: Owned[]
+}
+
+export interface Member {
+  user: User;
+  user_role: "ADMIN" | "MEMBER" | "OWNER";
+  member_status: "MUTED" | "BANNED" | "NONE";
 }

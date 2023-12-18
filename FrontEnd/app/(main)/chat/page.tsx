@@ -24,8 +24,6 @@ import { Channel } from "@/types";
 export const fetchData_userChannels = async () => {
   try {
     const result = await userChannels();
-    console.log("userChannels", result);
-
     return result;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -36,7 +34,6 @@ const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-
 
   const {
     data: channel,
@@ -49,9 +46,7 @@ const Chats = () => {
 
   if (!channel && isLoading)
     return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg">
-        {" "}
-      </div>
+      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
     );
 
   function formatAMPM(date: any) {
@@ -117,12 +112,15 @@ const Chats = () => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
-                                  channel &&
                                   channel
-                                    .filter((obj: any) => obj.type === "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type === "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : []
                                 }
                                 indicator={{
                                   className:
@@ -138,12 +136,15 @@ const Chats = () => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
-                                  channel &&
                                   channel
-                                    .filter((obj: any) => obj.type !== "DIRECT")
-                                    .map((obj: any, i) => (
-                                      <MiniChat channels={obj}></MiniChat>
-                                    ))
+                                    ? channel
+                                        .filter(
+                                          (obj: any) => obj.type !== "DIRECT"
+                                        )
+                                        .map((obj: any, i) => (
+                                          <MiniChat channels={obj}></MiniChat>
+                                        ))
+                                    : []
                                 }
                                 indicator={{
                                   className:
@@ -152,7 +153,7 @@ const Chats = () => {
                               ></MyTabs>
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
-                                <JoinModal mutate={mutate} />
+                                <JoinModal />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>

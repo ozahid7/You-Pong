@@ -1,10 +1,10 @@
 import {
-	ForbiddenException,
-	Injectable,
-	NotAcceptableException,
-	NotFoundException,
-	Res,
-	ServiceUnavailableException,
+  ForbiddenException,
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+  Res,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Response } from 'express';
@@ -15,197 +15,195 @@ import { AchievementService } from 'src/achievement/achievement.service';
 
 @Injectable()
 export class UserService {
-	private id: number = 157;
-	private rank: number = 1;
+  private id: number = 157;
+  private rank: number = 1;
 
-	async generateUser(usename: string): Promise<string> {
-		let res: string = usename + this.id.toString().padStart(3, '0');
-		if ((await this.findService.finduserByUserName(res)) == null) {
-			return res;
-		}
-		this.id++;
-		return await this.generateUser(usename);
-	}
+  async generateUser(usename: string): Promise<string> {
+    let res: string = usename + this.id.toString().padStart(3, '0');
+    if ((await this.findService.finduserByUserName(res)) == null) {
+      return res;
+    }
+    this.id++;
+    return await this.generateUser(usename);
+  }
 
-	constructor(
-		private prisma: PrismaService,
-		private findService: FindUserService,
-		private achievementService: AchievementService,
-	) {}
+  constructor(
+    private prisma: PrismaService,
+    private findService: FindUserService,
+    private achievementService: AchievementService,
+  ) {}
 
-	//POST
-	async postUser(user: userDto) {
-		const result = await this.prisma.user.create({
-			data: {
-				username: user.username,
-				firstname: user.firstname,
-				lastname: user.lastname,
-				avatar: user.avatar,
-				hash: user.hash,
-				email: user.email,
-				two_fact_auth: user.two_fact_auth,
-				victory: user.victory,
-				defeats: user.defeats,
-				level: user.level,
-				rank: user.rank,
-				status: user.status,
-				created_at: user.created_at,
-				updated_at: user.updated_at,
-			},
-		});
-		return result;
-	}
+  //POST
+  async postUser(user: userDto) {
+    const result = await this.prisma.user.create({
+      data: {
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        avatar: user.avatar,
+        hash: user.hash,
+        email: user.email,
+        two_fact_auth: user.two_fact_auth,
+        victory: user.victory,
+        defeats: user.defeats,
+        level: user.level,
+        rank: user.rank,
+        status: user.status,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      },
+    });
+    return result;
+  }
 
-	//POST MANY
-	async postUsers(users: userDto[]) {
-		const data = users.map((user) => ({
-			username: user.username,
-			firstname: user.firstname,
-			lastname: user.lastname,
-			avatar: user.avatar,
-			hash: user.hash,
-			email: user.email,
-			two_fact_auth: user.two_fact_auth,
-			jw_token: user.jw_token,
-			victory: user.victory,
-			defeats: user.defeats,
-			level: user.level,
-			rank: user.rank,
-			status: user.status,
-			created_at: user.created_at,
-			updated_at: user.updated_at,
-		}));
-		const result = await this.prisma.user.createMany({
-			data,
-			skipDuplicates: true,
-		});
-		const resultCount = result.count;
-		const duplicate = data.length - resultCount;
-		if (duplicate > 0) {
-			return {
-				message: 'Duplicates found',
-				count: duplicate,
-			};
-		}
+  //POST MANY
+  async postUsers(users: userDto[]) {
+    const data = users.map((user) => ({
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      avatar: user.avatar,
+      hash: user.hash,
+      email: user.email,
+      two_fact_auth: user.two_fact_auth,
+      jw_token: user.jw_token,
+      victory: user.victory,
+      defeats: user.defeats,
+      level: user.level,
+      rank: user.rank,
+      status: user.status,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    }));
+    const result = await this.prisma.user.createMany({
+      data,
+      skipDuplicates: true,
+    });
+    const resultCount = result.count;
+    const duplicate = data.length - resultCount;
+    if (duplicate > 0) {
+      return {
+        message: 'Duplicates found',
+        count: duplicate,
+      };
+    }
 
-		return { message: 'Users created successfully' };
-	}
+    return { message: 'Users created successfully' };
+  }
 
-	//DELETE
-	async deleteUser(username: string) {
-		const result = await this.prisma.user.delete({
-			where: {
-				username: username,
-			},
-		});
-		return result;
-	}
+  //DELETE
+  async deleteUser(username: string) {
+    const result = await this.prisma.user.delete({
+      where: {
+        username: username,
+      },
+    });
+    return result;
+  }
 
-	//DELETE MANY
-	async deleteUsers() {
-		const result = await this.prisma.user.deleteMany();
-		return result;
-	}
+  //DELETE MANY
+  async deleteUsers() {
+    const result = await this.prisma.user.deleteMany();
+    return result;
+  }
 
-	//GET
+  //GET
 
-	//GET MANY
-	async getUsers() {
-		const result = await this.prisma.user.findMany();
-		return result;
-	}
-	// create a user
-	async create(obj: any) {
-		try {
-			const newUser = await this.prisma.user.create({
-				data: {
-					username: await this.generateUser(obj.username),
-					email: obj.email,
-					hash: obj.hash,
-					lastname: obj.familyName,
-					firstname: obj.givenName,
-					avatar: obj.avatar,
-					rank: this.rank,
-				},
-			});
-			this.rank++;
-			return newUser;
-		} catch (error) {
-			if (error.code === 'P2002') {
-				throw new ForbiddenException('Email Already in use');
-			}
-			throw error;
-		}
-	}
+  //GET MANY
+  async getUsers() {
+    const result = await this.prisma.user.findMany();
+    return result;
+  }
+  // create a user
+  async create(obj: any) {
+    try {
+      const newUser = await this.prisma.user.create({
+        data: {
+          username: await this.generateUser(obj.username),
+          email: obj.email,
+          hash: obj.hash,
+          lastname: obj.familyName,
+          firstname: obj.givenName,
+          avatar: obj.avatar,
+          rank: this.rank,
+        },
+      });
+      this.rank++;
+      return newUser;
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ForbiddenException('Email Already in use');
+      }
+      throw error;
+    }
+  }
 
-	async signout(@Res() res: Response) {
-		try {
-			res.clearCookie('access_token');
-			res.status(200).json({});
-		} catch (error) {
-			throw new ForbiddenException(error);
-		}
-	}
+  async signout(@Res() res: Response) {
+    try {
+      res.clearCookie('access_token');
+      res.status(200).json({});
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
+  }
 
-	async findUser(friend: string, id_user: string) {
-		// const user = await this.findService.finduserByUserName(friend);
-		// find user by username if not blocked or not blocked by user
-		const user = await this.prisma.user.findUnique({
-			where: {
-				username: friend,
-			},
-			include: {
-				friendship_friend: true,
-				friendship_user: true,
-				channels: true,
-				achievements: true,
-				matchs: true,
-				blocked_from: true,
-				blocked_user: true,
-			},
-		});
-		let isPending: boolean = false;
-		if (
-			id_user &&
-			user &&
-			user.friendship_friend.find(
-				(user) => user.id_user === id_user && user.state === 'PENDING',
-			)
-		)
-			isPending = true;
-		if (!user) throw new ServiceUnavailableException('Username not Found!');
-		
-		await user.blocked_from.forEach((element) => {
-			if (element.id_user === id_user) {
-				throw new ForbiddenException('Username not Found!');
-			}
-		});
-		await user.blocked_user.forEach((element) => {
-			if (element.id_user === id_user) {
-				throw new ForbiddenException('Username not Found!');
-			}
-		});
+  async findUser(friend: string, id_user: string) {
+    // const user = await this.findService.finduserByUserName(friend);
+    // find user by username if not blocked or not blocked by user
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: friend,
+      },
+      include: {
+        friendship_friend: true,
+        friendship_user: true,
+        channels: true,
+        achievements: true,
+        matchs: true,
+        blocked_from: true,
+        blocked_user: true,
+      },
+    });
+    let isPending: boolean = false;
+    if (
+      id_user &&
+      user &&
+      user.friendship_friend.find(
+        (user) => user.id_user === id_user && user.state === 'PENDING',
+      )
+    )
+      isPending = true;
+    if (!user) throw new ServiceUnavailableException('Username not Found!');
 
-		return {
-			avatar: (await user).avatar,
-			username: user.username,
-			level: user.level,
-			rank: user.rank,
-			wins: user.victory,
-			losts: user.defeats,
-			status: user.status,
-			channels: user.channels,
-			isIntra: user.hash === null ? true : false,
-			matchs: user.matchs,
-			achievements: user.achievements,
-			isPending: isPending,
-		};
-	}
+    await user.blocked_from.forEach((element) => {
+      if (element.id_user === id_user) {
+        throw new ForbiddenException('Username not Found!');
+      }
+    });
+    await user.blocked_user.forEach((element) => {
+      if (element.id_user === id_user) {
+        throw new ForbiddenException('Username not Found!');
+      }
+    });
 
+    return {
+      avatar: (await user).avatar,
+      username: user.username,
+      level: user.level,
+      rank: user.rank,
+      wins: user.victory,
+      losts: user.defeats,
+      status: user.status,
+      channels: user.channels,
+      isIntra: user.hash === null ? true : false,
+      matchs: user.matchs,
+      achievements: user.achievements,
+      isPending: isPending,
+    };
+  }
 
-
-	//GET
-	async getUserChannels(id_user: string) {
-		return (await this.findService.finduserById(id_user)).channels;
-	}
+  //GET
+  async getUserChannels(id_user: string) {
+    return (await this.findService.finduserById(id_user)).channels;
+  }
 }

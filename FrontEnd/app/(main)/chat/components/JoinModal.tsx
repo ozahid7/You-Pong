@@ -28,10 +28,11 @@ import {
   IoLockOpenOutline,
   IoEnterOutline,
 } from "react-icons/io5";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import groups from "../../../../public/groups.svg";
 import { InputGroupPass } from ".";
 import { fetchData_userChannels } from "../page";
+import { KeyedMutator, ScopedMutator } from "swr/_internal";
 
 export const fetchData_getChannels = async () => {
   try {
@@ -43,7 +44,7 @@ export const fetchData_getChannels = async () => {
   }
 };
 
-export default function JoinModal({ mutate }) {
+export default function JoinModal() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
@@ -65,17 +66,17 @@ export default function JoinModal({ mutate }) {
 
   const showModal = (obj: Channel) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [open, setOpen] = useState<() => void>();
-    const passRef = useRef<HTMLInputElement>();
+    const passRef = useRef<HTMLInputElement>(null);
+    var open: () => void = () => {};
 
     const close = () => {
       onClose();
     };
 
     const OpenModal = async () => {
-      if (obj.type === "PROTECTED") setOpen(onOpen);
+      if (obj.type === "PROTECTED") open = onOpen;
       else if (obj.type === "PUBLIC") {
-        joinChannel(obj.name, null);
+        joinChannel(obj.id_channel || "", null || "");
         mutate(fetchData_userChannels);
         close();
       }
@@ -83,8 +84,8 @@ export default function JoinModal({ mutate }) {
 
     const join = () => {
       if (obj.type === "PROTECTED") {
-        console.log(passRef.current.value);
-        joinChannel(obj.name, passRef.current.value);
+        console.log(passRef.current?.value);
+        joinChannel(obj.id_channel || "", passRef.current?.value || "");
       }
       mutate(fetchData_userChannels);
       close();
@@ -163,62 +164,59 @@ export default function JoinModal({ mutate }) {
               <ModalBody className="w-[95%] max-h-[600px] overflow-auto scrollbar-hide rounded-md">
                 <div className="flex justify-evenly items-center flex-col gap-3">
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
-                    <Table aria-label="Example empty table">
-                      <TableHeader>
-                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                          AVATAR
-                        </TableColumn>
-                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                          NAME
-                        </TableColumn>
-                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                          TYPE
-                        </TableColumn>
-                        <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-                          ACTION
-                        </TableColumn>
-                      </TableHeader>
-                      <TableBody
-                        emptyContent={"No channels to display."}
-                        className=""
-                      >
-                        {channels &&
-                          channels
-                            .filter(
-                              (obj: any) =>
-                                obj.type !== "DIRECT" && obj.type !== "PRIVATE"
-                            )
-                            .map((obj: any, i) => (
-                              <TableRow key={i}>
-                                <TableCell>
-                                  <Image
-                                    src={obj.avatar || groups}
-                                    width={60}
-                                    height={60}
-                                    className="border-[2px] border-palette-green p-[0.5]"
-                                    alt="image"
-                                  />
-                                </TableCell>
-                                <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
-                                  {obj.name}
-                                </TableCell>
-                                <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
-                                  <div className="flex flex-row gap-1 items-center w-fit p-1">
-                                    {obj.type === "PUBLIC" ? (
-                                      <IoLockOpenOutline />
-                                    ) : (
-                                      <IoLockClosedOutline />
-                                    )}
-                                    {obj.type}
-                                  </div>
-                                </TableCell>
-                                <TableCell className="flex flex-row">
-                                  {showModal(obj)}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                      </TableBody>
-                    </Table>
+                    <table className="table table-lg">
+                      <thead>
+                        <tr className="text-[20px] font-body shadow-sm">
+                          <th></th>
+                          <th>Name</th>
+                          <th>Type</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <>
+                          {channels ? (
+                            channels
+                              .filter(
+                                (obj: any) =>
+                                  obj.type !== "DIRECT" &&
+                                  obj.type !== "PRIVATE"
+                              )
+                              .map((obj: any, i) => (
+                                <tr key={i}>
+                                  <td>
+                                    <Image
+                                      src={obj.avatar || groups}
+                                      width={60}
+                                      height={60}
+                                      className="border-[2px] border-palette-green p-[0.5]"
+                                      alt="image"
+                                    />
+                                  </td>
+                                  <td className="font-body font-[500] text-[18px] text-[#424242]">
+                                    {obj.name}
+                                  </td>
+                                  <td className="font-body font-[500] text-[16px] text-[#424242]">
+                                    <div className="flex flex-row gap-1 items-center w-fit p-1">
+                                      {obj.type === "PUBLIC" ? (
+                                        <IoLockOpenOutline />
+                                      ) : (
+                                        <IoLockClosedOutline />
+                                      )}
+                                      {obj.type}
+                                    </div>
+                                  </td>
+                                  <td className="flex flex-row">
+                                    {showModal(obj)}
+                                  </td>
+                                </tr>
+                              ))
+                          ) : (
+                            <div>NO CHANNELS</div>
+                          )}
+                        </>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </ModalBody>
@@ -229,4 +227,67 @@ export default function JoinModal({ mutate }) {
       </Modal>
     </Fragment>
   );
+}
+
+{
+  /* <Table aria-label="Example empty table">
+<TableHeader>
+  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+    AVATAR
+  </TableColumn>
+  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+    NAME
+  </TableColumn>
+  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+    TYPE
+  </TableColumn>
+  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
+    ACTION
+  </TableColumn>
+</TableHeader>
+<TableBody
+  emptyContent={"No channels to display."}
+  className=""
+>
+  <>
+    {channels
+      ? channels
+          .filter(
+            (obj: any) =>
+              obj.type !== "DIRECT" &&
+              obj.type !== "PRIVATE"
+          )
+          .map((obj: any, i) => (
+            <TableRow key={i}>
+              <TableCell>
+                <Image
+                  src={obj.avatar || groups}
+                  width={60}
+                  height={60}
+                  className="border-[2px] border-palette-green p-[0.5]"
+                  alt="image"
+                />
+              </TableCell>
+              <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
+                {obj.name}
+              </TableCell>
+              <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
+                <div className="flex flex-row gap-1 items-center w-fit p-1">
+                  {obj.type === "PUBLIC" ? (
+                    <IoLockOpenOutline />
+                  ) : (
+                    <IoLockClosedOutline />
+                  )}
+                  {obj.type}
+                </div>
+              </TableCell>
+              <TableCell className="flex flex-row">
+                {showModal(obj)}
+              </TableCell>
+            </TableRow>
+          ))
+      : <div>NO CHANNELS</div>}
+  </>
+</TableBody>
+</Table> */
 }

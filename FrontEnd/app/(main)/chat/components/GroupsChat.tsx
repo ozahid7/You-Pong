@@ -21,7 +21,7 @@ const GroupsChat = ({ channels }: obj) => {
 
   const fetchData_Channel = async () => {
     try {
-      const result = await getChannel(channels.name);
+      const result = await getChannel(channels.id_channel || "");
       return result.object;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -36,7 +36,7 @@ const GroupsChat = ({ channels }: obj) => {
 
   useEffect(() => {
     if (channel && !isLoading && !error)
-      channel.users.map((obj) => {
+      channel.users?.map((obj) => {
         obj.status === "ONLINE" ? (m += 1) : (m += 0);
       });
     setMembers(m);
@@ -64,10 +64,7 @@ const GroupsChat = ({ channels }: obj) => {
             </div>
           </div>
           <div>
-            <GroupDropdown
-              channels={channels}
-              users={channel?.users || []}
-            ></GroupDropdown>
+            <GroupDropdown channels={channels}></GroupDropdown>
           </div>
         </div>
       </div>
