@@ -29,7 +29,6 @@ export class UserService {
   constructor(
     private prisma: PrismaService,
     private findService: FindUserService,
-    private achievementService: AchievementService,
   ) {}
 
   //POST
@@ -126,9 +125,6 @@ export class UserService {
           avatar: obj.avatar,
         },
       });
-      const achievements = await this.achievementService.createAchievements(
-        newUser.id_user,
-      );
       return newUser;
     } catch (error) {
       if (error.code === 'P2002') {

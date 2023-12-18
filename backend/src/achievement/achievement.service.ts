@@ -1,113 +1,46 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { achCreateDto } from './dto';
 
 @Injectable()
 export class AchievementService {
   constructor(private prisma: PrismaService) {}
 
-  //CREATE ACHIEVEMENTS
-  async createAchievements(id_user: string) {
+  //GET MANY
+  async getAchievements(username: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id_user: id_user },
+      where: { username: username },
     });
     if (!user)
       return {
         message: 'No such User !',
         object: null,
       };
-    const achievements = [
-      {
-        title: 'Play your first',
-        description:
-          'Experience the wonder and excitement of gaming for the first time',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-      {
-        title: 'Play ranked game',
-        description:
-          'Play your first ranked game and prove your skills in the competitive arena',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-      {
-        title: 'Win your first game',
-        description:
-          'Achieve your first victory by eliminating an opponent in your first game',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-      {
-        title: 'Hat Trick Hero',
-        description: 'Achieve three victories in a short span of time',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-      {
-        title: 'Reach level 5',
-        description:
-          'Congratulations on surpassing the initial challenges and becoming a seasoned adventurer!',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-      {
-        title: 'Speed Demon',
-        description: 'Win a game challenge within a specified time limit',
-        avatar: 'http://localhost:4000/file/Badge.png',
-        isOwned: false,
-        id_user: id_user,
-      },
-    ];
-    const result = await this.prisma.achievement.createMany({
-      data: achievements,
+    const achievements = await this.prisma.achievement.findMany({
+      include: { users: true },
     });
+    if (!achievements)
+      return {
+        message: 'No such Achievements !',
+        object: null,
+      };
+    const result = await Promise.all(
+      achievements.map((achievement) => {
+        if (
+          achievement.users.filter((user) => user.username === username)
+            .length !== 0
+        )
+          return { achievement, is_owned: true };
+        return { achievement, is_owned: false };
+      }),
+    );
     if (!result)
       return {
-        message: "Can't create achievements !",
+        message: 'Failed to get owned achievements !',
         object: null,
       };
     return {
-      message: 'Achievements Created Succefully',
+      message: 'Achievements founded Successfully !',
       object: result,
     };
   }
-
-  //   async setAchievement(dto: achCreateDto) {
-  //     try {
-  //       await this.prisma.achievement.create({
-  //         data: {
-  //           avatar: dto.avatar,
-  //           title: dto.title,
-  //           description: dto.description,
-  //           requirement: dto.requirement,
-  //         },
-  //       });
-  //       return true;
-  //     } catch (error) {
-  //       throw new ForbiddenException('Failed to create achievement.');
-  //     }
-  //   }
-
-  //   async findAch(_title: string) {
-  //     try {
-  //       const ach = await this.prisma.achievement.findUnique({
-  //         where: {
-  //           title: _title,
-  //         },
-  //       });
-  //       return ach;
-  //     } catch (error) {
-  //       throw new NotFoundException('achievement not found');
-  //     }
-  //   }
 }
