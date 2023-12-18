@@ -30,7 +30,6 @@ export class UserService {
   constructor(
     private prisma: PrismaService,
     private findService: FindUserService,
-    private achievementService: AchievementService,
   ) {}
 
   //POST

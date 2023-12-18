@@ -94,11 +94,10 @@ model User {
 	channels Channel[] @relation("channels")
 	bannedChannels Channel[] @relation("bannedChannels")
 	messages Message[]
-	// notifications Notification[]
 	friendship_friend Friendship[] @relation("friendship_friend")
 	friendship_user Friendship[] @relation("friendship_user")
 	matchs Match_History[]
-	achievements Achievement[] @relation(name:"owned")
+	achievements Achievement[]
 	@@map("user")
 }
 
@@ -148,15 +147,6 @@ model Message {
 	channel Channel @relation(name: "message",fields: [id_channel], references: [id_channel])
 }
 
-// //NOTIFICATION MODEL
-// model Notification {
-// 	id_notification String @id @default(uuid())
-// 	type notification
-// 	created_at DateTime @default(now())
-// 	id_user String
-// 	user User @relation(fields: [id_user], references: I[id_user])
-// }
-
 //MATCH_HISTORY MODEL
 model Match_History {
 	id_match String @id @default(uuid())
@@ -183,18 +173,5 @@ model Achievement {
 	title String @unique
 	description String
 	avatar String
-	isOwned Boolean? @default(false)
-	id_user String
-	user User @relation(name:"owned" ,fields: [id_user], references: [id_user])
+	users User[]
 }
-
-//OWNED MODEL
-// model Owned {
-// 	id_achievement String @unique
-// 	achievement Achievement @relation(fields: [id_achievement], references: [id_achievement]) 
-// 	id_user String
-// 	user User @relation(name:"owned" ,fields: [id_user], references: [id_user])
-// 	owned_at DateTime @default(now())
-// 	avatar String
-// 	@@id([id_achievement, id_user])
-// }
