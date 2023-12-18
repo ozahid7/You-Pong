@@ -6,12 +6,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Table,
-  TableCell,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableHeader,
   useDisclosure,
   DropdownTrigger,
   DropdownMenu,
@@ -27,13 +21,14 @@ import {
   LuBan,
   LuBellOff,
   LuDoorOpen,
+  LuUser,
 } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../public/groups.svg";
 import useSWR from "swr";
-import { getChannel, getMainUser } from "../data/api";
+import { JoinDropDown } from ".";
 
 interface Props {
   Users: Member[];
@@ -48,10 +43,9 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
     role: "",
     status: "offline",
     selection: "",
-    hidaya: true,
+    show: true,
     join: true,
   };
-  var num: any = Channel_?.rooms?.length;
 
   console.log("MEMBERS", Users);
 
@@ -108,19 +102,21 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
                         Infos.role = "";
                         if (user.user.id_user === MainUser?.uid) {
                           Infos.disabled = "btn-disabled";
-                          if (user.user_role === "MEMBER") Infos.join = false;
-                          else Infos.join = true;
-                          if (user.user_role === "ADMIN") Infos.hidaya = false;
-                          else Infos.hidaya = true;
+                          user.user_role === "MEMBER"
+                            ? (Infos.join = false)
+                            : (Infos.join = true);
+                          user.user_role === "ADMIN"
+                            ? (Infos.show = false)
+                            : (Infos.show = true);
                         } else Infos.disabled = "";
-                        if (user.user.id_user === MainUser?.uid)
-                          Infos.selection =
-                            "ring ring-palette-orange ring-offset-base-100 ring-offset-2";
-                        else Infos.selection = "";
+                        user.user.id_user === MainUser?.uid
+                          ? (Infos.selection =
+                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                          : (Infos.selection = "");
                         user.user.status === "ONLINE"
                           ? (Infos.status = "online")
                           : (Infos.status = "offline");
-                        user.user_role === "OWNER" && Infos.hidaya === false
+                        user.user_role === "OWNER" && Infos.show === false
                           ? (Infos.disabled = "btn-disabled")
                           : "";
                         return (
@@ -158,62 +154,12 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
                             </td>
                             <td className="flex flex-row h-full justify-center items-center">
                               {Infos.join ? (
-                                <Dropdown className="bg-palette-white self-center">
-                                  <DropdownTrigger className="w-fit">
-                                    <Button
-                                      size="lg"
-                                      className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                    >
-                                      Action
-                                      <LuArrowDown />
-                                    </Button>
-                                  </DropdownTrigger>
-                                  <DropdownMenu
-                                    className="w-full"
-                                    aria-label="DropDownMenu"
-                                  >
-                                    <DropdownItem
-                                      className="hover:bg-palette-white border-none"
-                                      variant="bordered"
-                                      aria-label="SetAsAdmin"
-                                    >
-                                      <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                        <LuStar />
-                                        Set as admin
-                                      </button>
-                                    </DropdownItem>
-                                    <DropdownItem
-                                      className="hover:bg-palette-white border-none"
-                                      variant="bordered"
-                                      aria-label="Mute"
-                                    >
-                                      <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                        <LuBellOff />
-                                        Mute
-                                      </button>
-                                    </DropdownItem>
-                                    <DropdownItem
-                                      className="hover:bg-palette-white border-none"
-                                      variant="bordered"
-                                      aria-label="Kick"
-                                    >
-                                      <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                        <LuDoorOpen />
-                                        Kick
-                                      </button>
-                                    </DropdownItem>
-                                    <DropdownItem
-                                      className="hover:bg-palette-white border-none"
-                                      variant="bordered"
-                                      aria-label="Ban"
-                                    >
-                                      <button className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full">
-                                        <LuBan />
-                                        Ban
-                                      </button>
-                                    </DropdownItem>
-                                  </DropdownMenu>
-                                </Dropdown>
+                                <JoinDropDown
+                                  disable={Infos.disabled}
+                                  user={user}
+                                  key={user.user.id_user}
+                                  channel={Channel_}
+                                ></JoinDropDown>
                               ) : (
                                 ""
                               )}

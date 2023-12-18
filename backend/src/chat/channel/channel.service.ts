@@ -88,7 +88,7 @@ export class ChannelService {
           },
         });
         if (user) {
-          return { user, user_role: room.user_role };
+          return { user, user_role: room.user_role, member_status: room.member_status };
         }
       }),
     );

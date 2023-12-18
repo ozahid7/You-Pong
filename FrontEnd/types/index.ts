@@ -129,4 +129,5 @@ export interface User_Hero {
 export interface Member {
   user: User;
   user_role: "ADMIN" | "MEMBER" | "OWNER";
+  member_status: "MUTED" | "BANNED" | "NONE";
 }
