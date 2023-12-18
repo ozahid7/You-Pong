@@ -67,7 +67,6 @@ export class ChannelService {
     const rooms = await this.prisma.room_Chat.findMany({
       where: {
         id_channel: id_channel,
-        NOT: { member_status: 'BANNED' },
         lefted: false,
       },
     });
@@ -88,7 +87,11 @@ export class ChannelService {
           },
         });
         if (user) {
-          return { user, user_role: room.user_role, member_status: room.member_status };
+          return {
+            user,
+            user_role: room.user_role,
+            member_status: room.member_status,
+          };
         }
       }),
     );
