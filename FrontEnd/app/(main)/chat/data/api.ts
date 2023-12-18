@@ -109,6 +109,23 @@ export const BanMember = async (
   }
 };
 
+export const UnBanMember = async (
+  id_channel: string | undefined,
+  username: string
+) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/unban/?id_channel=${id_channel}&username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+
 export const SetAdmin = async (
   id_channel: string | undefined,
   username: string

@@ -65,7 +65,7 @@ export default function MuteDropDown({ user, channel }: Props) {
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (
-          <ul className="menu bg-base-200 w-40 rounded-box gap-1">
+          <ul className="menu bg-base-200 w-40 rounded-box gap-1 ">
             <li onClick={Handle_1Minute}>
               <button
                 className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"

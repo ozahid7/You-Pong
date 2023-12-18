@@ -6,13 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {
-  LuArrowDown,
-  LuStar,
-  LuUser,
-  LuDoorOpen,
-  LuBan,
-} from "react-icons/lu";
+import { LuArrowDown, LuStar, LuUser, LuDoorOpen, LuBan } from "react-icons/lu";
 import { Channel, Member } from "@/types";
 import { MuteDropDown } from ".";
 import {
@@ -20,6 +14,7 @@ import {
   KickMember,
   SetAdmin,
   SetMember,
+  UnBanMember,
   getMembers,
 } from "../data/api";
 import useSWR, { mutate } from "swr";
@@ -48,8 +43,11 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
     KickMember(channel?.id_channel, user.user.username);
     mutate(fetchData_getMembers);
   };
+
   const HandleBan = () => {
-    BanMember(channel?.id_channel, user.user.username);
+    user.member_status !== "BANNED"
+      ? BanMember(channel?.id_channel, user.user.username)
+      : UnBanMember(channel?.id_channel, user.user.username);
     mutate(fetchData_getMembers);
   };
 

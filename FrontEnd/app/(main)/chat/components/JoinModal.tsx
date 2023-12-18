@@ -102,7 +102,10 @@ export default function JoinModal() {
           <IoEnterOutline />
           Join
         </Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+        >
           <ModalContent>
             {(close) => (
               <>
@@ -119,7 +122,11 @@ export default function JoinModal() {
                   ></InputGroupPass>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="light" onPress={join}>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={join}
+                  >
                     Submit
                   </Button>
                 </ModalFooter>
@@ -175,7 +182,7 @@ export default function JoinModal() {
                       </thead>
                       <tbody>
                         <>
-                          {channels ? (
+                          {channels &&
                             channels
                               .filter(
                                 (obj: any) =>
@@ -210,10 +217,7 @@ export default function JoinModal() {
                                     {showModal(obj)}
                                   </td>
                                 </tr>
-                              ))
-                          ) : (
-                            <div>NO CHANNELS</div>
-                          )}
+                              ))}
                         </>
                       </tbody>
                     </table>
