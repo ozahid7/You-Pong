@@ -26,6 +26,11 @@ export class MessageService {
       },
       include: { users: true, bannedUsers: true },
     });
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     if (
       channel.bannedUsers.find((user) => user.id_user === id_user) ||
       channel.users.find((user) => user.id_user === id_user) === undefined
@@ -57,7 +62,11 @@ export class MessageService {
       const filtredUsers = await Promise.all(users.filter((user) => user));
       const messagesFiltered = await Promise.all(
         messages.map(async (message) => {
-          if (filtredUsers.find((user) => user.id_user === message.id_sender))
+          if (
+            filtredUsers.find(
+              (user) => user && user.id_user === message.id_sender,
+            )
+          )
             return message;
         }),
       );

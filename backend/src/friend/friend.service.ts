@@ -116,11 +116,12 @@ export class friendService {
     );
     const filtredUsers = users.filter((user) => user);
     const result = filtredUsers.map((user) => {
-      return {
-        username: user.username,
-        avatar: user.avatar,
-        status: user.status,
-      };
+      if (user)
+        return {
+          username: user.username,
+          avatar: user.avatar,
+          status: user.status,
+        };
     });
     if (!result)
       return {
