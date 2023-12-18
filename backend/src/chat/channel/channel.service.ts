@@ -548,23 +548,36 @@ export class ChannelService {
       where: {
         id_channel: id_channel,
       },
+      include: { users: true },
       data: {
         users: {
           disconnect: { id_user: id_user },
         },
-        rooms: {
-          disconnect: {
-            id_channel_id_user: { id_channel: id_channel, id_user: id_user },
-          },
-        },
       },
-      include: { users: true, rooms: true },
     });
-
+    if (!result)
+      return {
+        message: "Can't update a channel !",
+        object: null,
+      };
+    const my_room = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: id_channel,
+          id_user: id_user,
+        },
+        lefted: false,
+      },
+    });
+    if (!my_room)
+      return {
+        message: "Can't find a room chat !",
+        object: null,
+      };
     const room = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
-          id_channel: result.id_channel,
+          id_channel: id_channel,
           id_user: id_user,
         },
         lefted: false,
@@ -580,14 +593,37 @@ export class ChannelService {
         message: "Can't delete a room chat !",
         object: null,
       };
-    if (result.users.length === 0 && result.rooms.length === 0) {
-      const channel = this.deleteChannel(result.id_channel);
-      if (!(await channel).object)
+    if (result.users.length === 0) {
+      const channel = await this.deleteChannel(result.id_channel);
+      if (!channel.object)
         return {
           message: "Can't delete a channel !",
           object: null,
         };
     }
+    // if (my_room.user_role === 'OWNER') {
+    //   const newOwner = await this.prisma.room_Chat.findFirst({
+    //     where: {
+    //       id_channel: id_channel,
+    //       lefted: false,
+    //       member_status: 'NONE',
+    //       NOT: { user_role: 'OWNER' },
+    //     },
+    //   });
+    //   const updatedRoom = await this.prisma.room_Chat.update({
+    //     where: {
+    //       name: newOwner.name,
+    //     },
+    //     data: {
+    //       user_role: 'OWNER',
+    //     },
+    //   });
+    //   if (!updatedRoom)
+    //     return {
+    //       message: "Can't update a room chat !",
+    //       object: null,
+    //     };
+    // }
     return {
       message: 'Channel Updated Succefully',
       object: result,
@@ -665,20 +701,18 @@ export class ChannelService {
       where: {
         id_channel: id_channel,
       },
+      include: { users: true },
       data: {
         users: {
           disconnect: { id_user: user.id_user },
         },
-        rooms: {
-          disconnect: {
-            id_channel_id_user: {
-              id_channel: id_channel,
-              id_user: user.id_user,
-            },
-          },
-        },
       },
     });
+    if (!result)
+      return {
+        message: "Can't update a channel !",
+        object: null,
+      };
     const room = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
