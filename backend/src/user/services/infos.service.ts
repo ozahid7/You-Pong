@@ -53,6 +53,8 @@ export class InfoUserService {
           matchs: user.matchs,
           achievements: user.achievements,
           isIntra: user.hash === null ? true : false,
+          createdAt: user.created_at,
+          updatedAt: user.updated_at,
         },
       };
     } catch (error) {

@@ -16,6 +16,7 @@ import { AchievementService } from 'src/achievement/achievement.service';
 @Injectable()
 export class UserService {
   private id: number = 157;
+  private rank: number = 1;
 
   async generateUser(usename: string): Promise<string> {
     let res: string = usename + this.id.toString().padStart(3, '0');
@@ -124,11 +125,10 @@ export class UserService {
           lastname: obj.familyName,
           firstname: obj.givenName,
           avatar: obj.avatar,
+          rank: this.rank,
         },
       });
-      const achievements = await this.achievementService.createAchievements(
-        newUser.id_user,
-      );
+      this.rank++;
       return newUser;
     } catch (error) {
       if (error.code === 'P2002') {
@@ -173,28 +173,6 @@ export class UserService {
       achievements: user.achievements,
       isPending: isPending,
     };
-  }
-
-  async updateUsername(userId: string, newName: string) {
-    try {
-      const user = await this.findService.finduserById(userId);
-      const pot = await this.prisma.user.findFirst({
-        where: {
-          username: newName,
-        },
-      });
-      if (pot) throw new NotAcceptableException('username already in use!');
-      await this.prisma.user.update({
-        where: {
-          username: (await user).username,
-        },
-        data: {
-          username: newName,
-        },
-      });
-    } catch (error) {
-      throw new NotAcceptableException('username already in use!');
-    }
   }
 
   //GET

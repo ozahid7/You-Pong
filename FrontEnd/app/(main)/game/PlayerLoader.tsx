@@ -1,5 +1,6 @@
 "use client";
 import { MyDialog } from "@/components";
+import Loader from "@/components/tools/Loader";
 import MiniLoader from "@/components/tools/MiniLoader";
 import React, { useEffect, useState } from "react";
 
@@ -67,7 +68,7 @@ const PlayerLoader = (props: { isOpen: boolean, showCounter: any, showLoader: an
                                     </span>
                                 </div>
                             </div>
-                            : <MiniLoader/>
+                            : <Loader/>
                         }
                     </div>
                 </div>
