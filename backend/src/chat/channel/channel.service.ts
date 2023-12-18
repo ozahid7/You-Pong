@@ -1298,6 +1298,7 @@ export class ChannelService {
       },
       data: {
         member_status: 'NONE',
+        // time_muted: null,
       },
     });
     if (!result)
