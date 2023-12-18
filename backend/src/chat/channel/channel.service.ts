@@ -1178,6 +1178,11 @@ export class ChannelService {
         message: "You can't mute yourself !",
         object: null,
       };
+    if (muteTime < 1 || muteTime > 1000000000)
+      return {
+        message: "You can't mute a member too much !",
+        object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
