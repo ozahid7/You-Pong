@@ -27,7 +27,7 @@ export class localService {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(dto.password, salt);
     // create new user
-    return this.user.create({
+    return await this.user.create({
       email: dto.email,
       hash,
       username: 'You-Pong',

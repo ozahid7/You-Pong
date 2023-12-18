@@ -16,12 +16,12 @@ export class FtService
 		const tfaStatus = await this.TfaUserService.getTfaStatus(user);
 		if (tfaStatus == false) {
 			await this.authService.genCookie(res, user.id_user, 'access_token')
-			res.redirect('http://localhost:3000/dashboard');
+			res.redirect('http://localhost:3000/user/profile');
 		}
 		// generate tfa Cookie
 		else {
 			await this.authService.genCookie(res, user.id_user, 'tfa');
-			res.redirect('http://localhost:3000/dashboard');
+			res.redirect('http://localhost:3000/user/profile');
 		}
 	}
 }

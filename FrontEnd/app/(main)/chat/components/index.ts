@@ -12,6 +12,8 @@ import MiniChat from "./MiniChat";
 import SearchChat from "./SearchChat";
 import MyButton from "./MyButton";
 import GroupsInput from "./GroupsInput";
+import JoinDropDown from "./JoinDropDown";
+import MuteDropDown from "./MuteDropDown";
 
 export {
     Chat,
@@ -27,5 +29,7 @@ export {
     MiniChat,
     SearchChat,
     MyButton,
-    GroupsInput
+    GroupsInput,
+    JoinDropDown,
+    MuteDropDown
 }

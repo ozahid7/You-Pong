@@ -4,24 +4,24 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 const useFriends = () => {
-    const getFriends = async () => {
-        try {
-            const response = await useAxios<FriendsReturn>(
-                "get",
-                endPoints.getFriend
-            );
-            console.log("friends response = ", response);
-            return response.Object
-        } catch (error) {
-            console.log("error get Friends : ", error);
-        }
-        return null;
-    };
+  const getFriends = async () => {
+    try {
+      const response = await useAxios<FriendsReturn>(
+        "get",
+        endPoints.getFriend
+      );
+      console.log("friends response = ", response);
+      return response.Object;
+    } catch (error) {
+      console.log("error get Friends : ", error);
+    }
+    return null;
+  };
 
-    return useQuery({
-        queryKey: ["friends"],
-        queryFn: getFriends,
-    });
+  return useQuery({
+    queryKey: ["friends"],
+    queryFn: getFriends,
+  });
 };
 
 export default useFriends;

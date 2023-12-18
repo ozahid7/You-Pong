@@ -1,0 +1,81 @@
+import React, { useRef, useState } from "react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { LuBellOff } from "react-icons/lu";
+import { Channel, Member } from "@/types";
+import { MuteMember, UnMuteMember, getMembers } from "../data/api";
+import useSWR, { mutate } from "swr";
+
+interface Props {
+  user: Member;
+  channel: Channel | null;
+}
+
+export default function MuteDropDown({ user, channel }: Props) {
+  const muteRef1 = useRef<HTMLAnchorElement>(null);
+  const muteRef5 = useRef<HTMLAnchorElement>(null);
+  const muteRef15 = useRef<HTMLAnchorElement>(null);
+
+  console.log(user.member_status);
+
+  const fetchData_getMembers = async () => {
+    try {
+      const result = await getMembers(channel?.id_channel || "");
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
+
+  const Handle_1Minute = () => {
+    MuteMember(channel?.id_channel, user.user.username, 60000);
+    mutate(fetchData_getMembers);
+  };
+  const Handle_5Minutes = () => {
+    MuteMember(channel?.id_channel, user.user.username, 300000);
+    mutate(fetchData_getMembers);
+  };
+  const Handle_15Minutes = () => {
+    MuteMember(channel?.id_channel, user.user.username, 900000);
+    mutate(fetchData_getMembers);
+  };
+
+  const HandleUnmute = () => {
+    if (user.member_status === "MUTED") {
+      UnMuteMember(channel?.id_channel, user.user.username);
+      mutate(fetchData_getMembers);
+      return;
+    }
+  };
+  return (
+    <Popover placement="bottom" showArrow aria-label="Mute">
+      <PopoverTrigger>
+        <button
+          className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+          onClick={HandleUnmute}
+        >
+          <LuBellOff />
+          {user.member_status === "MUTED" ? "Unmute" : "Mute"}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent>
+        {user.member_status !== "MUTED" ? (
+          <ul className="menu bg-base-200 w-56 rounded-box">
+            <li onClick={Handle_1Minute}>
+              <a ref={muteRef1}>1 Minute</a>
+            </li>
+            <li onClick={Handle_5Minutes}>
+              <a ref={muteRef5}>5 Minutes</a>
+            </li>
+            <li onClick={Handle_15Minutes}>
+              <a ref={muteRef15}>15 Minutes</a>
+            </li>
+          </ul>
+        ) : (
+          <div>{user.user.username} is Unmuted</div>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}

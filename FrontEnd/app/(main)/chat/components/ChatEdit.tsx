@@ -19,7 +19,7 @@ import groups from "../../../../public/groups.svg";
 import Image from "next/image";
 import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
-import { Channel } from "@/types";
+import { Channel, Member } from "@/types";
 import {
   putData,
   setData,
@@ -28,29 +28,30 @@ import {
 } from "@/app/(main)/chat/data/api";
 import { mutate } from "swr";
 import { User } from "@/types";
+import { fetchData_getChannels } from "./JoinModal";
 
 var setDataObj: Channel = {
-  type: undefined,
-  name: undefined,
+  type: undefined || "",
+  name: undefined || "",
   description: undefined,
   avatar: undefined,
 };
 
 interface HomePage {
   channels: Channel;
-  users: User[];
+  users: Member[];
 }
 
 const ChatEdit = ({ channels, users }: HomePage) => {
-  const nameRef = useRef<HTMLInputElement>();
-  const descRef = useRef<HTMLInputElement>();
-  const passRef = useRef<HTMLInputElement>();
-  const imgRef = useRef<HTMLInputElement>();
+  const nameRef = useRef<HTMLInputElement>(null);
+  const descRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+  const imgRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
   const [members, setMembers] = useState<number>(0);
-  var   m: number = 0;
+  var m: number = 0;
 
   let imageUrl: any;
 
@@ -66,20 +67,21 @@ const ChatEdit = ({ channels, users }: HomePage) => {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
     imageUrl = channels.avatar;
   }
-  var result = undefined;
+  var result: any = undefined;
   const SendDataToLeader = async () => {
-    if (imgRef.current.value !== "") {
-      result = await setFile(imgRef.current.files[0]);
+    if (imgRef.current?.value !== "") {
+      if (imgRef.current?.files)
+        result = await setFile(imgRef.current.files[0]);
     }
-    if (channels.name !== nameRef.current.value)
-      setDataObj.name = nameRef.current.value;
-    if (channels.description !== descRef.current.value)
-      setDataObj.description = descRef.current.value;
+    if (channels.name !== nameRef.current?.value)
+      setDataObj.name = nameRef.current?.value || "";
+    if (channels.description !== descRef.current?.value)
+      setDataObj.description = descRef.current?.value;
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels.name);
     imageUrl = channels.avatar;
-    mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
+    mutate(fetchData_getChannels);
     onClose();
   };
 
@@ -89,9 +91,9 @@ const ChatEdit = ({ channels, users }: HomePage) => {
   };
 
   useEffect(() => {
-    if (users )
+    if (users)
       users.map((obj) => {
-        obj.status === "ONLINE" ? (m += 1) : (m += 0);
+        obj.user.status === "ONLINE" ? (m += 1) : (m += 0);
       });
     setMembers(m);
   }, [users]);
@@ -132,7 +134,6 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                 }}
               >
                 Edit a group
-                <div></div>
               </ModalHeader>
               <ModalBody className="w-[60%]">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -199,7 +200,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                             ></InputGroup>
                             <InputGroup
                               ref={descRef}
-                              text={channels.description}
+                              text={channels.description || ""}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></InputGroup>
@@ -221,7 +222,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                             ></InputGroup>
                             <InputGroup
                               ref={descRef}
-                              text={channels.description}
+                              text={channels.description || ""}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></InputGroup>
@@ -243,7 +244,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                             ></InputGroup>
                             <InputGroup
                               ref={descRef}
-                              text={channels.description}
+                              text={channels.description || ""}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
                             ></InputGroup>

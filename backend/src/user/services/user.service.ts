@@ -16,6 +16,7 @@ import { AchievementService } from 'src/achievement/achievement.service';
 @Injectable()
 export class UserService {
   private id: number = 157;
+  private rank: number = 1;
 
   async generateUser(usename: string): Promise<string> {
     let res: string = usename + this.id.toString().padStart(3, '0');
@@ -123,8 +124,10 @@ export class UserService {
           lastname: obj.familyName,
           firstname: obj.givenName,
           avatar: obj.avatar,
+          rank: this.rank,
         },
       });
+      this.rank++;
       return newUser;
     } catch (error) {
       if (error.code === 'P2002') {
@@ -144,7 +147,22 @@ export class UserService {
   }
 
   async findUser(friend: string, id_user: string) {
-    const user = await this.findService.finduserByUserName(friend);
+    // const user = await this.findService.finduserByUserName(friend);
+    // find user by username if not blocked or not blocked by user
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: friend,
+      },
+      include: {
+        friendship_friend: true,
+        friendship_user: true,
+        channels: true,
+        achievements: true,
+        matchs: true,
+        blocked_from: true,
+        blocked_user: true,
+      },
+    });
     let isPending: boolean = false;
     if (
       id_user &&
@@ -155,6 +173,18 @@ export class UserService {
     )
       isPending = true;
     if (!user) throw new ServiceUnavailableException('Username not Found!');
+
+    await user.blocked_from.forEach((element) => {
+      if (element.id_user === id_user) {
+        throw new ForbiddenException('Username not Found!');
+      }
+    });
+    await user.blocked_user.forEach((element) => {
+      if (element.id_user === id_user) {
+        throw new ForbiddenException('Username not Found!');
+      }
+    });
+
     return {
       avatar: (await user).avatar,
       username: user.username,
@@ -169,28 +199,6 @@ export class UserService {
       achievements: user.achievements,
       isPending: isPending,
     };
-  }
-
-  async updateUsername(userId: string, newName: string) {
-    try {
-      const user = await this.findService.finduserById(userId);
-      const pot = await this.prisma.user.findFirst({
-        where: {
-          username: newName,
-        },
-      });
-      if (pot) throw new NotAcceptableException('username already in use!');
-      await this.prisma.user.update({
-        where: {
-          username: (await user).username,
-        },
-        data: {
-          username: newName,
-        },
-      });
-    } catch (error) {
-      throw new NotAcceptableException('username already in use!');
-    }
   }
 
   //GET

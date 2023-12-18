@@ -20,12 +20,13 @@ import groups from "../../../../public/groups.svg";
 import { setData, setFile } from "@/app/(main)/chat/data/api";
 import { mutate } from "swr";
 import { GroupsInput } from ".";
+import { fetchData_userChannels } from "../page";
 
 export var setDataObj: Channel = {
   type: "PUBLIC",
   name: "Channel",
   description: "Change this description",
-  avatar: null,
+  avatar: null || "",
 };
 
 export default function GroupsModal() {
@@ -43,6 +44,9 @@ export default function GroupsModal() {
 
   let imageUrl: any;
 
+  const randomInt = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
   if (file instanceof Blob || file instanceof File) {
     try {
       imageUrl = URL.createObjectURL(file);
@@ -58,22 +62,23 @@ export default function GroupsModal() {
   const CreateGroupDATA = async () => {
     var result = null;
 
-    setDataObj.name = nameRef.current.value;
-    if (nameRef.current.value) {
-      if (descRef.current.value) setDataObj.description = descRef.current.value;
+    setDataObj.name = nameRef.current?.value || randomInt(1, 100).toString();
+    if (nameRef.current?.value) {
+      if (descRef.current?.value)
+        setDataObj.description = descRef.current?.value;
       if (setDataObj.type == "PROTECTED") {
         if (
-          passRef.current.value &&
-          passConfRef.current.value === passRef.current.value
+          passRef.current?.value &&
+          passConfRef.current?.value === passRef.current?.value
         )
-          setDataObj.hash = passRef.current.value;
-        else setDataObj.hash = null;
+          setDataObj.hash = passRef.current?.value;
+        else setDataObj.hash = null || "";
       }
       if (
         (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
         setDataObj.type != "PROTECTED"
       ) {
-        if (imgRef.current.value !== "") {
+        if (imgRef.current?.value !== "" && imgRef.current?.files) {
           result = await setFile(imgRef.current.files[0]);
         } else result = await setFile(null);
 
@@ -84,7 +89,7 @@ export default function GroupsModal() {
         object = await setData(setDataObj);
         // SEND DATA TO HAMID RIGHT HERE
         if (object.object !== null)
-          mutate("/myData", (cachedData) => [...cachedData, setDataObj], true);
+          mutate(fetchData_userChannels);
       }
       clean();
     }
@@ -98,7 +103,7 @@ export default function GroupsModal() {
   const clean = () => {
     setFilee(groups);
     setDataObj.description = "Change this description";
-    setDataObj.avatar = null;
+    setDataObj.avatar = null || groups;
     // if (descRef.current.value !== null)
     //   descRef.current.value = null;
     // nameRef.current.value = null;

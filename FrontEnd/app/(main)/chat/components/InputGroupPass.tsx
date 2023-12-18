@@ -29,7 +29,7 @@ const InputGroupPass = forwardRef<HTMLInputElement, MyInputProps>(
         <input
           ref={ref}
           type={type}
-		//   defaultValue={text}
+          //   defaultValue={text}
           placeholder={text}
           className={`${inputclass} center placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 pr-2 outline-none  fold:w-[97%]  h-[86%] s:w-[98%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}
         />

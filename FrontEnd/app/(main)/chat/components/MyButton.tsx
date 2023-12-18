@@ -14,11 +14,7 @@ export default function MyButton({
   }
 
   return (
-    <NextUIButton
-      color={color}
-      className={className}
-      {...rest}
-    >
+    <NextUIButton color={color} className={className} {...rest}>
       {children}
     </NextUIButton>
   );

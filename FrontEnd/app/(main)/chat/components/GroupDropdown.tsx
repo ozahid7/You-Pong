@@ -1,42 +1,59 @@
 "use client";
-import { Menu } from "@headlessui/react";
-import { Fragment, useState, useRef } from "react";
 import React from "react";
 import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
-import { menuGroupsElements } from "@/const";
-import { renderIcon } from "@/utils";
-import { Channel, User } from "@/types";
-import {
-  Modal,
-  ModalBody,
-  Button,
-  useDisclosure,
-  ModalContent,
-  NextUIProvider,
-} from "@nextui-org/react";
+import { Channel, Member, User, User_Hero } from "@/types";
+import { Button } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
-import { leaveChannel, userChannels } from "../data/api";
-import { useSWRConfig } from "swr";
+import {
+  getChannel,
+  getMainUser,
+  getMembers,
+  leaveChannel,
+  userChannels,
+} from "../data/api";
+import useSWR, { useSWRConfig } from "swr";
 import { fetchData_userChannels } from "../page";
 import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {
   channels: Channel;
-  users: User[];
 }
 
-const GroupDropdown = ({ channels, users }: HomePage) => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+const GroupDropdown = ({ channels }: HomePage) => {
   const { mutate } = useSWRConfig();
 
   const Leaving = () => {
-    leaveChannel(channels.name);
-    // console.log(result);
+    leaveChannel(channels.id_channel || "");
     mutate(fetchData_userChannels);
     mutate(fetchData_getChannels);
   };
+
+  const fetchData_getMembers = async () => {
+    try {
+      const result = await getMembers(channels.id_channel || "");
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchData_getMainUser = async () => {
+    try {
+      const result = await getMainUser();
+
+      return result.userInfo;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
+  const { data: MainUser } = useSWR<User_Hero>(
+    "/MainUser",
+    fetchData_getMainUser
+  );
 
   return (
     <div className="flex flex-col justify-center relative">
@@ -57,10 +74,14 @@ const GroupDropdown = ({ channels, users }: HomePage) => {
           className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
         >
           <li>
-            <MembersEdit users={users}></MembersEdit>
+            <MembersEdit
+              MainUser={MainUser}
+              Users={Users || []}
+              Channel_={channels || null}
+            ></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels} users={users}></ChatEdit>
+            <ChatEdit channels={channels} users={Users || []}></ChatEdit>
           </li>
           <li>
             <Button

@@ -1,6 +1,5 @@
 import { Channel } from "@/types";
 import axios from "axios";
-import { attachReactRefresh } from "next/dist/build/webpack-config";
 // import fs from "fs";
 // import { setDataObj } from "@/components/tools/GroupsModal";
 
@@ -18,10 +17,10 @@ export const userChannels = async () => {
 };
 
 // http://localhost:4000/chat/channel/join/name
-export const joinChannel = async (name: string, password: string) => {
+export const joinChannel = async (id_channel: string, password: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/join?name=${name}&password=${password}`
+      `http://localhost:4000/chat/channel/join?id_channel=${id_channel}&password=${password}`
     );
     return response.data;
   } catch (error) {
@@ -32,10 +31,88 @@ export const joinChannel = async (name: string, password: string) => {
 };
 
 // http://localhost:4000/chat/channel/leave/name
-export const leaveChannel = async (name: string) => {
+export const leaveChannel = async (id_channel: string) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/leave?name=${name}`
+      `http://localhost:4000/chat/channel/leave/?id_channel=${id_channel}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const MuteMember = async (id_channel: string | undefined, username:string, time: number) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/mute/?id_channel=${id_channel}&username=${username}&time=${time}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const UnMuteMember = async (id_channel: string | undefined, username:string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/unmute/?id_channel=${id_channel}&username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const KickMember = async (id_channel: string | undefined, username:string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/kick/?id_channel=${id_channel}&username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const BanMember = async (id_channel: string | undefined, username:string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/ban/?id_channel=${id_channel}&username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const SetAdmin = async (id_channel: string | undefined, username:string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/admin/?id_channel=${id_channel}&username=${username}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const SetMember = async (id_channel: string | undefined, username:string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/member/?id_channel=${id_channel}&username=${username}`
     );
     return response.data;
   } catch (error) {
@@ -56,9 +133,25 @@ export const getChannels = async () => {
   }
 };
 
-export const getChannel = async (name: string) => {
+export const getChannel = async (id_channel: string) => {
   try {
-    const response = await axios.get(`http://localhost:4000/chat/channel/${name}`);
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/myChannel/${id_channel}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+// return object, USERS+USER_ROLE+STATUS
+export const getMembers = async (id_channel: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/members/?id_channel=${id_channel}`
+    );
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -100,7 +193,7 @@ export const putData = async (data: Channel, name: string) => {
     };
 
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/update?name=${name}`,
+      `http://localhost:4000/chat/channel/update/?name=${name}`,
       obj
     );
     return response.data;
@@ -114,7 +207,8 @@ export const putData = async (data: Channel, name: string) => {
 export const setFile = async (file: File | null) => {
   try {
     const formData = new FormData();
-    formData.append("avatar", file);
+    if (file !== null)
+      formData.append("avatar", file);
 
     const response = await axios.post(
       "http://localhost:4000/upload",
@@ -137,17 +231,6 @@ export const getFile = async (pathname: string) => {
   try {
     const response = await axios.get(`http://localhost:4000/file/${pathname}`);
 
-    return response.data;
-  } catch (error) {
-    // Handle errors here
-    console.error(error);
-    return null;
-  }
-};
-
-export const getMembers = async () => {
-  try {
-    const response = await axios.get("http://localhost:4000/user");
     return response.data;
   } catch (error) {
     // Handle errors here
