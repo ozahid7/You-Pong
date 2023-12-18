@@ -220,6 +220,27 @@ export class ChannelController {
     }
   }
 
+  //PUT MEMBER
+  @UseGuards(AuthGuard('jwt'))
+  @Put('/member/')
+  async putChannel_member(
+    @Query('id_channel') id_channel: string,
+    @Query('username') username: string,
+    @Req() req,
+  ) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.setMember(
+        id_user,
+        username,
+        id_channel,
+      );
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to set admin as a member', 444);
+    }
+  }
+
   //PUT BAN
   @UseGuards(AuthGuard('jwt'))
   @Put('/ban/')
