@@ -5,38 +5,8 @@ import avatar from "../../../../public/avatar.jpeg";
 interface Props {
   type: string;
 }
-interface TextWithLineBreaksProps {
-  text: string;
-  maxWidth: number;
-}
-
-const TextWithLineBreaks: React.FC<TextWithLineBreaksProps> = ({
-  text,
-  maxWidth,
-}) => {
-  const words = text.split(" ");
-
-  return (
-    <div className="whitespace-pre-wrap">
-      {words.map((word, index) => (
-        <React.Fragment key={index}>
-          {index > 0 && " "}
-          {word}
-          {index < words.length - 1 && " "}
-          {index < words.length - 1 &&
-            word.length + words[index + 1].length > maxWidth && <br />}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-};
 
 const MyMessage = ({ type }: Props) => {
-  const senderRef = React.useRef<HTMLDivElement>(null);
-  const myRef = React.useRef<HTMLDivElement>(null);
-
-  const senderWIDTH = senderRef.current?.clientWidth;
-  const myWIDTH = myRef.current?.clientWidth;
   return (
     <Fragment>
       {type === "sender" ? (
@@ -58,13 +28,12 @@ const MyMessage = ({ type }: Props) => {
               role="button"
               tabIndex={0}
               data-theme="mytheme"
-              className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%]"
-              ref={senderRef}
+              className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
             >
-              <TextWithLineBreaks
-                text="Hey sahbi Oussama Zahid!wefwefwefwefewfw we jw w wbwe fhwe w ww weffwefwewefwf ewfefw wef ew we wf w wef wef wef wef wef wf wfe wfe wfe wfe wfe wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe fw fe fw f wefwefewfwefew fwefwefwefeww"
-                maxWidth={senderWIDTH || 0}
-              />
+              Hey sahbi Oussama Zahid!wefwefwefwefewfw we jw w wbwe fhwe w ww
+              weffwefwewefwf ewfefw wef ew we wf w wef wef wef wef wef wf wfe
+              wfe wfe wfe wfe wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe
+              fw fe fw f wefwefewfwefew fwefwefwefeww
             </div>
             <ul
               tabIndex={0}
@@ -93,13 +62,12 @@ const MyMessage = ({ type }: Props) => {
               role="button"
               tabIndex={0}
               data-theme="mytheme"
-              className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%]"
-              ref={myRef}
+              className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
             >
-              <TextWithLineBreaks
-                text="Fuck you!wefwefwefwefewfw we jw w wbwe fhwe w ww weffwefwewefwf ewfefw wef ew we wf w wef wef wef wef wef wf wfe wfe wfe wfe wfe wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe fw fe fw f wefwefewfwefew fwefwefwefeww"
-                maxWidth={myWIDTH || 0}
-              />
+              Fuck you!wefwefwefwefewfw we jw w wbwe fhwe w ww weffwefwewefwf
+              ewfefw wef ew we wf w wef wef wef wef wef wf wfe wfe wfe wfe wfe
+              wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe fw fe fw f
+              wefwefewfwefew fwefwefwefeww
             </div>
             <ul
               tabIndex={0}

@@ -289,7 +289,6 @@ export const getMessages = async (id_channel: string) => {
     const response = await axios.get(
       `http://localhost:4000/chat/message/?id_channel=${id_channel}`
     );
-
     return response.data;
   } catch (error) {
     // Handle errors here

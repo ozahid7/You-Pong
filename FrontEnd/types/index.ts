@@ -137,9 +137,6 @@ export interface Message {
 	content: String;
 	created_at: any;
 	id_sender: String
-	user: User;
 	name_room: String;
-	room: Room_Chat;
 	id_channel: String;
-	channel: Channel;
 }

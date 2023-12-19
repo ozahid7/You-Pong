@@ -5,7 +5,7 @@ import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { getChannel, getMembers } from "../data/api";
+import { getChannel, getMembers, getMessages } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
@@ -41,13 +41,6 @@ const GroupsChat = ({ channels }: obj) => {
       });
     setMembers(m);
   }, [channel, members]);
-
-  // sm_: "480px",
-  // md_: "640px",
-  // lg_: "992px",
-  // xl_: "1024px",
-  // "2xl_": "1280px",
-  // "3xl_": "1440px",
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">

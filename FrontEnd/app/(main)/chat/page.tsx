@@ -41,7 +41,6 @@ const Chats = () => {
     isLoading,
   } = useSWR<Channel[]>("/myData", fetchData_userChannels);
 
-  console.log(channel);
   if (error) return <div>ERROR</div>;
 
   if (!channel && isLoading)
