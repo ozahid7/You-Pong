@@ -125,7 +125,6 @@ export const UnBanMember = async (
   }
 };
 
-
 export const SetAdmin = async (
   id_channel: string | undefined,
   username: string
@@ -277,6 +276,20 @@ export const getFile = async (pathname: string) => {
 export const getMainUser = async () => {
   try {
     const response = await axios.get("http://localhost:4000/user/GetHero");
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+export const getMessages = async (id_channel: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/chat/message/?id_channel=${id_channel}`
+    );
+
     return response.data;
   } catch (error) {
     // Handle errors here
