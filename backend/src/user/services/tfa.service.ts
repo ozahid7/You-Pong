@@ -18,14 +18,14 @@ export class TfaUserService {
     }
 
     async switchTfaStatus(_id: string, code: string) {
-      const user = this.findUser.finduserById(_id);
-      if (!user)
-        throw new NotFoundException('user not found')
-      try {
-            if (((await user).tfaIsEnable) == false)
-                true;
-            else if (await this.checkTfaCode(code, user))
-                throw new ForbiddenException('code is incorrect');
+        const user = this.findUser.finduserById(_id);
+        if (!user)
+            throw new NotFoundException('user not found')
+        if (((await user).tfaIsEnable) == false)
+            true;
+        else if (await this.checkTfaCode(code, user))
+            throw new ForbiddenException('code is incorrect');
+        try {
             await this.prisma.user.update({
                 where: {
                     id_user: _id,
