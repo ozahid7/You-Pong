@@ -657,8 +657,6 @@ export class ChannelUpdateService {
       },
       data: {
         member_status: 'BANNED',
-        lefted: true,
-        lefted_at: new Date(),
       },
     });
     const channelUpdated = await this.prisma.channel.update({
@@ -691,7 +689,7 @@ export class ChannelUpdateService {
       where: {
         id_channel: id_channel,
       },
-      include: { users: true },
+      include: { users: true, bannedUsers: true },
     });
     const user = await this.prisma.user.findUnique({
       where: {
@@ -711,10 +709,10 @@ export class ChannelUpdateService {
     const isAdmin = channel.users.some((user) => {
       return user.id_user === id_user;
     });
-    const isMember = channel.users.some((user) => {
+    const isBanned = channel.bannedUsers.some((user) => {
       return user.username === username;
     });
-    if (!isAdmin || !isMember)
+    if (!isAdmin || !isBanned)
       return {
         message: 'The user is not a member in this Channel !',
         object: null,
@@ -757,16 +755,12 @@ export class ChannelUpdateService {
         message: "You can't unban yourself !",
         object: null,
       };
-    const result = await this.prisma.room_Chat.update({
+    const result = await this.prisma.room_Chat.delete({
       where: {
         id_channel_id_user: {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
-      },
-      data: {
-        member_status: 'NONE',
-        lefted: true,
       },
     });
     const channelUpdated = await this.prisma.channel.update({
