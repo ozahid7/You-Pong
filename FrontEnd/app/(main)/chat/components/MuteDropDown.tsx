@@ -1,5 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  useDisclosure,
+  Button,
+} from "@nextui-org/react";
 import { LuBellOff, LuTimer } from "react-icons/lu";
 import { Channel, Member } from "@/types";
 import { MuteMember, UnMuteMember, getMembers } from "../data/api";
@@ -8,9 +14,10 @@ import useSWR, { mutate } from "swr";
 interface Props {
   user: Member;
   channel: Channel | null;
+  onClose: () => void;
 }
 
-export default function MuteDropDown({ user, channel }: Props) {
+export default function MuteDropDown({ user, channel, onClose }: Props) {
   const muteRef1 = useRef<HTMLButtonElement>(null);
   const muteRef5 = useRef<HTMLButtonElement>(null);
   const muteRef15 = useRef<HTMLButtonElement>(null);
@@ -31,21 +38,24 @@ export default function MuteDropDown({ user, channel }: Props) {
   const Handle_1Minute = () => {
     MuteMember(channel?.id_channel, user.user.username, 60000);
     mutate(fetchData_getMembers);
+    onClose();
   };
   const Handle_5Minutes = () => {
     MuteMember(channel?.id_channel, user.user.username, 300000);
     mutate(fetchData_getMembers);
+    onClose();
   };
   const Handle_15Minutes = () => {
     MuteMember(channel?.id_channel, user.user.username, 900000);
     mutate(fetchData_getMembers);
+    onClose();
   };
 
   const HandleUnmute = () => {
     if (user.member_status === "MUTED") {
       UnMuteMember(channel?.id_channel, user.user.username);
       mutate(fetchData_getMembers);
-      return;
+      onClose();
     }
   };
   return (
@@ -55,13 +65,13 @@ export default function MuteDropDown({ user, channel }: Props) {
       aria-label="Mute"
     >
       <PopoverTrigger>
-        <button
+        <Button
           className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
           onClick={HandleUnmute}
         >
           <LuBellOff />
           {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (

@@ -5,6 +5,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  useDisclosure,
 } from "@nextui-org/react";
 import { LuArrowDown, LuStar, LuUser, LuDoorOpen, LuBan } from "react-icons/lu";
 import { Channel, Member } from "@/types";
@@ -26,6 +27,7 @@ interface Props {
 }
 
 const JoinDropDown = ({ disable, user, channel }: Props) => {
+  const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
   const fetchData_getMembers = async () => {
     try {
       const result = await getMembers(channel?.id_channel || "");
@@ -62,11 +64,15 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
       <Dropdown
         className="bg-palette-white self-center"
         type="listbox"
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        isOpen={isOpen}
       >
         <DropdownTrigger className="w-fit">
           <Button
             size="lg"
             className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+            onPress={onOpen}
           >
             Action
             <LuArrowDown />
@@ -98,6 +104,7 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
             <MuteDropDown
               user={user}
               channel={channel}
+              onClose={onClose}
             ></MuteDropDown>
           </DropdownItem>
           <DropdownItem

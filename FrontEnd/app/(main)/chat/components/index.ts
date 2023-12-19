@@ -14,6 +14,8 @@ import MyButton from "./MyButton";
 import GroupsInput from "./GroupsInput";
 import JoinDropDown from "./JoinDropDown";
 import MuteDropDown from "./MuteDropDown";
+import ChatDialog from "./ChatDialog";
+import Message from "./Message";
 
 export {
     Chat,
@@ -31,5 +33,7 @@ export {
     MyButton,
     GroupsInput,
     JoinDropDown,
-    MuteDropDown
+    MuteDropDown,
+    ChatDialog,
+    Message
 }

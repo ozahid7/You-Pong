@@ -39,9 +39,9 @@ const Chats = () => {
     data: channel,
     error,
     isLoading,
-    mutate,
   } = useSWR<Channel[]>("/myData", fetchData_userChannels);
 
+  console.log(channel);
   if (error) return <div>ERROR</div>;
 
   if (!channel && isLoading)
@@ -170,7 +170,10 @@ const Chats = () => {
                         ? channel
                             .filter((obj) => obj.type !== "DIRECT")
                             .map((obj, i) => (
-                              <GroupsChat channels={obj} key={i}></GroupsChat>
+                              <GroupsChat
+                                channels={obj}
+                                key={i}
+                              ></GroupsChat>
                             ))
                         : ""}
                     </SwipeableTabs>
@@ -183,7 +186,10 @@ const Chats = () => {
                         ? channel
                             .filter((obj) => obj.type === "DIRECT")
                             .map((obj, i) => (
-                              <Chat channels={obj} key={i}></Chat>
+                              <Chat
+                                channels={obj}
+                                key={i}
+                              ></Chat>
                             ))
                         : ""}
                     </SwipeableTabs>
