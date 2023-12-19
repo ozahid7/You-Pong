@@ -41,6 +41,7 @@ export class MessageService {
         orderBy: {
           created_at: 'desc',
         },
+        include: { user: true },
       });
       const users = await Promise.all(
         channel.users.map(async (user) => {
@@ -58,7 +59,7 @@ export class MessageService {
       const messagesFiltered = await Promise.all(
         messages.map(async (message) => {
           if (filtredUsers.find((user) => user.id_user === message.id_sender))
-            return message;
+            return { message };
         }),
       );
       const result = messagesFiltered.filter((message) => message);
