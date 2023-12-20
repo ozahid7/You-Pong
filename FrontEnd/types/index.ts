@@ -139,4 +139,5 @@ export interface Message {
 	id_sender: String
 	name_room: String;
 	id_channel: String;
+  user: User;
 }
