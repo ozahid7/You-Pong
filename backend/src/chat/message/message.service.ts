@@ -59,10 +59,20 @@ export class MessageService {
       const messagesFiltered = await Promise.all(
         messages.map(async (message) => {
           if (filtredUsers.find((user) => user.id_user === message.id_sender))
-            return { message };
+            return {
+              id_message: message.id_message,
+              content: message.content,
+              created_at: message.created_at,
+              id_sender: message.id_sender,
+              name_room: message.name_room,
+              id_channel: message.id_channel,
+              user: message.user,
+            };
         }),
       );
-      const result = messagesFiltered.filter((message) => message);
+      const result = await Promise.all(
+        messagesFiltered.filter((message) => message),
+      );
       if (result.length !== 0)
         return {
           message: 'Messages founded successfully',

@@ -1,12 +1,14 @@
 import Image from "next/image";
 import React, { Fragment } from "react";
 import avatar from "../../../../public/avatar.jpeg";
+import { Message } from "@/types";
 
 interface Props {
   type: string;
+  message: Message;
 }
 
-const MyMessage = ({ type }: Props) => {
+const MyMessage = ({ type, message }: Props) => {
   return (
     <Fragment>
       {type === "sender" ? (
@@ -14,14 +16,16 @@ const MyMessage = ({ type }: Props) => {
           <div className="chat-image avatar">
             <div className="w-10 rounded-full">
               <Image
+                width={40}
+                height={40}
                 alt="Sender's avatar"
-                src={avatar}
+                src={message.user.avatar || avatar}
               />
             </div>
           </div>
           <div className="flex chat-header items-center gap-1">
-            <div className="w-fit h-fit">Abderrachid Yassir</div>
-            <time className="text-xs opacity-50">12:45</time>
+            <div className="w-fit h-fit">{message.user.username}</div>
+            <time className="text-xs opacity-50">{message.created_at}</time>
           </div>
           <div className="w-full h-full dropdown dropdown-hover">
             <div
@@ -30,10 +34,7 @@ const MyMessage = ({ type }: Props) => {
               data-theme="mytheme"
               className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
             >
-              Hey sahbi Oussama Zahid!wefwefwefwefewfw we jw w wbwe fhwe w ww
-              weffwefwewefwf ewfefw wef ew we wf w wef wef wef wef wef wf wfe
-              wfe wfe wfe wfe wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe
-              fw fe fw f wefwefewfwefew fwefwefwefeww
+              {message.content}
             </div>
             <ul
               tabIndex={0}
@@ -43,19 +44,21 @@ const MyMessage = ({ type }: Props) => {
             </ul>
           </div>
         </div>
-      ) : (
+      ) : type === "main" ? (
         <div className="chat chat-end p-1 ">
           <div className="chat-image avatar">
             <div className="w-10 rounded-full">
               <Image
+                width={40}
+                height={40}
                 alt="Main user's avatar"
-                src={avatar}
+                src={message.user.avatar || avatar}
               />
             </div>
           </div>
           <div className="flex chat-header items-center gap-1">
-            <div className="w-fit h-fit">Oussama Zahid</div>
-            <time className="text-xs opacity-50">12:45</time>
+            <div className="w-fit h-fit">{message.user.username}</div>
+            <time className="text-xs opacity-50">{message.created_at}</time>
           </div>
           <div className="dropdown dropdown-hover flex items-end justify-end w-full h-full flex-col">
             <div
@@ -64,10 +67,7 @@ const MyMessage = ({ type }: Props) => {
               data-theme="mytheme"
               className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
             >
-              Fuck you!wefwefwefwefewfw we jw w wbwe fhwe w ww weffwefwewefwf
-              ewfefw wef ew we wf w wef wef wef wef wef wf wfe wfe wfe wfe wfe
-              wf ewf ewfe wef wef wefewfewfew wef wef ew fwe fwe fw fe fw f
-              wefwefewfwefew fwefwefwefeww
+              {message.content}
             </div>
             <ul
               tabIndex={0}
@@ -77,6 +77,8 @@ const MyMessage = ({ type }: Props) => {
             </ul>
           </div>
         </div>
+      ) : (
+        ""
       )}
     </Fragment>
   );
