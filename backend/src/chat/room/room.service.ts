@@ -6,9 +6,9 @@ export class RoomService {
   constructor(private prisma: PrismaService) {}
 
   //POST
-  async postRoom(username: string, room_name: string, id_channel: string) {
+  async postRoom(id_friend: string, room_name: string, id_channel: string) {
     const user = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     const channel = await this.prisma.channel.findUnique({
       where: {

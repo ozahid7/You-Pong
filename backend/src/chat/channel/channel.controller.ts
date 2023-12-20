@@ -76,12 +76,12 @@ export class ChannelController {
   //POST DIRECT
   @UseGuards(AuthGuard('jwt'))
   @Post('/direct/')
-  async postChannelDirect(@Req() req, @Query('username') username: string) {
+  async postChannelDirect(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelService.postChannelDirect(
         id_user,
-        username,
+        id_friend,
       );
       return result;
     } catch (error) {
@@ -92,12 +92,12 @@ export class ChannelController {
   //DELETE DIRECT
   @UseGuards(AuthGuard('jwt'))
   @Delete('/direct/')
-  async deleteChannelDirect(@Req() req, @Query('username') username: string) {
+  async deleteChannelDirect(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelService.deleteChannelDirect(
         id_user,
-        username,
+        id_friend,
       );
       return result;
     } catch (error) {
@@ -190,14 +190,14 @@ export class ChannelController {
   @Put('/kick/')
   async putChannel_kick(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.kickUser(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;
@@ -211,14 +211,14 @@ export class ChannelController {
   @Put('/admin/')
   async putChannel_admin(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.setAdmin(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;
@@ -232,14 +232,14 @@ export class ChannelController {
   @Put('/member/')
   async putChannel_member(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.setMember(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;
@@ -253,14 +253,14 @@ export class ChannelController {
   @Put('/ban/')
   async putChannel_ban(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.banMember(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;
@@ -274,14 +274,14 @@ export class ChannelController {
   @Put('/unban/')
   async putChannel_unban(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.unbanMember(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;
@@ -295,7 +295,7 @@ export class ChannelController {
   @Put('/mute/')
   async putChannel_mute(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Query('time') muteTime: number,
     @Req() req,
   ) {
@@ -303,7 +303,7 @@ export class ChannelController {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.muteMember(
         id_user,
-        username,
+        id_friend,
         id_channel,
         muteTime,
       );
@@ -318,14 +318,14 @@ export class ChannelController {
   @Put('/unmute/')
   async putChannel_unmute(
     @Query('id_channel') id_channel: string,
-    @Query('username') username: string,
+    @Query('id_friend') id_friend: string,
     @Req() req,
   ) {
     try {
       const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.unmuteMember(
         id_user,
-        username,
+        id_friend,
         id_channel,
       );
       return result;

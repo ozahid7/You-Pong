@@ -233,7 +233,7 @@ export class ChannelService {
   }
 
   //POST DIRECT
-  async postChannelDirect(id_user: string, username: string) {
+  async postChannelDirect(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id_user: id_user,
@@ -241,7 +241,7 @@ export class ChannelService {
     });
     const freind = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user || !freind)
@@ -316,7 +316,7 @@ export class ChannelService {
   }
 
   //DELETE DIRECT
-  async deleteChannelDirect(id_user: string, username: string) {
+  async deleteChannelDirect(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id_user: id_user,
@@ -324,7 +324,7 @@ export class ChannelService {
     });
     const freind = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user || !freind)
