@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { messageDto } from '../dto/message.create.dto';
-import { use } from 'passport';
 
 @Injectable()
 export class MessageService {
@@ -26,6 +24,11 @@ export class MessageService {
       },
       include: { users: true, bannedUsers: true },
     });
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        object: null,
+      };
     if (
       channel.bannedUsers.find((user) => user.id_user === id_user) ||
       channel.users.find((user) => user.id_user === id_user) === undefined
@@ -58,8 +61,20 @@ export class MessageService {
       const filtredUsers = await Promise.all(users.filter((user) => user));
       const messagesFiltered = await Promise.all(
         messages.map(async (message) => {
-          if (filtredUsers.find((user) => user.id_user === message.id_sender))
-            return { message };
+          if (
+            filtredUsers.find(
+              (user) => user && user.id_user === message.id_sender,
+            )
+          )
+            return {
+              id_message: message.id_message,
+              content: message.content,
+              created_at: message.created_at,
+              id_sender: message.id_sender,
+              name_room: message.name_room,
+              id_channel: message.id_channel,
+              user: message.user,
+            };
         }),
       );
       const result = messagesFiltered.filter((message) => message);

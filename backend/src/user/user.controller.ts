@@ -61,10 +61,10 @@ export class UserController {
   }
   //
   //DELETE
-  @Delete(':username')
-  async deleteUser(@Param('username') username: string) {
+  @Delete(':id_user')
+  async deleteUser(@Param('id_user') id_user: string) {
     try {
-      const result = await this.userService.deleteUser(username);
+      const result = await this.userService.deleteUser(id_user);
       return result;
     } catch (error) {
       throw new HttpException('Failed to delete users', 209);

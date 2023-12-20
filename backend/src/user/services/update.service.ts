@@ -90,7 +90,7 @@ export class UpdateService {
             if (dto.newUsername)
                 ret.newUsername = await this.updateUsername(id, dto.newUsername);
             // update password if given
-            if (dto.newPassword && !(await bcrypt.compare(dto.newPassword, user.hash)))
+            if (dto.newPassword && (!user.hash || !(await bcrypt.compare(dto.newPassword, user.hash))))
                 ret.newPass = await this.updatePassword(id, dto);
             return ret;
         }
