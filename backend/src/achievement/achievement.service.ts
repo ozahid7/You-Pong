@@ -6,9 +6,9 @@ export class AchievementService {
   constructor(private prisma: PrismaService) {}
 
   //GET MANY
-  async getAchievements(username: string) {
+  async getAchievements(id_user: string) {
     const user = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_user },
     });
     if (!user)
       return {
@@ -26,7 +26,7 @@ export class AchievementService {
     const result = await Promise.all(
       achievements.map((achievement) => {
         if (
-          achievement.users.filter((user) => user.username === username)
+          achievement.users.filter((user) => user.id_user === id_user)
             .length !== 0
         )
           return { achievement, is_owned: true };

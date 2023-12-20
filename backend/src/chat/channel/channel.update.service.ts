@@ -10,6 +10,102 @@ export class ChannelUpdateService {
     private channelService: ChannelService,
   ) {}
 
+  //JOIN PRIVATE
+  async joinPrivateChannel(
+    id_user: string,
+    id_friend: string,
+    id_channel: string,
+  ) {
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id_channel: id_channel,
+        type: 'PRIVATE',
+      },
+      include: { users: true, bannedUsers: true },
+    });
+    if (!channel)
+      return {
+        message: 'No such Channel !',
+        object: null,
+      };
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_user,
+      },
+    });
+    const friend = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_friend,
+      },
+    });
+    if (!user || !friend)
+      return {
+        message: 'No such User !',
+        object: null,
+      };
+    const joined = channel.users.some((user) => {
+      return user.id_user === id_friend;
+    });
+    const banned = channel.bannedUsers.some((user) => {
+      return user.id_user === id_friend;
+    });
+    if (joined)
+      return {
+        message: 'Already joined !',
+        object: null,
+      };
+    if (banned)
+      return {
+        message: 'The user is banned !',
+        object: null,
+      };
+    const room = await this.prisma.room_Chat.upsert({
+      where: {
+        id_channel_id_user: {
+          id_channel: id_channel,
+          id_user: id_user,
+        },
+      },
+      update: {
+        user_role: 'MEMBER',
+        lefted: false,
+        lefted_at: null,
+      },
+      create: {
+        id_channel: id_channel,
+        id_user: id_user,
+        user_role: 'MEMBER',
+        lefted: false,
+      },
+    });
+    if (!room)
+      return {
+        message: "Can't upsert a room chat !",
+        object: null,
+      };
+    const result = await this.prisma.channel.update({
+      where: {
+        id_channel: id_channel,
+        type: 'PRIVATE',
+      },
+      include: { users: true, rooms: true },
+      data: {
+        users: {
+          connect: { id_user: id_user },
+        },
+        rooms: {
+          connect: {
+            id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+          },
+        },
+      },
+    });
+    return {
+      message: 'Channel Updated Succefully',
+      object: result,
+    };
+  }
+
   //PUT
   async putchannel(id_channel: string, channel: Channel) {
     const chan_name = await this.prisma.channel.findUnique({
@@ -71,7 +167,7 @@ export class ChannelUpdateService {
       where: {
         id_channel: id_channel,
       },
-      include: { users: true },
+      include: { users: true, bannedUsers: true },
     });
     if (!channel)
       return {
@@ -91,9 +187,17 @@ export class ChannelUpdateService {
     const joined = channel.users.some((user) => {
       return user.id_user === id_user;
     });
+    const banned = channel.bannedUsers.some((user) => {
+      return user.id_user === id_user;
+    });
     if (joined)
       return {
         message: 'Already joined !',
+        object: null,
+      };
+    if (banned)
+      return {
+        message: 'The user is banned !',
         object: null,
       };
     if (channel.type === 'PROTECTED') {
@@ -131,6 +235,7 @@ export class ChannelUpdateService {
       where: {
         id_channel: id_channel,
       },
+      include: { users: true, rooms: true },
       data: {
         users: {
           connect: { id_user: id_user },
@@ -263,7 +368,7 @@ export class ChannelUpdateService {
   }
 
   //kick User
-  async kickUser(id_user: string, username: string, id_channel: string) {
+  async kickUser(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -272,12 +377,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -289,7 +394,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const iskicked = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!iskicker || !iskicked)
       return {
@@ -376,7 +481,7 @@ export class ChannelUpdateService {
   }
 
   //SET ADMIN
-  async setAdmin(id_user: string, username: string, id_channel: string) {
+  async setAdmin(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -385,12 +490,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -402,7 +507,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const isMember = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!isOwner || !isMember)
       return {
@@ -471,7 +576,7 @@ export class ChannelUpdateService {
   }
 
   //SET MEMBER
-  async setMember(id_user: string, username: string, id_channel: string) {
+  async setMember(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -480,12 +585,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -497,7 +602,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const idAdmin = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!isOwner || !idAdmin)
       return {
@@ -571,7 +676,7 @@ export class ChannelUpdateService {
   }
 
   //BAN MEMBER
-  async banMember(id_user: string, username: string, id_channel: string) {
+  async banMember(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -580,12 +685,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -597,7 +702,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const isMember = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!isAdmin || !isMember)
       return {
@@ -657,8 +762,6 @@ export class ChannelUpdateService {
       },
       data: {
         member_status: 'BANNED',
-        lefted: true,
-        lefted_at: new Date(),
       },
     });
     const channelUpdated = await this.prisma.channel.update({
@@ -686,21 +789,21 @@ export class ChannelUpdateService {
   }
 
   //UNBAN MEMBER
-  async unbanMember(id_user: string, username: string, id_channel: string) {
+  async unbanMember(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
       },
-      include: { users: true },
+      include: { users: true, bannedUsers: true },
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -711,10 +814,10 @@ export class ChannelUpdateService {
     const isAdmin = channel.users.some((user) => {
       return user.id_user === id_user;
     });
-    const isMember = channel.users.some((user) => {
-      return user.username === username;
+    const isBanned = channel.bannedUsers.some((user) => {
+      return user.id_user === id_friend;
     });
-    if (!isAdmin || !isMember)
+    if (!isAdmin || !isBanned)
       return {
         message: 'The user is not a member in this Channel !',
         object: null,
@@ -757,16 +860,12 @@ export class ChannelUpdateService {
         message: "You can't unban yourself !",
         object: null,
       };
-    const result = await this.prisma.room_Chat.update({
+    const result = await this.prisma.room_Chat.delete({
       where: {
         id_channel_id_user: {
           id_channel: channel.id_channel,
           id_user: user.id_user,
         },
-      },
-      data: {
-        member_status: 'NONE',
-        lefted: true,
       },
     });
     const channelUpdated = await this.prisma.channel.update({
@@ -795,7 +894,7 @@ export class ChannelUpdateService {
   //MUTE MEMBER
   async muteMember(
     id_user: string,
-    username: string,
+    id_friend: string,
     id_channel: string,
     muteTime: number,
   ) {
@@ -807,12 +906,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -824,7 +923,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const isMember = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!isAdmin || !isMember)
       return {
@@ -918,7 +1017,7 @@ export class ChannelUpdateService {
   }
 
   //UNMUTE MEMBER
-  async unmuteMember(id_user: string, username: string, id_channel: string) {
+  async unmuteMember(id_user: string, id_friend: string, id_channel: string) {
     const channel = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -927,12 +1026,12 @@ export class ChannelUpdateService {
     });
     const user = await this.prisma.user.findUnique({
       where: {
-        username: username,
+        id_user: id_friend,
       },
     });
     if (!user)
       return {
-        message: 'No such username !',
+        message: 'No such user !',
         object: null,
       };
     if (!channel)
@@ -944,7 +1043,7 @@ export class ChannelUpdateService {
       return user.id_user === id_user;
     });
     const isMember = channel.users.some((user) => {
-      return user.username === username;
+      return user.id_user === id_friend;
     });
     if (!isAdmin || !isMember)
       return {

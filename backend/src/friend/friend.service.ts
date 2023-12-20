@@ -116,11 +116,12 @@ export class friendService {
     );
     const filtredUsers = users.filter((user) => user);
     const result = filtredUsers.map((user) => {
-      return {
-        username: user.username,
-        avatar: user.avatar,
-        status: user.status,
-      };
+      if (user)
+        return {
+          username: user.username,
+          avatar: user.avatar,
+          status: user.status,
+        };
     });
     if (!result)
       return {
@@ -134,12 +135,12 @@ export class friendService {
   }
 
   //POST
-  async postFriend(id_user: string, username: string) {
+  async postFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {
@@ -184,12 +185,12 @@ export class friendService {
   }
 
   //PUT ACCEPTED
-  async acceptFriend(id_user: string, username: string) {
+  async acceptFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {
@@ -240,12 +241,12 @@ export class friendService {
   }
 
   //DELETE REFUSED
-  async refuseFriend(id_user: string, username: string) {
+  async refuseFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {
@@ -289,12 +290,12 @@ export class friendService {
   }
 
   //PUT BLOCKED
-  async blockFriend(id_user: string, username: string) {
+  async blockFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {
@@ -348,7 +349,7 @@ export class friendService {
     });
     const deleteDirect = await this.channel.deleteChannelDirect(
       id_user,
-      friend.username,
+      friend.id_user,
     );
     if (!result || !updateUser || !deleteDirect)
       return {
@@ -362,12 +363,12 @@ export class friendService {
   }
 
   //PUT UNBLOCK
-  async unblockFriend(id_user: string, username: string) {
+  async unblockFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {
@@ -418,12 +419,12 @@ export class friendService {
   }
 
   //DELETE
-  async deleteFriend(id_user: string, username: string) {
+  async deleteFriend(id_user: string, id_friend: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
     });
     const friend = await this.prisma.user.findUnique({
-      where: { username: username },
+      where: { id_user: id_friend },
     });
     if (!user || !friend || user.id_user === friend.id_user)
       return {

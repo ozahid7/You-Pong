@@ -45,10 +45,10 @@ export class friendController {
   //POST
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  async postFriend(@Req() req, @Query('username') username: string) {
+  async postFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.postFriend(id_user, username);
+      const result = await this.friendService.postFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to create friendship', 444);
@@ -58,10 +58,10 @@ export class friendController {
   //PUT ACCEPTED
   @UseGuards(AuthGuard('jwt'))
   @Put('/accept/')
-  async acceptFriend(@Req() req, @Query('username') username: string) {
+  async acceptFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.acceptFriend(id_user, username);
+      const result = await this.friendService.acceptFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to accept friend', 444);
@@ -71,10 +71,10 @@ export class friendController {
   //PUT REFUSED
   @UseGuards(AuthGuard('jwt'))
   @Put('/refuse/')
-  async refuseFriend(@Req() req, @Query('username') username: string) {
+  async refuseFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.refuseFriend(id_user, username);
+      const result = await this.friendService.refuseFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to refuse friend', 444);
@@ -84,10 +84,10 @@ export class friendController {
   //PUT BLOCK
   @UseGuards(AuthGuard('jwt'))
   @Put('/block/')
-  async blockFriend(@Req() req, @Query('username') username: string) {
+  async blockFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.blockFriend(id_user, username);
+      const result = await this.friendService.blockFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to block friend', 444);
@@ -97,10 +97,10 @@ export class friendController {
   //PUT UNBLOCK
   @UseGuards(AuthGuard('jwt'))
   @Put('/unblock/')
-  async unblockFriend(@Req() req, @Query('username') username: string) {
+  async unblockFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.unblockFriend(id_user, username);
+      const result = await this.friendService.unblockFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to unblock friend', 444);
@@ -110,10 +110,10 @@ export class friendController {
   //DELETE
   @UseGuards(AuthGuard('jwt'))
   @Delete()
-  async deleteFriend(@Req() req, @Query('username') username: string) {
+  async deleteFriend(@Req() req, @Query('id_friend') id_friend: string) {
     try {
       const id_user: string = req.user.sub;
-      const result = await this.friendService.deleteFriend(id_user, username);
+      const result = await this.friendService.deleteFriend(id_user, id_friend);
       return result;
     } catch (error) {
       throw new HttpException('Failed to delete friend', 444);

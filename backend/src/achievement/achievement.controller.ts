@@ -13,9 +13,9 @@ export class AchievementController {
   constructor(private achService: AchievementService) {}
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getAchievements(@Query('username') username: string) {
+  async getAchievements(@Query('id_user') id_user: string) {
     try {
-      return await this.achService.getAchievements(username);
+      return await this.achService.getAchievements(id_user);
     } catch (error) {
       throw new HttpException('Failed to get achievements', 455);
     }
