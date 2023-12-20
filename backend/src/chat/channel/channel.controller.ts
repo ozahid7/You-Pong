@@ -169,6 +169,27 @@ export class ChannelController {
     }
   }
 
+  //PUT JOIN PRIVATE
+  @UseGuards(AuthGuard('jwt'))
+  @Put('/joinPrivate/')
+  async putChannel_joinPrivate(
+    @Query('id_channel') id_channel: string,
+    @Query('id_friend') id_friend: string,
+    @Req() req,
+  ) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelUpdateService.joinPrivateChannel(
+        id_user,
+        id_friend,
+        id_channel,
+      );
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to join a private channel', 444);
+    }
+  }
+
   //PUT LEAVE
   @UseGuards(AuthGuard('jwt'))
   @Put('/leave/')
