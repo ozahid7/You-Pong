@@ -77,7 +77,9 @@ export class MessageService {
             };
         }),
       );
-      const result = messagesFiltered.filter((message) => message);
+      const result = await Promise.all(
+        messagesFiltered.filter((message) => message),
+      );
       if (result.length !== 0)
         return {
           message: 'Messages founded successfully',

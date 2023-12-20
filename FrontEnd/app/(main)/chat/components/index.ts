@@ -14,22 +14,26 @@ import MyButton from "./MyButton";
 import GroupsInput from "./GroupsInput";
 import JoinDropDown from "./JoinDropDown";
 import MuteDropDown from "./MuteDropDown";
+import ChatDialog from "./ChatDialog";
+import MyMessage from "./MyMessage";
 
 export {
-    Chat,
-    ChatDropdown,
-    ChatEdit,
-    GroupDropdown,
-    GroupsChat,
-    GroupsModal,
-    InputGroup,
-    InputGroupPass,
-    JoinModal,
-    MembersEdit,
-    MiniChat,
-    SearchChat,
-    MyButton,
-    GroupsInput,
-    JoinDropDown,
-    MuteDropDown
-}
+  Chat,
+  ChatDropdown,
+  ChatEdit,
+  GroupDropdown,
+  GroupsChat,
+  GroupsModal,
+  InputGroup,
+  InputGroupPass,
+  JoinModal,
+  MembersEdit,
+  MiniChat,
+  SearchChat,
+  MyButton,
+  GroupsInput,
+  JoinDropDown,
+  MuteDropDown,
+  ChatDialog,
+  MyMessage,
+};

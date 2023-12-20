@@ -131,3 +131,13 @@ export interface Member {
   user_role: "ADMIN" | "MEMBER" | "OWNER";
   member_status: "MUTED" | "BANNED" | "NONE";
 }
+
+export interface Message {
+  id_message: String;
+	content: String;
+	created_at: any;
+	id_sender: String
+	name_room: String;
+	id_channel: String;
+  user: User;
+}
