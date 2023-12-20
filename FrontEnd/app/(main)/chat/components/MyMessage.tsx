@@ -9,13 +9,14 @@ interface Props {
 }
 
 const MyMessage = ({ type, message }: Props) => {
-  const formatPrismaStudioDate = (createdAt: string): string => {
-    const date = new Date(createdAt);
+  // format date from prisma to normal us date
+  const PrismaDateFormat = (created_at: string): string => {
+    const date = new Date(created_at);
     const options = {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
       minute: "numeric",
+      hour: "numeric",
+      day: "numeric",
+      month: "short",
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
@@ -68,7 +69,9 @@ const MyMessage = ({ type, message }: Props) => {
           </div>
           <div className="flex chat-header items-center gap-1">
             <div className="w-fit h-fit">{message.user.username}</div>
-            <time className="text-xs opacity-50">{formatPrismaStudioDate(message.created_at)}</time>
+            <time className="text-xs opacity-50">
+              {PrismaDateFormat(message.created_at)}
+            </time>
           </div>
           <div className="dropdown dropdown-hover flex items-end justify-end w-full h-full flex-col">
             <div
