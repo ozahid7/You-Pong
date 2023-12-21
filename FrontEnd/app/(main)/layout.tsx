@@ -11,6 +11,7 @@ interface lyoutProps {
 }
 
 function RootLayout({ children }: lyoutProps) {
+  
   return (
     <UserContextProvider>
       <main className="flex h-screen w-full background">

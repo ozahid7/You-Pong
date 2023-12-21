@@ -10,12 +10,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { MyContext, useUser } from "@/providers/UserContextProvider";
 import ProfileSettings from "./ProfileSettings";
+import { getMe } from "@/api/getHero";
 
 const page = () => {
-    const user = useUser();
+    const user = getMe(true);
     const userQuery = useQuery({ queryKey: ["user"] });
     const queryClient = useQueryClient();
-    const { tfaStatus } = user.userData;
+    const { tfaStatus } = user.data;
 
     const [showTwoFactor, setTwoFactor] = useState(false);
     const [showProfileSetting, setShowProfileSetting] = useState(false);
@@ -130,6 +131,7 @@ const page = () => {
             <ProfileSettings
                 isOpen={showProfileSetting}
                 setIsOpen={setShowProfileSetting}
+                closeModal={() => {}}
             />
         </div>
     );

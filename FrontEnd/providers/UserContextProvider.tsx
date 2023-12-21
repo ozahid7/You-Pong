@@ -16,6 +16,8 @@ import {
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 import UseQueryProvider from "./UseQueryProvider";
+import { getMe } from "@/api/getHero";
+import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
 
 interface myContextProps {
   userData: UserInfo;
@@ -34,27 +36,24 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [userData, setUserData] = useState(undefined);
   const [tfaStatus, setTfaStatus] = useState(false);
 
-  const getHero = async () => {
-    try {
-      const response = await useAxios<UserData>("get", endPoints.gethero);
-      console.log("hero response = ", response.userInfo);
-      setUserData(response.userInfo);
-      setTfaStatus(response.userInfo.tfaStatus);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("isLoged", "true");
-        localStorage.getItem("isLoged") === "true"
-          ? setIsLoged(true)
-          : setIsLoged(false);
-      }
-      return response.userInfo;
-    } catch (error) {
-      setchecked(true);
-      localStorage.removeItem("isLoged");
-      console.log("get hero error = :", error);
-      redirect(myRoutes.root);
-    }
-    return null;
-  };
+  const me = getMe(tfaVerified);
+
+  useEffect(() => {
+		if (me.data) {
+			setUserData(me.data);
+			setTfaStatus(me.data.tfaStatus);
+			if (typeof window !== "undefined") {
+				localStorage.setItem("isLoged", "true");
+				localStorage.getItem("isLoged") === "true"
+					? setIsLoged(true)
+					: setIsLoged(false);
+			}
+		} else if (me.isError) {
+			setchecked(true);
+			localStorage.removeItem("isLoged");
+			redirect(myRoutes.root);
+		}
+  }, [me.isSuccess, me.isError]);
 
   const getTfa = async () => {
     try {
@@ -73,35 +72,39 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     else setTfaVerified(true);
   }, []);
 
-  const heroQuery = useQuery({
-    queryKey: ["user"],
-    queryFn: getHero,
-    enabled: tfaVerified,
-  });
-
   useLayoutEffect(() => {
     if (!loged && checked) {
       redirect(myRoutes.root);
     }
   }, [isLoged, checked]);
+  const [isOpen, setIsOpen] = useState(true);
+  useEffect(() => {}, [isOpen]);
 
   if (tfaStatus && !tfaVerified && !loged)
-    return (
-      <TwoFactor
-        isEnabled={true}
-        isOpen={true}
-        closemodal={() => {}}
-        setValid={setTfaVerified}
-        setIsLoged={setIsLoged}
-      />
-    );
-  else if (heroQuery.isLoading) return <Loader />;
-  else if (heroQuery.isSuccess && isLoged && loged && tfaVerified)
-    return (
-      <MyContext.Provider value={{ userData, isLoged }}>
-        {children}
-      </MyContext.Provider>
-    );
+		return (
+			<TwoFactor
+				isEnabled={true}
+				isOpen={true}
+				closemodal={() => {}}
+				setValid={setTfaVerified}
+				setIsLoged={setIsLoged}
+			/>
+		);
+  else if (me.isLoading) return <Loader />;
+  else if (me.data && isLoged && loged && tfaVerified && isOpen)
+		return (
+			<ProfileSettings
+				isOpen={isOpen}
+				setIsOpen={() => {}}
+				closeModal={setIsOpen}
+			/>
+		);
+  else if (me.data && isLoged && loged && tfaVerified)
+		return (
+			<MyContext.Provider value={{ userData, isLoged }}>
+				{children}
+			</MyContext.Provider>
+		);
 };
 
 export const useUser = () => {

@@ -5,18 +5,10 @@ import { PieChart } from "react-minimal-pie-chart";
 import { MyContext, useUser } from "@/providers/UserContextProvider";
 import { UserToShow } from "@/types/Api";
 
-const OverviewCard = ({ otheruser }: { otheruser: UserToShow }) => {
-    const user = useUser();
-    let wins = user.userData.wins;
-    let loses = user.userData.loses;
-
-    if (otheruser !== undefined && otheruser) {
-        wins = otheruser.wins;
-        loses = otheruser.losts;
-    }
+const OverviewCard = (props: {loses: number, wins: number}) => {
 
     let result: number;
-    result = wins + loses != 0 ? Math.round((wins * 100) / (wins + loses)) : 50;
+    result = props.wins + props.loses != 0 ? Math.round((props.wins * 100) / (props.wins + props.loses)) : 50;
 
     return (
         <div className="flex z-0 justify-center w-[90%] md:w-full max-w-[600px] overflow-hidden min-h-[140px] h:min-h-[200px] lg:min-h-[180px] h-[20%] md:h-[28%] h:h-[24%]">
@@ -30,8 +22,8 @@ const OverviewCard = ({ otheruser }: { otheruser: UserToShow }) => {
                             <MiniBanner
                                 isGreen={false}
                                 className="h-[30%] h:w-full justify-around"
-                                name="Lose"
-                                value={loses.toString()}
+                                name="Loses"
+                                value={props.loses.toString()}
                                 valueStyle="md:text-xl"
                                 nameStyle="md:text-2xl"
                             />
@@ -39,7 +31,7 @@ const OverviewCard = ({ otheruser }: { otheruser: UserToShow }) => {
                                 isGreen={true}
                                 className="h-[30%] h:w-full justify-around"
                                 name="Wins"
-                                value={wins.toString()}
+                                value={props.wins.toString()}
                                 valueStyle="md:text-xl"
                                 nameStyle="md:text-2xl"
                             />
@@ -62,13 +54,13 @@ const OverviewCard = ({ otheruser }: { otheruser: UserToShow }) => {
                                     animate={true}
                                     data={[
                                         {
-                                            title: "loses",
-                                            value: loses || 1,
+                                            title: "props.loses",
+                                            value: props.loses || 1,
                                             color: "#EB6440",
                                         },
                                         {
-                                            title: "wins",
-                                            value: wins || 1,
+                                            title: "props.wins",
+                                            value: props.wins || 1,
                                             color: "#497174",
                                         },
                                     ]}
