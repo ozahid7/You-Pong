@@ -37,14 +37,29 @@ const ChatDialog = ({ channel }: Props) => {
   );
 
   const { data: Messages } = useSWR<Message[]>("/Messages", fetchData_Messages);
+  const idUser = MainUser?.uid;
+  console.log(idUser);
 
   // Sockets
-  
   const socket = io("http://localhost:4000/chat", {
-    extraHeaders: {
-      id_user: `${MainUser?.uid}`,
+    transports: ["websocket"],
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          "Sec-WebSocket-Version": "13",
+          "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+          "Sec-WebSocket-Extensions":
+            "permessage-deflate; client_max_window_bits",
+          id_user: `${MainUser?.uid}`,
+        },
+      },
     },
   });
+  // const socket = io("http://localhost:4000/chat", {
+  //   extraHeaders: {
+  //     id_user: `${MainUser?.uid}`,
+  //   },
+  // });
 
   return (
     <Fragment>
