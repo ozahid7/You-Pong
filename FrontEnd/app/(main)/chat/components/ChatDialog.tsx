@@ -1,8 +1,10 @@
+"use client";
 import { Channel, Message, User_Hero } from "@/types";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import useSWR from "swr";
 import { MyMessage } from ".";
 import { getMainUser, getMessages } from "../data/api";
+import { io } from "socket.io-client";
 
 interface Props {
   channel: Channel;
@@ -36,6 +38,14 @@ const ChatDialog = ({ channel }: Props) => {
 
   const { data: Messages } = useSWR<Message[]>("/Messages", fetchData_Messages);
 
+  // Sockets
+  
+  const socket = io("http://localhost:4000/chat", {
+    extraHeaders: {
+      id_user: `${MainUser?.uid}`,
+    },
+  });
+
   return (
     <Fragment>
       <div className="flex flex-col w-full h-full overflow-auto my_scroll_green ">
@@ -48,6 +58,7 @@ const ChatDialog = ({ channel }: Props) => {
               <MyMessage
                 type={type}
                 message={message}
+                key={message.user.id_user}
               />
             );
           })}

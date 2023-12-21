@@ -46,12 +46,12 @@ export const leaveChannel = async (id_channel: string) => {
 
 export const MuteMember = async (
   id_channel: string | undefined,
-  id_user: string,
+  id_friend: string,
   time: number
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/mute/?id_channel=${id_channel}&id_user=${id_user}&time=${time}`
+      `http://localhost:4000/chat/channel/mute/?id_channel=${id_channel}&id_friend=${id_friend}&time=${time}`
     );
     return response.data;
   } catch (error) {
@@ -63,11 +63,11 @@ export const MuteMember = async (
 
 export const UnMuteMember = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/unmute/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/unmute/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -79,11 +79,11 @@ export const UnMuteMember = async (
 
 export const KickMember = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/kick/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/kick/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -95,11 +95,11 @@ export const KickMember = async (
 
 export const BanMember = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/ban/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/ban/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -111,11 +111,11 @@ export const BanMember = async (
 
 export const UnBanMember = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/unban/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/unban/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -127,11 +127,11 @@ export const UnBanMember = async (
 
 export const SetAdmin = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/admin/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/admin/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -143,11 +143,11 @@ export const SetAdmin = async (
 
 export const SetMember = async (
   id_channel: string | undefined,
-  id_user: string
+  id_friend: string
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/chat/channel/member/?id_channel=${id_channel}&id_user=${id_user}`
+      `http://localhost:4000/chat/channel/member/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {

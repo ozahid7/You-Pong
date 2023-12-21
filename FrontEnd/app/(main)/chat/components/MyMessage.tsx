@@ -13,83 +13,78 @@ const MyMessage = ({ type, message }: Props) => {
   const PrismaDateFormat = (created_at: string): string => {
     const date = new Date(created_at);
     const options = {
-      minute: "numeric",
-      hour: "numeric",
-      day: "numeric",
-      month: "short",
+      minute: "numeric" || "",
+      hour: "numeric" || "",
+      day: "numeric" || "",
+      month: "short" || "",
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
   return (
     <Fragment>
       {type === "sender" ? (
-        <div className="chat chat-start p-1">
-          <div className="chat-image avatar">
-            <div className="w-10 rounded-full">
-              <Image
-                width={40}
-                height={40}
-                alt="Sender's avatar"
-                src={message.user.avatar || avatar}
-              />
+        <Fragment>
+          <div className="chat chat-start p-1">
+            <div className="chat-image avatar">
+              <div className="w-10 rounded-full">
+                <Image
+                  width={40}
+                  height={40}
+                  alt="Sender's avatar"
+                  src={message.user.avatar || avatar}
+                />
+              </div>
+            </div>
+            <div className="flex chat-header items-center gap-1">
+              <div className="w-fit h-fit">{message.user.username}</div>
+              <time className="text-xs opacity-50">{message.created_at}</time>
+            </div>
+            <div className="w-full h-full dropdown dropdown-hover">
+              <div
+                role="button"
+                tabIndex={0}
+                data-theme="mytheme"
+                className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+              >
+                {message.content}
+              </div>
+              <ul
+                tabIndex={0}
+                className="chat-footer opacity-50 dropdown-content z-[1] menu p-2 bg-base-100 rounded-box w-fit"
+              >
+                <li>Delivered</li>
+              </ul>
             </div>
           </div>
-          <div className="flex chat-header items-center gap-1">
-            <div className="w-fit h-fit">{message.user.username}</div>
-            <time className="text-xs opacity-50">{message.created_at}</time>
-          </div>
-          <div className="w-full h-full dropdown dropdown-hover">
-            <div
-              role="button"
-              tabIndex={0}
-              data-theme="mytheme"
-              className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
-            >
-              {message.content}
-            </div>
-            <ul
-              tabIndex={0}
-              className="chat-footer opacity-50 dropdown-content z-[1] menu p-2 bg-base-100 rounded-box w-fit"
-            >
-              <li>Delivered</li>
-            </ul>
-          </div>
-        </div>
+        </Fragment>
       ) : type === "main" ? (
-        <div className="chat chat-end p-1 ">
-          <div className="chat-image avatar">
-            <div className="w-10 rounded-full">
-              <Image
-                width={40}
-                height={40}
-                alt="Main user's avatar"
-                src={message.user.avatar || avatar}
-              />
+        <Fragment>
+          <div className="chat chat-end p-1 ">
+            <div className="chat-image avatar">
+              <div className="w-10 rounded-full">
+                <Image
+                  width={40}
+                  height={40}
+                  alt="Main user's avatar"
+                  src={message.user.avatar || avatar}
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex chat-header items-center gap-1">
-            <div className="w-fit h-fit">{message.user.username}</div>
-            <time className="text-xs opacity-50">
-              {PrismaDateFormat(message.created_at)}
-            </time>
-          </div>
-          <div className="dropdown dropdown-hover flex items-end justify-end w-full h-full flex-col">
+            <div className="flex chat-header items-center gap-1">
+              <div className="w-full h-fit">{message.user.username}</div>
+            </div>
             <div
               role="button"
-              tabIndex={0}
               data-theme="mytheme"
               className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
             >
               {message.content}
             </div>
-            <ul
-              tabIndex={0}
-              className="chat-footer opacity-50 dropdown-content z-[1] menu p-2 bg-base-100 rounded-box w-fit"
-            >
-              <li>Seen at 12:46</li>
-            </ul>
+            <time className="text-xs opacity-50">
+              {PrismaDateFormat(message.created_at)}
+            </time>
           </div>
-        </div>
+        </Fragment>
       ) : (
         ""
       )}

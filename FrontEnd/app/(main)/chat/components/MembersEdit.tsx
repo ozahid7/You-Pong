@@ -71,7 +71,7 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
         placement="center"
         onOpenChange={onOpenChange}
         onClose={onClose}
-        size="2xl"
+        size="3xl"
         backdrop="blur"
         className="w-full"
       >

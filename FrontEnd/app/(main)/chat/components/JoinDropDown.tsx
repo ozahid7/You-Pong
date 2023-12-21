@@ -42,21 +42,21 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
   if (error) return <div>useSWR: Error found, Fetching data failed!</div>;
 
   const HandleKick = () => {
-    KickMember(channel?.id_channel, user.user.username);
+    KickMember(channel?.id_channel, user.user.id_user);
     mutate(fetchData_getMembers);
   };
 
   const HandleBan = () => {
     user.member_status !== "BANNED"
-      ? BanMember(channel?.id_channel, user.user.username)
-      : UnBanMember(channel?.id_channel, user.user.username);
+      ? BanMember(channel?.id_channel, user.user.id_user)
+      : UnBanMember(channel?.id_channel, user.user.id_user);
     mutate(fetchData_getMembers);
   };
 
   const HandleAdmin = () => {
     user.user_role === "MEMBER"
-      ? SetAdmin(channel?.id_channel, user.user.username)
-      : SetMember(channel?.id_channel, user.user.username);
+      ? SetAdmin(channel?.id_channel, user.user.id_user)
+      : SetMember(channel?.id_channel, user.user.id_user);
     mutate(fetchData_getMembers);
   };
   return (
