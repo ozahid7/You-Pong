@@ -1,13 +1,11 @@
 "use client";
 
 import { MiniBanner, MyCard } from "@/components";
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { UserToShow } from "@/types/Api";
-import { useUser } from "@/providers/UserContextProvider";
 import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser } from "@/api/friendShip";

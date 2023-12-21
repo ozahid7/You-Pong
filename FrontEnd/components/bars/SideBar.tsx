@@ -13,7 +13,7 @@ import {
 	LuLogOut,
 } from "react-icons/lu";
 import { QueryClient } from "@tanstack/react-query";
-import { getMe } from "@/api/getHero";
+import { useUser } from "@/api/getHero";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
 	const path = usePathname();
@@ -57,7 +57,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 
 const SideBar = () => {
 	const router = useRouter();
-	const user = getMe(true);
+	const user = useUser(true);
 	const { username, avatar } = user.data;
 
 	const handleLogout = async () => {

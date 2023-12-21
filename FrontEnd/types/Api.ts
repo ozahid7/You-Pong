@@ -93,6 +93,7 @@ export const endPoints = {
 export type user = {
 	avatar: string;
 	username: string;
+	id_user: string;
 	status: string;
 };
 export type FriendArr = {

@@ -44,7 +44,7 @@ export class friendService {
         if (id === id_user) id = friend.id_friend;
         return await this.prisma.user.findUnique({
           where: { id_user: id },
-          select: { username: true, avatar: true, status: true },
+          select: { id_user: true, username: true, avatar: true, status: true },
         });
       }),
     );
@@ -54,7 +54,7 @@ export class friendService {
         if (id === id_user) id = friend.id_friend;
         return await this.prisma.user.findUnique({
           where: { id_user: id },
-          select: { username: true, avatar: true, status: true },
+          select: { id_user: true, username: true, avatar: true, status: true },
         });
       }),
     );
@@ -65,7 +65,7 @@ export class friendService {
 
         return await this.prisma.user.findUnique({
           where: { id_user: id },
-          select: { username: true, avatar: true, status: true },
+          select: { id_user: true, username: true, avatar: true, status: true },
         });
       }),
     );
@@ -118,6 +118,7 @@ export class friendService {
     const result = filtredUsers.map((user) => {
       if (user)
         return {
+          uid: user.id_user,
           username: user.username,
           avatar: user.avatar,
           status: user.status,

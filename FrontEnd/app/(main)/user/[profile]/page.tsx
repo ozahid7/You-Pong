@@ -8,7 +8,7 @@ import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import ProfileSettings from "../../settings/ProfileSettings";
-import { getMe } from "@/api/getHero";
+import { useUser } from "@/api/getHero";
 
 interface pageProps {
 	params: { profile: string };
@@ -16,7 +16,7 @@ interface pageProps {
 
 const page = ({ params }: pageProps) => {
 	const { data, isLoading, isFetching } = useOtherUser(params.profile);
-	const user = getMe(true)
+	const user = useUser(true);
 	const isMe = !data || data === undefined ? true : false;
 	const toShow = !isMe ? data : user.data;
 	const {
@@ -33,7 +33,7 @@ const page = ({ params }: pageProps) => {
 		createdAt,
 		updatedAt,
 	} = toShow;
-	 if (isLoading || isFetching) return <Loader />;
+	if (isLoading || isFetching) return <Loader />;
 	else
 		return (
 			<div className="w-full 2xl:w-[92%] xl:min-h-[90vh] pb-24 h-auto  flex flex-col xl:flex-row">

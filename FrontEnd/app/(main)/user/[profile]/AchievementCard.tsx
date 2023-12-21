@@ -2,9 +2,7 @@
 import { useAchiv } from "@/api/useAchiv";
 import { Acheivement, MyCard } from "@/components";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { MyContext, useUser } from "@/providers/UserContextProvider";
-import { Achievement, UserToShow } from "@/types/Api";
-import React, { useContext } from "react";
+import { Achievement } from "@/types/Api";
 import { Tooltip } from "react-tooltip";
 
 const AchievementCard = (props: { uid: string }) => {

@@ -1,22 +1,15 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import Image from "next/image";
-import { LuSearch, LuBell } from "react-icons/lu";
+import React from "react";
 import { FiChevronDown } from "react-icons/fi";
-import { AnimatedText, MyDropdown } from "..";
+import { MyDropdown } from "..";
 import SearchBar from "./SearchBar";
-import { useQuery } from "@tanstack/react-query";
-import { friendsEndPoint, searchBarReturn, searchUsers } from "@/types/Api";
-import { useAxios } from "@/utils";
 import { myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
-import { MyContext, useUser } from "@/providers/UserContextProvider";
 import { searchusers } from "@/api/friendShip";
-import Loader from "../tools/Loader";
-import { getMe } from "@/api/getHero";
+import { useUser } from "@/api/getHero";
 
 const NavBar = () => {
-	const user = getMe(true);
+	const user = useUser(true);
 	const router = useRouter();
 	const { username, level, avatar } = user.data;
 	const isMorethan: boolean = username.length > 7 ? true : false;

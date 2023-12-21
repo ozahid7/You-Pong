@@ -1,7 +1,7 @@
 import { achievementReturn, endPoints } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "./getHero";
+import { useUser } from "./getHero";
 
 export const useAchiv = (uid: string) => {
 	const getAchiv = async () => {

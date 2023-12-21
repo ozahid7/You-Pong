@@ -2,19 +2,16 @@
 import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
 
-import React, { useContext, useEffect, useState } from "react";
-import { baseURL, useAxios } from "@/utils";
+import React, { useEffect, useState } from "react";
+import {  useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
-import axios from "axios";
 import { setFile } from "../chat/data/api";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { useUser } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import Loader from "@/components/tools/Loader";
-import { useAchiv } from "@/api/useAchiv";
-import { getMe } from "@/api/getHero";
+import { useUser } from "@/api/getHero";
+import axios from "axios";
 
 interface ProfileSettingsProps {
 	isOpen: boolean;
@@ -27,7 +24,7 @@ const ProfileSettings = ({
 	setIsOpen,
 	closeModal,
 }: ProfileSettingsProps) => {
-	const user = getMe(true);
+	const user = useUser(true);
 	const { username, avatar, isIntra } = user.data;
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -35,7 +32,7 @@ const ProfileSettings = ({
 	const [currentPass, setCurrentPass] = useState("");
 	const [newPass, setNewPass] = useState("");
 	const [selectedFile, setSelectedFile] = useState(avatar);
-	const [file, setfile] = useState<any>();
+	const [file, setfile] = useState<File>();
 	const [confirmPass, setConfirmPass] = useState("");
 	const [submit, setSubmit] = useState(false);
 	const [invalidUser, setInvalidUser] = useState(
@@ -48,22 +45,25 @@ const ProfileSettings = ({
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files![0];
-		if (file) {
+		const fil = e.target.files![0];
+		if (fil) {
 			const reader = new FileReader();
 			reader.onload = (e) => {
 				setSelectedFile(e.target?.result as string);
 			};
-			reader.readAsDataURL(file);
-			setfile(file);
+			reader.readAsDataURL(fil);
+			setfile(fil);
 		}
 	};
 
 	const UpdateInfos = async () => {
 		setLoder(true);
-		if (selectedFile != avatar) photo = await setFile(file);
+		console.log("file = ", file);
+		photo = await setFile(file).then(() => {
+			console.log('photo = ', photo);
+		})
 		const toSend = {
-			newUsername: userName,
+			newUsername: userName.replaceAll(' ', ''),
 			password: currentPass,
 			newPassword: newPass,
 			newAvatar: photo,

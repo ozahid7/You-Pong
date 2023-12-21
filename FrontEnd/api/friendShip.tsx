@@ -10,9 +10,9 @@ export const blockuser = (uid: string, friends: any, setInvalid: any) => {
 		try {
 			const response = await useAxios(
 				"put",
-				friendsEndPoint.block + "?id_user=" + uid
+				friendsEndPoint.block + "?id_friend=" + uid
 			);
-			console.log("response... = ", response);
+			console.log("block user response = ", response);
 			if (friends !== undefined) friends.refetch();
 			if (setInvalid !== undefined) setInvalid(true);
 			search.refetch();
@@ -46,7 +46,7 @@ export const adduser = (uid: string, friends: any) => {
 		try {
 			const response = await useAxios(
 				"post",
-				friendsEndPoint.add + "?id_user=" + uid
+				friendsEndPoint.add + "?id_friend=" + uid
 			);
 			console.log("add user response = ", response);
 			friends.refetch();
@@ -63,7 +63,7 @@ export const removeuser = (uid: string, friends: any) => {
 		try {
 			const response = await useAxios(
 				"put",
-				friendsEndPoint.decline + "?id_user=" + uid
+				friendsEndPoint.decline + "?id_friend=" + uid
 			);
 			console.log("remove user response = ", response);
 			friends.refetch();
@@ -82,7 +82,7 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 		try {
 			const response = await useAxios(
 				"put",
-				friendsEndPoint.unblock + "?id_user=" + uid
+				friendsEndPoint.unblock + "?id_friend=" + uid
 			);
 			setInvalid(true);
 			console.log("unblock response... = ", response);
@@ -100,7 +100,7 @@ export const acceptuser = (uid: string, setInvalid: any) => {
 		try {
 			const response = await useAxios(
 				"put",
-				friendsEndPoint.accept + "?id_user=" + uid
+				friendsEndPoint.accept + "?id_friend=" + uid
 			);
 			console.log("accept user response = ", response);
 			setInvalid(true);
@@ -117,7 +117,7 @@ export const declineuser = (uid: string, setInvalid: any) => {
 		try {
 			const response = await useAxios(
 				"put",
-				friendsEndPoint.decline + "?id_user=" + uid
+				friendsEndPoint.decline + "?id_friend=" + uid
 			);
 			console.log("accept user response = ", response);
 			setInvalid(true);
@@ -138,7 +138,7 @@ export const todirect = (uid: string) => {
 		try {
 			const response = await useAxios(
 				"post",
-				chatEndPoint.direct + "?id_user=" + uid
+				chatEndPoint.direct + "?id_friend=" + uid
 			);
 			console.log("todirect response = ", response);
 			router.push(myRoutes.chat + "/" + uid);
