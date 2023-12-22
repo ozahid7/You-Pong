@@ -4,7 +4,6 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 @Injectable()
 export class UploadService {
   async uploadFile(file: Express.Multer.File | null) {
-    let avatar: string = '';
     let path = `./DefaultImages/groups.png`;
     let filename = `groups.png`;
     if (file && file !== undefined) {
@@ -18,14 +17,13 @@ export class UploadService {
       if (!existsSync('./DefaultImages')) {
         mkdirSync('./DefaultImages');
       }
-      avatar = `http://localhost:4000/file/${filename}`;
       if (existsSync(path)) {
-        return avatar;
+        return `http://localhost:4000/file/${filename}`;
       }
     }
     const fileStream = createWriteStream(path);
-    if (file) await fileStream.write(file.buffer);
+    if (file) fileStream.write(file.buffer);
     fileStream.end();
-    return avatar;
+    return `http://localhost:4000/file/${filename}`;
   }
 }
