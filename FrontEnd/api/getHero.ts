@@ -1,8 +1,6 @@
-import { myRoutes } from "@/const";
 import { UserData, endPoints } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
 
 export const useUser = (tfaVerified: boolean) => {
 	const getHero = async () => {

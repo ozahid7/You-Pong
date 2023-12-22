@@ -36,9 +36,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
 
-	const me = useUser(tfaVerified);
+	const me = useUser(tfaVerified)
+
+
 
 	useEffect(() => {
+		console.log({ me })
 		if (me.data) {
 			console.log(me.data.createdAt == me.data.updatedAt);
 			setUserData(me.data);
@@ -49,12 +52,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					? setIsLoged(true)
 					: setIsLoged(false);
 			}
-		} else if (me.isError) {
+		}
+		if(!me.data && !me.isPending) 
+		{
 			setchecked(true);
 			localStorage.removeItem("isLoged");
 			redirect(myRoutes.root);
 		}
-	}, [me.isSuccess, me.isError]);
+	}, [me]);
 
 	const getTfa = async () => {
 		try {

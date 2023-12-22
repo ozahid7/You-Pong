@@ -5,7 +5,6 @@ import React from "react";
 import { renderIcon } from "@/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { blockUser } from "@/utils/friends";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
@@ -22,7 +21,6 @@ const MyDropdown = (props: {
     setDataInvalid?: any
 }) => {
     const router = useRouter();
-    const friendsQuery = new QueryClient()
     const block = blockuser(props.user, undefined, props.setDataInvalid);
 
     const handleLogout = async () => {

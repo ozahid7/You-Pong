@@ -58,10 +58,7 @@ const ProfileSettings = ({
 
 	const UpdateInfos = async () => {
 		setLoder(true);
-		console.log("file = ", file);
-		photo = await setFile(file).then(() => {
-			console.log('photo = ', photo);
-		})
+		photo = await setFile(file)
 		const toSend = {
 			newUsername: userName.replaceAll(' ', ''),
 			password: currentPass,

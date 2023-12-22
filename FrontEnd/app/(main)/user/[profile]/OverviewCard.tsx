@@ -2,8 +2,6 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useContext } from "react";
 import { PieChart } from "react-minimal-pie-chart";
-import { MyContext, useUser } from "@/providers/UserContextProvider";
-import { UserToShow } from "@/types/Api";
 
 const OverviewCard = (props: {loses: number, wins: number}) => {
 
