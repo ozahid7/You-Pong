@@ -15,13 +15,14 @@ const RequestBanner = (props: {
   zindex?: number;
   image: any;
   userName: string;
+  uid: string;
   status: string;
   SetInvalidData: any;
 }) => {
   const [enabled, setEnabled] = useState(false);
-  const block = blockuser(props.userName, undefined, props.SetInvalidData);
-  const accept = acceptuser(props.userName, props.SetInvalidData);
-  const decline = declineuser(props.userName, props.SetInvalidData);
+  const block = blockuser(props.uid, undefined, props.SetInvalidData);
+  const accept = acceptuser(props.uid, props.SetInvalidData);
+  const decline = declineuser(props.uid, props.SetInvalidData);
 
   if (decline.isPending || accept.isPending || block.isPending)
     return <MiniLoader customClass="m-auto" />;

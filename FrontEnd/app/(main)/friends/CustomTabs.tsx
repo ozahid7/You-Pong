@@ -8,7 +8,7 @@ import RequestBanner from "./RequestBanner";
 import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { MyContext } from "@/providers/UserContextProvider";
-import { FriendArr, FriendsReturn } from "@/types/Api";
+import { FriendArr, FriendsReturn, user } from "@/types/Api";
 
 const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
   const { accepted, blocked, pending } = props.friends.data;
@@ -100,13 +100,14 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
                   </span>
                 </div>
               ) : (
-                ListArr.map((e, index) => (
+                ListArr.map((e: user, index) => (
                   <FriendBanner
                     key={index}
                     userName={e.username}
                     image={renderImage(e.avatar)}
                     status={e.status}
                     SetInvalidData={setInvalidData}
+                    uid={e.id_user}
                   />
                 ))
               )}
@@ -120,13 +121,14 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
                   </span>
                 </div>
               ) : (
-                RequestArr.map((e, index) => (
+                RequestArr.map((e: user, index) => (
                   <RequestBanner
                     key={index}
                     userName={e.username}
                     image={renderImage(e.avatar)}
                     status={e.status}
                     SetInvalidData={setInvalidData}
+                    uid={e.id_user}
                   />
                 ))
               )}
@@ -141,13 +143,14 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
                   </span>
                 </div>
               ) : (
-                BlockArr.map((e, index) => (
+                BlockArr.map((e: user, index) => (
                   <BlockedBanner
                     key={index}
                     friends={props.friends}
                     userName={e.username}
                     image={renderImage(e.avatar)}
                     status={e.status}
+                    uid={e.id_user}
                     SetInvalidData={setInvalidData}
                   />
                 ))

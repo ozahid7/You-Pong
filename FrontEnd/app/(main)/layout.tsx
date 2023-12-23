@@ -3,7 +3,7 @@ import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
 import UseQueryProvider from "@/providers/UseQueryProvider";
-import UserContextProvider, { useUser } from "@/providers/UserContextProvider";
+import UserContextProvider from "@/providers/UserContextProvider";
 import { QueryClient } from "@tanstack/react-query";
 
 interface lyoutProps {
@@ -11,6 +11,7 @@ interface lyoutProps {
 }
 
 function RootLayout({ children }: lyoutProps) {
+  
   return (
     <UserContextProvider>
       <main className="flex h-screen w-full background">
