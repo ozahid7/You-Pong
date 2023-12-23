@@ -38,12 +38,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const me = useUser(tfaVerified)
 
-
-
 	useEffect(() => {
-		console.log({ me })
 		if (me.data) {
-			console.log(me.data.createdAt == me.data.updatedAt);
 			setUserData(me.data);
 			setTfaStatus(me.data.tfaStatus);
 			if (typeof window !== "undefined") {

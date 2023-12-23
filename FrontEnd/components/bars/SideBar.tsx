@@ -12,7 +12,7 @@ import {
 	LuSettings,
 	LuLogOut,
 } from "react-icons/lu";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
@@ -54,6 +54,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 		</div>
 	);
 };
+const query = new QueryClient();
 
 const SideBar = () => {
 	const router = useRouter();
@@ -69,6 +70,7 @@ const SideBar = () => {
 			.then((response) => {
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
+				query.removeQueries({queryKey: ['user']})
 				router.push("/");
 			})
 			.catch((e) => {

@@ -10,6 +10,8 @@ import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import { blockuser } from "@/api/friendShip";
 
+const query = new QueryClient();
+
 const MyDropdown = (props: {
     icon: any;
     style?: string;
@@ -32,6 +34,7 @@ const MyDropdown = (props: {
             .then((response) => {
                 console.log("data posted successfuly : ");
                 localStorage.removeItem("isLoged");
+                query.removeQueries({ queryKey: ["user"] });
                 router.push("/");
             })
             .catch((e) => {

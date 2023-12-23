@@ -170,7 +170,7 @@ model Friendship {
 //ACHIEVEMENT MODEL
 model Achievement {
 	id_achievement String @id @default(uuid())
-	title String @unique
+	title String
 	description String
 	avatar String
 	users User[]

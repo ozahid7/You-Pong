@@ -3,7 +3,7 @@ import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
 
 import React, { useEffect, useState } from "react";
-import {  useAxios } from "@/utils";
+import { useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
 import { setFile } from "../chat/data/api";
 import { useQueryClient } from "@tanstack/react-query";
@@ -58,9 +58,9 @@ const ProfileSettings = ({
 
 	const UpdateInfos = async () => {
 		setLoder(true);
-		photo = await setFile(file)
+		if (selectedFile !== avatar) photo = await setFile(file);
 		const toSend = {
-			newUsername: userName.replaceAll(' ', ''),
+			newUsername: userName.replaceAll(" ", ""),
 			password: currentPass,
 			newPassword: newPass,
 			newAvatar: photo,
