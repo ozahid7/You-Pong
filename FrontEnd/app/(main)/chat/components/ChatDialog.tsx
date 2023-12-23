@@ -4,7 +4,6 @@ import React, { Fragment, useEffect, useRef } from "react";
 import useSWR from "swr";
 import { MyMessage } from ".";
 import { getMainUser, getMessages } from "../data/api";
-import { io } from "socket.io-client";
 
 interface Props {
   channel: Channel;
@@ -37,29 +36,6 @@ const ChatDialog = ({ channel }: Props) => {
   );
 
   const { data: Messages } = useSWR<Message[]>("/Messages", fetchData_Messages);
-  const idUser = MainUser?.uid;
-  console.log(idUser);
-
-  // Sockets
-  const socket = io("http://localhost:4000/chat", {
-    transports: ["websocket"],
-    transportOptions: {
-      polling: {
-        extraHeaders: {
-          "Sec-WebSocket-Version": "13",
-          "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-          "Sec-WebSocket-Extensions":
-            "permessage-deflate; client_max_window_bits",
-          id_user: `${MainUser?.uid}`,
-        },
-      },
-    },
-  });
-  // const socket = io("http://localhost:4000/chat", {
-  //   extraHeaders: {
-  //     id_user: `${MainUser?.uid}`,
-  //   },
-  // });
 
   return (
     <Fragment>
