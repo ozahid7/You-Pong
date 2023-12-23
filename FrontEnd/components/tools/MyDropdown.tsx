@@ -5,11 +5,12 @@ import React from "react";
 import { renderIcon } from "@/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { blockUser } from "@/utils/friends";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { apiHost, myRoutes } from "@/const";
 import axios from "axios";
 import { blockuser } from "@/api/friendShip";
+
+const query = new QueryClient();
 
 const MyDropdown = (props: {
     icon: any;
@@ -22,7 +23,6 @@ const MyDropdown = (props: {
     setDataInvalid?: any
 }) => {
     const router = useRouter();
-    const friendsQuery = new QueryClient()
     const block = blockuser(props.user, undefined, props.setDataInvalid);
 
     const handleLogout = async () => {
@@ -34,6 +34,7 @@ const MyDropdown = (props: {
             .then((response) => {
                 console.log("data posted successfuly : ");
                 localStorage.removeItem("isLoged");
+                query.removeQueries({ queryKey: ["user"] });
                 router.push("/");
             })
             .catch((e) => {

@@ -46,6 +46,7 @@ export class InfoUserService {
           rank: user.rank,
           loses: user.defeats,
           wins: user.victory,
+          status: user.status,
           tfaStatus: user.tfaIsEnable,
           // achievements: await this.creatAchObj(),
           avatar: user.avatar,

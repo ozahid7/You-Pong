@@ -14,12 +14,13 @@ const FriendBanner = (props: {
   zindex?: number;
   image: any;
   userName: string;
+  uid: string;
   status: string;
   SetInvalidData: any;
 }) => {
   const [enabled, setEnabled] = useState(false);
-  const block = blockuser(props.userName, undefined, props.SetInvalidData);
-  const direct = todirect(props.userName);
+  const block = blockuser(props.uid, undefined, props.SetInvalidData);
+  const direct = todirect(props.uid);
 
   if (block.isPending || direct.isPending)
     return <MiniLoader customClass="m-auto" />;

@@ -191,12 +191,15 @@ export class UserService {
       level: user.level,
       rank: user.rank,
       wins: user.victory,
-      losts: user.defeats,
+      loses: user.defeats,
+      uid: user.id_user,
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
       matchs: user.matchs,
       achievements: user.achievements,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
       isPending: isPending,
     };
   }
