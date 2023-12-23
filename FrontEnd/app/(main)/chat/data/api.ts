@@ -296,3 +296,14 @@ export const getMessages = async (id_channel: string) => {
     return null;
   }
 };
+
+////////////////////////////////////////////////////////////
+
+export const fetchData_userChannels = async () => {
+  try {
+    const result = await userChannels();
+    return result;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};

@@ -17,18 +17,9 @@ import {
   SearchChat,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
-import { userChannels } from "./data/api";
+import { fetchData_userChannels, userChannels } from "./data/api";
 import useSWR from "swr";
 import { Channel } from "@/types";
-
-export const fetchData_userChannels = async () => {
-  try {
-    const result = await userChannels();
-    return result;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);

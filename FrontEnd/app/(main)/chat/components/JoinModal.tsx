@@ -19,6 +19,7 @@ import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel } from "@/types";
 import {
+  fetchData_userChannels,
   getChannels,
   joinChannel,
   userChannels,
@@ -31,8 +32,6 @@ import {
 import useSWR, { mutate } from "swr";
 import groups from "../../../../public/groups.svg";
 import { InputGroupPass } from ".";
-import { fetchData_userChannels } from "../page";
-import { KeyedMutator, ScopedMutator } from "swr/_internal";
 
 export const fetchData_getChannels = async () => {
   try {
