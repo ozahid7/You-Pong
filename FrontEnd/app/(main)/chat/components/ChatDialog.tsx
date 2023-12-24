@@ -38,7 +38,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
   useEffect(() => {
     if (data) {
       // Set the initial messages from the database //
-      setMessages(data);
+      setMessages(data.reverse());
       setShouldScrollToBottom(true);
     }
   }, [data]);
