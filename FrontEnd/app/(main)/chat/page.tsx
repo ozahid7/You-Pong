@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -20,35 +20,25 @@ import { LuUsers, LuUser } from "react-icons/lu";
 import { fetchData_userChannels, userChannels } from "./data/api";
 import useSWR from "swr";
 import { Channel } from "@/types";
+import { MyContext } from "@/providers/UserContextProvider";
+
+const sharedData = useContext(MyContext);
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-
-  const {
-    data: channel,
-    error,
-    isLoading,
-  } = useSWR<Channel[]>("/myData", fetchData_userChannels);
-
-  if (error) return <div>ERROR</div>;
+  const { data: channel, isLoading } = useSWR<Channel[]>(
+    "/myData",
+    fetchData_userChannels
+  );
 
   if (!channel && isLoading)
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
     );
 
-  function formatAMPM(date: any) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    var strTime = hours + ":" + minutes + " " + ampm;
-    return strTime;
-  }
+  console.log(sharedData.socket);
 
   return (
     <div className="flex w-full h-[90%] justify-center items-center">

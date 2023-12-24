@@ -20,9 +20,10 @@ import { useUser } from "@/api/getHero";
 import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
 import { io } from "socket.io-client";
 
-interface myContextProps {
+export interface myContextProps {
   userData: UserInfo;
   isLoged: boolean;
+  socket: any;
 }
 export const MyContext = createContext<myContextProps | undefined>(undefined);
 
@@ -38,6 +39,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoged, setIsLoged] = useState(false);
   const [userData, setUserData] = useState(undefined);
   const [tfaStatus, setTfaStatus] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   const me = useUser(tfaVerified);
 
@@ -116,24 +118,26 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     me.data.createdAt !== me.data.updatedAt
   ) {
     if (oneTime == true) {
-      const socket = io(`http://localhost:4000/chat?id_user=${me.data.uid}`, {
-        transports: ["websocket"],
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              "Sec-WebSocket-Version": "13",
-              "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-              "Sec-WebSocket-Extensions":
-                "permessage-deflate; client_max_window_bits",
+      setSocket(
+        io(`http://localhost:4000/chat?id_user=${me.data.uid}`, {
+          transports: ["websocket"],
+          transportOptions: {
+            polling: {
+              extraHeaders: {
+                "Sec-WebSocket-Version": "13",
+                "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+                "Sec-WebSocket-Extensions":
+                  "permessage-deflate; client_max_window_bits",
+              },
             },
           },
-        },
-      });
+        })
+      );
       oneTime = false;
     }
 
     return (
-      <MyContext.Provider value={{ userData, isLoged }} >
+      <MyContext.Provider value={{ userData, isLoged, socket }}>
         {children}
       </MyContext.Provider>
     );
