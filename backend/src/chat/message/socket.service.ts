@@ -23,7 +23,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private prisma: PrismaService) {}
   private users: { id_user: string; id_socket: string }[] = [];
   async addUser(id_user: string, id_socket: string) {
-    await this.users.push({ id_user, id_socket });
+    this.users.push({ id_user, id_socket });
   }
   removeUser(id_socket: string) {
     this.users = this.users.filter((user) => user.id_socket !== id_socket);
@@ -33,8 +33,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(socket: Socket) {
     let id_user: string;
-    if (socket && socket.handshake.headers['id_user'])
-      id_user = socket.handshake.headers['id_user'].toString();
+    if (socket && socket.handshake.query)
+      id_user = socket.handshake.query.id_user.toString();
     console.log('connected: ', socket.id);
     if (
       !this.users.find(
