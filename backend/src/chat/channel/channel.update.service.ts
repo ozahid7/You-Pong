@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Channel } from '@prisma/client';
 import { ChannelService } from './channel.service';
+import { channelDto } from '../dto/channel.create.dto';
 
 @Injectable()
 export class ChannelUpdateService {
@@ -107,7 +107,7 @@ export class ChannelUpdateService {
   }
 
   //PUT
-  async putchannel(id_channel: string, channel: Channel) {
+  async putchannel(id_channel: string, channel: channelDto) {
     const chan_name = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -118,15 +118,12 @@ export class ChannelUpdateService {
         message: 'No channel to set',
         object: null,
       };
-    let updated: Channel = {
-      id_channel: channel.id_channel,
+    let updated: channelDto = {
       name: channel.name,
       description: channel.description,
       avatar: channel.avatar,
       hash: channel.hash,
       type: channel.type,
-      created_at: channel.created_at,
-      updated_at: channel.updated_at,
     };
     if (channel.name !== undefined) updated.name = channel.name;
     if (channel.description != undefined)
@@ -148,7 +145,13 @@ export class ChannelUpdateService {
       where: {
         id_channel: id_channel,
       },
-      data: updated,
+      data: {
+        name: updated.name,
+        description: updated.description,
+        avatar: updated.avatar,
+        hash: updated.hash,
+        type: updated.type,
+      }
     });
     if (!result)
       return {
