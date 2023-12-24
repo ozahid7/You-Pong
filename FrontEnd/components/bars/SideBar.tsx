@@ -80,7 +80,7 @@ const SideBar = () => {
 
 	return (
 		<aside
-			className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}
+			className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-y-2 border-r-2 border-[#D6E4E5]`}
 		>
 			{/* top part */}
 
