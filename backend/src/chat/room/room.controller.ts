@@ -8,13 +8,11 @@ import {
   Get,
   Put,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { RoomService } from './room.service';
 
 @Controller('chat/room')
 export class RoomController {
   constructor(
-    private prisma: PrismaService,
     private roomService: RoomService,
   ) {}
 

@@ -1,8 +1,6 @@
 import {
-  Body,
   Controller,
   HttpException,
-  Post,
   Get,
   Delete,
   Param,
@@ -10,12 +8,8 @@ import {
   Req,
   Query,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { MessageService } from './message.service';
-import { messageDto } from '../dto/message.create.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { SocketService } from './socket.service';
-import { JsonObject } from '@prisma/client/runtime/library';
 
 export interface nameChannel {
   name: string;
@@ -24,9 +18,7 @@ export interface nameChannel {
 @Controller('chat/message')
 export class MessageController {
   constructor(
-    private prisma: PrismaService,
     private messageService: MessageService,
-    private socketService: SocketService,
   ) {}
 
   //POST MANY
