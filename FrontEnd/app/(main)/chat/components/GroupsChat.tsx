@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
-import { Channel, User_Hero } from "@/types";
+import { Channel, Message, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { getChannel, getMembers, getMessages } from "../data/api";
 import { User } from "@/types";
@@ -18,11 +18,14 @@ interface obj {
 }
 
 var one: boolean = false;
+var show: boolean = false;
 
 const GroupsChat = ({ channels, socket, user }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [members, setMembers] = useState<number>(0);
   const [inputValue, setInputValue] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
+
   var m: number = 0;
 
   const fetchData_Channel = async () => {
@@ -64,6 +67,7 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
       handleButtonClick();
     }
   };
+
   useEffect(() => {
     if (channel && !isLoading && !error)
       channel.users?.map((obj) => {
@@ -72,6 +76,13 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
     setMembers(m);
 
     //send message
+    if (!one) {
+      socket?.on("receiveMessage", (data: Message) => {
+        data.id_channel === channels.id_channel ? (show = true) : (show = false);
+        setMessages((prevMessages) => [...prevMessages, data]);
+      });
+      one = true;
+    }
   }, [channel, members]);
 
   return (
@@ -103,8 +114,9 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
         <ChatDialog
           channel={channels}
-          socket={socket}
           main={user}
+          show={show}
+          messages={messages}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">

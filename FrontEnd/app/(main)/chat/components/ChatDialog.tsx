@@ -7,15 +7,14 @@ import MyMessage from "./MyMessage";
 
 interface Props {
   channel: Channel;
-  socket: any;
   main: User_Hero;
+  messages: Message[];
+  show: boolean;
 }
 
 var one: boolean = false;
-var show: boolean = false;
 
-const ChatDialog = ({ channel, socket, main }: Props) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const ChatDialog = ({ channel, main, show, messages }: Props) => {
   var type: string = "";
 
   const { data: MainUser } = useSWR<User_Hero>(
@@ -23,15 +22,6 @@ const ChatDialog = ({ channel, socket, main }: Props) => {
     fetchData_getMainUser
   );
 
-  useEffect(() => {
-    if (!one) {
-      socket?.on("receiveMessage", (data: Message) => {
-        data.id_channel === channel.id_channel ? (show = true) : (show = false);
-        setMessages((prevMessages) => [...prevMessages, data]);
-      });
-      one = true;
-    }
-  }, []);
 
   return (
     <Fragment>
