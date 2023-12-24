@@ -1,6 +1,6 @@
 "use client";
 import { MiniBanner, MyCard } from "@/components";
-import React, { useContext } from "react";
+import React from "react";
 import { PieChart } from "react-minimal-pie-chart";
 
 const OverviewCard = (props: {loses: number, wins: number}) => {

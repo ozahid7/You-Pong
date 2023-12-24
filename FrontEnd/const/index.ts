@@ -11,8 +11,7 @@ import {
     LuUsers,
 } from "react-icons/lu";
 import { renderIcon } from "@/utils";
-import { createContext } from "react";
-import { FriendArr, UserInfo } from "@/types/Api";
+
 
 export const myRoutes = {
     root: "/",

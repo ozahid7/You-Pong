@@ -3,7 +3,6 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import React from "react";
 import { renderIcon } from "@/utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { apiHost, myRoutes } from "@/const";

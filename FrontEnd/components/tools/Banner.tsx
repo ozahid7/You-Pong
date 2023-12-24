@@ -1,5 +1,4 @@
 import React from "react";
-import { AnimatedText } from "..";
 import { twMerge } from "tailwind-merge";
 
 interface BannerProps {

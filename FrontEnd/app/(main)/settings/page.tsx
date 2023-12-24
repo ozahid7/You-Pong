@@ -1,14 +1,13 @@
 "use client";
 import { MyContainer, TwoFactor } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { MyContext } from "@/providers/UserContextProvider";
 import ProfileSettings from "./ProfileSettings";
 import { useUser } from "@/api/getHero";
 

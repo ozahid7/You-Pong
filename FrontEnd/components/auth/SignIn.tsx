@@ -3,7 +3,7 @@ import { CustomButton, IntraButton, MyDialog, MyInput } from "@/components";
 import { myRoutes } from "@/const";
 import { endPoints, singInData } from "@/types/Api";
 import { baseURL, useAxios } from "@/utils";
-import { redirect, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SignIn = (props: {

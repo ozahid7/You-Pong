@@ -12,7 +12,7 @@ import {
 	LuSettings,
 	LuLogOut,
 } from "react-icons/lu";
-import { QueryCache, QueryClient } from "@tanstack/react-query";
+import {  QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {

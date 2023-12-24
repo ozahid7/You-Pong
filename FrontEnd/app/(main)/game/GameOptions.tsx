@@ -1,7 +1,5 @@
 "use client";
 import {
-    Background,
-    MyContainer,
     Map,
     CustomButton,
     Mode,
@@ -9,7 +7,7 @@ import {
 } from "@/components";
 import { myRoutes } from "@/const";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdCancelPresentation } from "react-icons/md";
 
 export default function GameSettings(props: {
@@ -18,7 +16,7 @@ export default function GameSettings(props: {
     showPlayerLoader: any;
 }) {
     const router = useRouter()
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>

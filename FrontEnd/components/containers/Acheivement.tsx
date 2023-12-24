@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import { LuUnlock, LuLock } from "react-icons/lu";
-import { AnimatedText } from "..";
 import { AcheivementProps } from "@/types";
 import { twMerge } from "tailwind-merge";
 

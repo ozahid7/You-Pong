@@ -1,9 +1,7 @@
 "use client";
-import useOtherUser from "@/api/useOtherUser";
 import { Banner, MyCard } from "@/components";
-import { MyContext } from "@/providers/UserContextProvider";
-import { UserToShow, match } from "@/types/Api";
-import React, { useContext } from "react";
+import {  match } from "@/types/Api";
+import React from "react";
 import { Tooltip } from "react-tooltip";
 
 

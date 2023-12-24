@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./input.css";
 import UseQueryProvider from "@/providers/UseQueryProvider";
-import UserContextProvider from "@/providers/UserContextProvider";
 
 export const metadata: Metadata = {
     title: "You Pong",

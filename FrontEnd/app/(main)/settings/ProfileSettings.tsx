@@ -1,7 +1,6 @@
 "use client";
 import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
-
 import React, { useEffect, useState } from "react";
 import { useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
@@ -11,7 +10,6 @@ import MiniLoader from "@/components/tools/MiniLoader";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useUser } from "@/api/getHero";
-import axios from "axios";
 
 interface ProfileSettingsProps {
 	isOpen: boolean;

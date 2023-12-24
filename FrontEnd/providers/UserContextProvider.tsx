@@ -1,21 +1,17 @@
 "use client";
-import React, { useContext } from "react";
-import { SideBar, NavBar, MobileSideBar, TwoFactor } from "@/components";
+import React from "react";
+import { TwoFactor } from "@/components";
 import { redirect } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import {
-	FriendArr,
 	endPoints,
 	tfaSwitch,
-	UserData,
 	UserInfo,
-	FriendsReturn,
 } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
-import UseQueryProvider from "./UseQueryProvider";
 import { useUser } from "@/api/getHero";
 import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
 

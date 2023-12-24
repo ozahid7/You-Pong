@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -7,7 +7,6 @@ import OverviewCard from "./OverviewCard";
 import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
-import ProfileSettings from "../../settings/ProfileSettings";
 import { useUser } from "@/api/getHero";
 
 interface pageProps {

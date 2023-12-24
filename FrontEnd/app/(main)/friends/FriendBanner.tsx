@@ -1,13 +1,10 @@
 "use client";
 import { MyDropdown } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
-import React, { useContext, useDebugValue, useEffect, useState } from "react";
+import React, {useState } from "react";
 import { LuMessageSquarePlus } from "react-icons/lu";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAxios } from "@/utils";
-import { friendsEndPoint } from "@/types/Api";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { menuChatElements, menuUserElements } from "@/const";
+import { menuUserElements } from "@/const";
 import { blockuser, todirect } from "@/api/friendShip";
 
 const FriendBanner = (props: {
