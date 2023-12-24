@@ -19,12 +19,12 @@ interface obj {
 
 var one: boolean = false;
 var show: boolean = false;
+var messagess: Message[] = [];
 
 const GroupsChat = ({ channels, socket, user }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [members, setMembers] = useState<number>(0);
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
 
   var m: number = 0;
 
@@ -76,13 +76,6 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
     setMembers(m);
 
     //send message
-    if (!one) {
-      socket?.on("receiveMessage", (data: Message) => {
-        data.id_channel === channels.id_channel ? (show = true) : (show = false);
-        setMessages((prevMessages) => [...prevMessages, data]);
-      });
-      one = true;
-    }
   }, [channel, members]);
 
   return (
@@ -115,8 +108,7 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
         <ChatDialog
           channel={channels}
           main={user}
-          show={show}
-          messages={messages}
+          socket={socket}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
