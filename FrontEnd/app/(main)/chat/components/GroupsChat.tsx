@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
-import { Channel } from "@/types";
+import { Channel, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { getChannel, getMembers, getMessages } from "../data/api";
 import { User } from "@/types";
@@ -14,10 +14,15 @@ import useSWR from "swr";
 interface obj {
   channels: Channel;
   socket: any;
+  user: User_Hero;
 }
 
-const GroupsChat = ({ channels, socket }: obj) => {
+var one: boolean = false;
+
+const GroupsChat = ({ channels, socket, user }: obj) => {
+  const messageRef = useRef<HTMLInputElement>(null);
   const [members, setMembers] = useState<number>(0);
+  const [inputValue, setInputValue] = useState("");
   var m: number = 0;
 
   const fetchData_Channel = async () => {
@@ -35,12 +40,38 @@ const GroupsChat = ({ channels, socket }: obj) => {
     isLoading,
   } = useSWR<Channel>("/myChannel", fetchData_Channel);
 
+  const handleButtonClick = () => {
+    if (!one) {
+      const message = {
+        id_channel: channel.id_channel,
+        id_sender: user.uid,
+        message: inputValue,
+      };
+      socket?.emit("newMessage", message);
+      messageRef.current.value = null;
+      one = true;
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    one = false;
+  };
+
+  const handleEnterPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
+    }
+  };
   useEffect(() => {
     if (channel && !isLoading && !error)
       channel.users?.map((obj) => {
         obj.status === "ONLINE" ? (m += 1) : (m += 0);
       });
     setMembers(m);
+
+    //send message
   }, [channel, members]);
 
   return (
@@ -73,6 +104,7 @@ const GroupsChat = ({ channels, socket }: obj) => {
         <ChatDialog
           channel={channels}
           socket={socket}
+          main={user}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
@@ -82,8 +114,14 @@ const GroupsChat = ({ channels, socket }: obj) => {
               type="text"
               placeholder="Type a message here ..."
               className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+              onChange={handleInputChange}
+              onKeyDown={handleEnterPress}
+              ref={messageRef}
             />
-            <button>
+            <button
+              type="submit"
+              onClick={handleButtonClick}
+            >
               <LuSend className="h-8 w-8 text-[#497174] xs:w-5 xs:h-5 xs:mr-2" />
             </button>
           </div>

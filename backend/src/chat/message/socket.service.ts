@@ -15,6 +15,7 @@ export interface infoType {
   id_channel: string;
   id_sender: string;
   message: string;
+  created_at: Date;
 }
 
 @Injectable()
@@ -121,6 +122,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (message) {
           console.log('send message');
           info.id_sender = sender.id_user;
+          info.created_at = message.created_at;
           result.map((user) => {
             if (user)
               this.server.to(user.id_socket).emit('receiveMessage', info);

@@ -27,12 +27,12 @@ import { Channel, User_Hero } from "@/types";
 import { io } from "socket.io-client";
 
 var one: boolean = false;
+var connection: any = null;
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-  var connection: any = null;
 
   const { data: MainUser } = useSWR<User_Hero>(
     "/MainUser",
@@ -181,6 +181,7 @@ const Chats = () => {
                               <GroupsChat
                                 channels={obj}
                                 socket={connection}
+                                user={MainUser}
                                 key={i}
                               ></GroupsChat>
                             ))
