@@ -1,30 +1,28 @@
 "use client";
 import { Channel, Message, User_Hero } from "@/types";
-import React, { Fragment, useEffect, useRef } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import useSWR from "swr";
 import { MyMessage } from ".";
-import { getMainUser, getMessages } from "../data/api";
+import { fetchData_getMainUser, getMainUser, getMessages } from "../data/api";
+import { io } from "socket.io-client";
 
 interface Props {
   channel: Channel;
+  socket: any;
 }
 
-const ChatDialog = ({ channel }: Props) => {
+const ChatDialog = ({ channel, socket }: Props) => {
   var type: string = "";
   const fetchData_Messages = async () => {
     try {
       const result = await getMessages(channel.id_channel || "");
       return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchData_getMainUser = async () => {
-    try {
-      const result = await getMainUser();
-
-      return result.userInfo;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -36,6 +34,20 @@ const ChatDialog = ({ channel }: Props) => {
   );
 
   const { data: Messages } = useSWR<Message[]>("/Messages", fetchData_Messages);
+
+  const messages = useRef([]);
+
+  useEffect(() => {
+    socket?.on("receiveMessage", (data: any) => {
+      console.log("Received message:", data);
+    });
+    const info = {
+      id_channel: channel.id_channel,
+      id_sender: MainUser.uid,
+      content: "Hello, backend!",
+    };
+    socket?.emit("newMessage", info);
+  }, []);
 
   return (
     <Fragment>

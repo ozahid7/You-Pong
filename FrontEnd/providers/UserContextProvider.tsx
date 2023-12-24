@@ -23,7 +23,6 @@ import { io } from "socket.io-client";
 export interface myContextProps {
   userData: UserInfo;
   isLoged: boolean;
-  socket: any;
 }
 export const MyContext = createContext<myContextProps | undefined>(undefined);
 
@@ -39,7 +38,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoged, setIsLoged] = useState(false);
   const [userData, setUserData] = useState(undefined);
   const [tfaStatus, setTfaStatus] = useState(false);
-  const [socket, setSocket] = useState(null);
 
   const me = useUser(tfaVerified);
 
@@ -65,7 +63,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const response = await useAxios<tfaSwitch>("get", endPoints.getTfaStatus);
       if (response === false) setTfaVerified(true);
-      console.log(response);
       setTfaStatus(response);
     } catch (error) {
       setTfaVerified(true);
@@ -116,32 +113,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     loged &&
     tfaVerified &&
     me.data.createdAt !== me.data.updatedAt
-  ) {
-    if (oneTime == true) {
-      setSocket(
-        io(`http://localhost:4000/chat?id_user=${me.data.uid}`, {
-          transports: ["websocket"],
-          transportOptions: {
-            polling: {
-              extraHeaders: {
-                "Sec-WebSocket-Version": "13",
-                "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-                "Sec-WebSocket-Extensions":
-                  "permessage-deflate; client_max_window_bits",
-              },
-            },
-          },
-        })
-      );
-      oneTime = false;
-    }
-
+  )
     return (
-      <MyContext.Provider value={{ userData, isLoged, socket }}>
+      <MyContext.Provider value={{ userData, isLoged }}>
         {children}
       </MyContext.Provider>
     );
-  }
 };
 
 export default UserContextProvider;

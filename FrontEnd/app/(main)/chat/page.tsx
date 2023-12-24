@@ -17,28 +17,56 @@ import {
   SearchChat,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
-import { fetchData_userChannels, userChannels } from "./data/api";
+import {
+  fetchData_getMainUser,
+  fetchData_userChannels,
+  userChannels,
+} from "./data/api";
 import useSWR from "swr";
-import { Channel } from "@/types";
-import { MyContext } from "@/providers/UserContextProvider";
+import { Channel, User_Hero } from "@/types";
+import { io } from "socket.io-client";
 
-const sharedData = useContext(MyContext);
+var one: boolean = false;
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-  const { data: channel, isLoading } = useSWR<Channel[]>(
+  var connection: any = null;
+
+  const { data: MainUser } = useSWR<User_Hero>(
+    "/MainUser",
+    fetchData_getMainUser
+  );
+
+  const { data: channel } = useSWR<Channel[]>(
     "/myData",
     fetchData_userChannels
   );
 
-  if (!channel && isLoading)
+  if (!channel)
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
     );
 
-  console.log(sharedData.socket);
+  //// Socket
+  if (MainUser?.uid && !one) {
+    connection = io(`http://localhost:4000/chat?id_user=${MainUser.uid}`, {
+      transports: ["websocket"],
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            "Sec-WebSocket-Version": "13",
+            "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+            "Sec-WebSocket-Extensions":
+              "permessage-deflate; client_max_window_bits",
+          },
+        },
+      },
+      autoConnect: true,
+    });
+    one = true;
+  }
 
   return (
     <div className="flex w-full h-[90%] justify-center items-center">
@@ -152,6 +180,7 @@ const Chats = () => {
                             .map((obj, i) => (
                               <GroupsChat
                                 channels={obj}
+                                socket={connection}
                                 key={i}
                               ></GroupsChat>
                             ))

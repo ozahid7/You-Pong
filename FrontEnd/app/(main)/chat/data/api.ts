@@ -307,3 +307,13 @@ export const fetchData_userChannels = async () => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const fetchData_getMainUser = async () => {
+  try {
+    const result = await getMainUser();
+
+    return result.userInfo;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};

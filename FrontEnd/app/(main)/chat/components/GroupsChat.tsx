@@ -13,9 +13,10 @@ import useSWR from "swr";
 
 interface obj {
   channels: Channel;
+  socket: any;
 }
 
-const GroupsChat = ({ channels }: obj) => {
+const GroupsChat = ({ channels, socket }: obj) => {
   const [members, setMembers] = useState<number>(0);
   var m: number = 0;
 
@@ -69,7 +70,10 @@ const GroupsChat = ({ channels }: obj) => {
         </div>
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
-        <ChatDialog channel={channels} />
+        <ChatDialog
+          channel={channels}
+          socket={socket}
+        />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">

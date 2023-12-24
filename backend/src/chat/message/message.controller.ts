@@ -17,9 +17,7 @@ export interface nameChannel {
 
 @Controller('chat/message')
 export class MessageController {
-  constructor(
-    private messageService: MessageService,
-  ) {}
+  constructor(private messageService: MessageService) {}
 
   //POST MANY
   // @UseGuards(AuthGuard('jwt'))

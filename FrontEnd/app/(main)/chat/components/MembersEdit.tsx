@@ -7,27 +7,14 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Button,
-  Dropdown,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
-import {
-  LuUsers,
-  LuArrowDown,
-  LuStar,
-  LuBan,
-  LuBellOff,
-  LuDoorOpen,
-  LuUser,
-} from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../public/groups.svg";
-import useSWR from "swr";
 import { JoinDropDown } from ".";
 
 interface Props {
@@ -47,11 +34,12 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
     join: true,
   };
 
-  console.log("MEMBERS", Users);
-
   return (
     <Fragment>
-      <Button onPress={onOpen} className="rounded-none btn green_button">
+      <Button
+        onPress={onOpen}
+        className="rounded-none btn green_button"
+      >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
             value={{
