@@ -16,9 +16,10 @@ var show: boolean = false;
 
 const ChatDialog = ({ channel, main, socket }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  var shouldScrollToBottom: boolean = true;
   var type: string = "";
+
   const fetchData_Messages = async () => {
     try {
       const result = await getMessages(channel.id_channel || "");
@@ -27,7 +28,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   const { data } = useSWR<Message[]>("/messages", fetchData_Messages);
 
   const { data: MainUser } = useSWR<User_Hero>(
@@ -39,7 +40,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
     if (data) {
       // Set the initial messages from the database //
       setMessages(data.reverse());
-      setShouldScrollToBottom(true);
+      shouldScrollToBottom = true;
     }
   }, [data]);
 
@@ -48,7 +49,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
       socket?.on("receiveMessage", (data: Message) => {
         data.id_channel === channel.id_channel ? (show = true) : (show = false);
         setMessages((prevMessages) => [...prevMessages, data]);
-        setShouldScrollToBottom(true);
+        shouldScrollToBottom = true;
       });
       one = true;
     }
@@ -58,7 +59,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
     if (shouldScrollToBottom && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       // Reset the scroll trigger //
-      setShouldScrollToBottom(false);
+      shouldScrollToBottom = false;
     }
   }, [shouldScrollToBottom, messages]);
 
