@@ -8,7 +8,7 @@ interface Props {
   message: Message;
 }
 
-const ChatBubbleMain = ({ main, message }) => {
+const ChatBubbleMain = ({ main, message } : Props) => {
   const formatPrismaDate = (prismaDate) => {
     const date = new Date(prismaDate);
     const hours = date.getHours();

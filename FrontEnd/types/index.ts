@@ -139,3 +139,9 @@ export interface Message {
   created_at: Date;
   id_message: string;
 }
+
+export interface Bubble {
+  message: Message;
+  type: string;
+  member: Member | User_Hero;
+}

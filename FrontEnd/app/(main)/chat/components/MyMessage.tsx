@@ -25,18 +25,6 @@ const MyMessage = ({ type, message, main, show }: Props) => {
   };
 
   const { data: Members } = useSWR<Member[]>("/members", fetchData_getMembers);
-
-  const formatPrismaDate = (prismaDate) => {
-    const date = new Date(prismaDate);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-
-    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
-
-    return `${formattedHours}:${minutes < 10 ? "0" : ""}${minutes} ${ampm}`;
-  };
-
   return (
     <Fragment>
       {type === "sender" ? (

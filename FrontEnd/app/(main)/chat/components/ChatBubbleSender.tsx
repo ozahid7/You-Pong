@@ -1,14 +1,14 @@
-import { Message, User_Hero } from "@/types";
+import { Member, Message, User_Hero } from "@/types";
 import Image from "next/image";
 import React from "react";
 import avatar from "../../../../public/avatar.jpeg";
 
 interface Props {
-  member: User_Hero;
+  member: Member;
   message: Message;
 }
 
-const ChatBubbleSender = ({ member, message }) => {
+const ChatBubbleSender = ({ member, message } : Props) => {
   const formatPrismaDate = (prismaDate) => {
     const date = new Date(prismaDate);
     const hours = date.getHours();

@@ -65,11 +65,11 @@ const Chat = ({ channels, socket, user }: HomePage) => {
         </div>
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
-        <ChatDialog
+        {/* <ChatDialog
           channel={channels}
           main={user}
           socket={socket}
-        />
+        /> */}
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
