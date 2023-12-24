@@ -135,6 +135,7 @@ export interface Member {
 export interface Message {
   id_channel: string;
   id_sender: string;
-  message: string;
+  content: string;
   created_at: Date;
+  id_message: string;
 }

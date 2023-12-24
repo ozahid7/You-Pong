@@ -48,7 +48,7 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
       const message = {
         id_channel: channel.id_channel,
         id_sender: user.uid,
-        message: inputValue,
+        content: inputValue,
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
@@ -109,6 +109,7 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
           channel={channels}
           main={user}
           socket={socket}
+          key={user.uid}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">

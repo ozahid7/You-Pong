@@ -198,6 +198,8 @@ const Chats = () => {
                             .map((obj, i) => (
                               <Chat
                                 channels={obj}
+                                socket={connection}
+                                user={MainUser}
                                 key={i}
                               ></Chat>
                             ))

@@ -13,7 +13,6 @@ interface Props {
 
 var one: boolean = false;
 var show: boolean = false;
-var globalMessages: Message[] = [];
 
 const ChatDialog = ({ channel, main, socket }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -38,7 +37,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
 
   useEffect(() => {
     if (data) {
-      // Set the initial messages from the database
+      // Set the initial messages from the database //
       setMessages(data);
       setShouldScrollToBottom(true);
     }
@@ -58,7 +57,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      // Reset the scroll trigger
+      // Reset the scroll trigger //
       setShouldScrollToBottom(false);
     }
   }, [shouldScrollToBottom, messages]);
@@ -80,7 +79,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
                 message={message}
                 main={main}
                 show={show}
-                key={Math.floor(Math.random() * 10000)}
+                key={message.id_message}
               />
             );
           })}

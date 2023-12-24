@@ -38,74 +38,70 @@ const MyMessage = ({ type, message, main, show }: Props) => {
   return (
     <Fragment>
       {type === "sender" ? (
-        <Fragment>
-          {Members &&
-            Members.filter(
-              (member) => member.user.id_user === message.id_sender
-            ).map((member) => {
-              return (
-                <div
-                  className="chat chat-start p-1"
-                  key={Math.floor(Math.random() * 10000) + 1}
-                >
-                  <div className="chat-image avatar">
-                    <div className="w-10 rounded-full">
-                      <Image
-                        width={40}
-                        height={40}
-                        alt="Sender's avatar"
-                        src={member.user.avatar || avatar}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex chat-header items-center gap-1">
-                    <div className="w-fit h-fit">{member.user.username}</div>
-                  </div>
-                  <div className="w-full h-full dropdown dropdown-hover">
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      data-theme="mytheme"
-                      className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
-                    >
-                      {message?.message}
-                    </div>
-                    <time className="text-xs opacity-50">
-                      {formatPrismaDate(message.created_at)}
-                    </time>
-                  </div>
+        Members &&
+        Members.filter(
+          (member) => member.user.id_user === message.id_sender
+        ).map((member) => {
+          return (
+            <div
+              className="chat chat-start p-1"
+              key={member.user.id_user}
+            >
+              <div className="chat-image avatar">
+                <div className="w-10 rounded-full">
+                  <Image
+                    width={40}
+                    height={40}
+                    alt="Sender's avatar"
+                    src={member.user.avatar || avatar}
+                  />
                 </div>
-              );
-            })}
-        </Fragment>
-      ) : (
-        <Fragment>
-          <div className="chat chat-end p-1 ">
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <Image
-                  width={40}
-                  height={40}
-                  alt="Main user's avatar"
-                  src={main.avatar || avatar}
-                />
+              </div>
+              <div className="flex chat-header items-center gap-1">
+                <div className="w-fit h-fit">{member.user.username}</div>
+              </div>
+              <div className="w-full h-full dropdown dropdown-hover">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  data-theme="mytheme"
+                  className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+                >
+                  {message?.content}
+                </div>
+                <time className="text-xs opacity-50">
+                  {formatPrismaDate(message.created_at)}
+                </time>
               </div>
             </div>
-            <div className="flex chat-header items-center gap-1">
-              <div className="w-full h-fit">{main.username}</div>
+          );
+        })
+      ) : (
+        <div className="chat chat-end p-1 ">
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <Image
+                width={40}
+                height={40}
+                alt="Main user's avatar"
+                src={main.avatar || avatar}
+              />
             </div>
-            <div
-              role="button"
-              data-theme="mytheme"
-              className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
-            >
-              {message?.message}
-            </div>
-            <time className="text-xs opacity-50">
-              {formatPrismaDate(message.created_at)}
-            </time>
           </div>
-        </Fragment>
+          <div className="flex chat-header items-center gap-1">
+            <div className="w-full h-fit">{main.username}</div>
+          </div>
+          <div
+            role="button"
+            data-theme="mytheme"
+            className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+          >
+            {message?.content}
+          </div>
+          <time className="text-xs opacity-50">
+            {formatPrismaDate(message.created_at)}
+          </time>
+        </div>
       )}
     </Fragment>
   );
