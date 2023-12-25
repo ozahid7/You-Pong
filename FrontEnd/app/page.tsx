@@ -5,9 +5,10 @@ import {
     SignUp,
 } from "@/components";
 import "./globals.css";
-import { landing_page_description, myRoutes } from "@/const";
+import { landing_page_description, myRoutes, socketurl } from "@/const";
 import {  useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
+
 
 function Home() {
     const [valid, setValid] = useState(false)
@@ -15,11 +16,12 @@ function Home() {
     const [showSignup, setSignUp] = useState(false);
     const [showSingIn, setSingIn] = useState(false);
     let Loged: boolean = false;
-    if (typeof window !== 'undefined') {
-      Loged =  localStorage.getItem("isLoged") === "true" ? true : false;
-    }
     
     useLayoutEffect(() => {
+        if (typeof window !== 'undefined') {
+          Loged =  localStorage.getItem("isLoged") === "true" ? true : false;
+        }
+     
         if (Loged) {
             redirect(myRoutes.dashboard);
         }

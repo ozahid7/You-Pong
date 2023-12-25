@@ -23,6 +23,8 @@ export const myRoutes = {
     notfound: "/user",
 };
 
+export const socketurl = "http://localhost:5000"
+
 //render react icons
 export const navMenuElements = [
     { href: myRoutes.dashboard, label: "Profile", icon: renderIcon(LuUser) },

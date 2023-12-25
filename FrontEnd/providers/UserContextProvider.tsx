@@ -2,7 +2,7 @@
 import React from "react";
 import { TwoFactor } from "@/components";
 import { redirect } from "next/navigation";
-import { myRoutes } from "@/const";
+import { myRoutes, socketurl } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import {
@@ -14,6 +14,7 @@ import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 import { useUser } from "@/api/getHero";
 import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
+import { io } from "socket.io-client";
 
 interface myContextProps {
 	userData: UserInfo;
@@ -31,8 +32,13 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isLoged, setIsLoged] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
+	const [gameSocket, setGameSocket] = useState(null)
 
 	const me = useUser(tfaVerified)
+
+	useEffect(() => {
+		setGameSocket(io(socketurl))
+	}, [])
 
 	useEffect(() => {
 		if (me.data) {
