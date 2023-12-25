@@ -130,6 +130,7 @@ const Chats = () => {
                                           <MiniChatDirect
                                             channels={obj}
                                             main={MainUser}
+                                            key={i}
                                           />
                                         ))
                                     : []
@@ -138,7 +139,8 @@ const Chats = () => {
                                   className:
                                     "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
                                 }}
-                              ></MyTabs>
+                                key="direct"
+                              />
                             </div>
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
@@ -153,16 +155,22 @@ const Chats = () => {
                                         .filter(
                                           (obj: any) => obj.type !== "DIRECT"
                                         )
-                                        .map((obj: any, i) => (
-                                          <MiniChat channels={obj} />
-                                        ))
+                                        .map((obj: any, i) => {
+                                          return (
+                                            <MiniChat
+                                              channels={obj}
+                                              key={i}
+                                            />
+                                          );
+                                        })
                                     : []
                                 }
                                 indicator={{
                                   className:
                                     "bg-palette-green self-center 2xl:w-[52px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
                                 }}
-                              ></MyTabs>
+                                key="groups"
+                              />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal />
                                 <JoinModal />
@@ -177,37 +185,39 @@ const Chats = () => {
                     <SwipeableTabs
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
+                      key="groups"
                     >
-                      {channel
-                        ? channel
-                            .filter((obj) => obj.type !== "DIRECT")
-                            .map((obj, i) => (
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type !== "DIRECT")
+                          .map((obj, i) => {
+                            return (
                               <GroupsChat
                                 channels={obj}
                                 socket={connection}
                                 user={MainUser}
                                 key={i}
                               ></GroupsChat>
-                            ))
-                        : ""}
+                            );
+                          })}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
+                      key="direct"
                     >
-                      {channel
-                        ? channel
-                            .filter((obj) => obj.type === "DIRECT")
-                            .map((obj, i) => (
-                              <Chat
-                                channels={obj}
-                                socket={connection}
-                                main={MainUser}
-                                key={i}
-                              ></Chat>
-                            ))
-                        : ""}
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type === "DIRECT")
+                          .map((obj, i) => (
+                            <Chat
+                              channels={obj}
+                              socket={connection}
+                              main={MainUser}
+                              key={i}
+                            ></Chat>
+                          ))}
                     </SwipeableTabs>
                   )}
                 </div>

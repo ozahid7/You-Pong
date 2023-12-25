@@ -10,6 +10,7 @@ import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
 import useSWR from "swr";
+import { generateRandomKey } from "./ChatDialog";
 
 interface obj {
   channels: Channel;
@@ -18,10 +19,8 @@ interface obj {
 }
 
 var one: boolean = false;
-var show: boolean = false;
-var messagess: Message[] = [];
 
-const GroupsChat = ({ channels, socket, user }: obj) => {
+const GroupsChat = ({ channels, socket, user}: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -34,21 +33,18 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
     }
   };
 
-  const {
-    data: channel,
-    error,
-    isLoading,
-  } = useSWR<Channel>("/myChannel", fetchData_Channel);
+  const { data: channel } = useSWR<Channel>("/myChannel", fetchData_Channel);
 
   const handleButtonClick = () => {
-    if (!one) {
-      const message = {
-        id_channel: channel.id_channel,
+    if (!one && socket) {
+      var message = {
+        id_channel: channels.id_channel,
         id_sender: user.uid,
         content: inputValue,
       };
-      socket?.emit("newMessage", message);
+      socket.emit("newMessage", message);
       messageRef.current.value = null;
+      message = null;
       one = true;
     }
   };
@@ -62,6 +58,7 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
+      one = false;
     }
   };
 
@@ -105,9 +102,10 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
         <ChatDialog
-          channel={channels}
           main={user}
           socket={socket}
+          channel={channels}
+          key={channels.id_channel}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">

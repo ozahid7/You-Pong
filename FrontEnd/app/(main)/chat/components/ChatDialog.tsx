@@ -2,24 +2,15 @@
 import { Bubble, Channel, Member, Message, User_Hero } from "@/types";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import useSWR, { mutate } from "swr";
-import {
-  fetchData_getMainUser,
-  getMainUser,
-  getMembers,
-  getMessages,
-} from "../data/api";
-import MyMessage from "./MyMessage";
+import { getMembers, getMessages } from "../data/api";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 
 interface Props {
-  channel: Channel;
   main: User_Hero;
   socket: any;
+  channel: Channel;
 }
-
-var one: boolean = false;
-var show: boolean = false;
 
 export const generateRandomKey = () => {
   const timestamp = new Date().getTime();
@@ -27,7 +18,8 @@ export const generateRandomKey = () => {
   return `${timestamp}-${randomNumber}`;
 };
 
-const ChatDialog = ({ channel, main, socket }: Props) => {
+const ChatDialog = ({ main, socket, channel }: Props) => {
+  var one: boolean = false;
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
@@ -56,7 +48,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
   useEffect(() => {
     if (data) {
       // Set the initial messages from the database //
-      setMessages(data.reverse());
+      setMessages(data);
       mutate(fetchData_Messages);
     }
   }, [data]);
@@ -64,9 +56,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
   useEffect(() => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
-        data.id_channel === channel.id_channel ? (show = true) : (show = false);
         setMessages((prevMessages) => [...prevMessages, data]);
-        mutate(fetchData_Messages);
       });
       one = true;
     }
@@ -81,25 +71,27 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
   }, [shouldScrollToBottom, messages]);
 
   const whichUSER = (message: Message) => {
-    if (message.id_sender === main.uid) {
-      return (
-        <ChatBubbleMain
-          message={message}
-          main={main}
-          key={generateRandomKey()}
-        />
-      );
-    } else if (message.id_sender !== main.uid && Members) {
-      const member: Member[] = Members.filter(
-        (member) => member.user.id_user === message.id_sender
-      );
-      return (
-        <ChatBubbleSender
-          message={message}
-          member={member[0] || null}
-          key={generateRandomKey()}
-        />
-      );
+    if (message.id_channel === channel.id_channel) {
+      if (message.id_sender === main.uid) {
+        return (
+          <ChatBubbleMain
+            message={message}
+            main={main}
+            key={message.id_message}
+          />
+        );
+      } else if (message.id_sender !== main.uid && Members) {
+        const member: Member[] = Members.filter(
+          (member) => member.user.id_user === message.id_sender
+        );
+        return (
+          <ChatBubbleSender
+            message={message}
+            member={member[0] || null}
+            key={message.id_message}
+          />
+        );
+      }
     }
   };
 
@@ -110,7 +102,6 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
         ref={scrollRef}
       >
         {messages &&
-          show === true &&
           messages.map((message) => {
             return whichUSER(message);
           })}

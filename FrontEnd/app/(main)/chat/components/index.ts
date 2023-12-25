@@ -15,7 +15,6 @@ import GroupsInput from "./GroupsInput";
 import JoinDropDown from "./JoinDropDown";
 import MuteDropDown from "./MuteDropDown";
 import ChatDialog from "./ChatDialog";
-import MyMessage from "./MyMessage";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import DirectDropdown from "./DirectDropdown";
@@ -41,7 +40,6 @@ export {
   JoinDropDown,
   MuteDropDown,
   ChatDialog,
-  MyMessage,
   ChatBubbleMain,
   ChatBubbleSender,
   DirectDropdown,

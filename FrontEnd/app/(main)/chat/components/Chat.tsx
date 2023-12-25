@@ -31,28 +31,28 @@ const Chat = ({ channels, socket, main }: HomePage) => {
   const { data } = useSWR<Channel>("/myChannel", fetchData_Channel);
 
   const handleButtonClick = () => {
-    if (!one) {
-      const message = {
-        id_channel: channels.id_channel,
-        id_sender: main.uid,
-        message: inputValue,
-      };
-      socket?.emit("newMessage", message);
-      messageRef.current.value = null;
-      one = true;
-    }
+    // if (!one) {
+    //   const message = {
+    //     id_channel: data.id_channel,
+    //     id_sender: main.uid,
+    //     message: inputValue,
+    //   };
+    //   socket?.emit("newMessage", message);
+    //   messageRef.current.value = null;
+    //   one = true;
+    // }
   };
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-    one = false;
+    // setInputValue(e.target.value);
+    // one = false;
   };
 
   const handleEnterPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleButtonClick();
-    }
+    // if (e.key === "Enter") {
+    //   e.preventDefault();
+    //   handleButtonClick();
+    // }
   };
 
   return (
@@ -84,11 +84,11 @@ const Chat = ({ channels, socket, main }: HomePage) => {
         </div>
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
-        <ChatDialog
+        {/* <ChatDialog
           channel={channels}
           main={main}
           socket={socket}
-        />
+        /> */}
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
