@@ -15,6 +15,7 @@ import {
   GroupsModal,
   JoinModal,
   SearchChat,
+  MiniChatDirect,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import {
@@ -126,7 +127,10 @@ const Chats = () => {
                                           (obj: any) => obj.type === "DIRECT"
                                         )
                                         .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
+                                          <MiniChatDirect
+                                            channels={obj}
+                                            main={MainUser}
+                                          />
                                         ))
                                     : []
                                 }
@@ -150,7 +154,7 @@ const Chats = () => {
                                           (obj: any) => obj.type !== "DIRECT"
                                         )
                                         .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
+                                          <MiniChat channels={obj} />
                                         ))
                                     : []
                                 }
@@ -199,7 +203,7 @@ const Chats = () => {
                               <Chat
                                 channels={obj}
                                 socket={connection}
-                                user={MainUser}
+                                main={MainUser}
                                 key={i}
                               ></Chat>
                             ))

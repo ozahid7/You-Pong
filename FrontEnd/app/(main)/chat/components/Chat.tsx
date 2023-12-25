@@ -1,26 +1,40 @@
 import React, { useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
-import { ChatDialog, ChatDropdown } from ".";
-import { Channel, User_Hero } from "@/types";
+import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
+import { Channel, Member, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
+import { fetchData_getMainUser, getChannel, getMembers } from "../data/api";
+import useSWR from "swr";
 
 interface HomePage {
   channels: Channel;
   socket: any;
-  user: User_Hero;
+  main: User_Hero;
 }
 
 var one: boolean = false;
+var nameOne: boolean = false;
 
-const Chat = ({ channels, socket, user }: HomePage) => {
+const Chat = ({ channels, socket, main }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
+
+  const fetchData_Channel = async () => {
+    try {
+      const result = await getChannel(channels.id_channel || "");
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const { data } = useSWR<Channel>("/myChannel", fetchData_Channel);
 
   const handleButtonClick = () => {
     if (!one) {
       const message = {
         id_channel: channels.id_channel,
-        id_sender: user.uid,
+        id_sender: main.uid,
         message: inputValue,
       };
       socket?.emit("newMessage", message);
@@ -55,21 +69,26 @@ const Chat = ({ channels, socket, user }: HomePage) => {
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
-                {channels.name}
+                {data &&
+                  data.users
+                    .filter((user) => user.id_user !== main.uid)
+                    .map((user) => {
+                      return user.username;
+                    })}
               </div>
             </div>
           </div>
           <div>
-            {/* <GroupDropdown channels={channels}></GroupDropdown> */}
+            <DirectDropdown channels={channels} />
           </div>
         </div>
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
-        {/* <ChatDialog
+        <ChatDialog
           channel={channels}
-          main={user}
+          main={main}
           socket={socket}
-        /> */}
+        />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">

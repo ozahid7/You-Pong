@@ -18,6 +18,8 @@ import ChatDialog from "./ChatDialog";
 import MyMessage from "./MyMessage";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
+import DirectDropdown from "./DirectDropdown";
+import MiniChatDirect from "./MiniChatDirect";
 
 export {
   Chat,
@@ -40,4 +42,6 @@ export {
   MyMessage,
   ChatBubbleMain,
   ChatBubbleSender,
+  DirectDropdown,
+  MiniChatDirect
 };
