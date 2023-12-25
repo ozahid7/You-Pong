@@ -20,6 +20,8 @@ import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import DirectDropdown from "./DirectDropdown";
 import MiniChatDirect from "./MiniChatDirect";
+import PasswordModal from "./PasswordModal";
+import SimpleJoinButton from "./SimpleJoinButton";
 
 export {
   Chat,
@@ -43,5 +45,7 @@ export {
   ChatBubbleMain,
   ChatBubbleSender,
   DirectDropdown,
-  MiniChatDirect
+  MiniChatDirect,
+  PasswordModal,
+  SimpleJoinButton
 };

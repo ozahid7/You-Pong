@@ -31,7 +31,7 @@ import {
 } from "react-icons/io5";
 import useSWR, { mutate } from "swr";
 import groups from "../../../../public/groups.svg";
-import { InputGroupPass } from ".";
+import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
 
 export const fetchData_getChannels = async () => {
   try {
@@ -62,80 +62,6 @@ export default function JoinModal() {
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
     );
-
-  const showModal = (obj: Channel) => {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const passRef = useRef<HTMLInputElement>(null);
-    var open: () => void = () => {};
-
-    const close = () => {
-      onClose();
-    };
-
-    const OpenModal = async () => {
-      if (obj.type === "PROTECTED") open = onOpen;
-      else if (obj.type === "PUBLIC") {
-        joinChannel(obj.id_channel || "", null || "");
-        mutate(fetchData_userChannels);
-        close();
-      }
-    };
-
-    const join = () => {
-      if (obj.type === "PROTECTED") {
-        console.log(passRef.current?.value);
-        joinChannel(obj.id_channel || "", passRef.current?.value || "");
-      }
-      mutate(fetchData_userChannels);
-      close();
-    };
-
-    return (
-      <>
-        <Button
-          size="lg"
-          className={`flex mt-1 text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-          onClick={OpenModal}
-          onPress={open}
-        >
-          <IoEnterOutline />
-          Join
-        </Button>
-        <Modal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(close) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Set password
-                </ModalHeader>
-                <ModalBody>
-                  <InputGroupPass
-                    ref={passRef}
-                    text="Password"
-                    type="password"
-                    customclass="w-full h-[3rem] self-center"
-                    isPassword={true}
-                  ></InputGroupPass>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onPress={join}
-                  >
-                    Submit
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  };
 
   return (
     <Fragment>
@@ -213,7 +139,11 @@ export default function JoinModal() {
                                     </div>
                                   </td>
                                   <td className="flex flex-row">
-                                    {showModal(obj)}
+                                    {obj.type === "PROTECTED" ? (
+                                      <PasswordModal obj={obj} close={onClose}/>
+                                    ) : (
+                                      <SimpleJoinButton obj={obj} close={onClose}/>
+                                    )}
                                   </td>
                                 </tr>
                               ))}
@@ -230,67 +160,4 @@ export default function JoinModal() {
       </Modal>
     </Fragment>
   );
-}
-
-{
-  /* <Table aria-label="Example empty table">
-<TableHeader>
-  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-    AVATAR
-  </TableColumn>
-  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-    NAME
-  </TableColumn>
-  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-    TYPE
-  </TableColumn>
-  <TableColumn className="font-body font-[700] text-shadow-md text-[16px]">
-    ACTION
-  </TableColumn>
-</TableHeader>
-<TableBody
-  emptyContent={"No channels to display."}
-  className=""
->
-  <>
-    {channels
-      ? channels
-          .filter(
-            (obj: any) =>
-              obj.type !== "DIRECT" &&
-              obj.type !== "PRIVATE"
-          )
-          .map((obj: any, i) => (
-            <TableRow key={i}>
-              <TableCell>
-                <Image
-                  src={obj.avatar || groups}
-                  width={60}
-                  height={60}
-                  className="border-[2px] border-palette-green p-[0.5]"
-                  alt="image"
-                />
-              </TableCell>
-              <TableCell className="font-body font-[500] text-[18px] text-[#424242]">
-                {obj.name}
-              </TableCell>
-              <TableCell className="font-body font-[500] text-[16px] text-[#424242]">
-                <div className="flex flex-row gap-1 items-center w-fit p-1">
-                  {obj.type === "PUBLIC" ? (
-                    <IoLockOpenOutline />
-                  ) : (
-                    <IoLockClosedOutline />
-                  )}
-                  {obj.type}
-                </div>
-              </TableCell>
-              <TableCell className="flex flex-row">
-                {showModal(obj)}
-              </TableCell>
-            </TableRow>
-          ))
-      : <div>NO CHANNELS</div>}
-  </>
-</TableBody>
-</Table> */
 }
