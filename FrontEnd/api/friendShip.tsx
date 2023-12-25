@@ -31,7 +31,6 @@ export const searchusers = () => {
 				"get",
 				friendsEndPoint.search
 			);
-			console.log("search response = ", response);
 			return response.Object;
 		} catch (error) {
 			console.log("search response = ", error);

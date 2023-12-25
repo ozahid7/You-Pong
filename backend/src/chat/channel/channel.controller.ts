@@ -14,7 +14,6 @@ import {
 import { ChannelService } from './channel.service';
 import { ChannelUpdateService } from './channel.update.service';
 import { channelDto } from '../dto/channel.create.dto';
-import { Channel } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('chat/channel')
 export class ChannelController {
@@ -135,7 +134,7 @@ export class ChannelController {
   @Put('/update/')
   async putChannel(
     @Query('id_channel') id_channel: string,
-    @Body() channel: Channel,
+    @Body() channel: channelDto,
   ) {
     try {
       const result = await this.channelUpdateService.putchannel(

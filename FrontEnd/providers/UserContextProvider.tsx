@@ -16,11 +16,13 @@ import { useUser } from "@/api/getHero";
 import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
 import { io } from "socket.io-client";
 
-interface myContextProps {
-	userData: UserInfo;
-	isLoged: boolean;
+export interface myContextProps {
+  userData: UserInfo;
+  isLoged: boolean;
 }
 export const MyContext = createContext<myContextProps | undefined>(undefined);
+
+let oneTime: boolean = false;
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	let loged: boolean = false;
@@ -34,7 +36,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [tfaStatus, setTfaStatus] = useState(false);
 	const [gameSocket, setGameSocket] = useState(null)
 
-	const me = useUser(tfaVerified)
+  const me = useUser(tfaVerified);
 
 	useEffect(() => {
 		setGameSocket(io(socketurl))
@@ -59,69 +61,66 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, [me]);
 
-	const getTfa = async () => {
-		try {
-			const response = await useAxios<tfaSwitch>(
-				"get",
-				endPoints.getTfaStatus
-			);
-			if (response === false) setTfaVerified(true);
-			console.log(response);
-			setTfaStatus(response);
-		} catch (error) {
-			setTfaVerified(true);
-			console.log("error : ", error);
-		}
-		return null;
-	};
-	useEffect(() => {
-		if (!loged) getTfa();
-		else setTfaVerified(true);
-	}, []);
+  const getTfa = async () => {
+    try {
+      const response = await useAxios<tfaSwitch>("get", endPoints.getTfaStatus);
+      if (response === false) setTfaVerified(true);
+      setTfaStatus(response);
+    } catch (error) {
+      setTfaVerified(true);
+      console.log("error : ", error);
+    }
+    return null;
+  };
+  useEffect(() => {
+    if (!loged) getTfa();
+    else setTfaVerified(true);
+  }, []);
 
-	useLayoutEffect(() => {
-		if (!loged && checked) {
-			redirect(myRoutes.root);
-		}
-	}, [isLoged, checked]);
+  useLayoutEffect(() => {
+    if (!loged && checked) {
+      redirect(myRoutes.root);
+    }
+  }, [isLoged, checked]);
 
-	if (tfaStatus && !tfaVerified && !loged)
-		return (
-			<TwoFactor
-				isEnabled={true}
-				isOpen={true}
-				closemodal={() => {}}
-				setValid={setTfaVerified}
-				setIsLoged={setIsLoged}
-			/>
-		);
-	else if (me.isLoading) return <Loader />;
-	else if (
-		me.data &&
-		isLoged &&
-		loged &&
-		tfaVerified &&
-		me.data.createdAt === me.data.updatedAt
-	)
-		return (
-			<ProfileSettings
-				isOpen={me.data.createdAt === me.data.updatedAt}
-				setIsOpen={() => {}}
-				closeModal={() => {}}
-			/>
-		);
-	else if (
-		me.data &&
-		isLoged &&
-		loged &&
-		tfaVerified &&
-		me.data.createdAt !== me.data.updatedAt
-	)
-		return (
-			<MyContext.Provider value={{ userData, isLoged }}>
-				{children}
-			</MyContext.Provider>
-		);
+  if (tfaStatus && !tfaVerified && !loged)
+    return (
+      <TwoFactor
+        isEnabled={true}
+        isOpen={true}
+        closemodal={() => {}}
+        setValid={setTfaVerified}
+        setIsLoged={setIsLoged}
+      />
+    );
+  else if (me.isLoading) return <Loader />;
+  else if (
+    me.data &&
+    isLoged &&
+    loged &&
+    tfaVerified &&
+    me.data.createdAt === me.data.updatedAt
+  ) {
+    oneTime = true;
+    return (
+      <ProfileSettings
+        isOpen={me.data.createdAt === me.data.updatedAt}
+        setIsOpen={() => {}}
+        closeModal={() => {}}
+      />
+    );
+  } else if (
+    me.data &&
+    isLoged &&
+    loged &&
+    tfaVerified &&
+    me.data.createdAt !== me.data.updatedAt
+  )
+    return (
+      <MyContext.Provider value={{ userData, isLoged }}>
+        {children}
+      </MyContext.Provider>
+    );
 };
 
 export default UserContextProvider;

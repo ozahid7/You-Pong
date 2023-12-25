@@ -17,10 +17,9 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import groups from "../../../../public/groups.svg";
-import { setData, setFile } from "@/app/(main)/chat/data/api";
+import { fetchData_userChannels, setData, setFile } from "@/app/(main)/chat/data/api";
 import { mutate } from "swr";
 import { GroupsInput } from ".";
-import { fetchData_userChannels } from "../page";
 
 export var setDataObj: Channel = {
   type: "PUBLIC",

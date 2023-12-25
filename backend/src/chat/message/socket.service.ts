@@ -14,7 +14,8 @@ import { Server, Socket } from 'socket.io';
 export interface infoType {
   id_channel: string;
   id_sender: string;
-  message: string;
+  content: string;
+  created_at: Date;
 }
 
 @Injectable()
@@ -23,7 +24,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private prisma: PrismaService) {}
   private users: { id_user: string; id_socket: string }[] = [];
   async addUser(id_user: string, id_socket: string) {
-    await this.users.push({ id_user, id_socket });
+    this.users.push({ id_user, id_socket });
   }
   removeUser(id_socket: string) {
     this.users = this.users.filter((user) => user.id_socket !== id_socket);
@@ -33,8 +34,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(socket: Socket) {
     let id_user: string;
-    if (socket && socket.handshake.headers['id_user'])
-      id_user = socket.handshake.headers['id_user'].toString();
+    if (socket && socket.handshake.query)
+      id_user = socket.handshake.query.id_user.toString();
     console.log('connected: ', socket.id);
     if (
       !this.users.find(
@@ -103,7 +104,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (!room) return;
         const message = await this.prisma.message.create({
           data: {
-            content: info.message,
+            content: info.content,
             id_sender: sender.id_user,
             name_room: room.name,
             id_channel: info.id_channel,
@@ -121,6 +122,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (message) {
           console.log('send message');
           info.id_sender = sender.id_user;
+          info.created_at = message.created_at;
           result.map((user) => {
             if (user)
               this.server.to(user.id_socket).emit('receiveMessage', info);

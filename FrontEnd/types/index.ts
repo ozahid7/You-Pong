@@ -133,11 +133,15 @@ export interface Member {
 }
 
 export interface Message {
-  id_message: String;
-	content: String;
-	created_at: any;
-	id_sender: String
-	name_room: String;
-	id_channel: String;
-  user: User;
+  id_channel: string;
+  id_sender: string;
+  content: string;
+  created_at: Date;
+  id_message: string;
+}
+
+export interface Bubble {
+  message: Message;
+  type: string;
+  member: Member | User_Hero;
 }

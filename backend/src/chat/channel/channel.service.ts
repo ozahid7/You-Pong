@@ -205,8 +205,6 @@ export class ChannelService {
         avatar: channel.avatar,
         hash: channel.hash,
         type: channel.type,
-        created_at: channel.created_at,
-        updated_at: channel.updated_at,
         users: {
           connect: { id_user: id_user },
         },
