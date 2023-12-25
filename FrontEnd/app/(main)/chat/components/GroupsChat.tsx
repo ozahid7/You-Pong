@@ -23,10 +23,7 @@ var messagess: Message[] = [];
 
 const GroupsChat = ({ channels, socket, user }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
-  const [members, setMembers] = useState<number>(0);
   const [inputValue, setInputValue] = useState("");
-
-  var m: number = 0;
 
   const fetchData_Channel = async () => {
     try {
@@ -56,27 +53,28 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
     one = false;
   };
 
-  const handleEnterPress = (e) => {
+  const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
     }
   };
 
-  useEffect(() => {
-    if (channel && !isLoading && !error)
+  const printOnline = () => {
+    var m: number = 0;
+
+    if (channel)
       channel.users?.map((obj) => {
         obj.status === "ONLINE" ? (m += 1) : (m += 0);
       });
-    setMembers(m);
 
-    //send message
-  }, [channel, members]);
+    return m;
+  };
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">
@@ -95,7 +93,8 @@ const GroupsChat = ({ channels, socket, user }: obj) => {
                 {channels.name}
               </div>
               <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm_:block xs:hidden">
-                online: {members} {members > 1 ? "members" : "member"}
+                online: {printOnline()}{" "}
+                {printOnline() > 1 ? "members" : "member"}
               </div>
             </div>
           </div>

@@ -29,10 +29,8 @@ export const generateRandomKey = () => {
 
 const ChatDialog = ({ channel, main, socket }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  var shouldScrollToBottom: boolean = true;
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
-  var type: string = "";
 
   const fetchData_getMembers = async () => {
     try {
@@ -43,7 +41,36 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
     }
   };
 
+  const fetchData_Messages = async () => {
+    try {
+      const result = await getMessages(channel.id_channel || "");
+      return result.object;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const { data: Members } = useSWR<Member[]>("/members", fetchData_getMembers);
+  const { data } = useSWR<Message[]>("/messages", fetchData_Messages);
+
+  useEffect(() => {
+    if (data) {
+      // Set the initial messages from the database //
+      setMessages(data.reverse());
+      mutate(fetchData_Messages);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!one) {
+      socket?.on("receiveMessage", (data: Message) => {
+        data.id_channel === channel.id_channel ? (show = true) : (show = false);
+        setMessages((prevMessages) => [...prevMessages, data]);
+        mutate(fetchData_Messages);
+      });
+      one = true;
+    }
+  }, []);
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
@@ -76,34 +103,6 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
     }
   };
 
-  const fetchData_Messages = async () => {
-    try {
-      const result = await getMessages(channel.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const { data } = useSWR<Message[]>("/messages", fetchData_Messages);
-
-  useEffect(() => {
-    if (data) {
-      // Set the initial messages from the database //
-      setMessages(data.reverse());
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (!one) {
-      socket?.on("receiveMessage", (data: Message) => {
-        data.id_channel === channel.id_channel ? (show = true) : (show = false);
-        setMessages((prevMessages) => [...prevMessages, data]);
-      });
-      one = true;
-    }
-  }, []);
-
   return (
     <Fragment>
       <div
@@ -111,6 +110,7 @@ const ChatDialog = ({ channel, main, socket }: Props) => {
         ref={scrollRef}
       >
         {messages &&
+          show === true &&
           messages.map((message) => {
             return whichUSER(message);
           })}

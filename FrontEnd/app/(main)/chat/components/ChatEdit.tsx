@@ -50,7 +50,6 @@ const ChatEdit = ({ channels, users }: HomePage) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
-  const [members, setMembers] = useState<number>(0);
   var m: number = 0;
 
   let imageUrl: any;
@@ -90,13 +89,16 @@ const ChatEdit = ({ channels, users }: HomePage) => {
     setDataObj.type = newSelection;
   };
 
-  useEffect(() => {
-    if (users)
-      users.map((obj) => {
-        obj.user.status === "ONLINE" ? (m += 1) : (m += 0);
+  const printOnline = () => {
+    var m: number = 0;
+
+    if (channels)
+      channels.users?.map((obj) => {
+        obj.status === "ONLINE" ? (m += 1) : (m += 0);
       });
-    setMembers(m);
-  }, [users]);
+
+    return m;
+  };
 
   return (
     <Fragment>
@@ -172,7 +174,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                           Members: {users.length}
                         </div>
                         <div className="flex font-archivo text-[#00993D]">
-                          Online: {members}
+                          Online: {printOnline()}
                         </div>
                       </div>
                     </div>
