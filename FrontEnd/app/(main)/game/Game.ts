@@ -10,18 +10,18 @@ export class Game {
 	render: any;
 	engine: any;
 
-	constructor(height: number, width: number, container: any) {
-		this.height = height;
-		this.width = width;
+	constructor(container: HTMLDivElement) {
+		this.height = container.clientHeight
+		this.width = container.clientWidth;
 
 		const { Engine, Render, World, Bodies, Composite } = Matter;
 		this.engine = Engine.create();
 
 		//set up the engine
-		this.render = myRender(container, this.engine, width, height);
+		this.render = myRender(container, this.engine, this.width, this.height);
 
 		//add the World with its bodies
-		addWorld(this.engine, World, Bodies, height, width);
+		addWorld(this.engine, World, Bodies, this.height, this.width);
 
 		// Start the engine
 		Matter.Runner.run(this.engine);

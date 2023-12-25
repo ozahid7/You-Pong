@@ -15,23 +15,26 @@ export default function game() {
 	const [showCounter, setShowCounter] = useState(false);
 	const [width, setWidht] = useState<number>();
 	const [height, setHeight] = useState<number>();
-	const [{ widowWidth, windowHeight }, setWindowSize] = useState<{
-		widowWidth: number;
-		windowHeight: number;
-	}>({ widowWidth: 0, windowHeight: 0 });
 
 	useEffect(() => {
 		// Setup Matter.js
-		setHeight(ref.current.offsetHeight);
-		setWidht(ref.current.offsetWidth);
+		const h = ref.current
 		// Create a renderer and specify the container
+		const updateSize = () => {
+			setHeight(window.innerHeight);
+			setWidht(window.innerWidth);
+			console.log("width = ", width);
+		};
 
-		const game = new Game(height, width, ref.current);
+		window.addEventListener("resize", updateSize);
+		updateSize();
+		const game = new Game(ref.current);
 
 		return () => {
-			game.destroy()
-		}
-	}, [ref.current]);
+			game.destroy();
+			window.removeEventListener("resize", updateSize);
+		};
+	}, [width, height]);
 
 	return (
 		<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
