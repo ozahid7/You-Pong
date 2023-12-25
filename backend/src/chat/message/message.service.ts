@@ -42,7 +42,7 @@ export class MessageService {
       const messages = await this.prisma.message.findMany({
         where: { id_channel: channel.id_channel },
         orderBy: {
-          created_at: 'desc',
+          created_at: 'asc',
         },
         include: { user: true },
       });
