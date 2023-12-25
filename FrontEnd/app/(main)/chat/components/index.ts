@@ -16,6 +16,8 @@ import JoinDropDown from "./JoinDropDown";
 import MuteDropDown from "./MuteDropDown";
 import ChatDialog from "./ChatDialog";
 import MyMessage from "./MyMessage";
+import ChatBubbleMain from "./ChatBubbleMain";
+import ChatBubbleSender from "./ChatBubbleSender";
 
 export {
   Chat,
@@ -36,4 +38,6 @@ export {
   MuteDropDown,
   ChatDialog,
   MyMessage,
+  ChatBubbleMain,
+  ChatBubbleSender,
 };

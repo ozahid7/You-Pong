@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -17,46 +17,55 @@ import {
   SearchChat,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
-import { userChannels } from "./data/api";
+import {
+  fetchData_getMainUser,
+  fetchData_userChannels,
+  userChannels,
+} from "./data/api";
 import useSWR from "swr";
-import { Channel } from "@/types";
+import { Channel, User_Hero } from "@/types";
+import { io } from "socket.io-client";
 
-export const fetchData_userChannels = async () => {
-  try {
-    const result = await userChannels();
-    return result;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
+var one: boolean = false;
+var connection: any = null;
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-  const {
-    data: channel,
-    error,
-    isLoading,
-  } = useSWR<Channel[]>("/myData", fetchData_userChannels);
+  const { data: MainUser } = useSWR<User_Hero>(
+    "/MainUser",
+    fetchData_getMainUser
+  );
 
-  if (error) return <div>ERROR</div>;
+  const { data: channel } = useSWR<Channel[]>(
+    "/myData",
+    fetchData_userChannels
+  );
 
-  if (!channel && isLoading)
+  if (!channel)
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
     );
 
-  function formatAMPM(date: any) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    var strTime = hours + ":" + minutes + " " + ampm;
-    return strTime;
+  //// Socket
+  if (MainUser?.uid && !one) {
+    connection = io(`http://localhost:4000/chat?id_user=${MainUser.uid}`, {
+      transports: ["websocket"],
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            "Sec-WebSocket-Version": "13",
+            "Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+            "Sec-WebSocket-Extensions":
+              "permessage-deflate; client_max_window_bits",
+          },
+        },
+      },
+      autoConnect: true,
+    });
+    one = true;
   }
 
   return (
@@ -171,6 +180,8 @@ const Chats = () => {
                             .map((obj, i) => (
                               <GroupsChat
                                 channels={obj}
+                                socket={connection}
+                                user={MainUser}
                                 key={i}
                               ></GroupsChat>
                             ))
@@ -187,6 +198,8 @@ const Chats = () => {
                             .map((obj, i) => (
                               <Chat
                                 channels={obj}
+                                socket={connection}
+                                user={MainUser}
                                 key={i}
                               ></Chat>
                             ))

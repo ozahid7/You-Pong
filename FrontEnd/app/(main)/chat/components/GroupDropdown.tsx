@@ -7,6 +7,7 @@ import { Button } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
+  fetchData_userChannels,
   getChannel,
   getMainUser,
   getMembers,
@@ -14,7 +15,6 @@ import {
   userChannels,
 } from "../data/api";
 import useSWR, { useSWRConfig } from "swr";
-import { fetchData_userChannels } from "../page";
 import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {

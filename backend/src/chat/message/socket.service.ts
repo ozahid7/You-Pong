@@ -14,7 +14,8 @@ import { Server, Socket } from 'socket.io';
 export interface infoType {
   id_channel: string;
   id_sender: string;
-  message: string;
+  content: string;
+  created_at: Date;
 }
 
 @Injectable()
@@ -103,7 +104,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (!room) return;
         const message = await this.prisma.message.create({
           data: {
-            content: info.message,
+            content: info.content,
             id_sender: sender.id_user,
             name_room: room.name,
             id_channel: info.id_channel,
@@ -121,6 +122,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (message) {
           console.log('send message');
           info.id_sender = sender.id_user;
+          info.created_at = message.created_at;
           result.map((user) => {
             if (user)
               this.server.to(user.id_socket).emit('receiveMessage', info);
