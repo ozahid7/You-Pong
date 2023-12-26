@@ -169,17 +169,23 @@ export class UserService {
     if (
       id_user &&
       user &&
-      user.friendship_friend.find(
+      (user.friendship_friend.find(
         (user) => user.id_user === id_user && user.state === 'PENDING',
-      )
+      ) ||
+        user.friendship_user.find(
+          (user) => user.id_user === id_user && user.state === 'PENDING',
+        ))
     )
       user_relation = relation.pending;
     else if (
       id_user &&
       user &&
-      user.friendship_friend.find(
+      (user.friendship_friend.find(
         (user) => user.id_user === id_user && user.state === 'ACCEPTED',
-      )
+      ) ||
+        user.friendship_user.find(
+          (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+        ))
     )
       user_relation = relation.accepted;
 
