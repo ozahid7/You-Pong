@@ -35,48 +35,54 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
 	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
-	const path = usePathname()
+	const [test, setTest] = useState(false);
+	const path = usePathname();
+	let i: number = 0;
 
 	const me = useUser(tfaVerified);
 
-		useEffect(() => {
-			if (me.data) {
-				setUserData(me.data);
-				setTfaStatus(me.data.tfaStatus);
-				if (typeof window !== "undefined") {
-					localStorage.setItem("isLoged", "true");
-					localStorage.getItem("isLoged") === "true"
-						? setIsLoged(true)
-						: setIsLoged(false);
-				}
+	useEffect(() => {
+		if (me.data) {
+			setUserData(me.data);
+			setTfaStatus(me.data.tfaStatus);
+			if (typeof window !== "undefined") {
+				localStorage.setItem("isLoged", "true");
+				localStorage.getItem("isLoged") === "true"
+					? setIsLoged(true)
+					: setIsLoged(false);
 			}
-			if (!me.data && !me.isPending) {
-				setchecked(true);
-				localStorage.removeItem("isLoged");
-				redirect(myRoutes.root);
-			}
-			if (globalSocket === null && me.data)
-				setGlobalSocket(
-					io(socketurl + "?id_user=" + me.data.uid, {
-						transports: ["websocket"],
-						transportOptions: {
-							polling: {
-								extraHeaders: {
-									"Sec-WebSocket-Version": "13",
-									"Sec-WebSocket-Key":
-										"0Me1PSdr2zimQ28+k6ug8w==",
-									"Sec-WebSocket-Extensions":
-										"permessage-deflate; client_max_window_bits",
-								},
+		}
+		if (!me.data && !me.isPending) {
+			setchecked(true);
+			localStorage.removeItem("isLoged");
+			redirect(myRoutes.root);
+		}
+		if (globalSocket === null && me.data) {
+			setGlobalSocket(
+				io(socketurl + "?id_user=" + me.data.uid, {
+					transports: ["websocket"],
+					transportOptions: {
+						polling: {
+							extraHeaders: {
+								"Sec-WebSocket-Version": "13",
+								"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+								"Sec-WebSocket-Extensions":
+									"permessage-deflate; client_max_window_bits",
 							},
 						},
-						autoConnect: true,
-					})
-					
-				);
-				// if (path !== '/game' && globalSocket !== null)
-				// 	globalSocket.emit('online')
-		}, [me]);
+					},
+					autoConnect: true,
+				})
+			);
+			setTest(true)
+		}
+	}, [me]);
+
+	useEffect(() => {
+		if (path !== "/game" && test ) {
+			globalSocket.emit("online");
+		}
+	}, [test]);
 
 	const getTfa = async () => {
 		try {

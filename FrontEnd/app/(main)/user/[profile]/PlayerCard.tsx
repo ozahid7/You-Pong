@@ -20,7 +20,7 @@ const PlayerCard = (props: {
 	rank: number;
 	level: number;
 	isMe: boolean;
-	isPending: boolean;
+	user_relation: string;
 	status: string;
 	uid: string;
 }) => {
@@ -107,9 +107,9 @@ const PlayerCard = (props: {
 
 	const [Icon, setIcon] = useState<any>(FaUserClock);
 	useEffect(() => {
-		!isFriend && !isPending && !props.isPending
+		props.user_relation === "NONE"
 			? setIcon(addIcon)
-			: isPending || props.isPending
+			: props.user_relation === "PENDING"
 			? setIcon(pendingIcon)
 			: setIcon(removeIcon);
 	}, [isFriend, isPending]);
@@ -150,7 +150,7 @@ const PlayerCard = (props: {
 						)}
 
 						{!props.isMe && Icon}
-						{/* {!props.isMe && <LuMessageSquarePlus/>} */}
+						{!props.isMe && <LuMessageSquarePlus className={userIconStyle}/>}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">
 									<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">

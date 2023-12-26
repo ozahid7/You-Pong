@@ -28,7 +28,7 @@ const page = ({ params }: pageProps) => {
 		wins,
 		loses,
 		status,
-		isPending,
+		user_relation,
 		uid,
 		createdAt,
 		updatedAt,
@@ -48,7 +48,7 @@ const page = ({ params }: pageProps) => {
 								username={username}
 								rank={rank}
 								level={level}
-								isPending={isPending}
+								user_relation={user_relation}
 								avatar={avatar}
 								status={status}
 								isMe={isMe}

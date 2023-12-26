@@ -40,9 +40,9 @@ export type UserInfo = {
 	loses: number;
 	rank: number;
 	uid: string;
+	user_relation: 'PENDING' | 'ACCEPTED' | 'NONE';
 	tfaStatus: boolean;
 	username: string;
-	isPending: boolean;
 	createdAt: string;
 	updatedAt: string;
 	status: string;
@@ -59,11 +59,11 @@ export type UserToShow = {
 	avatar: string;
 	username: string;
 	level: number;
+	user_relation: 'PENDING' | 'ACCEPTED' | 'NONE';
 	rank: number;
 	wins: number;
 	loses: number;
 	uid: string;
-	isPending: boolean;
 	status: string;
 	tfaStatus: boolean;
 	achievements: Achievement[];
