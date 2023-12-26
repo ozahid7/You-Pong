@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext } from "react";
 import { TwoFactor } from "@/components";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
@@ -34,45 +34,49 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isLoged, setIsLoged] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
-	const [globalSocket, setGlobalSocket] = useState(null);
-	const [statusSocket, setStatusSocket] = useState(null);
+	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
+	const path = usePathname()
 
 	const me = useUser(tfaVerified);
 
-	useEffect(() => {
-		if (me.data) {
-			setUserData(me.data);
-			setTfaStatus(me.data.tfaStatus);
-			if (typeof window !== "undefined") {
-				localStorage.setItem("isLoged", "true");
-				localStorage.getItem("isLoged") === "true"
-					? setIsLoged(true)
-					: setIsLoged(false);
+		useEffect(() => {
+			if (me.data) {
+				setUserData(me.data);
+				setTfaStatus(me.data.tfaStatus);
+				if (typeof window !== "undefined") {
+					localStorage.setItem("isLoged", "true");
+					localStorage.getItem("isLoged") === "true"
+						? setIsLoged(true)
+						: setIsLoged(false);
+				}
 			}
-		}
-		if (!me.data && !me.isPending) {
-			setchecked(true);
-			localStorage.removeItem("isLoged");
-			redirect(myRoutes.root);
-		}
-		if (globalSocket === null && me.data)
-			setGlobalSocket(
-				io(socketurl + "?id_user=" + me.data.uid, {
-					transports: ["websocket"],
-					transportOptions: {
-						polling: {
-							extraHeaders: {
-								"Sec-WebSocket-Version": "13",
-								"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-								"Sec-WebSocket-Extensions":
-									"permessage-deflate; client_max_window_bits",
+			if (!me.data && !me.isPending) {
+				setchecked(true);
+				localStorage.removeItem("isLoged");
+				redirect(myRoutes.root);
+			}
+			if (globalSocket === null && me.data)
+				setGlobalSocket(
+					io(socketurl + "?id_user=" + me.data.uid, {
+						transports: ["websocket"],
+						transportOptions: {
+							polling: {
+								extraHeaders: {
+									"Sec-WebSocket-Version": "13",
+									"Sec-WebSocket-Key":
+										"0Me1PSdr2zimQ28+k6ug8w==",
+									"Sec-WebSocket-Extensions":
+										"permessage-deflate; client_max_window_bits",
+								},
 							},
 						},
-					},
-					autoConnect: true,
-				})
-			);
-	}, [me]);
+						autoConnect: true,
+					})
+					
+				);
+				// if (path !== '/game' && globalSocket !== null)
+				// 	globalSocket.emit('online')
+		}, [me]);
 
 	const getTfa = async () => {
 		try {
@@ -93,11 +97,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		else setTfaVerified(true);
 	}, []);
 
-	useLayoutEffect(() => {
-		if (!loged && checked) {
-			redirect(myRoutes.root);
-		}
-	}, [isLoged, checked]);
+	// useLayoutEffect(() => {
+	// 	if (!loged && checked) {
+	// 		redirect(myRoutes.root);
+	// 	}
+	// }, [isLoged, checked]);
 
 	if (tfaStatus && !tfaVerified && !loged)
 		return (

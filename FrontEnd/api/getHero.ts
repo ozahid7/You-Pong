@@ -6,6 +6,7 @@ export const useUser = (tfaVerified: boolean) => {
   const getHero = async () => {
     try {
       const response = await useAxios<UserData>("get", endPoints.gethero);
+      console.log('hero response = ', response.userInfo)
       return response.userInfo;
     } catch (error) {
       console.log("get hero error = :", error);

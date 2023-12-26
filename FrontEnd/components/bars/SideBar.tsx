@@ -14,10 +14,12 @@ import {
 } from "react-icons/lu";
 import {  QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
 	const path = usePathname();
 	const router = useRouter();
+	
 
 	const Elements = [
 		<LuLayoutDashboard size="64" />,
@@ -60,6 +62,8 @@ const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true);
 	const { username, avatar } = user.data;
+	const globalSocket = useGlobalSocket()
+	
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -70,6 +74,7 @@ const SideBar = () => {
 			.then((response) => {
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
+				globalSocket.emit('offline')
 				query.removeQueries({queryKey: ['user']})
 				router.push("/");
 			})

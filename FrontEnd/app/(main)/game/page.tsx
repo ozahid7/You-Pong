@@ -51,7 +51,7 @@ export default function game() {
 							></div>
 						</div>
 					</div>
-					<MyCountDown isOpen={false} setIsOpen={setShowCounter} />
+					<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
 					<GameSettings
 						showPlayerLoader={setShowPlayerLoder}
 						setMode={setMode}
@@ -59,7 +59,7 @@ export default function game() {
 					/>
 					{showPlayerLoader && (
 						<PlayerLoader
-							isOpen={false}
+							isOpen={showPlayerLoader}
 							showCounter={setShowCounter}
 							showLoader={setShowPlayerLoder}
 						/>

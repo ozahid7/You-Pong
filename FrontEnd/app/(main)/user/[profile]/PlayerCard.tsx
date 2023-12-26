@@ -3,7 +3,7 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
+import { FaFacebookMessenger, FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
@@ -11,11 +11,8 @@ import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser } from "@/api/friendShip";
 import { IconType } from "react-icons";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-
-interface statuProps {
-	id_user: string;
-	status: string;
-}
+import { text } from "stream/consumers";
+import { LuMessageSquare, LuMessageSquarePlus } from "react-icons/lu";
 
 const PlayerCard = (props: {
 	username: string;
@@ -34,34 +31,27 @@ const PlayerCard = (props: {
 	const router = useRouter();
 	const [color, setColor] = useState("");
 	const [subcolor, setSubColor] = useState("");
+	const [textColor, setTextColor] = useState("")
 	const friends = useFriends();
-	
 
 	var Block = blockuser(props.uid, friends, undefined);
 	var Add = adduser(props.uid, friends);
 	var Remove = removeuser(props.uid, friends);
 
-	const globalSocket = useGlobalSocket();
 	useEffect(() => {
-		globalSocket.on("status", (obj: statuProps) => {
-			{
-				if (obj.status === 'ONLINE')
-				{
-					setColor( "bg-green-600")
-					setSubColor( "bg-green-500")
-				}
-				else if (obj.status === 'OFFLINE')
-				{
-					setColor("bg-red-600");
-					setSubColor("bg-red-500");
-				}
-				else if (obj.status === 'INGAME')
-				{
-					setColor("bg-blue-600");
-					setSubColor("bg-blue-500");
-				}
-			}
-		});
+		if (props.status === "ONLINE") {
+			setColor("bg-green-600");
+			setSubColor("bg-green-500");
+			setTextColor("text-green-600")
+		} else if (props.status === "OFFLINE") {
+			setTextColor("text-red-600")
+			setColor("bg-red-600");
+			setSubColor("bg-red-500");
+		} else if (props.status === "INGAME") {
+			setTextColor("text-yellow-600")
+			setColor("bg-yellow-600");
+			setSubColor("bg-yellow-500");
+		}
 	}, []);
 
 	useEffect(() => {
@@ -160,12 +150,14 @@ const PlayerCard = (props: {
 						)}
 
 						{!props.isMe && Icon}
+						{/* {!props.isMe && <LuMessageSquarePlus/>} */}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
-							<div className=" w-full space-x-1  flex">
-								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
-									{name}
-								</h2>
-								<span className="relative flex h-2 w-2  sm:h-3 sm:w-3">
+							<div className=" w-full relative space-x-1  flex">
+									<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
+										{name}
+									</h2>
+									<p className={`absolute -top-1 left-0 text-[12px] ${textColor}`}>{props.status.toLowerCase()}</p>
+								<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
 									<span
 										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
 									></span>

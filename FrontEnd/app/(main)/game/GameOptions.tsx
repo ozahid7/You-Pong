@@ -16,7 +16,7 @@ export default function GameSettings(props: {
     showPlayerLoader: any;
 }) {
     const router = useRouter()
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
         <>
