@@ -1,93 +1,136 @@
-// import { Injectable, OnModuleInit, Req, UseGuards} from '@nestjs/common';
-// import {
-//   ConnectedSocket,
-//   MessageBody,
-//   OnGatewayConnection,
-//   OnGatewayDisconnect,
-//   SubscribeMessage,
-//   WebSocketGateway,
-//   WebSocketServer,
-// } from '@nestjs/websockets';
-// import { Server, Socket } from 'socket.io';
-// import { roomDto } from '../../chat/dto/room.create.dto';
-// import { PrismaService } from 'src/prisma/prisma.service';
-// import { ReadableByteStreamControllerCallback } from 'stream/web';
-// import { AuthGuard } from '@nestjs/passport';
-// import { JsonObject } from '@prisma/client/runtime/library';
-// import { FindUserService } from 'src/user/services';
-// import { Request } from 'express';
+import { Injectable } from '@nestjs/common';
+import {
+  ConnectedSocket,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Server, Socket } from 'socket.io';
 
-// @UseGuards(AuthGuard('jwt'))
-// @Injectable()
-// // @UseGuards(AuthGuard('jwt'))
-// @WebSocketGateway()
-// export class SocketService implements OnModuleInit{
-//   constructor(private prisma: PrismaService,
-//               private userFind: FindUserService,
-//               ) {}
-//   private room;
-//   private users: { userId: string; socketId: string }[] = [];
-//   private msgInfo: { userId: string; senderId: string; message: string };
+export interface infoType {
+  id_sender: string;
+  status: 'ONLINE' | 'OFFLINE' | 'INGAME';
+}
 
-//   async addUser(userId: string, socketId: string) {
-//     await this.users.push({ userId, socketId });
-//   }
-//   async removeUser(socketId: string) {
-//     this.users.filter((user) => user.socketId !== socketId);
-//   }
-//   @WebSocketServer()
-//   server: Server;
-//   onModuleInit() {
-//   //   this.server.on('connection', async (socket: Socket) => {
-//   //     console.log(socket.id);
-//   //     this.server.on('addUser', async (userId: string) => {
-//   //       this.addUser(userId, socket.id);
-//   //     });
-//   //     this.room = await this.prisma.room_Chat.findFirst({
-//   //       where: {
-//   //         name: 'room1',
-//   //       },
-//   //     });
-//   //     if (socket.rooms[this.room.name]) socket.join(this.room.name);
-//   //     console.log('joined ', this.room.name);
-//   //   });
-//   //   this.server.on('DM', async ({ receiverId, idRoom, message }) => {
-//   //     //Block condition
-//   //     await this.prisma.message.create({
-//   //       data: {
-//   //         content: message,
-//   //         id_room: idRoom,
-//   //       },
-//   //     });
-//   //     const receiverUser = this.users.find((user) => {
-//   //       user.userId === receiverId;
-//   //     });
-//   //     if (receiverUser !== undefined) {
-//   //       this.server.to(receiverUser.socketId).emit(message);
-//   //       console.log(message);
-//   //     }
-//   //   });
+@Injectable()
+@WebSocketGateway()
+export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private prisma: PrismaService) {}
+  private users: { id_user: string; id_socket: string }[] = [];
+  async addUser(id_user: string, id_socket: string) {
+    this.users.push({ id_user, id_socket });
+  }
+  removeUser(id_socket: string) {
+    this.users = this.users.filter((user) => user.id_socket !== id_socket);
+  }
+  @WebSocketServer()
+  server: Server;
 
-//   //   this.server.on('disconnect', async (socket: Socket) => {
-//   //     this.removeUser(socket.id);
-//   //     console.log('Disconnected');
-//     // });
-//   }
+  async handleConnection(socket: Socket) {
+    let id_user: string;
+    if (socket && socket.handshake.query)
+      id_user = socket.handshake.query.id_user.toString();
+    console.log('connected: ', socket.id);
+    if (
+      !this.users.find(
+        (user) => user.id_user === id_user && user.id_socket === socket.id,
+      )
+    ) {
+      this.addUser(id_user, socket.id);
+    }
+    console.log(this.users);
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    if (sender && sender !== undefined) {
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: sender.id_user,
+        },
+      });
+      if (my_user) {
+        const user = await this.prisma.user.update({
+            where:{id_user: sender.id_user},
+            data:{status:"ONLINE"}
+        })
+        if (user) {
+            console.log('ONLINE');
+            this.server.to(sender.id_socket).emit('status', {id_user: sender.id_user, status: 'ONLINE'});
+        }
+      }
+    }
+  }
+ async handleDisconnect(socket: Socket) {
+     const sender = this.users.find((user) => user.id_socket === socket.id);
+     if (sender !== undefined) {
+         const my_user = await this.prisma.user.findUnique({
+             where: {
+                 id_user: sender.id_user,
+                },
+            });
+            if (my_user) {
+                const user = await this.prisma.user.update({
+                    where:{id_user: sender.id_user},
+                    data:{status:"OFFLINE"}
+                })
+                if (user) {
+                    console.log('OFFLINE');
+                    
+                    this.server.to(sender.id_socket).emit('status', {id_user: sender.id_user, status: 'OFFLINE'});
+                }
+            }
+        }
+        this.removeUser(socket.id);
+        console.log('disconnected: ', socket.id);
+        console.log(this.users);
+  }
 
-//   @SubscribeMessage('newMessage')
-//   async newMessage(@MessageBody() body: JsonObject, @ConnectedSocket() client: Socket) {
-//     console.log(body);
-//     this.server.emit('le message', "toooom");
-//     }
+  @SubscribeMessage('inGame')
+  async inGame(
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    if (sender !== undefined) {
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: sender.id_user,
+        },
+      });
+      if (my_user) {
+        const user = await this.prisma.user.update({
+            where:{id_user: sender.id_user, status: "ONLINE"},
+            data:{status:"INGAME"}
+        })
+        if (user) {
+            console.log('INGAME');
+            this.server.to(sender.id_socket).emit('status', {id_user: sender.id_user, status: 'INGAME'});
+        }
+      }
+    }
+  }
 
-//     async handleConnection(client: Socket): Promise<void> {
-//       // const user = await this.userFind.finduserById(req);
-//       // console.log(req);
-
-//       console.log(`Client connected: ${client.id}`);
-//     }
-
-//     handleDisconnect(client: Socket): void {
-//       console.log(`Client disconnected: ${client.id}`);
-//   }
-// }
+  @SubscribeMessage('endGame')
+  async endGame(
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    if (sender !== undefined) {
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: sender.id_user,
+        },
+      });
+      if (my_user) {
+        const user = await this.prisma.user.update({
+            where:{id_user: sender.id_user, status: "INGAME"},
+            data:{status:"ONLINE"}
+        })
+        if (user) {
+            console.log('ONLINE');
+            this.server.to(sender.id_socket).emit('status', {id_user: sender.id_user, status: 'ONLINE'});
+        }
+      }
+    }
+  }
+}
