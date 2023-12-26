@@ -10,6 +10,8 @@ import MiniLoader from "@/components/tools/MiniLoader";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { Socket } from "socket.io-client";
 
 interface ProfileSettingsProps {
 	isOpen: boolean;
@@ -40,6 +42,11 @@ const ProfileSettings = ({
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 	const [message, setMessage] = useState("Required");
 	const [loader, setLoder] = useState(false);
+	const ctx = useGlobalSocket();
+	let globalSocket: Socket;
+	if (ctx !== undefined){
+		globalSocket = ctx.globalSocket;
+	}
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +88,10 @@ const ProfileSettings = ({
 				console.log("update response = ", res);
 				user.refetch();
 				closeModal(false);
+				if (user.data.createdAt === user.data.updatedAt){
+					console.log('emit from update');
+					globalSocket.emit('online')
+				}
 				router.push(myRoutes.dashboard);
 			} catch (error) {
 				console.log("error = ", error);

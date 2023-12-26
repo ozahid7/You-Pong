@@ -62,7 +62,7 @@ const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true);
 	const { username, avatar } = user.data;
-	const globalSocket = useGlobalSocket()
+	const {globalSocket} = useGlobalSocket()
 	
 
 	const handleLogout = async () => {
@@ -72,10 +72,10 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
+				query.removeQueries({queryKey: ['user']})
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit('offline')
-				query.removeQueries({queryKey: ['user']})
 				router.push("/");
 			})
 			.catch((e) => {

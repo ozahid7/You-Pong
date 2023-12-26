@@ -8,7 +8,7 @@ import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
-import { adduser, blockuser, removeuser } from "@/api/friendShip";
+import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { IconType } from "react-icons";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { text } from "stream/consumers";
@@ -26,6 +26,8 @@ const PlayerCard = (props: {
 }) => {
 	const userIconStyle =
 		"z-10 h-[14%] w-[14%]  absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1  text-cardtitle cursor-pointer";
+	const directIconStyle =
+		"z-10 h-[15%] w-[15%]  absolute sm:bottom-[74px] xl:w-[12%] xl:h-[12%] h:right-3 bottom-14 right-1  text-cardtitle cursor-pointer";
 	const [isFriend, setIsFriend] = useState(false);
 	const [isPending, setIsPending] = useState(false);
 	const router = useRouter();
@@ -34,9 +36,11 @@ const PlayerCard = (props: {
 	const [textColor, setTextColor] = useState("")
 	const friends = useFriends();
 
-	var Block = blockuser(props.uid, friends, undefined);
-	var Add = adduser(props.uid, friends);
-	var Remove = removeuser(props.uid, friends);
+	const Block = blockuser(props.uid, friends, undefined);
+	const Add = adduser(props.uid, friends);
+	const Remove = removeuser(props.uid, friends);
+	const direct = todirect(props.uid);
+
 
 	useEffect(() => {
 		if (props.status === "ONLINE") {
@@ -150,13 +154,26 @@ const PlayerCard = (props: {
 						)}
 
 						{!props.isMe && Icon}
-						{!props.isMe && <LuMessageSquarePlus className={userIconStyle}/>}
+						{!props.isMe && (
+							<LuMessageSquarePlus
+								size={100}
+								strokeWidth={2.5}
+								className={directIconStyle}
+								onClick={() => {
+									direct.mutate()
+								}}
+							/>
+						)}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">
-									<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
-										{name}
-									</h2>
-									<p className={`absolute -top-1 left-0 text-[12px] ${textColor}`}>{props.status.toLowerCase()}</p>
+								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
+									{name}
+								</h2>
+								<p
+									className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
+								>
+									{props.status.toLowerCase()}
+								</p>
 								<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
 									<span
 										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}

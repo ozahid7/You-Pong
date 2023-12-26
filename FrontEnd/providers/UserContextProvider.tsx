@@ -30,12 +30,13 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		loged = localStorage.getItem("isLoged") === "true" ? true : false;
 	}
 	const [checked, setchecked] = useState(false);
+
 	const [tfaVerified, setTfaVerified] = useState(false);
 	const [isLoged, setIsLoged] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
 	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
-	const [test, setTest] = useState(false);
+	const [toEmit, setToEmit] = useState(false);
 	const path = usePathname();
 	let i: number = 0;
 
@@ -74,15 +75,20 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					autoConnect: true,
 				})
 			);
-			setTest(true)
+			setToEmit(true);
 		}
 	}, [me]);
 
 	useEffect(() => {
-		if (path !== "/game" && test ) {
+		if (
+			path !== "/game" &&
+			toEmit &&
+			(me.data.createdAt !== me.data.updatedAt)
+		) {
+			console.log("emit from provider");
 			globalSocket.emit("online");
 		}
-	}, [test]);
+	}, [toEmit]);
 
 	const getTfa = async () => {
 		try {
@@ -127,7 +133,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		tfaVerified &&
 		me.data.createdAt === me.data.updatedAt
 	) {
-		oneTime = true;
 		return (
 			<ProfileSettings
 				isOpen={me.data.createdAt === me.data.updatedAt}
@@ -150,7 +155,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useGlobalSocket = () => {
-	return useContext(GlobalContext).globalSocket;
+	return useContext(GlobalContext);
 };
 
 export default UserContextProvider;

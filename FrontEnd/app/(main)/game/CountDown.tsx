@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 const MyCountDown = (props: { isOpen: boolean; setIsOpen: any }) => {
 	let [counter, setCounter] = useState(3);
-	const globalSocket = useGlobalSocket();
+	const { globalSocket } = useGlobalSocket();
 	useEffect(() => {
 		if (props.isOpen) {
 			const time = setInterval(() => {
@@ -16,7 +16,7 @@ const MyCountDown = (props: { isOpen: boolean; setIsOpen: any }) => {
 
 			setTimeout(() => {
 				props.setIsOpen(false);
-				globalSocket.emit('inGame')
+				globalSocket.emit("inGame");
 			}, 5000);
 			return () => clearInterval(time);
 		}

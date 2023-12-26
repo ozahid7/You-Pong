@@ -117,6 +117,9 @@ export class UserService {
   // create a user
   async create(obj: any) {
     try {
+      let rank = 0;
+      const users = await this.prisma.user.findMany();
+      if (users) rank = users.length + 1;
       const newUser = await this.prisma.user.create({
         data: {
           username: await this.generateUser(obj.username),
@@ -125,7 +128,8 @@ export class UserService {
           lastname: obj.familyName,
           firstname: obj.givenName,
           avatar: obj.avatar,
-          rank: this.rank,
+          rank: rank,
+          // rank: this.rank,
         },
       });
       this.rank++;
@@ -173,7 +177,7 @@ export class UserService {
         (user) => user.id_user === id_user && user.state === 'PENDING',
       ) ||
         user.friendship_user.find(
-          (user) => user.id_user === id_user && user.state === 'PENDING',
+          (user) => user.id_friend === id_user && user.state === 'PENDING',
         ))
     )
       user_relation = relation.pending;
@@ -184,7 +188,7 @@ export class UserService {
         (user) => user.id_user === id_user && user.state === 'ACCEPTED',
       ) ||
         user.friendship_user.find(
-          (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+          (user) => user.id_friend === id_user && user.state === 'ACCEPTED',
         ))
     )
       user_relation = relation.accepted;
