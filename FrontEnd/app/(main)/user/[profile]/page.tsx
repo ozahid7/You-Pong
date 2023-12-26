@@ -8,6 +8,7 @@ import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 interface pageProps {
 	params: { profile: string };
@@ -33,7 +34,7 @@ const page = ({ params }: pageProps) => {
 		updatedAt,
 	} = toShow;
 
-	const 
+	
 
 	if (isLoading || isFetching) return <Loader />;
 	else

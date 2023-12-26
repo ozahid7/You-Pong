@@ -1,7 +1,7 @@
 "use client";
 
 import { MiniBanner, MyCard } from "@/components";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
@@ -9,30 +9,60 @@ import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser } from "@/api/friendShip";
+import { IconType } from "react-icons";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+
+interface statuProps {
+	id_user: string;
+	status: string;
+}
 
 const PlayerCard = (props: {
 	username: string;
 	avatar: string;
 	rank: number;
 	level: number;
-  	isMe: boolean
+	isMe: boolean;
 	isPending: boolean;
 	status: string;
-	uid: string
+	uid: string;
 }) => {
-
-
 	const userIconStyle =
 		"z-10 h-[14%] w-[14%]  absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1  text-cardtitle cursor-pointer";
 	const [isFriend, setIsFriend] = useState(false);
 	const [isPending, setIsPending] = useState(false);
 	const router = useRouter();
-	const isOnline = true;
+	const [color, setColor] = useState("");
+	const [subcolor, setSubColor] = useState("");
 	const friends = useFriends();
+	
 
 	var Block = blockuser(props.uid, friends, undefined);
 	var Add = adduser(props.uid, friends);
 	var Remove = removeuser(props.uid, friends);
+
+	const globalSocket = useGlobalSocket();
+	useEffect(() => {
+		globalSocket.on("status", (obj: statuProps) => {
+			{
+				if (obj.status === 'ONLINE')
+				{
+					setColor( "bg-green-600")
+					setSubColor( "bg-green-500")
+				}
+				else if (obj.status === 'OFFLINE')
+				{
+					setColor("bg-red-600");
+					setSubColor("bg-red-500");
+				}
+				else if (obj.status === 'INGAME')
+				{
+					setColor("bg-blue-600");
+					setSubColor("bg-blue-500");
+				}
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		if (friends.data) {
@@ -85,7 +115,7 @@ const PlayerCard = (props: {
 		/>
 	);
 
-	const [Icon, setIcon] = useState(FaUserClock);
+	const [Icon, setIcon] = useState<any>(FaUserClock);
 	useEffect(() => {
 		!isFriend && !isPending && !props.isPending
 			? setIcon(addIcon)
@@ -129,7 +159,7 @@ const PlayerCard = (props: {
 							/>
 						)}
 
-              {!props.isMe && Icon}
+						{!props.isMe && Icon}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full space-x-1  flex">
 								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
@@ -137,18 +167,10 @@ const PlayerCard = (props: {
 								</h2>
 								<span className="relative flex h-2 w-2  sm:h-3 sm:w-3">
 									<span
-										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
-											isOnline
-												? "bg-green-500"
-												: "bg-red-500"
-										}  opacity-75`}
+										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
 									></span>
 									<span
-										className={`relative inline-flex rounded-full w-2 h-2 sm:h-3 sm:w-3 ${
-											isOnline
-												? "bg-green-600"
-												: "bg-red-600"
-										} `}
+										className={`relative inline-flex rounded-full w-2 h-2 sm:h-3 sm:w-3 ${subcolor} `}
 									></span>
 								</span>
 							</div>

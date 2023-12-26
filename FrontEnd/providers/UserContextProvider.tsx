@@ -5,11 +5,7 @@ import { redirect } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
-import {
-	endPoints,
-	tfaSwitch,
-	UserInfo,
-} from "@/types/Api";
+import { endPoints, tfaSwitch, UserInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 import { useUser } from "@/api/getHero";
@@ -22,7 +18,9 @@ export interface myContextProps {
 	isLoged: boolean;
 	globalSocket: Socket;
 }
-export const GlobalContext = createContext<myContextProps | undefined>(undefined);
+export const GlobalContext = createContext<myContextProps | undefined>(
+	undefined
+);
 
 let oneTime: boolean = false;
 
@@ -36,11 +34,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isLoged, setIsLoged] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
-	const [globalSocket, setGlobalSocket] = useState(null)
-  const [statusSocket, setStatusSocket] = useState(null)
+	const [globalSocket, setGlobalSocket] = useState(null);
+	const [statusSocket, setStatusSocket] = useState(null);
 
-  const me = useUser(tfaVerified);
-
+	const me = useUser(tfaVerified);
 
 	useEffect(() => {
 		if (me.data) {
@@ -53,79 +50,97 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					: setIsLoged(false);
 			}
 		}
-		if(!me.data && !me.isPending) 
-		{
+		if (!me.data && !me.isPending) {
 			setchecked(true);
 			localStorage.removeItem("isLoged");
 			redirect(myRoutes.root);
 		}
-    if (globalSocket === null && me.data) setGlobalSocket(io(socketurl + "?id_user=" + me.data.uid));
+		if (globalSocket === null && me.data)
+			setGlobalSocket(
+				io(socketurl + "?id_user=" + me.data.uid, {
+					transports: ["websocket"],
+					transportOptions: {
+						polling: {
+							extraHeaders: {
+								"Sec-WebSocket-Version": "13",
+								"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+								"Sec-WebSocket-Extensions":
+									"permessage-deflate; client_max_window_bits",
+							},
+						},
+					},
+					autoConnect: true,
+				})
+			);
 	}, [me]);
 
-  const getTfa = async () => {
-    try {
-      const response = await useAxios<tfaSwitch>("get", endPoints.getTfaStatus);
-      if (response === false) setTfaVerified(true);
-      setTfaStatus(response);
-    } catch (error) {
-      setTfaVerified(true);
-      console.log("error : ", error);
-    }
-    return null;
-  };
-  useEffect(() => {
-    if (!loged) getTfa();
-    else setTfaVerified(true);
-  }, []);
+	const getTfa = async () => {
+		try {
+			const response = await useAxios<tfaSwitch>(
+				"get",
+				endPoints.getTfaStatus
+			);
+			if (response === false) setTfaVerified(true);
+			setTfaStatus(response);
+		} catch (error) {
+			setTfaVerified(true);
+			console.log("error : ", error);
+		}
+		return null;
+	};
+	useEffect(() => {
+		if (!loged) getTfa();
+		else setTfaVerified(true);
+	}, []);
 
-  useLayoutEffect(() => {
-    if (!loged && checked) {
-      redirect(myRoutes.root);
-    }
-  }, [isLoged, checked]);
+	useLayoutEffect(() => {
+		if (!loged && checked) {
+			redirect(myRoutes.root);
+		}
+	}, [isLoged, checked]);
 
-  if (tfaStatus && !tfaVerified && !loged)
-    return (
-      <TwoFactor
-        isEnabled={true}
-        isOpen={true}
-        closemodal={() => {}}
-        setValid={setTfaVerified}
-        setIsLoged={setIsLoged}
-      />
-    );
-  else if (me.isLoading) return <Loader />;
-  else if (
-    me.data &&
-    isLoged &&
-    loged &&
-    tfaVerified &&
-    me.data.createdAt === me.data.updatedAt
-  ) {
-    oneTime = true;
-    return (
-      <ProfileSettings
-        isOpen={me.data.createdAt === me.data.updatedAt}
-        setIsOpen={() => {}}
-        closeModal={() => {}}
-      />
-    );
-  } else if (
-    me.data &&
-    isLoged &&
-    loged &&
-    tfaVerified &&
-    me.data.createdAt !== me.data.updatedAt
-  )
-    return (
-      <GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>
-        {children}
-      </GlobalContext.Provider>
-    );
+	if (tfaStatus && !tfaVerified && !loged)
+		return (
+			<TwoFactor
+				isEnabled={true}
+				isOpen={true}
+				closemodal={() => {}}
+				setValid={setTfaVerified}
+				setIsLoged={setIsLoged}
+			/>
+		);
+	else if (me.isLoading) return <Loader />;
+	else if (
+		me.data &&
+		isLoged &&
+		loged &&
+		tfaVerified &&
+		me.data.createdAt === me.data.updatedAt
+	) {
+		oneTime = true;
+		return (
+			<ProfileSettings
+				isOpen={me.data.createdAt === me.data.updatedAt}
+				setIsOpen={() => {}}
+				closeModal={() => {}}
+			/>
+		);
+	} else if (
+		me.data &&
+		isLoged &&
+		loged &&
+		tfaVerified &&
+		me.data.createdAt !== me.data.updatedAt
+	)
+		return (
+			<GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>
+				{children}
+			</GlobalContext.Provider>
+		);
 };
 
 export const useGlobalSocket = () => {
 	return useContext(GlobalContext).globalSocket;
-}
+};
 
 export default UserContextProvider;

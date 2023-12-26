@@ -23,7 +23,7 @@ export const myRoutes = {
     notfound: "/user",
 };
 
-export const socketurl = "http://localhost:5000"
+export const socketurl = "http://localhost:4000"
 
 //render react icons
 export const navMenuElements = [
