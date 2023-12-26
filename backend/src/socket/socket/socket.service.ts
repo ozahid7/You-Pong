@@ -49,7 +49,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && my_user !== undefined) {
           const user = await this.prisma.user.update({
-            where: { id_user: my_user.id_user, status: 'OFFLINE' },
+            where: { id_user: my_user.id_user},
             data: { status: 'ONLINE' },
           });
           if (user) {
@@ -127,7 +127,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && my_user !== undefined) {
           const user = await this.prisma.user.update({
-            where: { id_user: my_user.id_user, status: 'ONLINE' },
+            where: { id_user: my_user.id_user },
             data: { status: 'INGAME' },
           });
           if (user) {
@@ -157,7 +157,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && my_user !== undefined) {
           const user = await this.prisma.user.update({
-            where: { id_user: my_user.id_user, NOT: { status: 'ONLINE' } },
+            where: { id_user: my_user.id_user},
             data: { status: 'ONLINE' },
           });
           if (user) {
