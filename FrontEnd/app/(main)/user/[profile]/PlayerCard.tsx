@@ -3,16 +3,22 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import { FaFacebookMessenger, FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
+import {
+	FaFacebookMessenger,
+	FaUserClock,
+	FaUserMinus,
+	FaUserPlus,
+} from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { myRoutes } from "@/const";
+import { myRoutes, socketurl } from "@/const";
 import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { IconType } from "react-icons";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { text } from "stream/consumers";
 import { LuMessageSquare, LuMessageSquarePlus } from "react-icons/lu";
+import { useUser } from "@/api/getHero";
 
 const PlayerCard = (props: {
 	username: string;
@@ -33,30 +39,50 @@ const PlayerCard = (props: {
 	const router = useRouter();
 	const [color, setColor] = useState("");
 	const [subcolor, setSubColor] = useState("");
-	const [textColor, setTextColor] = useState("")
+	const [textColor, setTextColor] = useState("");
 	const friends = useFriends();
-
+	const { globalSocket } = useGlobalSocket();
+	const [statusToShow, setStatus] = useState("");
 	const Block = blockuser(props.uid, friends, undefined);
 	const Add = adduser(props.uid, friends);
 	const Remove = removeuser(props.uid, friends);
 	const direct = todirect(props.uid);
-
+	const user = useUser(true);
 
 	useEffect(() => {
-		if (props.status === "ONLINE") {
-			setColor("bg-green-600");
-			setSubColor("bg-green-500");
-			setTextColor("text-green-600")
-		} else if (props.status === "OFFLINE") {
-			setTextColor("text-red-600")
-			setColor("bg-red-600");
-			setSubColor("bg-red-500");
-		} else if (props.status === "INGAME") {
-			setTextColor("text-yellow-600")
-			setColor("bg-yellow-600");
-			setSubColor("bg-yellow-500");
+		if (globalSocket.connected && props.isMe)
+			user.refetch().then((response) => {
+				const status = response.data.status;
+				if (status === "ONLINE") {
+					setColor("bg-green-600");
+					setSubColor("bg-green-500");
+					setTextColor("text-green-600");
+				} else if (status === "OFFLINE") {
+					setTextColor("text-red-600");
+					setColor("bg-red-600");
+					setSubColor("bg-red-500");
+				} else if (status === "INGAME") {
+					setTextColor("text-yellow-600");
+					setColor("bg-yellow-600");
+					setSubColor("bg-yellow-500");
+				}
+			});
+		if (!props.isMe) {
+			if (props.status === "ONLINE") {
+				setColor("bg-green-600");
+				setSubColor("bg-green-500");
+				setTextColor("text-green-600");
+			} else if (props.status === "OFFLINE") {
+				setTextColor("text-red-600");
+				setColor("bg-red-600");
+				setSubColor("bg-red-500");
+			} else if (props.status === "INGAME") {
+				setTextColor("text-yellow-600");
+				setColor("bg-yellow-600");
+				setSubColor("bg-yellow-500");
+			}
 		}
-	}, []);
+	}, [globalSocket.connected]);
 
 	useEffect(() => {
 		if (friends.data) {
@@ -160,7 +186,7 @@ const PlayerCard = (props: {
 								strokeWidth={2.5}
 								className={directIconStyle}
 								onClick={() => {
-									direct.mutate()
+									direct.mutate();
 								}}
 							/>
 						)}
@@ -169,11 +195,11 @@ const PlayerCard = (props: {
 								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
 									{name}
 								</h2>
-								<p
+								{textColor.length > 0 ? <p
 									className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
 								>
 									{props.status.toLowerCase()}
-								</p>
+								</p>: <></>}
 								<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
 									<span
 										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
