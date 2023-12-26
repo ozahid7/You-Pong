@@ -6,8 +6,11 @@ const io = new Server({
     }
 });
 
-io.on("connection", (socket) => {
-	console.log(" some one has connected! ", socket.id)
+io.on("connection", socket => {
+	console.log(" some one has connected ! ", socket.id)
+    socket.on('first_event', (number, string, obj ) => {
+        console.log(number, string, obj)
+    })
 });
 
 io.listen(5000);

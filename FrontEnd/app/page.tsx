@@ -6,7 +6,7 @@ import {
 } from "@/components";
 import "./globals.css";
 import { landing_page_description, myRoutes, socketurl } from "@/const";
-import {  useLayoutEffect, useState } from "react";
+import {  useEffect, useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
 
 
@@ -17,7 +17,7 @@ function Home() {
     const [showSingIn, setSingIn] = useState(false);
     let Loged: boolean = false;
     
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (typeof window !== 'undefined') {
           Loged =  localStorage.getItem("isLoged") === "true" ? true : false;
         }

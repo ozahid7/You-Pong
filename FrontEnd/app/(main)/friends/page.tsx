@@ -5,10 +5,12 @@ import CustomTabs from "./CustomTabs";
 import { useState } from "react";
 import useFriends from "@/api/useFriends";
 import Loader from "@/components/tools/Loader";
+import {  useGlobalSocket } from "@/providers/UserContextProvider";
 
 const page = () => {
   const [Input, setInput] = useState("");
   const friends = useFriends();
+  const globalSocket = useGlobalSocket()
 
   if (friends.isLoading) return <Loader />;
   else

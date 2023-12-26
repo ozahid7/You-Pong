@@ -32,6 +32,9 @@ const page = ({ params }: pageProps) => {
 		createdAt,
 		updatedAt,
 	} = toShow;
+
+	const 
+
 	if (isLoading || isFetching) return <Loader />;
 	else
 		return (

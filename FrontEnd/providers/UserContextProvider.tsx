@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { TwoFactor } from "@/components";
 import { redirect } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
@@ -15,12 +15,14 @@ import Loader from "@/components/tools/Loader";
 import { useUser } from "@/api/getHero";
 import ProfileSettings from "@/app/(main)/settings/ProfileSettings";
 import { io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 export interface myContextProps {
-  userData: UserInfo;
-  isLoged: boolean;
+	userData: UserInfo;
+	isLoged: boolean;
+	globalSocket: Socket;
 }
-export const MyContext = createContext<myContextProps | undefined>(undefined);
+export const GlobalContext = createContext<myContextProps | undefined>(undefined);
 
 let oneTime: boolean = false;
 
@@ -34,13 +36,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [isLoged, setIsLoged] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
-	const [gameSocket, setGameSocket] = useState(null)
+	const [globalSocket, setGlobalSocket] = useState(null)
+  const [statusSocket, setStatusSocket] = useState(null)
 
   const me = useUser(tfaVerified);
 
-	useEffect(() => {
-		setGameSocket(io(socketurl))
-	}, [])
 
 	useEffect(() => {
 		if (me.data) {
@@ -59,6 +59,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			localStorage.removeItem("isLoged");
 			redirect(myRoutes.root);
 		}
+    if (globalSocket === null && me.data) setGlobalSocket(io(socketurl + "?id_user=" + me.data.uid));
 	}, [me]);
 
   const getTfa = async () => {
@@ -117,10 +118,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     me.data.createdAt !== me.data.updatedAt
   )
     return (
-      <MyContext.Provider value={{ userData, isLoged }}>
+      <GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>
         {children}
-      </MyContext.Provider>
+      </GlobalContext.Provider>
     );
 };
+
+export const useGlobalSocket = () => {
+	return useContext(GlobalContext).globalSocket;
+}
 
 export default UserContextProvider;
