@@ -12,6 +12,7 @@ import { userDto } from '../dto/user.create.dto';
 import { FindUserService } from './find.service';
 import { error } from 'console';
 import { AchievementService } from 'src/achievement/achievement.service';
+import { relation } from '../dto/relation.enum';
 
 @Injectable()
 export class UserService {
@@ -163,7 +164,8 @@ export class UserService {
         blocked_user: true,
       },
     });
-    let isPending: boolean = false;
+
+    let user_relation = relation.none;
     if (
       id_user &&
       user &&
@@ -171,7 +173,16 @@ export class UserService {
         (user) => user.id_user === id_user && user.state === 'PENDING',
       )
     )
-      isPending = true;
+      user_relation = relation.pending;
+    else if (
+      id_user &&
+      user &&
+      user.friendship_friend.find(
+        (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+      )
+    )
+      user_relation = relation.accepted;
+
     if (!user) throw new ServiceUnavailableException('Username not Found!');
 
     await user.blocked_from.forEach((element) => {
@@ -200,7 +211,7 @@ export class UserService {
       achievements: user.achievements,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
-      isPending: isPending,
+      user_relation: user_relation,
     };
   }
 
