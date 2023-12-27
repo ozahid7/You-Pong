@@ -23,13 +23,14 @@ import {
   fetchData_userChannels,
   userChannels,
 } from "./data/api";
-import useSWR from "swr";
-import { Channel, User_Hero } from "@/types";
+import { Channel, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import useSWR from "swr";
 
 var one: boolean = false;
 var connection: any = null;
-var name: string = "";
+var indexChannels: whichChannel[] = [];
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
@@ -46,10 +47,19 @@ const Chats = () => {
     fetchData_userChannels
   );
 
-  if (!channel)
-    return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
-    );
+  useEffect(() => {
+    if (channel) {
+      channel?.map((channel, key) => {
+        const temp: whichChannel = {
+          id_channel: channel.id_channel,
+          index: key,
+          name: channel.name,
+        };
+        indexChannels.push(temp);
+      });
+    }
+    console.log(indexChannels);
+  }, [channel]);
 
   //// Socket
   if (MainUser?.uid && !one) {
@@ -69,13 +79,6 @@ const Chats = () => {
     });
     one = true;
   }
-
-  useEffect(() => {
-    
-  
-
-  }, [])
-  
 
   return (
     <div className="flex w-full h-[90%] justify-center items-center">
@@ -208,6 +211,8 @@ const Chats = () => {
                                 channels={obj}
                                 socket={connection}
                                 user={MainUser}
+                                indexChannels={indexChannels}
+                                index={valueGroups}
                                 key={i}
                               ></GroupsChat>
                             );

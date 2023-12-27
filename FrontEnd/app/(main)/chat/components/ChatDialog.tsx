@@ -2,10 +2,11 @@
 import { Bubble, Channel, Member, Message, User_Hero } from "@/types";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import useSWR, { mutate } from "swr";
-import { getMembers, getMessages } from "../data/api";
+import { fetchData_Messages, fetchData_getMembers, getMembers, getMessages } from "../data/api";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import { log } from "console";
+import { useQuery } from "react-query";
 
 interface Props {
   main: User_Hero;
@@ -25,32 +26,34 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
 
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channel.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const {
+    data: Members,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useQuery<Member[], Error>(
+    ["members", channel.id_channel || ""],
+    () => fetchData_getMembers(channel.id_channel || ""),
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
     }
-  };
+  );
 
-  const fetchData_Messages = async () => {
-    try {
-      const result = await getMessages(channel.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const { data, error, isLoading } = useQuery<Message[], Error>(
+    ["messages", channel.id_channel || ""],
+    () => fetchData_Messages(channel.id_channel || ""),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
     }
-  };
-
-  const { data: Members } = useSWR<Member[]>("/members", fetchData_getMembers);
-  const { data } = useSWR<Message[]>("/messages", fetchData_Messages);
+  );
 
   useEffect(() => {
     if (data) {
       // Set the initial messages from the database //
       setMessages(data);
-      mutate(fetchData_Messages);
     }
   }, [data]);
 
@@ -58,7 +61,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
-        mutate(fetchData_Messages);
       });
       one = true;
     }
@@ -73,7 +75,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   }, [shouldScrollToBottom, messages]);
 
   const whichUSER = (message: Message) => {
-    if (message && message.id_channel === channel.id_channel) {      
+    if (message && message.id_channel === channel.id_channel) {
       if (message.id_sender === main.uid) {
         return (
           <ChatBubbleMain

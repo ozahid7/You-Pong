@@ -85,12 +85,12 @@ export interface User {
   level: number;
   rank?: number;
   status: "ONLINE" | "OFFLINE" | "INGAME";
-  // created_at: DateTime;
-  // updated_at: DateTime;
+  created_at: Date;
+  updated_at: Date;
   rooms: Room_Chat[];
   blocked: Room_Chat[];
   channels?: Channel[];
-  // messages: Message[]
+  messages: Message[];
   // notifications Notification[]
   // freindship_freind: Freindship[];
   // freindship_user: Freindship[];
@@ -113,12 +113,12 @@ export interface User_Hero {
   level: number;
   rank?: number;
   status: "ONLINE" | "OFFLINE" | "INGAME";
-  // created_at: DateTime;
-  // updated_at: DateTime;
+  created_at: Date;
+  updated_at: Date;
   rooms: Room_Chat[];
   blocked: Room_Chat[];
   channels?: Channel[];
-  // messages: Message[]
+  messages: Message[];
   // notifications Notification[]
   // freindship_freind: Freindship[];
   // freindship_user: Freindship[];
@@ -144,4 +144,10 @@ export interface Bubble {
   message: Message;
   type: string;
   member: Member | User_Hero;
+}
+
+export interface whichChannel {
+  name: string;
+  id_channel: string;
+  index: number;
 }

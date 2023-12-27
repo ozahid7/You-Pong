@@ -3,9 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
-import { Channel, Message, User_Hero } from "@/types";
+import { Channel, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { getChannel, getMembers, getMessages } from "../data/api";
+import {
+  fetchData_userChannels,
+  getChannel,
+  getMembers,
+  getMessages,
+} from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
@@ -16,11 +21,13 @@ interface obj {
   channels: Channel;
   socket: any;
   user: User_Hero;
+  indexChannels: whichChannel[];
+  index: number;
 }
 
 var one: boolean = false;
 
-const GroupsChat = ({channels, socket, user}: obj) => {
+const GroupsChat = ({ channels, socket, user, indexChannels, index }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -34,6 +41,13 @@ const GroupsChat = ({channels, socket, user}: obj) => {
   };
 
   const { data: channel } = useSWR<Channel>("/myChannel", fetchData_Channel);
+  const { data } = useSWR<Channel[]>("/myData", fetchData_userChannels);
+
+  const retChannel: Channel | null = data
+    ? data.find(
+        (channel) => channel.id_channel === indexChannels[index].id_channel
+      ) || null
+    : null;
 
   const handleButtonClick = () => {
     if (!one && socket) {
@@ -104,7 +118,7 @@ const GroupsChat = ({channels, socket, user}: obj) => {
         <ChatDialog
           main={user}
           socket={socket}
-          channel={channels}
+          channel={retChannel}
           key={channels?.id_channel}
         />
       </div>
