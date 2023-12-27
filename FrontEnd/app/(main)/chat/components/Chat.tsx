@@ -3,8 +3,12 @@ import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
 import { Channel, Member, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { fetchData_getMainUser, getChannel, getMembers } from "../data/api";
-import useSWR from "swr";
+import {
+  fetchData_Channel,
+  getChannel,
+  getMembers,
+} from "../data/api";
+import { useQuery } from "react-query";
 
 interface HomePage {
   channels: Channel;
@@ -19,16 +23,19 @@ const Chat = ({ channels, socket, main }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
-  const fetchData_Channel = async () => {
-    try {
-      const result = await getChannel(channels.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const {
+    data,
+    error: ChannelError,
+    isLoading: ChannelLoading,
+  } = useQuery<Channel, Error>(
+    ["channel", channels?.id_channel],
+    () => fetchData_Channel(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
     }
-  };
-
-  const { data } = useSWR<Channel>("/myChannel", fetchData_Channel);
+  );
 
   const handleButtonClick = () => {
     if (!one) {

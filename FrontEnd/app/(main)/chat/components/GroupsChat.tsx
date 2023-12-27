@@ -6,16 +6,18 @@ import { ChatDialog, GroupDropdown } from ".";
 import { Channel, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import {
-  fetchData_userChannels,
+  fetchData_Channel,
+  fetchData_getChannels,
   getChannel,
+  getChannels,
   getMembers,
   getMessages,
 } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
-import useSWR from "swr";
 import { generateRandomKey } from "./ChatDialog";
+import { useQuery } from "react-query";
 
 interface obj {
   channels: Channel;
@@ -23,29 +25,49 @@ interface obj {
   user: User_Hero;
   indexChannels: whichChannel[];
   index: number;
+  refetch: any;
 }
 
 var one: boolean = false;
 
-const GroupsChat = ({ channels, socket, user, indexChannels, index }: obj) => {
+const GroupsChat = ({
+  channels,
+  socket,
+  user,
+  indexChannels,
+  index,
+  refetch,
+}: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
-  const fetchData_Channel = async () => {
-    try {
-      const result = await getChannel(channels.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const {
+    data: channel,
+    error: ChannelError,
+    isLoading: ChannelLoading,
+  } = useQuery<Channel, Error>(
+    ["channel", channels?.id_channel],
+    () => fetchData_Channel(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
     }
-  };
+  );
 
-  const { data: channel } = useSWR<Channel>("/myChannel", fetchData_Channel);
-  const { data } = useSWR<Channel[]>("/myData", fetchData_userChannels);
+  const {
+    data,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useQuery<Channel[], Error>(["getChannels"], fetchData_getChannels, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
 
   const retChannel: Channel | null = data
     ? data.find(
-        (channel) => channel.id_channel === indexChannels[index].id_channel
+        (channel) => channel.id_channel === indexChannels[index]?.id_channel
       ) || null
     : null;
 
@@ -110,7 +132,10 @@ const GroupsChat = ({ channels, socket, user, indexChannels, index }: obj) => {
             </div>
           </div>
           <div>
-            <GroupDropdown channels={channels}></GroupDropdown>
+            <GroupDropdown
+              channels={channels}
+              refetch={refetch}
+            ></GroupDropdown>
           </div>
         </div>
       </div>

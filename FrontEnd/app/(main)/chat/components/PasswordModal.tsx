@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useRef } from "react";
-import { fetchData_userChannels, joinChannel } from "../data/api";
+import { joinChannel } from "../data/api";
 import { mutate } from "swr";
 import { IoEnterOutline } from "react-icons/io5";
 import InputGroupPass from "./InputGroupPass";
@@ -17,9 +17,10 @@ import InputGroupPass from "./InputGroupPass";
 interface Props {
   obj: Channel;
   close: any;
+  refetch: any;
 }
 
-const PasswordModal = ({ obj, close }: Props) => {
+const PasswordModal = ({ obj, close, refetch }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const passRef = useRef<HTMLInputElement>(null);
 
@@ -31,10 +32,11 @@ const PasswordModal = ({ obj, close }: Props) => {
         passRef.current?.value
       );
       if (response.message !== "Password Incorrect") {
-        mutate(fetchData_userChannels);
+        refetch();
         close();
       } else {
         passRef.current.value = null;
+        console.error(response.message);
       }
     }
   };

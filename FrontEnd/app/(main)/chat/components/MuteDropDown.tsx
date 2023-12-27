@@ -8,8 +8,13 @@ import {
 } from "@nextui-org/react";
 import { LuBellOff, LuTimer } from "react-icons/lu";
 import { Channel, Member } from "@/types";
-import { MuteMember, UnMuteMember, getMembers } from "../data/api";
-import useSWR, { mutate } from "swr";
+import {
+  MuteMember,
+  UnMuteMember,
+  fetchData_getMembers,
+  getMembers,
+} from "../data/api";
+import { useQuery } from "react-query";
 
 interface Props {
   user: Member;
@@ -22,39 +27,40 @@ export default function MuteDropDown({ user, channel, onClose }: Props) {
   const muteRef5 = useRef<HTMLButtonElement>(null);
   const muteRef15 = useRef<HTMLButtonElement>(null);
 
-  console.log(user.member_status);
-
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channel?.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const {
+    data: Users,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useQuery<Member[], Error>(
+    ["members", channel?.id_channel],
+    () => fetchData_getMembers(channel?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
     }
-  };
-
-  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
+  );
 
   const Handle_1Minute = () => {
     MuteMember(channel?.id_channel, user.user.username, 60000);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
     onClose();
   };
   const Handle_5Minutes = () => {
     MuteMember(channel?.id_channel, user.user.username, 300000);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
     onClose();
   };
   const Handle_15Minutes = () => {
     MuteMember(channel?.id_channel, user.user.username, 900000);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
     onClose();
   };
 
   const HandleUnmute = () => {
     if (user.member_status === "MUTED") {
       UnMuteMember(channel?.id_channel, user.user.username);
-      mutate(fetchData_getMembers);
+      // mutate(fetchData_getMembers);
       onClose();
     }
   };

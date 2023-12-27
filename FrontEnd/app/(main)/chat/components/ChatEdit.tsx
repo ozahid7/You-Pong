@@ -28,7 +28,6 @@ import {
 } from "@/app/(main)/chat/data/api";
 import { mutate } from "swr";
 import { User } from "@/types";
-import { fetchData_getChannels } from "./JoinModal";
 
 var setDataObj: Channel = {
   type: undefined || "",
@@ -80,7 +79,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels?.id_channel);
     imageUrl = channels.avatar;
-    mutate(fetchData_getChannels);
+    // mutate(fetchData_getChannels);
     onClose();
   };
 

@@ -1,7 +1,6 @@
 "use client";
 import { Bubble, Channel, Member, Message, User_Hero } from "@/types";
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import useSWR, { mutate } from "swr";
 import {
   fetchData_Messages,
   fetchData_getMembers,
@@ -37,8 +36,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     error: membersError,
     isLoading: membersLoading,
   } = useQuery<Member[], Error>(
-    ["members", channel.id_channel || ""],
-    () => fetchData_getMembers(channel.id_channel || ""),
+    ["members", channel?.id_channel],
+    () => fetchData_getMembers(channel?.id_channel),
     {
       onError: (error: Error) => {
         console.error("Members query error:", error);
@@ -47,8 +46,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   );
 
   const { data, error, isLoading } = useQuery<Message[], Error>(
-    ["messages", channel.id_channel || ""],
-    () => fetchData_Messages(channel.id_channel || ""),
+    ["messages", channel?.id_channel || ""],
+    () => fetchData_Messages(channel?.id_channel || ""),
     {
       onError: (error: Error) => {
         console.error("Messages query error:", error);

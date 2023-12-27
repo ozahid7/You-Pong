@@ -300,22 +300,13 @@ export const getMessages = async (id_channel: string) => {
 ////////////////////////////////////////////////////////////
 
 export const fetchData_userChannels = async () => {
-  try {
-    const result = await userChannels();
-    return result;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  const result = await userChannels();
+  return result;
 };
 
 export const fetchData_getMainUser = async () => {
-  try {
-    const result = await getMainUser();
-
-    return result.userInfo;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  const result = await getMainUser();
+  return result.userInfo;
 };
 
 export const fetchData_getMembers = async (id_channel: string) => {
@@ -325,5 +316,15 @@ export const fetchData_getMembers = async (id_channel: string) => {
 
 export const fetchData_Messages = async (id_channel: string) => {
   const result = await getMessages(id_channel);
+  return result.object;
+};
+
+export const fetchData_Channel = async (id_channel: string) => {
+  const result = await getChannel(id_channel);
+  return result.object;
+};
+
+export const fetchData_getChannels = async () => {
+  const result = await getChannels();
   return result.object;
 };

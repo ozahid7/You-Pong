@@ -18,7 +18,6 @@ import {
   UnBanMember,
   getMembers,
 } from "../data/api";
-import useSWR, { mutate } from "swr";
 
 interface Props {
   disable: string;
@@ -28,36 +27,24 @@ interface Props {
 
 const JoinDropDown = ({ disable, user, channel }: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channel?.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const { error } = useSWR<Member[]>("/Users", fetchData_getMembers);
-
-  if (error) return <div>useSWR: Error found, Fetching data failed!</div>;
 
   const HandleKick = () => {
     KickMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
   };
 
   const HandleBan = () => {
     user.member_status !== "BANNED"
       ? BanMember(channel?.id_channel, user.user.id_user)
       : UnBanMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
   };
 
   const HandleAdmin = () => {
     user.user_role === "MEMBER"
       ? SetAdmin(channel?.id_channel, user.user.id_user)
       : SetMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
+    // mutate(fetchData_getMembers);
   };
   return (
     <Fragment>

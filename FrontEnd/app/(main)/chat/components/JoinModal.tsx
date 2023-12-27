@@ -19,7 +19,7 @@ import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel } from "@/types";
 import {
-  fetchData_userChannels,
+  fetchData_getChannels,
   getChannels,
   joinChannel,
   userChannels,
@@ -32,18 +32,9 @@ import {
 import useSWR, { mutate } from "swr";
 import groups from "../../../../public/groups.svg";
 import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
+import { useQuery } from "react-query";
 
-export const fetchData_getChannels = async () => {
-  try {
-    const result = await getChannels();
-
-    return result.object;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-export default function JoinModal() {
+export default function JoinModal({ refetch }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
@@ -54,7 +45,11 @@ export default function JoinModal() {
     data: channels,
     error,
     isLoading,
-  } = useSWR<Channel[]>("/myChannels", fetchData_getChannels);
+  } = useQuery<Channel[], Error>(["getChannelsJoin"], fetchData_getChannels, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
 
   if (error) return <div>ERROR</div>;
 
@@ -140,9 +135,19 @@ export default function JoinModal() {
                                   </td>
                                   <td className="flex flex-row">
                                     {obj.type === "PROTECTED" ? (
-                                      <PasswordModal obj={obj} close={onClose}/>
+                                      <PasswordModal
+                                        obj={obj}
+                                        close={onClose}
+                                        refetch={refetch}
+                                        key="protected"
+                                      />
                                     ) : (
-                                      <SimpleJoinButton obj={obj} close={onClose}/>
+                                      <SimpleJoinButton
+                                        obj={obj}
+                                        refetch={refetch}
+                                        close={onClose}
+                                        key="public"
+                                      />
                                     )}
                                   </td>
                                 </tr>

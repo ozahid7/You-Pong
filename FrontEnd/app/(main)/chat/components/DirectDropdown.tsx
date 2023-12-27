@@ -6,16 +6,6 @@ import { Channel, Member, User, User_Hero } from "@/types";
 import { Button } from "@nextui-org/react";
 import { ChatEdit, MembersEdit } from ".";
 import { FiChevronDown } from "react-icons/fi";
-import {
-  fetchData_userChannels,
-  getChannel,
-  getMainUser,
-  getMembers,
-  leaveChannel,
-  userChannels,
-} from "../data/api";
-import useSWR, { useSWRConfig } from "swr";
-import { fetchData_getChannels } from "./JoinModal";
 
 interface HomePage {
   channels: Channel;

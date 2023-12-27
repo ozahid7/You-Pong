@@ -151,3 +151,9 @@ export interface whichChannel {
   id_channel: string;
   index: number;
 }
+
+export interface QueryProp {
+  data: any;
+  error: Error;
+  isLoading: boolean;
+}

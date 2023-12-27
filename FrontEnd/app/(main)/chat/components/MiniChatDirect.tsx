@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Channel, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import useSWR from "swr";
-import { getChannel } from "../data/api";
+import { fetchData_Channel, getChannel } from "../data/api";
+import { useQuery } from "react-query";
 
 interface HomeProps {
   channels: Channel;
@@ -10,16 +10,19 @@ interface HomeProps {
 }
 
 const MiniChatDirect = ({ channels, main }: HomeProps) => {
-  const fetchData_Channel = async () => {
-    try {
-      const result = await getChannel(channels.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const {
+    data,
+    error: ChannelError,
+    isLoading: ChannelLoading,
+  } = useQuery<Channel, Error>(
+    ["channel", channels?.id_channel],
+    () => fetchData_Channel(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
     }
-  };
-
-  const { data } = useSWR<Channel>("/myChannel", fetchData_Channel);
+  );
 
   const user: User | null = data
     ? data.users.find((user) => user.id_user !== main.uid) || null

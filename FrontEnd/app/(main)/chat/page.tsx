@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -19,14 +19,14 @@ import {
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import {
+  fetchData_getChannels,
   fetchData_getMainUser,
   fetchData_userChannels,
-  userChannels,
+  getChannels,
 } from "./data/api";
 import { Channel, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import useSWR from "swr";
+import { useQuery } from "react-query";
 
 var one: boolean = false;
 var connection: any = null;
@@ -36,16 +36,28 @@ const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
+  const refetchDataRef = useRef<() => void | Promise<void>>(() => {});
 
-  const { data: MainUser } = useSWR<User_Hero>(
-    "/MainUser",
-    fetchData_getMainUser
-  );
+  const {
+    data: MainUser,
+    error: MainUserError,
+    isLoading: MainUserLoading,
+  } = useQuery<User_Hero, Error>(["MainUser"], fetchData_getMainUser, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
 
-  const { data: channel } = useSWR<Channel[]>(
-    "/myData",
-    fetchData_userChannels
-  );
+  const {
+    data: channel,
+    error: membersError,
+    isLoading: membersLoading,
+    refetch,
+  } = useQuery<Channel[], Error>(["userChannels"], fetchData_userChannels, {
+    onError: (error: Error) => {
+      console.error("Channels query error:", error);
+    },
+  });
 
   useEffect(() => {
     if (channel) {
@@ -57,8 +69,8 @@ const Chats = () => {
         };
         indexChannels.push(temp);
       });
+      refetch();
     }
-    console.log(indexChannels);
   }, [channel]);
 
   //// Socket
@@ -152,9 +164,6 @@ const Chats = () => {
                                     "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
                                 }}
                                 key="direct"
-                                onClick={() => {
-                                  console.log("clicked");
-                                }}
                               />
                             </div>
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
@@ -187,8 +196,8 @@ const Chats = () => {
                                 key="groups"
                               />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
-                                <GroupsModal />
-                                <JoinModal />
+                                <GroupsModal refetch={refetch} />
+                                <JoinModal refetch={refetch} />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>
@@ -213,6 +222,7 @@ const Chats = () => {
                                 user={MainUser}
                                 indexChannels={indexChannels}
                                 index={valueGroups}
+                                refetch={refetch}
                                 key={i}
                               ></GroupsChat>
                             );
