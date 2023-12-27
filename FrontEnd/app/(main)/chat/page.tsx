@@ -29,6 +29,7 @@ import { io } from "socket.io-client";
 
 var one: boolean = false;
 var connection: any = null;
+var name: string = "";
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
@@ -124,9 +125,10 @@ const Chats = () => {
                                   channel
                                     ? channel
                                         .filter(
-                                          (obj: any) => obj.type === "DIRECT"
+                                          (obj: Channel) =>
+                                            obj.type === "DIRECT"
                                         )
-                                        .map((obj: any, i) => (
+                                        .map((obj: Channel, i) => (
                                           <MiniChatDirect
                                             channels={obj}
                                             main={MainUser}
@@ -140,6 +142,9 @@ const Chats = () => {
                                     "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
                                 }}
                                 key="direct"
+                                onClick={() => {
+                                  console.log("clicked");
+                                }}
                               />
                             </div>
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
@@ -191,6 +196,7 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type !== "DIRECT")
                           .map((obj, i) => {
+                            console.log(valueGroups);
                             return (
                               <GroupsChat
                                 channels={obj}

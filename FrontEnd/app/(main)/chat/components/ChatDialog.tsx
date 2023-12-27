@@ -5,6 +5,7 @@ import useSWR, { mutate } from "swr";
 import { getMembers, getMessages } from "../data/api";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
+import { log } from "console";
 
 interface Props {
   main: User_Hero;
@@ -57,6 +58,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
+        mutate(fetchData_Messages);
       });
       one = true;
     }
@@ -71,7 +73,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   }, [shouldScrollToBottom, messages]);
 
   const whichUSER = (message: Message) => {
-    if (message.id_channel === channel.id_channel) {
+    if (message && message.id_channel === channel.id_channel) {      
       if (message.id_sender === main.uid) {
         return (
           <ChatBubbleMain
@@ -92,6 +94,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           />
         );
       }
+      one = false;
     }
   };
 
