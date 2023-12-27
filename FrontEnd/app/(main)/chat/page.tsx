@@ -24,40 +24,63 @@ import {
   fetchData_userChannels,
   getChannels,
 } from "./data/api";
-import { Channel, User_Hero, whichChannel } from "@/types";
+import { Channel, QueryProp, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
 import { useQuery } from "react-query";
 
 var one: boolean = false;
 var connection: any = null;
 var indexChannels: whichChannel[] = [];
+var JoinChannels: QueryProp = {
+  data: null,
+  isLoading: false,
+  error: null,
+  fetcher: null,
+};
 
 const Chats = () => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-  const refetchDataRef = useRef<() => void | Promise<void>>(() => {});
+
+  const { data: MainUser } = useQuery<User_Hero, Error>(
+    ["MainUser"],
+    fetchData_getMainUser,
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
+    }
+  );
+
+  const { data: channel, refetch } = useQuery<Channel[], Error>(
+    ["userChannels"],
+    fetchData_userChannels,
+    {
+      onError: (error: Error) => {
+        console.error("Channels query error:", error);
+      },
+    }
+  );
 
   const {
-    data: MainUser,
-    error: MainUserError,
-    isLoading: MainUserLoading,
-  } = useQuery<User_Hero, Error>(["MainUser"], fetchData_getMainUser, {
+    data,
+    error,
+    isLoading,
+    refetch: joinRefetch,
+  } = useQuery<Channel[], Error>(["getChannelsJoin"], fetchData_getChannels, {
     onError: (error: Error) => {
       console.error("Members query error:", error);
     },
   });
 
-  const {
-    data: channel,
-    error: membersError,
-    isLoading: membersLoading,
-    refetch,
-  } = useQuery<Channel[], Error>(["userChannels"], fetchData_userChannels, {
-    onError: (error: Error) => {
-      console.error("Channels query error:", error);
-    },
-  });
+  useEffect(() => {
+    JoinChannels.data = data;
+    JoinChannels.error = error;
+    JoinChannels.isLoading = isLoading;
+    JoinChannels.fetcher = joinRefetch;
+    joinRefetch();
+  }, [data]);
 
   useEffect(() => {
     if (channel) {
@@ -197,7 +220,10 @@ const Chats = () => {
                               />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
                                 <GroupsModal refetch={refetch} />
-                                <JoinModal refetch={refetch} />
+                                <JoinModal
+                                  refetch={refetch}
+                                  channels={JoinChannels}
+                                />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>
@@ -223,6 +249,7 @@ const Chats = () => {
                                 indexChannels={indexChannels}
                                 index={valueGroups}
                                 refetch={refetch}
+                                joinRefetch={joinRefetch}
                                 key={i}
                               ></GroupsChat>
                             );

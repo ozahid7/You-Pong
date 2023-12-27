@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../components";
-import { Channel } from "@/types";
+import { Channel, QueryProp } from "@/types";
 import {
   fetchData_getChannels,
   getChannels,
@@ -34,26 +34,18 @@ import groups from "../../../../public/groups.svg";
 import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
 import { useQuery } from "react-query";
 
-export default function JoinModal({ refetch }) {
+interface Props {
+  refetch: any;
+  channels: QueryProp;
+}
+export default function JoinModal({ refetch, channels }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
     onClose();
   };
 
-  const {
-    data: channels,
-    error,
-    isLoading,
-  } = useQuery<Channel[], Error>(["getChannelsJoin"], fetchData_getChannels, {
-    onError: (error: Error) => {
-      console.error("Members query error:", error);
-    },
-  });
-
-  if (error) return <div>ERROR</div>;
-
-  if (!channels && isLoading)
+  if (!channels?.data && channels?.isLoading)
     return (
       <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
     );
@@ -102,8 +94,8 @@ export default function JoinModal({ refetch }) {
                       </thead>
                       <tbody>
                         <>
-                          {channels &&
-                            channels
+                          {channels.data &&
+                            channels.data
                               .filter(
                                 (obj: any) =>
                                   obj.type !== "DIRECT" &&
@@ -145,6 +137,7 @@ export default function JoinModal({ refetch }) {
                                       <SimpleJoinButton
                                         obj={obj}
                                         refetch={refetch}
+                                        joinRefetch={channels.fetcher}
                                         close={onClose}
                                         key="public"
                                       />

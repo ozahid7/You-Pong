@@ -20,14 +20,15 @@ import { useQuery } from "react-query";
 interface HomePage {
   channels: Channel;
   refetch: any;
+  joinRefetch: any;
 }
 
-const GroupDropdown = ({ channels, refetch }: HomePage) => {
+const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
   const Leaving = async () => {
     const success = await leaveChannel(channels.id_channel);
-    console.log(success);
     if (success.message === "Channel Updated Succefully") {
       refetch();
+      joinRefetch();
     } else console.error(success.message);
   };
 

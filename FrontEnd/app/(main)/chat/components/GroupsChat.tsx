@@ -26,6 +26,7 @@ interface obj {
   indexChannels: whichChannel[];
   index: number;
   refetch: any;
+  joinRefetch: any;
 }
 
 var one: boolean = false;
@@ -37,6 +38,7 @@ const GroupsChat = ({
   indexChannels,
   index,
   refetch,
+  joinRefetch
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
@@ -135,6 +137,7 @@ const GroupsChat = ({
             <GroupDropdown
               channels={channels}
               refetch={refetch}
+              joinRefetch={joinRefetch}
             ></GroupDropdown>
           </div>
         </div>

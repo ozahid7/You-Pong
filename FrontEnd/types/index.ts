@@ -156,4 +156,5 @@ export interface QueryProp {
   data: any;
   error: Error;
   isLoading: boolean;
+  fetcher?: any;
 }
