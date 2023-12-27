@@ -19,6 +19,8 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { text } from "stream/consumers";
 import { LuMessageSquare, LuMessageSquarePlus } from "react-icons/lu";
 import { useUser } from "@/api/getHero";
+import useOtherUser from "@/api/useOtherUser";
+import { QueryClient } from "react-query";
 
 const PlayerCard = (props: {
 	username: string;
@@ -31,9 +33,9 @@ const PlayerCard = (props: {
 	uid: string;
 }) => {
 	const userIconStyle =
-		"z-10 h-[14%] w-[14%]  absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1  text-cardtitle cursor-pointer";
+		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg drop-shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
 	const directIconStyle =
-		"z-10 h-[15%] w-[15%]  absolute sm:bottom-[74px] xl:w-[12%] xl:h-[12%] h:right-3 bottom-14 right-1  text-cardtitle cursor-pointer";
+		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute sm:bottom-[74px] xl:w-[12%] xl:h-[12%] h:right-3 bottom-14 right-1  text-palette-orange cursor-pointer";
 	const [isFriend, setIsFriend] = useState(false);
 	const [isPending, setIsPending] = useState(false);
 	const router = useRouter();
@@ -48,6 +50,7 @@ const PlayerCard = (props: {
 	const Remove = removeuser(props.uid, friends);
 	const direct = todirect(props.uid);
 	const user = useUser(true);
+	const otheruser = useOtherUser(props.username)
 
 	useEffect(() => {
 		if (globalSocket.connected && props.isMe)
@@ -68,19 +71,23 @@ const PlayerCard = (props: {
 				}
 			});
 		if (!props.isMe) {
-			if (props.status === "ONLINE") {
-				setColor("bg-green-600");
-				setSubColor("bg-green-500");
-				setTextColor("text-green-600");
-			} else if (props.status === "OFFLINE") {
-				setTextColor("text-red-600");
-				setColor("bg-red-600");
-				setSubColor("bg-red-500");
-			} else if (props.status === "INGAME") {
-				setTextColor("text-yellow-600");
-				setColor("bg-yellow-600");
-				setSubColor("bg-yellow-500");
-			}
+			otheruser.refetch()
+				.then((response) => {
+					const status = response.data.status;
+					if (status === "ONLINE") {
+						setColor("bg-green-600");
+						setSubColor("bg-green-500");
+						setTextColor("text-green-600");
+					} else if (status === "OFFLINE") {
+						setTextColor("text-red-600");
+						setColor("bg-red-600");
+						setSubColor("bg-red-500");
+					} else if (status === "INGAME") {
+						setTextColor("text-yellow-600");
+						setColor("bg-yellow-600");
+						setSubColor("bg-yellow-500");
+					}
+				});
 		}
 	}, [globalSocket.connected]);
 
@@ -144,7 +151,7 @@ const PlayerCard = (props: {
 			: setIcon(removeIcon);
 	}, [isFriend, isPending]);
 	return (
-		<div className="flex justify-center z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
+		<div className="flex justify-center  z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
 			<MyCard otherclass="">
 				<div className="w-full relative justify-between items-center flex h-full">
 					<h3 className=" whitespace-nowrap absolute top-2 left-4 sm:left-8 sm:top-4   text-cardtitle  text-[12px] h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
@@ -166,7 +173,7 @@ const PlayerCard = (props: {
 									router.push("/settings");
 								}}
 								size={120}
-								className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
+								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-palette-green cursor-pointer"
 							/>
 						) : (
 							<HiBan
@@ -175,7 +182,7 @@ const PlayerCard = (props: {
 									router.push(myRoutes.dashboard);
 								}}
 								size={100}
-								className="z-10 h-5 w-5 sm:h-[12%]  sm:w-[12%] s:h-[16%] s:w-[16%] absolute top-1 right-1 sm:top-2 sm:right-2  text-cardtitle cursor-pointer"
+								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-red-600 cursor-pointer"
 							/>
 						)}
 
@@ -195,11 +202,15 @@ const PlayerCard = (props: {
 								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
 									{name}
 								</h2>
-								{textColor.length > 0 ? <p
-									className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
-								>
-									{props.status.toLowerCase()}
-								</p>: <></>}
+								{textColor.length > 0 ? (
+									<p
+										className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
+									>
+										{props.status.toLowerCase()}
+									</p>
+								) : (
+									<></>
+								)}
 								<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
 									<span
 										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}

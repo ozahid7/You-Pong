@@ -5,6 +5,8 @@ import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { IoGameControllerOutline } from "react-icons/io5";
+import { QueryCache } from "@tanstack/react-query";
+
 import {
 	LuLayoutDashboard,
 	LuUsers,
@@ -56,7 +58,7 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 		</div>
 	);
 };
-const query = new QueryClient();
+const queryCache = new QueryCache();
 
 const SideBar = () => {
 	const router = useRouter();
@@ -72,7 +74,7 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				query.removeQueries({queryKey: ['user']})
+				queryCache.clear()
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit('offline')

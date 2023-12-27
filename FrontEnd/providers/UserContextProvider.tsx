@@ -75,20 +75,21 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					autoConnect: true,
 				})
 			);
-			setToEmit(true);
 		}
+		setToEmit(true);
 	}, [me]);
 
 	useEffect(() => {
-		if (
+		if ( globalSocket && i === 0 &&
 			path !== "/game" &&
 			toEmit &&
 			(me.data.createdAt !== me.data.updatedAt)
 		) {
 			console.log("emit from provider");
 			globalSocket.emit("online");
+			i++;
 		}
-	}, [toEmit]);
+	});
 
 	const getTfa = async () => {
 		try {
