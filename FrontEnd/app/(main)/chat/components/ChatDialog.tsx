@@ -77,7 +77,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           <ChatBubbleMain
             message={message}
             main={main}
-            key={message.id_message}
+            key={generateRandomKey()}
           />
         );
       } else if (message.id_sender !== main.uid && Members) {
@@ -88,7 +88,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           <ChatBubbleSender
             message={message}
             member={member[0] || null}
-            key={message.id_message}
+            key={generateRandomKey()}
           />
         );
       }
