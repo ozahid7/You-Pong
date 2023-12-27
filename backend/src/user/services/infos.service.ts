@@ -51,7 +51,7 @@ export class InfoUserService {
           // achievements: await this.creatAchObj(),
           avatar: user.avatar,
           channels: user.channels,
-          matchs: user.matchs,
+          // matchs: user.matchs,
           achievements: user.achievements,
           isIntra: user.hash === null ? true : false,
           createdAt: user.created_at,

@@ -12,6 +12,7 @@ import { FileModule } from './file/file.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { FriendModule } from './friend/friend.module';
 import { SocketModule } from './socket/socket.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { SocketModule } from './socket/socket.module';
     FileModule,
     AchievementModule,
     FriendModule,
-    SocketModule
+    SocketModule,
+    GameModule
   ],
 })
 export class AppModule {}
