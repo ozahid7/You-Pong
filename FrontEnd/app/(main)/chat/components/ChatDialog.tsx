@@ -2,11 +2,17 @@
 import { Bubble, Channel, Member, Message, User_Hero } from "@/types";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import useSWR, { mutate } from "swr";
-import { fetchData_Messages, fetchData_getMembers, getMembers, getMessages } from "../data/api";
+import {
+  fetchData_Messages,
+  fetchData_getMembers,
+  getMembers,
+  getMessages,
+} from "../data/api";
 import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import { log } from "console";
 import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 interface Props {
   main: User_Hero;
@@ -49,6 +55,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       },
     }
   );
+
+  if (membersLoading || isLoading) <Loader />;
 
   useEffect(() => {
     if (data) {
