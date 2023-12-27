@@ -5,14 +5,39 @@ import "../input.css";
 import UserContextProvider, {
 	useGlobalSocket,
 } from "@/providers/UserContextProvider";
-import { usePagination } from "@nextui-org/react";
+import { Button, usePagination } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import MyToast from "@/components/tools/MyToast";
 
 interface lyoutProps {
 	children: React.ReactNode;
 }
 
 function RootLayout({ children }: lyoutProps) {
+	const notify = () => {
+		console.log("hello");
+		toast.warning(<MyToast userName="oussama zahid" />, {
+			position: "top-center",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			style: {
+				height: "120px",
+				width: "280px",
+			},
+			progressStyle: {
+				backgroundColor: "#EB6440",
+			},
+
+			icon: false,
+			closeButton: true,
+			draggable: true,
+			progress: undefined,
+			theme: "light",
+		});
+	};
 	return (
 		<UserContextProvider>
 			<main className="flex h-screen w-full background">
@@ -21,6 +46,11 @@ function RootLayout({ children }: lyoutProps) {
 					<NavBar />
 					{children}
 					<MobileSideBar />
+					<Button
+						onClick={notify}
+						className="w-20 absolute top-0 h-20 "
+					></Button>
+					<ToastContainer />
 				</main>
 			</main>
 		</UserContextProvider>
