@@ -32,10 +32,10 @@ enum channel_type {
 }
 
 //MATCH_STATUS (win, lose)
-enum match_status {
-	WIN
-	LOSE
-}
+// enum match_status {
+// 	WIN
+// 	LOSE
+// }
 
 //MEMBER_STATUS (muted, banned)
 enum member_status {
@@ -96,7 +96,8 @@ model User {
 	messages Message[]
 	friendship_friend Friendship[] @relation("friendship_friend")
 	friendship_user Friendship[] @relation("friendship_user")
-	matchs Match_History[]
+	matchs_player Match_History[] @relation("matchs_player")
+	matchs_oppenent Match_History[] @relation("matchs_oppenent")
 	achievements Achievement[]
 	@@map("user")
 }
@@ -150,10 +151,14 @@ model Message {
 //MATCH_HISTORY MODEL
 model Match_History {
 	id_match String @id @default(uuid())
-	my_score Int
-	friend_score Int
-	status match_status
-	users User[] 
+	id_player String
+	player User @relation("matchs_player", fields: [id_player], references: [id_user])
+	id_oppenent String
+	oppenent User @relation("matchs_oppenent", fields: [id_oppenent], references: [id_user])
+	player_score Int? @default(3)
+	oppenent_score Int? @default(0)
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
 }
 
 // FRIENDSHIP MODEL
