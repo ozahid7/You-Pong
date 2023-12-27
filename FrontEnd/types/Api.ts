@@ -23,14 +23,20 @@ export interface Achievement {
 
 export type achievementReturn = {
 	message: string;
-	object: Achievement[];
+	Object: Achievement[];
 };
+
+export type matchReturn = {
+	message: string
+	Object: match[];
+}
 
 export interface match {
 	avatar: string;
-	user: string;
-	wins: string | "0";
-	loses: string | "0";
+	username: string;
+	player_score: string;
+	opponent_score: string;
+	win: boolean;
 }
 
 export type UserInfo = {
@@ -86,6 +92,7 @@ export const endPoints = {
 	getFriend: "friend",
 	getFile: "upload",
 	getAchiv: "/achievement",
+	getMatchs: '/game',
 	updateInfo: "user/update",
 };
 

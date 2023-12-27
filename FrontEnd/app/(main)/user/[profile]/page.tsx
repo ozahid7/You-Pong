@@ -62,7 +62,7 @@ const page = ({ params }: pageProps) => {
 					</div>
 				</div>
 				<div className="w-full flex justify-center min-h-[500px] items-center xl:w-[34%]">
-					<HistoryCard matchs={matchs} />
+					<HistoryCard uid={uid} />
 				</div>
 			</div>
 		);

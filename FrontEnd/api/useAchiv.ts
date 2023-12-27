@@ -1,7 +1,6 @@
 import { achievementReturn, endPoints } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "./getHero";
 
 export const useAchiv = (uid: string) => {
 	const getAchiv = async () => {
@@ -11,7 +10,7 @@ export const useAchiv = (uid: string) => {
 				endPoints.getAchiv + "?id_user=" + uid
 			);
 			console.log("achiv response = ", response);
-			return response.object;
+			return response.Object;
 		} catch (error) {
 			console.log("achiv response = ", error);
 		}

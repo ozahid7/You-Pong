@@ -14,7 +14,7 @@ export class FindUserService {
         friendship_user: true,
         channels: true,
         achievements: true,
-        matchs_oppenent: true,
+        matchs_opponent: true,
         matchs_player: true,
       },
     });
@@ -31,7 +31,7 @@ export class FindUserService {
         friendship_user: true,
         channels: true,
         achievements: true,
-        matchs_oppenent: true,
+        matchs_opponent: true,
         matchs_player: true,
       },
     });

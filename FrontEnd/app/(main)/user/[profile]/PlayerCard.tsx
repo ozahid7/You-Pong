@@ -53,7 +53,7 @@ const PlayerCard = (props: {
 	const otheruser = useOtherUser(props.username)
 
 	useEffect(() => {
-		if (globalSocket.connected && props.isMe)
+		if (props.isMe)
 			user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
@@ -89,7 +89,7 @@ const PlayerCard = (props: {
 					}
 				});
 		}
-	}, [globalSocket.connected]);
+	}, [globalSocket, props.status]);
 
 	useEffect(() => {
 		if (friends.data) {

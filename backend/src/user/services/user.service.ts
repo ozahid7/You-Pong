@@ -170,7 +170,7 @@ export class UserService {
         achievements: true,
         blocked_from: true,
         blocked_user: true,
-        matchs_oppenent: true,
+        matchs_opponent: true,
         matchs_player: true,
       },
     });
@@ -223,7 +223,7 @@ export class UserService {
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
-      matchs_oppenent: user.matchs_oppenent,
+      matchs_opponent: user.matchs_opponent,
       matchs_player: user.matchs_player,
       achievements: user.achievements,
       createdAt: user.created_at,

@@ -58,7 +58,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			localStorage.removeItem("isLoged");
 			redirect(myRoutes.root);
 		}
-		if (globalSocket === null && me.data) {
+		if (globalSocket === null && me.data && me.data.createdAt !== me.data.updatedAt) {
 			setGlobalSocket(
 				io(socketurl + "?id_user=" + me.data.uid, {
 					transports: ["websocket"],
