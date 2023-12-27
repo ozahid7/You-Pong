@@ -42,11 +42,7 @@ const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
     }
   );
 
-  const {
-    data: Members,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<Member[], Error>(
+  const { data: Members, refetch: membersRefetch } = useQuery<Member[], Error>(
     ["members", channels?.id_channel],
     () => fetchData_getMembers(channels?.id_channel),
     {
@@ -81,6 +77,7 @@ const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
             <MembersEdit
               MainUser={MainUser}
               Users={Members}
+              membersRefetch={membersRefetch}
               Channel_={channels}
             ></MembersEdit>
           </li>

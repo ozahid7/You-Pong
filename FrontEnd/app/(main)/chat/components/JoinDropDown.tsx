@@ -23,29 +23,40 @@ interface Props {
   disable: string;
   user: Member;
   channel: Channel | null;
+  Refetch: any;
 }
 
-const JoinDropDown = ({ disable, user, channel }: Props) => {
+const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
 
-  const HandleKick = () => {
-    KickMember(channel?.id_channel, user.user.id_user);
-    // mutate(fetchData_getMembers);
+  const HandleKick = async () => {
+    const success = await KickMember(channel?.id_channel, user.user.id_user);
+    if (success.message === "Channel Updated Succefully") {
+      Refetch();
+      onClose();
+    } else console.error(success.message);
   };
 
-  const HandleBan = () => {
+  const HandleBan = async () => {
+    let success = null;
     user.member_status !== "BANNED"
-      ? BanMember(channel?.id_channel, user.user.id_user)
-      : UnBanMember(channel?.id_channel, user.user.id_user);
-    // mutate(fetchData_getMembers);
+      ? (success = await BanMember(channel?.id_channel, user.user.id_user))
+      : (success = await UnBanMember(channel?.id_channel, user.user.id_user));
+    if (success.message === "Channel Updated Succefully") {
+      Refetch();
+    } else console.error(success.message);
   };
 
-  const HandleAdmin = () => {
+  const HandleAdmin = async () => {
+    let success = null;
     user.user_role === "MEMBER"
-      ? SetAdmin(channel?.id_channel, user.user.id_user)
-      : SetMember(channel?.id_channel, user.user.id_user);
-    // mutate(fetchData_getMembers);
+      ? (success = await SetAdmin(channel?.id_channel, user.user.id_user))
+      : (success = await SetMember(channel?.id_channel, user.user.id_user));
+    if (success.message === "Channel Updated Succefully") {
+      Refetch();
+    } else console.error(success.message);
   };
+
   return (
     <Fragment>
       <Dropdown
@@ -92,6 +103,7 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
               user={user}
               channel={channel}
               onClose={onClose}
+              refetch={Refetch}
             ></MuteDropDown>
           </DropdownItem>
           <DropdownItem

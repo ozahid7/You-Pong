@@ -19,49 +19,64 @@ import { useQuery } from "react-query";
 interface Props {
   user: Member;
   channel: Channel | null;
+  refetch: any;
   onClose: () => void;
 }
 
-export default function MuteDropDown({ user, channel, onClose }: Props) {
+export default function MuteDropDown({
+  user,
+  channel,
+  onClose,
+  refetch,
+}: Props) {
   const muteRef1 = useRef<HTMLButtonElement>(null);
   const muteRef5 = useRef<HTMLButtonElement>(null);
   const muteRef15 = useRef<HTMLButtonElement>(null);
 
-  const {
-    data: Users,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<Member[], Error>(
-    ["members", channel?.id_channel],
-    () => fetchData_getMembers(channel?.id_channel),
-    {
-      onError: (error: Error) => {
-        console.error("Members query error:", error);
-      },
-    }
-  );
-
-  const Handle_1Minute = () => {
-    MuteMember(channel?.id_channel, user.user.username, 60000);
-    // mutate(fetchData_getMembers);
-    onClose();
-  };
-  const Handle_5Minutes = () => {
-    MuteMember(channel?.id_channel, user.user.username, 300000);
-    // mutate(fetchData_getMembers);
-    onClose();
-  };
-  const Handle_15Minutes = () => {
-    MuteMember(channel?.id_channel, user.user.username, 900000);
-    // mutate(fetchData_getMembers);
-    onClose();
-  };
-
-  const HandleUnmute = () => {
-    if (user.member_status === "MUTED") {
-      UnMuteMember(channel?.id_channel, user.user.username);
-      // mutate(fetchData_getMembers);
+  const Handle_1Minute = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      60000
+    );
+    if (success.message === "Channel Updated Succefully") {
+      refetch();
       onClose();
+    } else console.error(success.message);
+  };
+  const Handle_5Minutes = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      300000
+    );
+    if (success.message === "Channel Updated Succefully") {
+      refetch();
+      onClose();
+    } else console.error(success.message);
+  };
+  const Handle_15Minutes = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      900000
+    );
+    if (success.message === "Channel Updated Succefully") {
+      refetch();
+      onClose();
+    } else console.error(success.message);
+  };
+
+  const HandleUnmute = async () => {
+    if (user.member_status === "MUTED") {
+      const success = await UnMuteMember(
+        channel?.id_channel,
+        user.user.id_user
+      );
+      if (success.message === "Channel Updated Succefully") {
+        refetch();
+        onClose();
+      } else console.error(success.message);
     }
   };
   return (
@@ -71,13 +86,13 @@ export default function MuteDropDown({ user, channel, onClose }: Props) {
       aria-label="Mute"
     >
       <PopoverTrigger>
-        <Button
+        <button
           className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
           onClick={HandleUnmute}
         >
           <LuBellOff />
           {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (

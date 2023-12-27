@@ -21,9 +21,10 @@ interface Props {
   Users: Member[];
   MainUser: User_Hero | undefined;
   Channel_: Channel | null;
+  membersRefetch: any;
 }
 
-const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
+const MembersEdit = ({ Users, MainUser, Channel_, membersRefetch }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   var Infos = {
     disabled: "",
@@ -147,6 +148,7 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
                                   user={user}
                                   key={user.user.id_user}
                                   channel={Channel_}
+                                  Refetch={membersRefetch}
                                 ></JoinDropDown>
                               ) : (
                                 ""
