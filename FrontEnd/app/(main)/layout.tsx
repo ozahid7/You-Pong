@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyToast from "@/components/tools/MyToast";
+import InviteProvider from "@/providers/InviteProvider";
 
 interface lyoutProps {
 	children: React.ReactNode;
@@ -17,7 +18,6 @@ interface lyoutProps {
 
 function RootLayout({ children }: lyoutProps) {
 	const notify = () => {
-		console.log("hello");
 		toast.warning(<MyToast userName="oussama zahid" />, {
 			position: "top-center",
 			autoClose: 5000,
@@ -30,7 +30,6 @@ function RootLayout({ children }: lyoutProps) {
 			progressStyle: {
 				backgroundColor: "#EB6440",
 			},
-
 			icon: false,
 			closeButton: true,
 			draggable: true,
@@ -50,7 +49,7 @@ function RootLayout({ children }: lyoutProps) {
 						onClick={notify}
 						className="w-20 absolute top-0 h-20 "
 					></Button>
-					<ToastContainer />
+					<InviteProvider />
 				</main>
 			</main>
 		</UserContextProvider>

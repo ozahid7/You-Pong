@@ -3,24 +3,19 @@
 import { MiniBanner, MyCard } from "@/components";
 import React, { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
-import {
-	FaFacebookMessenger,
-	FaUserClock,
-	FaUserMinus,
-	FaUserPlus,
-} from "react-icons/fa";
+import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { myRoutes, socketurl } from "@/const";
+import { myRoutes } from "@/const";
 import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
-import { IconType } from "react-icons";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { text } from "stream/consumers";
-import { LuMessageSquare, LuMessageSquarePlus } from "react-icons/lu";
+import { LuMessageSquarePlus } from "react-icons/lu";
 import { useUser } from "@/api/getHero";
+import { BsController } from "react-icons/bs";
+
 import useOtherUser from "@/api/useOtherUser";
-import { QueryClient } from "react-query";
+import { inviteGame } from "@/utils/game";
 
 const PlayerCard = (props: {
 	username: string;
@@ -32,10 +27,10 @@ const PlayerCard = (props: {
 	status: string;
 	uid: string;
 }) => {
-	const userIconStyle =
+	const iconsStyle =
 		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg drop-shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
 	const directIconStyle =
-		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute sm:bottom-[74px] xl:w-[12%] xl:h-[12%] h:right-3 bottom-14 right-1  text-palette-orange cursor-pointer";
+		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute  xl:w-[12%] xl:h-[12%] h:right-3  right-1  cursor-pointer";
 	const [isFriend, setIsFriend] = useState(false);
 	const [isPending, setIsPending] = useState(false);
 	const router = useRouter();
@@ -50,7 +45,7 @@ const PlayerCard = (props: {
 	const Remove = removeuser(props.uid, friends);
 	const direct = todirect(props.uid);
 	const user = useUser(true);
-	const otheruser = useOtherUser(props.username)
+	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
 		if (props.isMe)
@@ -71,23 +66,22 @@ const PlayerCard = (props: {
 				}
 			});
 		if (!props.isMe) {
-			otheruser.refetch()
-				.then((response) => {
-					const status = response.data.status;
-					if (status === "ONLINE") {
-						setColor("bg-green-600");
-						setSubColor("bg-green-500");
-						setTextColor("text-green-600");
-					} else if (status === "OFFLINE") {
-						setTextColor("text-red-600");
-						setColor("bg-red-600");
-						setSubColor("bg-red-500");
-					} else if (status === "INGAME") {
-						setTextColor("text-yellow-600");
-						setColor("bg-yellow-600");
-						setSubColor("bg-yellow-500");
-					}
-				});
+			otheruser.refetch().then((response) => {
+				const status = response.data.status;
+				if (status === "ONLINE") {
+					setColor("bg-green-600");
+					setSubColor("bg-green-500");
+					setTextColor("text-green-600");
+				} else if (status === "OFFLINE") {
+					setTextColor("text-red-600");
+					setColor("bg-red-600");
+					setSubColor("bg-red-500");
+				} else if (status === "INGAME") {
+					setTextColor("text-yellow-600");
+					setColor("bg-yellow-600");
+					setSubColor("bg-yellow-500");
+				}
+			});
 		}
 	}, [globalSocket, props.status]);
 
@@ -117,7 +111,7 @@ const PlayerCard = (props: {
 				setIcon(addIcon);
 			}}
 			size={100}
-			className={userIconStyle}
+			className={iconsStyle}
 		/>
 	);
 	const addIcon = (
@@ -127,7 +121,7 @@ const PlayerCard = (props: {
 				setIcon(pendingIcon);
 			}}
 			size={100}
-			className={userIconStyle}
+			className={iconsStyle}
 		/>
 	);
 
@@ -138,7 +132,7 @@ const PlayerCard = (props: {
 				setIcon(addIcon);
 			}}
 			size={100}
-			className={userIconStyle}
+			className={iconsStyle}
 		/>
 	);
 
@@ -188,14 +182,28 @@ const PlayerCard = (props: {
 
 						{!props.isMe && Icon}
 						{!props.isMe && (
-							<LuMessageSquarePlus
-								size={100}
-								strokeWidth={2.5}
-								className={directIconStyle}
-								onClick={() => {
-									direct.mutate();
-								}}
-							/>
+							<>
+								<LuMessageSquarePlus
+									size={100}
+									strokeWidth={2.5}
+									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-green`}
+									onClick={() => {
+										direct.mutate();
+									}}
+								/>
+								<BsController
+									size={100}
+									strokeWidth={0.5}
+									className={`${directIconStyle} sm:bottom-[117px] bottom-24 text-palette-green`}
+									onClick={() => {
+										router.push(
+											myRoutes.game +
+												"/" +
+												otheruser.data.uid
+										);
+									}}
+								/>
+							</>
 						)}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">

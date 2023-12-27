@@ -1,10 +1,18 @@
 "use client";
 import React from "react";
 import MyToolTip from "./MyToolTip";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const MyToast = (props: { userName: string }) => {
-	const IconStyle =
-		"z-10 h-10 w-12 bg-palette-white p-[5px] rounded-lg drop-shadow-md  text-palette-orange cursor-pointer";
+	const { globalSocket } = useGlobalSocket();
+
+	const handelClick = (cmd: string) => {
+		if (cmd === "accept") {
+			globalSocket.emit("accept");
+		} else {
+			globalSocket.emit("refuse");
+		}
+	};
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
 			<div className="flex items-center justify-around w-full h-full max-h-[80px]">
@@ -27,10 +35,20 @@ const MyToast = (props: { userName: string }) => {
 							: props.userName}
 					</span>
 				</div>
-				<button className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm">
+				<button
+					onClick={() => {
+						handelClick("accept");
+					}}
+					className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm"
+				>
 					Accept
 				</button>
-				<button className="bg-palette-orange p-2 drop-shadow-md hover:opacity-70 rounded-md text-sm text-white">
+				<button
+					onClick={() => {
+						handelClick("refuse");
+					}}
+					className="bg-palette-orange p-2 drop-shadow-md hover:opacity-70 rounded-md text-sm text-white"
+				>
 					Cancel
 				</button>
 			</div>

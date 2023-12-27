@@ -6,8 +6,14 @@ import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
 import MyCountDown from "./CountDown";
 import { Game } from "./Game";
+import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
-export default function game() {
+interface pageProps {
+	params: { uid: string };
+}
+
+export default function game({ params }: pageProps) {
 	const [map, setMap] = useState("orange");
 	const ref = useRef<HTMLDivElement>(null);
 	const [mode, setMode] = useState("easy");
@@ -15,10 +21,12 @@ export default function game() {
 	const [showCounter, setShowCounter] = useState(false);
 	const [width, setWidht] = useState<number>();
 	const [height, setHeight] = useState<number>();
+	const user = useUser(true);
+	const { globalSocket } = useGlobalSocket();
 
 	useEffect(() => {
 		// Setup Matter.js
-		const h = ref.current
+		const h = ref.current;
 		// Create a renderer and specify the container
 		const updateSize = () => {
 			setHeight(window.innerHeight);
@@ -51,11 +59,17 @@ export default function game() {
 							></div>
 						</div>
 					</div>
-					<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
+					<MyCountDown
+						isOpen={showCounter}
+						setIsOpen={setShowCounter}
+					/>
 					<GameSettings
 						showPlayerLoader={setShowPlayerLoder}
 						setMode={setMode}
 						setMap={setMap}
+						opponent_uid={params.uid}
+						my_id={user.data.uid}
+						socket={globalSocket}
 					/>
 					{showPlayerLoader && (
 						<PlayerLoader

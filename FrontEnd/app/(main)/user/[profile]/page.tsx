@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -19,6 +19,7 @@ const page = ({ params }: pageProps) => {
 	const user = useUser(true);
 	const isMe = !data || data === undefined ? true : false;
 	const toShow = !isMe ? data : user.data;
+	const { globalSocket } = useGlobalSocket();
 	const {
 		username,
 		avatar,
@@ -33,8 +34,6 @@ const page = ({ params }: pageProps) => {
 		createdAt,
 		updatedAt,
 	} = toShow;
-
-	
 
 	if (isLoading) return <Loader />;
 	else
