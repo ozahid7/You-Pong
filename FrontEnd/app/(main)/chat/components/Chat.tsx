@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
-import { Channel, Member, User_Hero } from "@/types";
+import { Channel, Member, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_getMainUser, getChannel, getMembers } from "../data/api";
 import useSWR from "swr";
@@ -55,6 +55,10 @@ const Chat = ({ channels, socket, main }: HomePage) => {
     }
   };
 
+  const user: User | null = data
+    ? data.users.find((user) => user.id_user !== main.uid) || null
+    : null;
+
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">
       <div className="flex w-full h-[10%] justify-center items-end">
@@ -65,16 +69,11 @@ const Chat = ({ channels, socket, main }: HomePage) => {
               radius="sm"
               color="default"
               className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px] xl_:w-[60px] xl_:h-[60px]"
-              src={channels.avatar}
+              src={user?.avatar}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
-                {data &&
-                  data.users
-                    .filter((user) => user.id_user !== main.uid)
-                    .map((user) => {
-                      return user.username;
-                    })}
+                {user?.username}
               </div>
             </div>
           </div>

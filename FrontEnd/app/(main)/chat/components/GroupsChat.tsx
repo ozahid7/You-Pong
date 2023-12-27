@@ -20,7 +20,7 @@ interface obj {
 
 var one: boolean = false;
 
-const GroupsChat = ({ channels, socket, user}: obj) => {
+const GroupsChat = ({channels, socket, user}: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -83,11 +83,11 @@ const GroupsChat = ({ channels, socket, user}: obj) => {
               radius="sm"
               color="default"
               className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px] xl_:w-[60px] xl_:h-[60px]"
-              src={channels.avatar}
+              src={channels?.avatar}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
-                {channels.name}
+                {channels?.name}
               </div>
               <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm_:block xs:hidden">
                 online: {printOnline()}{" "}
@@ -105,7 +105,7 @@ const GroupsChat = ({ channels, socket, user}: obj) => {
           main={user}
           socket={socket}
           channel={channels}
-          key={channels.id_channel}
+          key={channels?.id_channel}
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">

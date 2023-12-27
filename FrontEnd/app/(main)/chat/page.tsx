@@ -70,6 +70,13 @@ const Chats = () => {
     one = true;
   }
 
+  useEffect(() => {
+    
+  
+
+  }, [])
+  
+
   return (
     <div className="flex w-full h-[90%] justify-center items-center">
       <div className="flex w-[88%] h-[90%]">
@@ -196,7 +203,6 @@ const Chats = () => {
                         channel
                           .filter((obj) => obj.type !== "DIRECT")
                           .map((obj, i) => {
-                            console.log(valueGroups);
                             return (
                               <GroupsChat
                                 channels={obj}
