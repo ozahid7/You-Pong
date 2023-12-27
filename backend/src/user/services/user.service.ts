@@ -12,7 +12,12 @@ import { userDto } from '../dto/user.create.dto';
 import { FindUserService } from './find.service';
 import { error } from 'console';
 import { AchievementService } from 'src/achievement/achievement.service';
-import { relation } from '../dto/relation.enum';
+
+export enum relation {
+  PENDING,
+  ACCEPTED,
+  NONE,
+}
 
 @Injectable()
 export class UserService {
@@ -159,13 +164,14 @@ export class UserService {
         friendship_user: true,
         channels: true,
         achievements: true,
-        matchs: true,
         blocked_from: true,
         blocked_user: true,
+        matchs_oppenent: true,
+        matchs_player: true,
       },
     });
 
-    let user_relation = relation.none;
+    let user_relation: relation = relation.NONE;
     if (
       id_user &&
       user &&
@@ -176,7 +182,7 @@ export class UserService {
           (user) => user.id_user === id_user && user.state === 'PENDING',
         ))
     )
-      user_relation = relation.pending;
+      user_relation = relation.PENDING;
     else if (
       id_user &&
       user &&
@@ -187,7 +193,7 @@ export class UserService {
           (user) => user.id_user === id_user && user.state === 'ACCEPTED',
         ))
     )
-      user_relation = relation.accepted;
+      user_relation = relation.ACCEPTED;
 
     if (!user) throw new ServiceUnavailableException('Username not Found!');
 
@@ -213,7 +219,8 @@ export class UserService {
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
-      matchs: user.matchs,
+      matchs_oppenent: user.matchs_oppenent,
+      matchs_player: user.matchs_player,
       achievements: user.achievements,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
