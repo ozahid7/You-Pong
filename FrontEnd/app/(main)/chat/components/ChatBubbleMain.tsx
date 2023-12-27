@@ -9,7 +9,7 @@ interface Props {
   message: Message;
 }
 
-const ChatBubbleMain = ({ main, message } : Props) => {
+const ChatBubbleMain = ({ main, message }: Props) => {
   const formatPrismaDate = (prismaDate) => {
     const date = new Date(prismaDate);
     const hours = date.getHours();
@@ -21,32 +21,34 @@ const ChatBubbleMain = ({ main, message } : Props) => {
     return `${formattedHours}:${minutes < 10 ? "0" : ""}${minutes} ${ampm}`;
   };
 
-  return (
-    <div className="chat chat-end p-1 ">
-      <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <Image
-            width={40}
-            height={40}
-            alt="Main user's avatar"
-            src={main.avatar || avatar}
-          />
+  if (message)
+    return (
+      <div className="chat chat-end p-1 ">
+        <div className="chat-image avatar">
+          <div className="w-10 rounded-full">
+            <Image
+              width={40}
+              height={40}
+              alt="Main user's avatar"
+              src={main.avatar || avatar}
+            />
+          </div>
         </div>
+        <div className="flex chat-header items-center gap-1">
+          <div className="w-full h-fit">{main.username}</div>
+        </div>
+        <div
+          role="button"
+          data-theme="mytheme"
+          className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+        >
+          {message?.content}
+        </div>
+        <time className="text-xs opacity-50">
+          {formatPrismaDate(message.created_at)}
+        </time>
       </div>
-      <div className="flex chat-header items-center gap-1">
-        <div className="w-full h-fit">{main.username}</div>
-      </div>
-      <div
-        role="button"
-        data-theme="mytheme"
-        className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
-      >
-        {message?.content}
-      </div>
-      <time className="text-xs opacity-50">
-        {formatPrismaDate(message.created_at)}
-      </time>
-    </div>
-  );
+    );
+  return;
 };
 export default ChatBubbleMain;
