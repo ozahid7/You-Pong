@@ -67,18 +67,19 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       // Set the initial messages from the database //
       setMessages(data);
       MessagesRefetch();
+      one = false;
     }
   }, [data]);
 
   useEffect(() => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
-        setMessages((prevMessages) => [...prevMessages, data]);
         MessagesRefetch();
+        setMessages((prevMessages) => [...prevMessages, data]);
       });
       one = true;
     }
-  }, []);
+  }, [one, socket]);
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {

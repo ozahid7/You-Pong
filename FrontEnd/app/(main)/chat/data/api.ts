@@ -14,6 +14,17 @@ export const userChannels = async () => {
   }
 };
 
+export const getUsers = async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/user");
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
 // http://localhost:4000/chat/channel/join/name
 export const joinChannel = async (id_channel: string, password: string) => {
   try {
@@ -299,6 +310,12 @@ export const getMessages = async (id_channel: string) => {
 
 export const fetchData_userChannels = async () => {
   const result = await userChannels();
+  return result;
+};
+
+export const fetchData_users = async () => {
+  const result = await getUsers();
+  console.log(result);
   return result;
 };
 

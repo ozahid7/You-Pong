@@ -21,6 +21,7 @@ import DirectDropdown from "./DirectDropdown";
 import MiniChatDirect from "./MiniChatDirect";
 import PasswordModal from "./PasswordModal";
 import SimpleJoinButton from "./SimpleJoinButton";
+import PrivateModal from "./PrivateModal";
 
 export {
   Chat,
@@ -45,5 +46,6 @@ export {
   DirectDropdown,
   MiniChatDirect,
   PasswordModal,
-  SimpleJoinButton
+  SimpleJoinButton,
+  PrivateModal,
 };

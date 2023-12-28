@@ -4,7 +4,7 @@ import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { Channel, Member, User, User_Hero } from "@/types";
 import { Button } from "@nextui-org/react";
-import { ChatEdit, MembersEdit } from ".";
+import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
   fetchData_getMainUser,
@@ -118,6 +118,15 @@ const GroupDropdown = ({
                 </div>
               </div>
             </Button>
+          </li>
+          <li>
+            <PrivateModal
+              MainUser={MainUser}
+              membersRefetch={membersRefetch}
+              channelsRefetch={channelsRefetch}
+              mainChannelRefetch={mainChannelRefetch}
+              Channel_={channels}
+            ></PrivateModal>
           </li>
         </ul>
       </div>
