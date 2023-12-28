@@ -27,12 +27,12 @@ import {
   getChannel,
 } from "@/app/(main)/chat/data/api";
 import { User } from "@/types";
+import { channel } from "diagnostics_channel";
 
-var setDataObj: Channel = {
-  type: undefined || "",
-  name: undefined || "",
-  description: undefined,
-  avatar: undefined,
+export const getRandomNumber = () => {
+  const min = 20;
+  const max = 100;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 interface HomePage {
@@ -42,15 +42,21 @@ interface HomePage {
 }
 
 const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
+  var setDataObj: Channel = {
+    type: channels.type,
+    name: channels.name,
+    description: "",
+    avatar: channels.avatar,
+    hash: channels.
+  };
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const confpassRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
-  var m: number = 0;
-
   let imageUrl: any;
 
   if (file instanceof Blob || file instanceof File) {
@@ -65,7 +71,9 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
     imageUrl = channels.avatar;
   }
+
   var result: any = undefined;
+
   const SendDataToLeader = async () => {
     if (imgRef.current?.value !== "") {
       if (imgRef.current?.files)
@@ -75,12 +83,29 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
       setDataObj.name = nameRef.current?.value;
     if (channels.description !== descRef.current?.value)
       setDataObj.description = descRef.current?.value;
-    setDataObj.type = channels.type;
+    /// handle password ///
+    if (selected === "PROTECTED") {
+      if (passRef.current && confpassRef.current) {
+        if (passRef.current.value === confpassRef.current.value)
+          setDataObj.hash = passRef.current.value;
+        else {
+          console.error("Password is not identical...");
+          return;
+        }
+      } else return;
+    }
+    //////////////////////
+    setDataObj.type = selected;
     setDataObj.avatar = result;
-    result = await putData(setDataObj, channels?.id_channel);
     imageUrl = channels.avatar;
-    channelsRefetch();
-    onClose();
+    if (setDataObj) result = await putData(setDataObj, channels?.id_channel);
+    if (result?.message === "Channel Updated Succefully") {
+      channelsRefetch();
+      onClose();
+    } else {
+      console.error(result?.message);
+      return;
+    }
   };
 
   const handleSelectionChange = (newSelection: string) => {
@@ -253,16 +278,20 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
                               customclass="w-full h-[3rem] self-center"
                             ></InputGroup>
                             <InputGroupPass
+                              ref={passRef}
                               text="New Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
+                              required={true}
                             ></InputGroupPass>
                             <InputGroupPass
+                              ref={confpassRef}
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
+                              required={true}
                             ></InputGroupPass>
                           </CardBody>
                         </Card>

@@ -68,6 +68,7 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
                   type="password"
                   customclass="w-full h-[3rem] self-center border-red-500 "
                   isPassword={true}
+                  required={true}
                 ></InputGroupPass>
               </ModalBody>
               <ModalFooter>
