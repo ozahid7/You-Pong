@@ -42,7 +42,6 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
     user.member_status !== "BANNED"
       ? (Ban = await BanMember(channel?.id_channel, user.user.id_user))
       : (Ban = await UnBanMember(channel?.id_channel, user.user.id_user));
-    console.log(Ban);
     if (Ban)
       if (Ban.message === "Channel Updated Succefully") {
         Refetch();

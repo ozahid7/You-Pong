@@ -309,20 +309,20 @@ export const fetchData_getMainUser = async () => {
 
 export const fetchData_getMembers = async (id_channel: string) => {
   const result = await getMembers(id_channel);
-  return result.object;
+  return result.Object;
 };
 
 export const fetchData_Messages = async (id_channel: string) => {
   const result = await getMessages(id_channel);
-  return result.object;
+  return result.Object;
 };
 
 export const fetchData_Channel = async (id_channel: string) => {
   const result = await getChannel(id_channel);
-  return result.object;
+  return result.Object;
 };
 
 export const fetchData_getChannels = async () => {
   const result = await getChannels();
-  return result.object;
+  return result.Object;
 };

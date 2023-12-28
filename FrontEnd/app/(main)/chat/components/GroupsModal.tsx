@@ -38,7 +38,7 @@ export default function GroupsModal({ refetch }) {
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
-  var object: { object: any; message: string };
+  var object: { Object: any; message: string };
 
   let imageUrl: any;
 
@@ -84,7 +84,7 @@ export default function GroupsModal({ refetch }) {
 
         object = await setData(setDataObj);
         // SEND DATA TO HAMID RIGHT HERE
-        if (object.object !== null) refetch();
+        if (object.Object !== null) refetch();
         onClose();
         // CLOSE THE MODAL Function :)
       }
