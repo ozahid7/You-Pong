@@ -2,8 +2,9 @@
 import React from "react";
 import MyToolTip from "./MyToolTip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { avatar } from "@nextui-org/theme";
 
-const MyToast = (props: { userName: string }) => {
+const MyToast = (props: { userName: string; avatar: string }) => {
 	const { globalSocket } = useGlobalSocket();
 
 	const handelClick = (cmd: string) => {
@@ -20,7 +21,7 @@ const MyToast = (props: { userName: string }) => {
 					<div className="w-[70%] pb-[70%] mx-auto relative">
 						<img
 							className=" h-[100%] drop-shadow-md w-[100%] border-b border-palette-orange absolute object-contain rounded-md"
-							src={"/ozahid-.jpeg"}
+							src={props.avatar}
 							alt="avatar"
 						/>
 					</div>

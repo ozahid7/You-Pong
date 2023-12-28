@@ -27,9 +27,9 @@ export type achievementReturn = {
 };
 
 export type matchReturn = {
-	message: string
+	message: string;
 	Object: match[];
-}
+};
 
 export interface match {
 	avatar: string;
@@ -46,7 +46,7 @@ export type UserInfo = {
 	loses: number;
 	rank: number;
 	uid: string;
-	user_relation: 'PENDING' | 'ACCEPTED' | 'NONE';
+	user_relation: number;
 	tfaStatus: boolean;
 	username: string;
 	createdAt: string;
@@ -65,7 +65,7 @@ export type UserToShow = {
 	avatar: string;
 	username: string;
 	level: number;
-	user_relation: 'PENDING' | 'ACCEPTED' | 'NONE';
+	user_relation: number;
 	rank: number;
 	wins: number;
 	loses: number;
@@ -92,7 +92,7 @@ export const endPoints = {
 	getFriend: "friend",
 	getFile: "upload",
 	getAchiv: "/achievement",
-	getMatchs: '/game',
+	getMatchs: "/game",
 	updateInfo: "user/update",
 };
 

@@ -10,6 +10,8 @@ import { Socket } from "socket.io-client";
 export default function GameSettings(props: {
 	setMap: any;
 	setMode: any;
+	map: string;
+	mode: string;
 	showPlayerLoader: any;
 	opponent_uid?: string;
 	socket?: Socket;
@@ -70,12 +72,12 @@ export default function GameSettings(props: {
 								handleclick={() => {
 									inviteGame(
 										{
-											id_game: "id",
+											id_game: "",
 											id_sender: props.my_id,
 											id_receiver: props.opponent_uid,
 											socket_player: props.socket.id,
-											map: "map",
-											mode: "mode",
+											map: props.map,
+											mode: props.mode,
 										},
 										props.socket
 									);

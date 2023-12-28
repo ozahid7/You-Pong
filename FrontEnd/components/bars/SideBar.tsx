@@ -113,7 +113,7 @@ const SideBar = () => {
 					{RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
 					{RenderSideBarElements(1, myRoutes.friends, "Friends")}
 					{RenderSideBarElements(2, myRoutes.chat, "Messages")}
-					{RenderSideBarElements(3, myRoutes.game, "Game")}
+					{RenderSideBarElements(3, myRoutes.gameme, "Game")}
 					{RenderSideBarElements(4, myRoutes.settings, "Settings")}
 				</div>
 				{/* bottom part */}

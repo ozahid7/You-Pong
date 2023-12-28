@@ -10,13 +10,13 @@ import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 interface pageProps {
-	params: { uid: string };
+	params: { user: string };
 }
 
 export default function game({ params }: pageProps) {
-	const [map, setMap] = useState("orange");
-	const ref = useRef<HTMLDivElement>(null);
+	const [map, setMap] = useState("classic");
 	const [mode, setMode] = useState("easy");
+	const ref = useRef<HTMLDivElement>(null);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showCounter, setShowCounter] = useState(false);
 	const [width, setWidht] = useState<number>();
@@ -31,7 +31,6 @@ export default function game({ params }: pageProps) {
 		const updateSize = () => {
 			setHeight(window.innerHeight);
 			setWidht(window.innerWidth);
-			console.log("width = ", width);
 		};
 
 		window.addEventListener("resize", updateSize);
@@ -67,7 +66,9 @@ export default function game({ params }: pageProps) {
 						showPlayerLoader={setShowPlayerLoder}
 						setMode={setMode}
 						setMap={setMap}
-						opponent_uid={params.uid}
+						map={map}
+						mode={mode}
+						opponent_uid={params.user}
 						my_id={user.data.uid}
 						socket={globalSocket}
 					/>

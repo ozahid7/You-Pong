@@ -23,7 +23,7 @@ const PlayerCard = (props: {
 	rank: number;
 	level: number;
 	isMe: boolean;
-	user_relation: string;
+	user_relation: number;
 	status: string;
 	uid: string;
 	user: UseQueryResult<UserInfo, Error>;
@@ -126,9 +126,9 @@ const PlayerCard = (props: {
 
 	const [Icon, setIcon] = useState<any>(FaUserClock);
 	useEffect(() => {
-		props.user_relation === "NONE"
+		props.user_relation === 2
 			? setIcon(addIcon)
-			: props.user_relation === "PENDING"
+			: props.user_relation === 0
 			? setIcon(pendingIcon)
 			: setIcon(removeIcon);
 	}, [isFriend, isPending]);

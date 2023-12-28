@@ -6,3 +6,9 @@ export interface infoGame {
 	map: string;
 	mode: string;
 }
+
+export interface inviteReturn {
+	info: infoGame;
+	avatar: string;
+	username: string;
+}

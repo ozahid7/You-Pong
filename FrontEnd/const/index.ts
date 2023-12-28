@@ -18,7 +18,8 @@ export const myRoutes = {
 	settings: "/settings",
 	friends: "/friends",
 	chat: "/chat",
-	game: "/game/me",
+	game: "/game",
+	gameme: "/game/me",
 	notfound: "/user",
 };
 

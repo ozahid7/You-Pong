@@ -86,7 +86,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		if (
 			globalSocket &&
-			i === 0 &&
 			path !== "/game" &&
 			toEmit &&
 			me.data.createdAt !== me.data.updatedAt
@@ -95,7 +94,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			globalSocket.emit("online");
 			i++;
 		}
-	}, [globalSocket]);
+	}, [globalSocket, path]);
 
 	const getTfa = async () => {
 		try {
@@ -145,6 +144,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				isOpen={me.data.createdAt === me.data.updatedAt}
 				setIsOpen={() => {}}
 				closeModal={() => {}}
+				user={me}
 			/>
 		);
 	} else if (
@@ -152,7 +152,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		isLoged &&
 		loged &&
 		tfaVerified &&
-		me.data.createdAt !== me.data.updatedAt
+		me.data.createdAt !== me.data.updatedAt &&
+		globalSocket
 	)
 		return (
 			<GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>

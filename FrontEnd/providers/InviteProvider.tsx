@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
+import { inviteReturn } from "@/types/game";
+import { notify } from "@/utils/game";
 
 function InviteProvider() {
 	const globalSocket = useGlobalSocket().globalSocket;
 
 	useEffect(() => {
-		globalSocket.on("invitation", (obj) => {
-			console.log("inv obj = ", obj);
+		console.log("from invite provider");
+		globalSocket.on("invitation", (obj: inviteReturn) => {
+			notify(obj.username, obj.avatar);
 		});
 		globalSocket.on("accepted", (obj) => {
 			console.log("accpet obj = ", obj);
