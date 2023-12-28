@@ -99,7 +99,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         if (my_user && my_user !== undefined) {
           const user = await this.prisma.user.updateMany({
             where: { id_user: my_user.id_user },
-            data: { status: 'ONLINE'},
+            data: { status: 'ONLINE' },
           });
           if (user) {
             console.log('ONLINE ,');
@@ -282,9 +282,9 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           info.id_game = new Date() + info.id_sender + info.id_receiver;
           info.socket_player = sender.id_socket;
           this.addPrivateGame(
-            sender.id_socket,
             info.id_game,
             info.id_sender,
+            sender.id_socket,
             info.map,
             info.mode,
           );

@@ -18,17 +18,9 @@ export const myRender = (
 	});
 };
 
-const wallOptions = {
-	isStatic: true,
-	render: {
-		fillStyle: "#EB6440",
-		strokeStyle: "#EB6440",
-	},
-};
-
 const wallThickness = 10;
 
-const getTopWall = (width: number, Bodies: any) => {
+const getTopWall = (width: number, Bodies: any, wallOptions: object) => {
 	return Bodies.rectangle(
 		width / 2,
 		wallThickness / 2,
@@ -38,7 +30,12 @@ const getTopWall = (width: number, Bodies: any) => {
 	);
 };
 
-const getBottomWall = (height: number, width: number, Bodies: any) => {
+const getBottomWall = (
+	height: number,
+	width: number,
+	Bodies: any,
+	wallOptions: object
+) => {
 	return Bodies.rectangle(
 		width / 2,
 		height,
@@ -48,7 +45,7 @@ const getBottomWall = (height: number, width: number, Bodies: any) => {
 	);
 };
 
-const getLeftWall = (height: number, Bodies: any) => {
+const getLeftWall = (height: number, Bodies: any, wallOptions: object) => {
 	return Bodies.rectangle(
 		wallThickness / 2,
 		height / 2,
@@ -58,7 +55,12 @@ const getLeftWall = (height: number, Bodies: any) => {
 	);
 };
 
-const getRightWall = (height: number, width: number, Bodies: any) => {
+const getRightWall = (
+	height: number,
+	width: number,
+	Bodies: any,
+	wallOptions: object
+) => {
 	return Bodies.rectangle(
 		width - wallThickness / 2,
 		height / 2,
@@ -70,7 +72,7 @@ const getRightWall = (height: number, width: number, Bodies: any) => {
 
 const paddleThikness = 15;
 
-const getTopPaddle = (width: number) => {
+const getTopPaddle = (width: number, wallOptions: object) => {
 	return Bodies.rectangle(
 		width / 2,
 		paddleThikness * 2,
@@ -80,7 +82,11 @@ const getTopPaddle = (width: number) => {
 	);
 };
 
-const getBottomPaddle = (width: number, height: number) => {
+const getBottomPaddle = (
+	width: number,
+	height: number,
+	wallOptions: object
+) => {
 	return Bodies.rectangle(
 		width / 2,
 		height - paddleThikness * 2,
@@ -90,7 +96,7 @@ const getBottomPaddle = (width: number, height: number) => {
 	);
 };
 
-const getBall = (width: number, height: number) => {
+const getBall = (width: number, height: number, wallOptions: object) => {
 	return Bodies.circle(width / 2, height / 2, 14, wallOptions);
 };
 
@@ -99,15 +105,16 @@ export const addWorld = (
 	World: any,
 	Bodies: any,
 	height: number,
-	width: number
+	width: number,
+	wallOptions: object
 ) => {
-	const topWall = getTopWall(width, Bodies);
-	const bottomWall = getBottomWall(height, width, Bodies);
-	const leftWall = getLeftWall(height, Bodies);
-	const rightWall = getRightWall(height, width, Bodies);
-	const topPaddle = getTopPaddle(width);
-	const bottomPaddle = getBottomPaddle(width, height);
-	const ball = getBall(width, height);
+	const topWall = getTopWall(width, Bodies, wallOptions);
+	const bottomWall = getBottomWall(height, width, Bodies, wallOptions);
+	const leftWall = getLeftWall(height, Bodies, wallOptions);
+	const rightWall = getRightWall(height, width, Bodies, wallOptions);
+	const topPaddle = getTopPaddle(width, wallOptions);
+	const bottomPaddle = getBottomPaddle(width, height, wallOptions);
+	const ball = getBall(width, height, wallOptions);
 	World.add(engine.world, [
 		topWall,
 		bottomWall,

@@ -3,23 +3,25 @@ import { ToastContainer } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
 import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
 
 function InviteProvider() {
 	const globalSocket = useGlobalSocket().globalSocket;
-
+	const router = useRouter();
 	useEffect(() => {
 		console.log("from invite provider");
 		globalSocket.on("invitation", (obj: inviteReturn) => {
-			notify(obj.username, obj.avatar);
+			notify(obj.username, obj.avatar, obj.info);
 		});
-		globalSocket.on("accepted", (obj) => {
-			console.log("accpet obj = ", obj);
+		globalSocket.on("accepted", (obj: inviteReturn) => {
+			router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
 		});
 		globalSocket.on("refused", (obj) => {
-			console.log("ref obj = ", obj);
+			console.log("refused obj = ", obj);
 		});
-		globalSocket.on("canceled", (obj) => {
-			console.log("cancel obj = ", obj);
+		globalSocket.on("canceled", (obj: inviteReturn) => {
+			router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
 		});
 	}, []);
 

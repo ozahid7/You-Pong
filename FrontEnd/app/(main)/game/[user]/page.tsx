@@ -8,6 +8,8 @@ import MyCountDown from "./CountDown";
 import { Game } from "./Game";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
 
 interface pageProps {
 	params: { user: string };
@@ -16,6 +18,7 @@ interface pageProps {
 export default function game({ params }: pageProps) {
 	const [map, setMap] = useState("classic");
 	const [mode, setMode] = useState("easy");
+	const router = useRouter();
 	const ref = useRef<HTMLDivElement>(null);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showCounter, setShowCounter] = useState(false);
@@ -23,25 +26,48 @@ export default function game({ params }: pageProps) {
 	const [height, setHeight] = useState<number>();
 	const user = useUser(true);
 	const { globalSocket } = useGlobalSocket();
+	const [showGameOption, setShowGameOption] = useState(true);
+	const [submit, setSubmit] = useState(false);
+
+	useEffect(() => {
+		if (params.user != "me" && params.user.length < 12) {
+			setShowGameOption(false);
+			const mode = params.user.slice(0, 4);
+			const map = params.user.slice(4);
+			console.log("mode = ", mode, "map = ", map);
+			if (mode !== "easy" && mode !== "hard")
+				router.push(myRoutes.dashboard);
+			if (map !== "classic" && map !== "orange" && map !== "green")
+				router.push(myRoutes.dashboard);
+
+			setMode(mode);
+			setMap(map);
+			setShowCounter(true);
+			setSubmit(true);
+		}
+	}, []);
 
 	useEffect(() => {
 		// Setup Matter.js
-		const h = ref.current;
-		// Create a renderer and specify the container
-		const updateSize = () => {
-			setHeight(window.innerHeight);
-			setWidht(window.innerWidth);
-		};
+		if (submit) {
+			const h = ref.current;
+			// Create a renderer and specify the container
+			const updateSize = () => {
+				setHeight(window.innerHeight);
+				setWidht(window.innerWidth);
+			};
 
-		window.addEventListener("resize", updateSize);
-		updateSize();
-		const game = new Game(ref.current);
+			window.addEventListener("resize", updateSize);
+			updateSize();
+			console.log("maaaaaaaaaaap", map);
+			const game = new Game(ref.current, map);
 
-		return () => {
-			game.destroy();
-			window.removeEventListener("resize", updateSize);
-		};
-	}, [width, height]);
+			return () => {
+				game.destroy();
+				window.removeEventListener("resize", updateSize);
+			};
+		}
+	}, [width, height, submit]);
 
 	return (
 		<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
@@ -63,6 +89,8 @@ export default function game({ params }: pageProps) {
 						setIsOpen={setShowCounter}
 					/>
 					<GameSettings
+						isOpen={showGameOption}
+						setIsOpen={setShowGameOption}
 						showPlayerLoader={setShowPlayerLoder}
 						setMode={setMode}
 						setMap={setMap}

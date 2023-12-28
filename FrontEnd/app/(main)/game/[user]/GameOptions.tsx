@@ -12,18 +12,19 @@ export default function GameSettings(props: {
 	setMode: any;
 	map: string;
 	mode: string;
+	isOpen: boolean;
+	setIsOpen: any;
 	showPlayerLoader: any;
 	opponent_uid?: string;
 	socket?: Socket;
 	my_id: string;
 }) {
 	const router = useRouter();
-	const [isOpen, setIsOpen] = useState(true);
 
 	return (
 		<>
 			<MyDialog
-				isOpen={isOpen}
+				isOpen={props.isOpen}
 				closemodal={() => {
 					router.push(myRoutes.dashboard);
 				}}
@@ -81,7 +82,7 @@ export default function GameSettings(props: {
 										},
 										props.socket
 									);
-									setIsOpen(false);
+									props.setIsOpen(false);
 									props.showPlayerLoader(true);
 								}}
 							/>

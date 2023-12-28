@@ -29,7 +29,7 @@ const arrayMap: Props[] = [
 ];
 
 function Map(props: { handelClick: any }) {
-	const [selected, setSelected] = useState("Classic");
+	const [selected, setSelected] = useState("classic");
 	return (
 		<>
 			{(arrayMap as Props[]).map((items: Props, index: number) => (

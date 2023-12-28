@@ -3,8 +3,8 @@ import { infoGame } from "@/types/game";
 import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
-export const notify = (username: string, avatar: string) => {
-	toast(<MyToast userName={username} avatar={avatar} />, {
+export const notify = (username: string, avatar: string, info: infoGame) => {
+	toast.success(<MyToast userName={username} avatar={avatar} info={info} />, {
 		position: "top-center",
 		autoClose: 5000,
 		hideProgressBar: false,
@@ -25,9 +25,14 @@ export const notify = (username: string, avatar: string) => {
 };
 
 export const inviteGame = (info: infoGame, socket: Socket) => {
-	console.log("emit from invite game ", socket.id);
 	socket.emit("invite", info);
-	// socket.emit("canceled");
-	// socket.emit("refuse");
-	// socket.emit("accepted");
+};
+
+export const acceptGame = (info: infoGame, socket: Socket) => {
+	console.log("from accept ", info.id_game);
+	socket.emit("accept", info);
+};
+
+export const refuseGame = (info: infoGame, socket: Socket) => {
+	socket.emit("refuse", info);
 };

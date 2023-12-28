@@ -2,18 +2,15 @@
 import React from "react";
 import MyToolTip from "./MyToolTip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { avatar } from "@nextui-org/theme";
+import { infoGame } from "@/types/game";
+import { acceptGame, refuseGame } from "@/utils/game";
 
-const MyToast = (props: { userName: string; avatar: string }) => {
+const MyToast = (props: {
+	userName: string;
+	avatar: string;
+	info: infoGame;
+}) => {
 	const { globalSocket } = useGlobalSocket();
-
-	const handelClick = (cmd: string) => {
-		if (cmd === "accept") {
-			globalSocket.emit("accept");
-		} else {
-			globalSocket.emit("refuse");
-		}
-	};
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
 			<div className="flex items-center justify-around w-full h-full max-h-[80px]">
@@ -38,7 +35,7 @@ const MyToast = (props: { userName: string; avatar: string }) => {
 				</div>
 				<button
 					onClick={() => {
-						handelClick("accept");
+						acceptGame(props.info, globalSocket);
 					}}
 					className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm"
 				>
@@ -46,7 +43,7 @@ const MyToast = (props: { userName: string; avatar: string }) => {
 				</button>
 				<button
 					onClick={() => {
-						handelClick("refuse");
+						refuseGame(props.info, globalSocket);
 					}}
 					className="bg-palette-orange p-2 drop-shadow-md hover:opacity-70 rounded-md text-sm text-white"
 				>

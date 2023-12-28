@@ -174,7 +174,7 @@ const PlayerCard = (props: {
 								<LuMessageSquarePlus
 									size={100}
 									strokeWidth={2.5}
-									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-green`}
+									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-orange`}
 									onClick={() => {
 										direct.mutate();
 									}}
@@ -195,7 +195,7 @@ const PlayerCard = (props: {
 						)}
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">
-								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl sm:text-4xl md:text-4xl text-cardtitle drop-shadow">
+								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl lg:text-4xl text-cardtitle drop-shadow">
 									{name}
 								</h2>
 								{textColor.length > 0 ? (
