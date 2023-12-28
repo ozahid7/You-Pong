@@ -44,7 +44,7 @@ const Chats = () => {
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-  const { data: MainUser } = useQuery<User_Hero, Error>(
+  const { data: MainUser, refetch: MainUserRefetch } = useQuery<User_Hero, Error>(
     ["MainUser"],
     fetchData_getMainUser,
     {
@@ -258,10 +258,10 @@ const Chats = () => {
                                 data={channel}
                                 channels={obj}
                                 socket={connection}
-                                user={MainUser}
+                                MainUser={MainUser}
                                 indexChannels={indexChannels}
                                 index={valueGroups}
-                                refetch={refetch}
+                                channelsRefetch={refetch}
                                 joinRefetch={joinRefetch}
                                 key={i}
                               ></GroupsChat>

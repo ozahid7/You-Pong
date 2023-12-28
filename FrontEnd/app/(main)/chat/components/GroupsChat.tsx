@@ -15,10 +15,10 @@ import { useQuery } from "react-query";
 interface obj {
   channels: Channel;
   socket: any;
-  user: User_Hero;
+  MainUser: User_Hero;
   indexChannels: whichChannel[];
   index: number;
-  refetch: any;
+  channelsRefetch: any;
   joinRefetch: any;
   data: Channel[];
 }
@@ -28,11 +28,11 @@ var one: boolean = false;
 const GroupsChat = ({
   channels,
   socket,
-  user,
+  MainUser,
   indexChannels,
   data,
   index,
-  refetch,
+  channelsRefetch,
   joinRefetch,
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
@@ -46,6 +46,7 @@ const GroupsChat = ({
     data: channel,
     error: ChannelError,
     isLoading: ChannelLoading,
+    refetch: mainChannel
   } = useQuery<Channel, Error>(
     ["channel", channels?.id_channel],
     () => fetchData_Channel(channels?.id_channel),
@@ -60,6 +61,7 @@ const GroupsChat = ({
     data: Members,
     error: MembersError,
     isLoading: MembersLoading,
+    refetch: membersRefetch
   } = useQuery<Member[], Error>(
     ["Members", channels?.id_channel],
     () => fetchData_getMembers(channels?.id_channel),
@@ -77,7 +79,7 @@ const GroupsChat = ({
     : null;
 
   const retMember: Member | null = Members
-    ? Members.find((member) => member.user.id_user === user.uid)
+    ? Members.find((member) => member.user.id_user === MainUser.uid)
     : null;
 
   if (retMember)
@@ -93,7 +95,7 @@ const GroupsChat = ({
     if (!one && socket) {
       var message = {
         id_channel: channels.id_channel,
-        id_sender: user.uid,
+        id_sender: MainUser.uid,
         content: inputValue.trim(),
       };
       socket.emit("newMessage", message);
@@ -152,7 +154,8 @@ const GroupsChat = ({
           <div>
             <GroupDropdown
               channels={channels}
-              refetch={refetch}
+              channelsRefetch={channelsRefetch}
+              mainChannelRefetch={mainChannel}
               joinRefetch={joinRefetch}
             ></GroupDropdown>
           </div>
@@ -160,7 +163,7 @@ const GroupsChat = ({
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
         <ChatDialog
-          main={user}
+          main={MainUser}
           socket={socket}
           channel={retChannel}
           key={channels?.id_channel}

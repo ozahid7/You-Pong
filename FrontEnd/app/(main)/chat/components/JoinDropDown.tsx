@@ -23,16 +23,18 @@ interface Props {
   disable: string;
   user: Member;
   channel: Channel | null;
-  Refetch: any;
+  membersRefetch: any;
+  channelsRefetch: any;
+  mainChannelRefetch: any;
 }
 
-const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
+const JoinDropDown = ({ disable, user, channel, membersRefetch, channelsRefetch, mainChannelRefetch }: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
 
   const HandleKick = async () => {
     const kick = await KickMember(channel?.id_channel, user.user.id_user);
     if (kick?.message === "Channel Updated Succefully") {
-      Refetch();
+      membersRefetch();
       onClose();
     } else console.error(kick?.message);
   };
@@ -44,7 +46,7 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
       : (Ban = await UnBanMember(channel?.id_channel, user.user.id_user));
     if (Ban)
       if (Ban.message === "Channel Updated Succefully") {
-        Refetch();
+        membersRefetch();
       } else console.error(Ban.message);
   };
 
@@ -54,7 +56,7 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
       ? (admin = await SetAdmin(channel?.id_channel, user.user.id_user))
       : (admin = await SetMember(channel?.id_channel, user.user.id_user));
     if (admin?.message === "Channel Updated Succefully") {
-      Refetch();
+      membersRefetch();
     } else console.error(admin?.message);
   };
 
@@ -104,7 +106,8 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
               user={user}
               channel={channel}
               onClose={onClose}
-              refetch={Refetch}
+              membersRefetch={membersRefetch}
+              channelsRefetch={mainChannelRefetch}
             ></MuteDropDown>
           </DropdownItem>
           <DropdownItem

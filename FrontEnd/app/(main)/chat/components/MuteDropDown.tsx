@@ -19,15 +19,17 @@ import { useQuery } from "react-query";
 interface Props {
   user: Member;
   channel: Channel | null;
-  refetch: any;
+  membersRefetch: any;
   onClose: () => void;
+  channelsRefetch: any;
 }
 
 export default function MuteDropDown({
   user,
   channel,
   onClose,
-  refetch,
+  membersRefetch,
+  channelsRefetch,
 }: Props) {
   const muteRef1 = useRef<HTMLButtonElement>(null);
   const muteRef5 = useRef<HTMLButtonElement>(null);
@@ -40,8 +42,10 @@ export default function MuteDropDown({
       60000
     );
     if (success?.message === "Channel Updated Succefully") {
-      refetch();
-      onClose();
+      membersRefetch();
+      channelsRefetch();
+      const timeoutId = setTimeout(membersRefetch(), 60000);
+      return clearTimeout(timeoutId), onClose();
     } else console.error(success?.message);
   };
   const Handle_5Minutes = async () => {
@@ -51,7 +55,7 @@ export default function MuteDropDown({
       300000
     );
     if (success?.message === "Channel Updated Succefully") {
-      refetch();
+      membersRefetch();
       onClose();
     } else console.error(success?.message);
   };
@@ -62,7 +66,7 @@ export default function MuteDropDown({
       900000
     );
     if (success?.message === "Channel Updated Succefully") {
-      refetch();
+      membersRefetch();
       onClose();
     } else console.error(success?.message);
   };
@@ -74,7 +78,8 @@ export default function MuteDropDown({
         user.user.id_user
       );
       if (success?.message === "Channel Updated Succefully") {
-        refetch();
+        channelsRefetch();
+        membersRefetch();
         onClose();
       } else console.error(success?.message);
     }

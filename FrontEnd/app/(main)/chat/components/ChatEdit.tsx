@@ -39,10 +39,10 @@ var setDataObj: Channel = {
 interface HomePage {
   channels: Channel;
   users: Member[];
-  refetch: any;
+  channelsRefetch: any;
 }
 
-const ChatEdit = ({ channels, users, refetch }: HomePage) => {
+const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
@@ -80,7 +80,7 @@ const ChatEdit = ({ channels, users, refetch }: HomePage) => {
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels?.id_channel);
     imageUrl = channels.avatar;
-    refetch();
+    channelsRefetch();
     onClose();
   };
 

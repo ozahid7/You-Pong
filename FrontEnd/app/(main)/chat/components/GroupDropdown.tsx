@@ -19,15 +19,21 @@ import { useQuery } from "react-query";
 
 interface HomePage {
   channels: Channel;
-  refetch: any;
+  channelsRefetch: any;
   joinRefetch: any;
+  mainChannelRefetch: any;
 }
 
-const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
+const GroupDropdown = ({
+  channels,
+  channelsRefetch,
+  joinRefetch,
+  mainChannelRefetch,
+}: HomePage) => {
   const Leaving = async () => {
     const success = await leaveChannel(channels.id_channel);
     if (success?.message === "Channel Updated Succefully") {
-      refetch();
+      channelsRefetch();
       joinRefetch();
     } else console.error(success?.message);
   };
@@ -78,6 +84,8 @@ const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
               MainUser={MainUser}
               Users={Members}
               membersRefetch={membersRefetch}
+              channelsRefetch={channelsRefetch}
+              mainChannelRefetch={mainChannelRefetch}
               Channel_={channels}
             ></MembersEdit>
           </li>
@@ -85,7 +93,7 @@ const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
             <ChatEdit
               channels={channels}
               users={Members}
-              refetch={refetch}
+              channelsRefetch={channelsRefetch}
             ></ChatEdit>
           </li>
           <li>
