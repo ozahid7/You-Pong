@@ -11,11 +11,11 @@ import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { LuMessageSquarePlus } from "react-icons/lu";
-import { useUser } from "@/api/getHero";
 import { BsController } from "react-icons/bs";
 
 import useOtherUser from "@/api/useOtherUser";
-import { inviteGame } from "@/utils/game";
+import { UseQueryResult } from "@tanstack/react-query";
+import { UserInfo } from "@/types/Api";
 
 const PlayerCard = (props: {
 	username: string;
@@ -26,6 +26,7 @@ const PlayerCard = (props: {
 	user_relation: string;
 	status: string;
 	uid: string;
+	user: UseQueryResult<UserInfo, Error>;
 }) => {
 	const iconsStyle =
 		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg drop-shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
@@ -44,12 +45,11 @@ const PlayerCard = (props: {
 	const Add = adduser(props.uid, friends);
 	const Remove = removeuser(props.uid, friends);
 	const direct = todirect(props.uid);
-	const user = useUser(true);
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
 		if (props.isMe)
-			user.refetch().then((response) => {
+			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
 					setColor("bg-green-600");

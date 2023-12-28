@@ -51,6 +51,7 @@ const page = ({ params }: pageProps) => {
 								avatar={avatar}
 								status={status}
 								isMe={isMe}
+								user={user}
 							/>
 							<OverviewCard wins={wins} loses={loses} />
 							<NewGameCard />

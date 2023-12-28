@@ -1,11 +1,11 @@
 import { myRoutes } from "@/const";
 import { chatEndPoint, friendsEndPoint, searchBarReturn } from "@/types/Api";
 import { useAxios } from "@/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export const blockuser = (uid: string, friends: any, setInvalid: any) => {
-	const search = searchusers();
+	const search = useQueryClient();
 	const blockUser = async () => {
 		try {
 			const response = await useAxios(
@@ -14,7 +14,7 @@ export const blockuser = (uid: string, friends: any, setInvalid: any) => {
 			);
 			if (friends !== undefined) friends.refetch();
 			if (setInvalid !== undefined) setInvalid(true);
-			search.refetch();
+			search.invalidateQueries({ queryKey: ["search"] });
 			return response;
 		} catch (error) {
 			console.log("error : ", error);
@@ -73,7 +73,7 @@ export const removeuser = (uid: string, friends: any) => {
 };
 
 export const unblockuser = (uid: string, setInvalid: any) => {
-	const search = searchusers();
+	const search = useQueryClient();
 	const unblockUser = async () => {
 		try {
 			const response = await useAxios(
@@ -81,7 +81,7 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 				friendsEndPoint.unblock + "?id_friend=" + uid
 			);
 			setInvalid(true);
-			search.refetch();
+			search.invalidateQueries({ queryKey: ["search"] });
 			return response;
 		} catch (error) {
 			console.log("unblock error : ", error);
