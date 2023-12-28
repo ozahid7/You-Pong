@@ -7,24 +7,27 @@ import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 
 function InviteProvider() {
-	const globalSocket = useGlobalSocket().globalSocket;
+	const { globalSocket } = useGlobalSocket();
 	const router = useRouter();
 	useEffect(() => {
-		console.log("from invite provider");
-		globalSocket.on("invitation", (obj: inviteReturn) => {
-			notify(obj.username, obj.avatar, obj.info);
-		});
-		globalSocket.on("accepted", (obj: inviteReturn) => {
-			console.log("from accepted ", obj);
-		});
-		globalSocket.on("refused", (obj) => {
-			console.log("refused obj = ", obj);
-		});
-		globalSocket.on("canceled", (obj: inviteReturn) => {
-			console.log("from cancled = ", obj);
-			router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
-		});
-	}, []);
+		if (globalSocket.id != undefined) {
+			console.log("socket id = ", globalSocket.id);
+			console.log("from invite provider");
+			globalSocket.on("invitation", (obj: inviteReturn) => {
+				notify(obj.username, obj.avatar, obj.info);
+			});
+			globalSocket.on("accepted", (obj: inviteReturn) => {
+				console.log("from accepted ", obj);
+			});
+			globalSocket.on("refused", (obj) => {
+				console.log("refused obj = ", obj);
+			});
+			globalSocket.on("canceled", (obj: inviteReturn) => {
+				console.log("from cancled = ", obj);
+				router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
+			});
+		}
+	}, [globalSocket.id]);
 
 	return <ToastContainer />;
 }

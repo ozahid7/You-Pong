@@ -28,6 +28,7 @@ export const notify = (username: string, avatar: string, info: infoGame) => {
 };
 
 export const inviteGame = (info: infoGame, socket: Socket) => {
+	console.log("socket from invite = ", socket.id);
 	socket.emit("invite", info);
 };
 
