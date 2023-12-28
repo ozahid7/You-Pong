@@ -243,6 +243,7 @@ const Chats = () => {
                           .map((obj, i) => {
                             return (
                               <GroupsChat
+                                data={channel}
                                 channels={obj}
                                 socket={connection}
                                 user={MainUser}

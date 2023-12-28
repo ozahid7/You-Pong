@@ -27,6 +27,7 @@ interface obj {
   index: number;
   refetch: any;
   joinRefetch: any;
+  data: Channel[];
 }
 
 var one: boolean = false;
@@ -36,9 +37,10 @@ const GroupsChat = ({
   socket,
   user,
   indexChannels,
+  data,
   index,
   refetch,
-  joinRefetch
+  joinRefetch,
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
@@ -57,20 +59,10 @@ const GroupsChat = ({
     }
   );
 
-  const {
-    data,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<Channel[], Error>(["getChannels"], fetchData_getChannels, {
-    onError: (error: Error) => {
-      console.error("Members query error:", error);
-    },
-  });
-
   const retChannel: Channel | null = data
     ? data.find(
         (channel) => channel.id_channel === indexChannels[index]?.id_channel
-      ) || null
+      )
     : null;
 
   const handleButtonClick = () => {

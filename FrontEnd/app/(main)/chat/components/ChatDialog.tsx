@@ -45,9 +45,9 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   );
 
-  const { data, error, isLoading } = useQuery<Message[], Error>(
-    ["messages", channel?.id_channel || ""],
-    () => fetchData_Messages(channel?.id_channel || ""),
+  const { data, error, isLoading, refetch: MessagesRefetch } = useQuery<Message[], Error>(
+    ["messages", channel?.id_channel],
+    () => fetchData_Messages(channel?.id_channel),
     {
       onError: (error: Error) => {
         console.error("Messages query error:", error);
@@ -61,6 +61,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (data) {
       // Set the initial messages from the database //
       setMessages(data);
+      MessagesRefetch();
     }
   }, [data]);
 
@@ -82,7 +83,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   }, [shouldScrollToBottom, messages]);
 
   const whichUSER = (message: Message) => {
-    if (message && message.id_channel === channel.id_channel) {
+    if (message && message.id_channel === channel?.id_channel) {
       if (message.id_sender === main.uid) {
         return (
           <ChatBubbleMain
