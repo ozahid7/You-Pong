@@ -93,7 +93,6 @@ const Chats = () => {
     indexChannels = [];
     indexChannelsDirect = [];
     if (channel) {
-      console.log("ENTERED");
       channel?.map((channel, key) => {
         const temp: whichChannel = {
           id_channel: channel.id_channel,

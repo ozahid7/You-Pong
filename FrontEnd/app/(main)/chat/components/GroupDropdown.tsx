@@ -26,10 +26,10 @@ interface HomePage {
 const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
   const Leaving = async () => {
     const success = await leaveChannel(channels.id_channel);
-    if (success.message === "Channel Updated Succefully") {
+    if (success?.message === "Channel Updated Succefully") {
       refetch();
       joinRefetch();
-    } else console.error(success.message);
+    } else console.error(success?.message);
   };
 
   const { data: MainUser } = useQuery<User_Hero, Error>(

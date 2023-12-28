@@ -112,12 +112,12 @@ const Chat = ({
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
-        <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
-          <div className="center w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+        <div className="input input-bordered input-primary w-full h-[60%] flex justify-center items-center ">
+          <div className=" w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
             <input
               type="text"
               placeholder="Type a message here ..."
-              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+              className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
               onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}

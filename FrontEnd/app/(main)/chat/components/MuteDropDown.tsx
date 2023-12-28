@@ -39,10 +39,10 @@ export default function MuteDropDown({
       user.user.id_user,
       60000
     );
-    if (success.message === "Channel Updated Succefully") {
+    if (success?.message === "Channel Updated Succefully") {
       refetch();
       onClose();
-    } else console.error(success.message);
+    } else console.error(success?.message);
   };
   const Handle_5Minutes = async () => {
     const success = await MuteMember(
@@ -50,10 +50,10 @@ export default function MuteDropDown({
       user.user.id_user,
       300000
     );
-    if (success.message === "Channel Updated Succefully") {
+    if (success?.message === "Channel Updated Succefully") {
       refetch();
       onClose();
-    } else console.error(success.message);
+    } else console.error(success?.message);
   };
   const Handle_15Minutes = async () => {
     const success = await MuteMember(
@@ -61,10 +61,10 @@ export default function MuteDropDown({
       user.user.id_user,
       900000
     );
-    if (success.message === "Channel Updated Succefully") {
+    if (success?.message === "Channel Updated Succefully") {
       refetch();
       onClose();
-    } else console.error(success.message);
+    } else console.error(success?.message);
   };
 
   const HandleUnmute = async () => {
@@ -73,10 +73,10 @@ export default function MuteDropDown({
         channel?.id_channel,
         user.user.id_user
       );
-      if (success.message === "Channel Updated Succefully") {
+      if (success?.message === "Channel Updated Succefully") {
         refetch();
         onClose();
-      } else console.error(success.message);
+      } else console.error(success?.message);
     }
   };
   return (

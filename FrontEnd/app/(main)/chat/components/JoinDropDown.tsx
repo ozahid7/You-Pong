@@ -31,10 +31,10 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
 
   const HandleKick = async () => {
     const kick = await KickMember(channel?.id_channel, user.user.id_user);
-    if (kick.message === "Channel Updated Succefully") {
+    if (kick?.message === "Channel Updated Succefully") {
       Refetch();
       onClose();
-    } else console.error(kick.message);
+    } else console.error(kick?.message);
   };
 
   const HandleBan = async () => {
@@ -53,9 +53,9 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
     user.user_role === "MEMBER"
       ? (admin = await SetAdmin(channel?.id_channel, user.user.id_user))
       : (admin = await SetMember(channel?.id_channel, user.user.id_user));
-    if (admin.message === "Channel Updated Succefully") {
+    if (admin?.message === "Channel Updated Succefully") {
       Refetch();
-    } else console.error(admin.message);
+    } else console.error(admin?.message);
   };
 
   return (

@@ -3,16 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
-import { Channel, Message, User_Hero, whichChannel } from "@/types";
+import { Channel, Member, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import {
-  fetchData_Channel,
-  fetchData_getChannels,
-  getChannel,
-  getChannels,
-  getMembers,
-  getMessages,
-} from "../data/api";
+import { fetchData_Channel, fetchData_getMembers } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
@@ -44,6 +37,10 @@ const GroupsChat = ({
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
+  var mutedMember = {
+    placeholder: "Type a message here ...",
+    disabled: false,
+  };
 
   const {
     data: channel,
@@ -59,13 +56,38 @@ const GroupsChat = ({
     }
   );
 
+  const {
+    data: Members,
+    error: MembersError,
+    isLoading: MembersLoading,
+  } = useQuery<Member[], Error>(
+    ["Members", channels?.id_channel],
+    () => fetchData_getMembers(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
+    }
+  );
+
   const retChannel: Channel | null = data
     ? data.find(
         (channel) => channel.id_channel === indexChannels[index]?.id_channel
       )
     : null;
 
-  // if (retChannel) console.error(retChannel.name, index);
+  const retMember: Member | null = Members
+    ? Members.find((member) => member.user.id_user === user.uid)
+    : null;
+
+  if (retMember)
+    if (retMember.member_status === "MUTED") {
+      mutedMember.placeholder = "You can't send a message ...";
+      mutedMember.disabled = true;
+    } else {
+      mutedMember.placeholder = "Type a message here ...";
+      mutedMember.disabled = false;
+    }
 
   const handleButtonClick = () => {
     if (!one && socket) {
@@ -145,15 +167,17 @@ const GroupsChat = ({
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
-        <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
-          <div className="center w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+        <div className="input input-bordered input-primary w-full h-[60%] flex justify-center items-center ">
+          {/* search_input_chat */}
+          <div className=" w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
             <input
               type="text"
-              placeholder="Type a message here ..."
-              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+              placeholder={mutedMember.placeholder}
+              className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
               onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}
+              disabled={mutedMember.disabled}
             />
             <button
               type="submit"

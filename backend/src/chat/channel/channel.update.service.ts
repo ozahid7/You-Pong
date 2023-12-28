@@ -335,6 +335,10 @@ export class ChannelUpdateService {
           message: "Can't delete a channel !",
           Object: null,
         };
+      return {
+        message: 'Channel Updated Succefully',
+        Object: result,
+      };
     }
     if (my_room.user_role === 'OWNER') {
       const newOwner = await this.prisma.room_Chat.findFirst({
@@ -873,7 +877,7 @@ export class ChannelUpdateService {
         message: "Can't update a room chat / channel !",
         Object: null,
       };
-    console.log('here');////////////// F HADI
+    console.log('here'); ////////////// F HADI
     const result = await this.prisma.room_Chat.delete({
       where: {
         id_channel_id_user: {
@@ -882,7 +886,7 @@ export class ChannelUpdateService {
         },
       },
     });
-    console.log('here 1');////////////////
+    console.log('here 1'); ////////////////
     const channelUpdated = await this.prisma.channel.update({
       where: {
         id_channel: id_channel,
