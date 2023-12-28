@@ -45,7 +45,12 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   );
 
-  const { data, error, isLoading, refetch: MessagesRefetch } = useQuery<Message[], Error>(
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: MessagesRefetch,
+  } = useQuery<Message[], Error>(
     ["messages", channel?.id_channel],
     () => fetchData_Messages(channel?.id_channel),
     {
@@ -69,6 +74,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
+        MessagesRefetch();
       });
       one = true;
     }

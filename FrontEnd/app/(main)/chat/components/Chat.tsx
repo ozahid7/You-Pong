@@ -68,12 +68,12 @@ const Chat = ({
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
     one = false;
   };
 
-  const handleEnterPress = (e) => {
+  const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
@@ -108,6 +108,7 @@ const Chat = ({
           channel={retChannel}
           main={main}
           socket={socket}
+          key={user?.id_user} //just added this
         />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">

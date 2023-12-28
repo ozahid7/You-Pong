@@ -76,6 +76,12 @@ const Chats = () => {
   });
 
   useEffect(() => {
+    JoinChannels = {
+      data: null,
+      isLoading: false,
+      error: null,
+      fetcher: null,
+    };
     JoinChannels.data = data;
     JoinChannels.error = error;
     JoinChannels.isLoading = isLoading;

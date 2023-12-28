@@ -38,13 +38,17 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
   };
 
   const HandleBan = async () => {
-    let success = null;
-    user.member_status !== "BANNED"
-      ? (success = await BanMember(channel?.id_channel, user.user.id_user))
-      : (success = await UnBanMember(channel?.id_channel, user.user.id_user));
-    if (success.message === "Channel Updated Succefully") {
-      Refetch();
-    } else console.error(success.message);
+    if (user.member_status === "BANNED") {
+      const unban = await UnBanMember(channel?.id_channel, user.user.id_user);
+      if (unban && unban.message === "Channel Updated Succefully") {
+        Refetch();
+      } else console.error(unban.message);
+    } else {
+      const ban = await BanMember(channel?.id_channel, user.user.id_user);
+      if (ban && ban.message === "Channel Updated Succefully") {
+        Refetch();
+      } else console.error(ban.message);
+    }
   };
 
   const HandleAdmin = async () => {
