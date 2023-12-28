@@ -1,5 +1,8 @@
 import MyToast from "@/components/tools/MyToast";
+import { myRoutes } from "@/const";
 import { infoGame } from "@/types/game";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { redirect, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
@@ -28,9 +31,14 @@ export const inviteGame = (info: infoGame, socket: Socket) => {
 	socket.emit("invite", info);
 };
 
-export const acceptGame = (info: infoGame, socket: Socket) => {
+export const acceptGame = (
+	info: infoGame,
+	socket: Socket,
+	router: AppRouterInstance
+) => {
 	console.log("from accept ", info.id_game);
 	socket.emit("accept", info);
+	router.push(myRoutes.game + "/" + info.mode + info.map);
 };
 
 export const refuseGame = (info: infoGame, socket: Socket) => {

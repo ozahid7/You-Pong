@@ -4,13 +4,16 @@ import MyToolTip from "./MyToolTip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { infoGame } from "@/types/game";
 import { acceptGame, refuseGame } from "@/utils/game";
+import { useRouter } from "next/navigation";
 
 const MyToast = (props: {
 	userName: string;
 	avatar: string;
 	info: infoGame;
 }) => {
+	const router = useRouter();
 	const { globalSocket } = useGlobalSocket();
+
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
 			<div className="flex items-center justify-around w-full h-full max-h-[80px]">
@@ -35,7 +38,7 @@ const MyToast = (props: {
 				</div>
 				<button
 					onClick={() => {
-						acceptGame(props.info, globalSocket);
+						acceptGame(props.info, globalSocket, router);
 					}}
 					className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm"
 				>

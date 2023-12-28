@@ -15,12 +15,13 @@ function InviteProvider() {
 			notify(obj.username, obj.avatar, obj.info);
 		});
 		globalSocket.on("accepted", (obj: inviteReturn) => {
-			router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
+			console.log("from accepted ", obj);
 		});
 		globalSocket.on("refused", (obj) => {
 			console.log("refused obj = ", obj);
 		});
 		globalSocket.on("canceled", (obj: inviteReturn) => {
+			console.log("from cancled = ", obj);
 			router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
 		});
 	}, []);

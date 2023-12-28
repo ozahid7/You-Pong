@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { MyContainer, ScoreCard } from "@/components";
-import Matter from "matter-js";
 import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
 import MyCountDown from "./CountDown";
@@ -43,8 +42,8 @@ export default function game({ params }: pageProps) {
 			setMode(mode);
 			setMap(map);
 			setShowCounter(true);
-			setSubmit(true);
 		}
+		setSubmit(true);
 	}, []);
 
 	useEffect(() => {
@@ -59,7 +58,6 @@ export default function game({ params }: pageProps) {
 
 			window.addEventListener("resize", updateSize);
 			updateSize();
-			console.log("maaaaaaaaaaap", map);
 			const game = new Game(ref.current, map);
 
 			return () => {

@@ -64,13 +64,11 @@ const Banner = ({
 					<span
 						data-tooltip-id="banner_tooltip"
 						data-tooltip-content={opponent}
-						className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg"
+						className="text-white text-xl s:text-2xl 2xl:text-[25px] sm:flex font-bold drop-shadow-lg"
 					>
-						{opponent.length > 7
-							? opponent.slice(0, 4) + "..."
-							: opponent}
+						{opponent.length > 8 ? opponent.slice(0, 7) : opponent}
 					</span>
-					<span className="text-white text-xl s:text-3xl md:text-3xl sm:flex font-bold drop-shadow-lg">
+					<span className="text-white text-xl s:text-3xl md:text-3xl  sm:flex font-bold drop-shadow-lg">
 						{wins + " : " + loses}
 					</span>
 				</div>
