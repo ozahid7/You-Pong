@@ -39,9 +39,10 @@ var setDataObj: Channel = {
 interface HomePage {
   channels: Channel;
   users: Member[];
+  refetch: any;
 }
 
-const ChatEdit = ({ channels, users }: HomePage) => {
+const ChatEdit = ({ channels, users, refetch }: HomePage) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
@@ -72,14 +73,14 @@ const ChatEdit = ({ channels, users }: HomePage) => {
         result = await setFile(imgRef.current.files[0]);
     }
     if (channels.name !== nameRef.current?.value)
-      setDataObj.name = nameRef.current?.value || "";
+      setDataObj.name = nameRef.current?.value;
     if (channels.description !== descRef.current?.value)
       setDataObj.description = descRef.current?.value;
     setDataObj.type = channels.type;
     setDataObj.avatar = result;
     result = await putData(setDataObj, channels?.id_channel);
     imageUrl = channels.avatar;
-    // mutate(fetchData_getChannels);
+    refetch();
     onClose();
   };
 

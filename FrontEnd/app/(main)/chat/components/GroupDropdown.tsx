@@ -85,6 +85,7 @@ const GroupDropdown = ({ channels, refetch, joinRefetch }: HomePage) => {
             <ChatEdit
               channels={channels}
               users={Members}
+              refetch={refetch}
             ></ChatEdit>
           </li>
           <li>
