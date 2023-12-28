@@ -2,7 +2,6 @@ import { Channel } from "@/types";
 import { Button } from "@nextui-org/react";
 import React, { useEffect, useRef } from "react";
 import { joinChannel } from "../data/api";
-import { mutate } from "swr";
 import { IoEnterOutline } from "react-icons/io5";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";

@@ -10,13 +10,13 @@ import {
   Button,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
-import { LuPlus, LuUserPlus2, LuUsers } from "react-icons/lu";
+import { LuPlus, LuUserCheck2, LuUserPlus2, LuUsers } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../public/groups.svg";
 import { JoinDropDown } from ".";
-import { fetchData_Channel, fetchData_users } from "../data/api";
+import { fetchData_Channel, fetchData_users, joinPrivate } from "../data/api";
 import { useQuery } from "react-query";
 
 interface Props {
@@ -55,6 +55,12 @@ const PrivateModal = ({
   );
 
   Channel_.type === "PRIVATE" ? (show = true) : (show = false);
+
+  const joinPrivateChannel = async (id_friend: string) => {
+    const response = await joinPrivate(Channel_.id_channel, id_friend);
+    if (response.message === "Channel Updated Succefully") UsersRefetch();
+    else console.error(response.message);
+  };
 
   return (
     <Fragment>
@@ -95,7 +101,7 @@ const PrivateModal = ({
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Members
+                Users
               </ModalHeader>
               <ModalBody className="w-[90%]">
                 <table className="table table-lg">
@@ -154,10 +160,21 @@ const PrivateModal = ({
                                 <Button
                                   size="lg"
                                   className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                  onPress={onOpen}
+                                  onClick={() =>
+                                    joinPrivateChannel(user.id_user)
+                                  }
                                 >
-                                  Invite
-                                  <LuPlus />
+                                  {Infos.disabled === "btn-disabled" ? (
+                                    <div className="flex flex-row gap-1 items-center text-palette-white">
+                                      Joined
+                                      <LuUserCheck2 />
+                                    </div>
+                                  ) : (
+                                    <div className="flex flex-row gap-1 items-center text-palette-white">
+                                      Invite
+                                      <LuPlus />
+                                    </div>
+                                  )}
                                 </Button>
                               ) : (
                                 ""

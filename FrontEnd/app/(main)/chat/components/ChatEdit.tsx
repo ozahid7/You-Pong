@@ -26,7 +26,6 @@ import {
   setFile,
   getChannel,
 } from "@/app/(main)/chat/data/api";
-import { mutate } from "swr";
 import { User } from "@/types";
 
 var setDataObj: Channel = {

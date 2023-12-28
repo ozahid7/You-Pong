@@ -29,7 +29,6 @@ import {
   IoLockOpenOutline,
   IoEnterOutline,
 } from "react-icons/io5";
-import useSWR, { mutate } from "swr";
 import groups from "../../../../public/groups.svg";
 import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
 import { useQuery } from "react-query";

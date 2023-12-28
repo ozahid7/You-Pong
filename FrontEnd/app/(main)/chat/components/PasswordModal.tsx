@@ -10,7 +10,6 @@ import {
 } from "@nextui-org/react";
 import React, { useRef } from "react";
 import { joinChannel } from "../data/api";
-import { mutate } from "swr";
 import { IoEnterOutline } from "react-icons/io5";
 import InputGroupPass from "./InputGroupPass";
 

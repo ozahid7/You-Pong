@@ -39,6 +39,20 @@ export const joinChannel = async (id_channel: string, password: string) => {
   }
 };
 
+// http://localhost:4000/chat/channel/join/name
+export const joinPrivate = async (id_channel: string, id_friend: string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/joinPrivate/?id_channel=${id_channel}&id_friend=${id_friend}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
 // http://localhost:4000/chat/channel/leave/name
 export const leaveChannel = async (id_channel: string) => {
   try {
