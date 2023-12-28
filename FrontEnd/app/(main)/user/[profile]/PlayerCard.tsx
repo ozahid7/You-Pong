@@ -38,9 +38,7 @@ const PlayerCard = (props: {
 	const [color, setColor] = useState("");
 	const [subcolor, setSubColor] = useState("");
 	const [textColor, setTextColor] = useState("");
-	const friends = useFriends();
 	const { globalSocket } = useGlobalSocket();
-	const [statusToShow, setStatus] = useState("");
 	const Block = blockuser(props.uid, undefined);
 	const Add = adduser(props.uid);
 	const Remove = removeuser(props.uid);
@@ -85,16 +83,6 @@ const PlayerCard = (props: {
 		}
 	}, [globalSocket, props.status]);
 
-	useEffect(() => {
-		if (friends.data) {
-			friends.data.accepted.map((elm: any) => {
-				if (props.username === elm.username) setIsFriend(true);
-			});
-			friends.data.pending.map((elm) => {
-				if (props.username === elm.username) setIsPending(true);
-			});
-		}
-	});
 	let name = props.username.replace(/[^a-zA-Z]/g, "");
 
 	name =
