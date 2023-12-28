@@ -70,7 +70,7 @@ const GroupsChat = ({
       var message = {
         id_channel: channels.id_channel,
         id_sender: user.uid,
-        content: inputValue,
+        content: inputValue.trim(),
       };
       socket.emit("newMessage", message);
       messageRef.current.value = null;

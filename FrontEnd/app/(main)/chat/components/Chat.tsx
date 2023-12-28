@@ -3,28 +3,25 @@ import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
 import { Channel, Member, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import {
-  fetchData_Channel,
-  getChannel,
-  getMembers,
-} from "../data/api";
+import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
 
 interface HomePage {
   channels: Channel;
   socket: any;
   main: User_Hero;
+  data: Channel[];
 }
 
 var one: boolean = false;
 var nameOne: boolean = false;
 
-const Chat = ({ channels, socket, main }: HomePage) => {
+const Chat = ({ channels, socket, main, data }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
   const {
-    data,
+    data: channel,
     error: ChannelError,
     isLoading: ChannelLoading,
   } = useQuery<Channel, Error>(
@@ -37,12 +34,16 @@ const Chat = ({ channels, socket, main }: HomePage) => {
     }
   );
 
+  const user: User | null = channel
+    ? channel.users.find((user) => user.id_user !== main.uid)
+    : null;
+
   const handleButtonClick = () => {
     if (!one) {
       const message = {
-        id_channel: data.id_channel,
+        id_channel: channel.id_channel,
         id_sender: main.uid,
-        content: inputValue,
+        content: inputValue.trim(),
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
@@ -61,10 +62,6 @@ const Chat = ({ channels, socket, main }: HomePage) => {
       handleButtonClick();
     }
   };
-
-  const user: User | null = data
-    ? data.users.find((user) => user.id_user !== main.uid) || null
-    : null;
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">

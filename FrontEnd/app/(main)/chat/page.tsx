@@ -267,6 +267,7 @@ const Chats = () => {
                           .filter((obj) => obj.type === "DIRECT")
                           .map((obj, i) => (
                             <Chat
+                              data={channel}
                               channels={obj}
                               socket={connection}
                               main={MainUser}
