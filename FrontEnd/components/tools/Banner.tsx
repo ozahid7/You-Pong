@@ -35,7 +35,7 @@ const Banner = ({
 		style
 	);
 	const directIconStyle =
-		"z-10 h-6 w-6 bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute  xl:w-[12%] xl:h-[12%] cursor-pointer";
+		"z-10 h-6 w-6 bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute cursor-pointer";
 
 	return (
 		<div className={classname}>

@@ -41,9 +41,9 @@ const PlayerCard = (props: {
 	const friends = useFriends();
 	const { globalSocket } = useGlobalSocket();
 	const [statusToShow, setStatus] = useState("");
-	const Block = blockuser(props.uid, friends, undefined);
-	const Add = adduser(props.uid, friends);
-	const Remove = removeuser(props.uid, friends);
+	const Block = blockuser(props.uid, undefined);
+	const Add = adduser(props.uid);
+	const Remove = removeuser(props.uid);
 	const direct = todirect(props.uid);
 	const otheruser = useOtherUser(props.username);
 

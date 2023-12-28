@@ -4,17 +4,17 @@ import { useAxios } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export const blockuser = (uid: string, friends: any, setInvalid: any) => {
-	const search = useQueryClient();
+export const blockuser = (uid: string, setInvalid: any) => {
+	const query = useQueryClient();
+
 	const blockUser = async () => {
 		try {
 			const response = await useAxios(
 				"put",
 				friendsEndPoint.block + "?id_friend=" + uid
 			);
-			if (friends !== undefined) friends.refetch();
-			if (setInvalid !== undefined) setInvalid(true);
-			search.invalidateQueries({ queryKey: ["search"] });
+			query.invalidateQueries({ queryKey: ["search"] });
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("error : ", error);
@@ -39,14 +39,15 @@ export const searchusers = () => {
 	return useQuery({ queryKey: ["search"], queryFn: searchUsers });
 };
 
-export const adduser = (uid: string, friends: any) => {
+export const adduser = (uid: string) => {
+	const query = useQueryClient();
 	const addUser = async () => {
 		try {
 			const response = await useAxios(
 				"post",
 				friendsEndPoint.add + "?id_friend=" + uid
 			);
-			friends.refetch();
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("add user error = ", error);
@@ -55,14 +56,15 @@ export const adduser = (uid: string, friends: any) => {
 	return useMutation({ mutationFn: addUser });
 };
 
-export const removeuser = (uid: string, friends: any) => {
+export const removeuser = (uid: string) => {
+	const query = useQueryClient();
 	const removeUser = async () => {
 		try {
 			const response = await useAxios(
 				"put",
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
-			friends.refetch();
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("remove user error =", error);
@@ -73,7 +75,7 @@ export const removeuser = (uid: string, friends: any) => {
 };
 
 export const unblockuser = (uid: string, setInvalid: any) => {
-	const search = useQueryClient();
+	const query = useQueryClient();
 	const unblockUser = async () => {
 		try {
 			const response = await useAxios(
@@ -81,7 +83,8 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 				friendsEndPoint.unblock + "?id_friend=" + uid
 			);
 			setInvalid(true);
-			search.invalidateQueries({ queryKey: ["search"] });
+			query.invalidateQueries({ queryKey: ["search"] });
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("unblock error : ", error);
@@ -91,13 +94,14 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 };
 
 export const acceptuser = (uid: string, setInvalid: any) => {
+	const query = useQueryClient();
 	const acceptkUser = async () => {
 		try {
 			const response = await useAxios(
 				"put",
 				friendsEndPoint.accept + "?id_friend=" + uid
 			);
-			setInvalid(true);
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("accept user error = ", error);
@@ -107,13 +111,14 @@ export const acceptuser = (uid: string, setInvalid: any) => {
 };
 
 export const declineuser = (uid: string, setInvalid: any) => {
+	const query = useQueryClient();
 	const declineUser = async () => {
 		try {
 			const response = await useAxios(
 				"put",
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
-			setInvalid(true);
+			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
 		} catch (error) {
 			console.log("accept user error = ", error);
