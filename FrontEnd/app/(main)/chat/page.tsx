@@ -31,6 +31,7 @@ import { useQuery } from "react-query";
 var one: boolean = false;
 var connection: any = null;
 var indexChannels: whichChannel[] = [];
+var indexChannelsDirect: whichChannel[] = [];
 var JoinChannels: QueryProp = {
   data: null,
   isLoading: false,
@@ -83,7 +84,10 @@ const Chats = () => {
   }, [data]);
 
   useEffect(() => {
+    indexChannels = [];
+    indexChannelsDirect = [];
     if (channel) {
+      console.log("ENTERED");
       channel?.map((channel, key) => {
         const temp: whichChannel = {
           id_channel: channel.id_channel,
@@ -91,7 +95,9 @@ const Chats = () => {
           name: channel.name,
           type: channel.type,
         };
-        if (channel.type !== "DIRECT") indexChannels.push(temp);
+        channel.type !== "DIRECT"
+          ? indexChannels.push(temp)
+          : indexChannelsDirect.push(temp);
       });
       refetch();
     }
@@ -272,6 +278,8 @@ const Chats = () => {
                               channels={obj}
                               socket={connection}
                               main={MainUser}
+                              indexChannels={indexChannelsDirect}
+                              index={valueDirect}
                               key={i}
                             ></Chat>
                           ))}

@@ -61,12 +61,11 @@ const GroupsChat = ({
 
   const retChannel: Channel | null = data
     ? data.find(
-        (channel) =>
-          channel.id_channel === indexChannels[index]?.id_channel
+        (channel) => channel.id_channel === indexChannels[index]?.id_channel
       )
     : null;
 
-  // console.log(retChannel.name);
+  // if (retChannel) console.error(retChannel.name, index);
 
   const handleButtonClick = () => {
     if (!one && socket) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
 import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
-import { Channel, Member, User, User_Hero } from "@/types";
+import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
@@ -11,12 +11,21 @@ interface HomePage {
   socket: any;
   main: User_Hero;
   data: Channel[];
+  indexChannels: whichChannel[];
+  index: number;
 }
 
 var one: boolean = false;
 var nameOne: boolean = false;
 
-const Chat = ({ channels, socket, main, data }: HomePage) => {
+const Chat = ({
+  channels,
+  socket,
+  main,
+  data,
+  indexChannels,
+  index,
+}: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -33,6 +42,14 @@ const Chat = ({ channels, socket, main, data }: HomePage) => {
       },
     }
   );
+
+  const retChannel: Channel | null = data
+    ? data.find(
+        (channel) => channel.id_channel === indexChannels[index]?.id_channel
+      )
+    : null;
+
+  // if (retChannel) console.error(retChannel.name);
 
   const user: User | null = channel
     ? channel.users.find((user) => user.id_user !== main.uid)
@@ -88,7 +105,7 @@ const Chat = ({ channels, socket, main, data }: HomePage) => {
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
         <ChatDialog
-          channel={channels}
+          channel={retChannel}
           main={main}
           socket={socket}
         />
