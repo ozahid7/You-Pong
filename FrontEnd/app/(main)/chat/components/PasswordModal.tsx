@@ -25,7 +25,6 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
   const passRef = useRef<HTMLInputElement>(null);
 
   const join = async () => {
-    console.log(passRef.current.value);
     if (passRef.current) {
       const response = await joinChannel(
         obj.id_channel,
@@ -45,7 +44,7 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
     <>
       <Button
         size="lg"
-        className={`flex mt-1 text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+        className={`flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
         onPress={onOpen}
       >
         <IoEnterOutline />

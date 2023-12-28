@@ -64,7 +64,7 @@ export default function JoinModal({ refetch, channels }) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={close}
-        size="2xl"
+        size="3xl"
         scrollBehavior="inside"
         backdrop="blur"
         placement="center"
@@ -112,17 +112,26 @@ export default function JoinModal({ refetch, channels }) {
                                       alt="image"
                                     />
                                   </td>
-                                  <td className="font-body font-[500] text-[18px] text-[#424242]">
+                                  <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
                                     {obj.name}
                                   </td>
                                   <td className="font-body font-[500] text-[16px] text-[#424242]">
-                                    <div className="flex flex-row gap-1 items-center w-fit p-1">
+                                    <div className="font-body font-[500] text-[18px] text-[#424242]">
                                       {obj.type === "PUBLIC" ? (
-                                        <IoLockOpenOutline />
+                                        <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
+                                          <div className="text-[20px]">
+                                            <IoLockOpenOutline />
+                                          </div>
+                                          {obj.type}
+                                        </div>
                                       ) : (
-                                        <IoLockClosedOutline />
+                                        <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
+                                          <div className="text-[20px]">
+                                            <IoLockClosedOutline />
+                                          </div>
+                                          {obj.type}
+                                        </div>
                                       )}
-                                      {obj.type}
                                     </div>
                                   </td>
                                   <td className="flex flex-row">

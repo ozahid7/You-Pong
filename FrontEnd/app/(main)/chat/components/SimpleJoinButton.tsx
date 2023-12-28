@@ -27,7 +27,7 @@ const SimpleJoinButton = ({ obj, close, refetch, joinRefetch }: Props) => {
   return (
     <Button
       size="lg"
-      className={`flex mt-1 text-[20px] btn xs:btn-xs sm:btn-sm md:btn-md font-body font-[600] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+      className={`flex btn xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
       onClick={join}
     >
       <IoEnterOutline />
