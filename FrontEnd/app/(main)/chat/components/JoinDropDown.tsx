@@ -30,35 +30,33 @@ const JoinDropDown = ({ disable, user, channel, Refetch }: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
 
   const HandleKick = async () => {
-    const success = await KickMember(channel?.id_channel, user.user.id_user);
-    if (success.message === "Channel Updated Succefully") {
+    const kick = await KickMember(channel?.id_channel, user.user.id_user);
+    if (kick.message === "Channel Updated Succefully") {
       Refetch();
       onClose();
-    } else console.error(success.message);
+    } else console.error(kick.message);
   };
 
   const HandleBan = async () => {
-    if (user.member_status === "BANNED") {
-      const unban = await UnBanMember(channel?.id_channel, user.user.id_user);
-      if (unban && unban.message === "Channel Updated Succefully") {
+    let Ban = null;
+    user.member_status !== "BANNED"
+      ? (Ban = await BanMember(channel?.id_channel, user.user.id_user))
+      : (Ban = await UnBanMember(channel?.id_channel, user.user.id_user));
+    console.log(Ban);
+    if (Ban)
+      if (Ban.message === "Channel Updated Succefully") {
         Refetch();
-      } else console.error(unban.message);
-    } else {
-      const ban = await BanMember(channel?.id_channel, user.user.id_user);
-      if (ban && ban.message === "Channel Updated Succefully") {
-        Refetch();
-      } else console.error(ban.message);
-    }
+      } else console.error(Ban.message);
   };
 
   const HandleAdmin = async () => {
-    let success = null;
+    let admin = null;
     user.user_role === "MEMBER"
-      ? (success = await SetAdmin(channel?.id_channel, user.user.id_user))
-      : (success = await SetMember(channel?.id_channel, user.user.id_user));
-    if (success.message === "Channel Updated Succefully") {
+      ? (admin = await SetAdmin(channel?.id_channel, user.user.id_user))
+      : (admin = await SetMember(channel?.id_channel, user.user.id_user));
+    if (admin.message === "Channel Updated Succefully") {
       Refetch();
-    } else console.error(success.message);
+    } else console.error(admin.message);
   };
 
   return (

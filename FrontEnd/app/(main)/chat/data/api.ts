@@ -1,7 +1,5 @@
 import { Channel } from "@/types";
 import axios from "axios";
-// import fs from "fs";
-// import { setDataObj } from "@/components/tools/GroupsModal";
 
 axios.defaults.withCredentials = true;
 
@@ -117,7 +115,6 @@ export const UnBanMember = async (
     const response = await axios.put(
       `http://localhost:4000/chat/channel/unban/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
-    console.error("response", response.data);
     return response.data;
   } catch (error) {
     // Handle errors here
