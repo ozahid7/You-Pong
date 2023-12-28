@@ -5,7 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { IoGameControllerOutline } from "react-icons/io5";
-import { QueryCache } from "@tanstack/react-query";
+import { QueryCache, useQueryClient } from "@tanstack/react-query";
 
 import {
 	LuLayoutDashboard,
@@ -14,14 +14,13 @@ import {
 	LuSettings,
 	LuLogOut,
 } from "react-icons/lu";
-import {  QueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
 	const path = usePathname();
 	const router = useRouter();
-	
 
 	const Elements = [
 		<LuLayoutDashboard size="64" />,
@@ -58,14 +57,13 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 		</div>
 	);
 };
-const queryCache = new QueryCache();
 
 const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true);
 	const { username, avatar } = user.data;
-	const {globalSocket} = useGlobalSocket()
-	
+	const { globalSocket } = useGlobalSocket();
+	const query = useQueryClient();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -74,10 +72,10 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				queryCache.clear()
+				query.removeQueries();
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
-				globalSocket.emit('offline')
+				globalSocket.emit("offline");
 				router.push("/");
 			})
 			.catch((e) => {

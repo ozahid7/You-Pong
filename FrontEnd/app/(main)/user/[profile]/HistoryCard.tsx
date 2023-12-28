@@ -1,16 +1,12 @@
 "use client";
-import { useUser } from "@/api/getHero";
 import { useMatchs } from "@/api/useMatchs";
 import { Banner, MyCard } from "@/components";
-import Loader from "@/components/tools/Loader";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { match } from "@/types/Api";
 import React from "react";
 import { Tooltip } from "react-tooltip";
 
-const HistoryCard = (props: { uid: string }) => {
+const HistoryCard = (props: { uid: string; me: string }) => {
 	const matchs = useMatchs(props.uid).data;
-	const user = useUser(true);
 	return (
 		<div className="flex justify-center z-0 items-center   max-w-[720px] xl:max-h-none max-h-[500px] xl:max-w-[520px] min-w-[256px] w-[90%] xl:w-[92%] h-[94%] xl:h-[90%] ">
 			<MyCard type="nocorner" otherclass="max-h-full w-full flex ">
@@ -48,7 +44,7 @@ const HistoryCard = (props: { uid: string }) => {
 										wins={e.player_score}
 										loses={e.opponent_score}
 										key={index}
-										me={user.data.username}
+										me={props.me}
 									/>
 								))}
 							</div>

@@ -131,6 +131,7 @@ const page = () => {
 				isOpen={showProfileSetting}
 				setIsOpen={setShowProfileSetting}
 				closeModal={() => {}}
+				user={user}
 			/>
 		</div>
 	);

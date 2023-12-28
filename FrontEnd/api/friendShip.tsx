@@ -12,7 +12,6 @@ export const blockuser = (uid: string, friends: any, setInvalid: any) => {
 				"put",
 				friendsEndPoint.block + "?id_friend=" + uid
 			);
-			console.log("block user response = ", response);
 			if (friends !== undefined) friends.refetch();
 			if (setInvalid !== undefined) setInvalid(true);
 			search.refetch();
@@ -33,7 +32,7 @@ export const searchusers = () => {
 			);
 			return response.Object;
 		} catch (error) {
-			console.log("search response = ", error);
+			console.log("search error = ", error);
 		}
 		return null;
 	};
@@ -47,7 +46,6 @@ export const adduser = (uid: string, friends: any) => {
 				"post",
 				friendsEndPoint.add + "?id_friend=" + uid
 			);
-			console.log("add user response = ", response);
 			friends.refetch();
 			return response;
 		} catch (error) {
@@ -64,7 +62,6 @@ export const removeuser = (uid: string, friends: any) => {
 				"put",
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
-			console.log("remove user response = ", response);
 			friends.refetch();
 			return response;
 		} catch (error) {
@@ -84,7 +81,6 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 				friendsEndPoint.unblock + "?id_friend=" + uid
 			);
 			setInvalid(true);
-			console.log("unblock response... = ", response);
 			search.refetch();
 			return response;
 		} catch (error) {
@@ -101,7 +97,6 @@ export const acceptuser = (uid: string, setInvalid: any) => {
 				"put",
 				friendsEndPoint.accept + "?id_friend=" + uid
 			);
-			console.log("accept user response = ", response);
 			setInvalid(true);
 			return response;
 		} catch (error) {
@@ -118,7 +113,6 @@ export const declineuser = (uid: string, setInvalid: any) => {
 				"put",
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
-			console.log("accept user response = ", response);
 			setInvalid(true);
 			return response;
 		} catch (error) {
@@ -139,7 +133,6 @@ export const todirect = (uid: string) => {
 				"post",
 				chatEndPoint.direct + "?id_friend=" + uid
 			);
-			console.log("todirect response = ", response);
 			router.push(myRoutes.chat + "/" + uid);
 			return response;
 		} catch (error) {

@@ -58,7 +58,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			localStorage.removeItem("isLoged");
 			redirect(myRoutes.root);
 		}
-		if (globalSocket === null && me.data && me.data.createdAt !== me.data.updatedAt) {
+		if (
+			globalSocket === null &&
+			me.data &&
+			me.data.createdAt !== me.data.updatedAt
+		) {
 			setGlobalSocket(
 				io(socketurl + "?id_user=" + me.data.uid, {
 					transports: ["websocket"],
@@ -80,16 +84,18 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [me]);
 
 	useEffect(() => {
-		if ( globalSocket && i === 0 &&
+		if (
+			globalSocket &&
+			i === 0 &&
 			path !== "/game" &&
 			toEmit &&
-			(me.data.createdAt !== me.data.updatedAt)
+			me.data.createdAt !== me.data.updatedAt
 		) {
 			console.log("emit from provider");
 			globalSocket.emit("online");
 			i++;
 		}
-	});
+	}, [globalSocket]);
 
 	const getTfa = async () => {
 		try {

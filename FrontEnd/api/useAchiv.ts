@@ -9,12 +9,11 @@ export const useAchiv = (uid: string) => {
 				"get",
 				endPoints.getAchiv + "?id_user=" + uid
 			);
-			console.log("achiv response = ", response);
 			return response.Object;
 		} catch (error) {
 			console.log("achiv response = ", error);
 		}
 		return null;
 	};
-	return useQuery({ queryKey: ["achiv"], queryFn: getAchiv });
+	return useQuery({ queryKey: ["achiv", uid], queryFn: getAchiv });
 };

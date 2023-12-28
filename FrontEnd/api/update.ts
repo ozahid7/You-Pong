@@ -17,7 +17,6 @@ export const updateProfile = (
 				newPassword: newPassword,
 				newAvatar: newAvatar,
 			});
-			console.log("update response = ", res);
 			return res;
 		} catch (error) {
 			console.log("error = ", error);
