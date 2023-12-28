@@ -150,6 +150,7 @@ export interface whichChannel {
   name: string;
   id_channel: string;
   index: number;
+  type: string;
 }
 
 export interface QueryProp {

@@ -89,8 +89,9 @@ const Chats = () => {
           id_channel: channel.id_channel,
           index: key,
           name: channel.name,
+          type: channel.type,
         };
-        indexChannels.push(temp);
+        if (channel.type !== "DIRECT") indexChannels.push(temp);
       });
       refetch();
     }
