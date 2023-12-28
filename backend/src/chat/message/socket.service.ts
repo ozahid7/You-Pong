@@ -84,6 +84,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               id_channel: info.id_channel,
               id_user: my_user.id_user,
             },
+            member_status: 'NONE',
           },
         });
         let users = channel.users.map(async (user) => {
