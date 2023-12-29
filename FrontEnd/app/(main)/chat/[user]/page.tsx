@@ -22,9 +22,10 @@ import {
   fetchData_getChannels,
   fetchData_getMainUser,
   fetchData_userChannels,
+  getChannel,
   getChannels,
 } from "./data/api";
-import { Channel, QueryProp, User_Hero, whichChannel } from "@/types";
+import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
 import { useQuery } from "react-query";
 
@@ -43,6 +44,7 @@ const Chats = ({ params }) => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
+  var redirect: number = 0;
 
   const { data: MainUser, refetch: MainUserRefetch } = useQuery<
     User_Hero,
@@ -104,6 +106,17 @@ const Chats = ({ params }) => {
           : indexChannelsDirect.push(temp);
       });
       refetch();
+      //// handle direct message ///
+      const id = params.user;
+      indexChannelsDirect.map(async (channel) => {
+        const result = await getChannel(channel.id_channel);
+        const ret = result.Object.users.find(
+          (user: User) => user.id_user === id
+        );
+        if (ret) setValueDirect(channel.index);
+        else if (ret === undefined) channel.index = 0;
+      });
+      /////////////////////////////
     }
   }, [channel]);
 
