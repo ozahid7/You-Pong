@@ -58,8 +58,6 @@ const PrivateModal = ({
 
   Channel_.type === "PRIVATE" ? (show = true) : (show = false);
 
-  console.log(Users);
-
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
     if (response.message === "Channel Updated Succefully") {
