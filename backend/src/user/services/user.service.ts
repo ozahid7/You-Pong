@@ -13,6 +13,12 @@ import { FindUserService } from './find.service';
 import { error } from 'console';
 import { AchievementService } from 'src/achievement/achievement.service';
 
+export enum relation {
+  PENDING,
+  ACCEPTED,
+  NONE,
+}
+
 @Injectable()
 export class UserService {
   private id: number = 157;
@@ -158,20 +164,37 @@ export class UserService {
         friendship_user: true,
         channels: true,
         achievements: true,
-        matchs: true,
         blocked_from: true,
         blocked_user: true,
+        matchs_oppenent: true,
+        matchs_player: true,
       },
     });
-    let isPending: boolean = false;
+
+    let user_relation: relation = relation.NONE;
     if (
       id_user &&
       user &&
-      user.friendship_friend.find(
+      (user.friendship_friend.find(
         (user) => user.id_user === id_user && user.state === 'PENDING',
-      )
+      ) ||
+        user.friendship_user.find(
+          (user) => user.id_user === id_user && user.state === 'PENDING',
+        ))
     )
-      isPending = true;
+      user_relation = relation.PENDING;
+    else if (
+      id_user &&
+      user &&
+      (user.friendship_friend.find(
+        (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+      ) ||
+        user.friendship_user.find(
+          (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+        ))
+    )
+      user_relation = relation.ACCEPTED;
+
     if (!user) throw new ServiceUnavailableException('Username not Found!');
 
     await user.blocked_from.forEach((element) => {
@@ -196,11 +219,12 @@ export class UserService {
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
-      matchs: user.matchs,
+      matchs_oppenent: user.matchs_oppenent,
+      matchs_player: user.matchs_player,
       achievements: user.achievements,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
-      isPending: isPending,
+      user_relation: user_relation,
     };
   }
 
