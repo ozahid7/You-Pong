@@ -93,6 +93,7 @@ const GroupDropdown = ({
             <ChatEdit
               channels={channels}
               users={Members}
+              MainUser={MainUser}
               channelsRefetch={channelsRefetch}
             ></ChatEdit>
           </li>

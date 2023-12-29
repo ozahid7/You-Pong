@@ -14,9 +14,11 @@ export const userChannels = async () => {
   }
 };
 
-export const getUsers = async () => {
+export const getUsers = async (id_channel: string) => {
   try {
-    const response = await axios.get("http://localhost:4000/user");
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/users?id_channel=${id_channel}`
+    );
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -327,10 +329,9 @@ export const fetchData_userChannels = async () => {
   return result;
 };
 
-export const fetchData_users = async () => {
-  const result = await getUsers();
-  console.log(result);
-  return result;
+export const fetchData_users = async (id_channel: string) => {
+  const result = await getUsers(id_channel);
+  return result.Object;
 };
 
 export const fetchData_getMainUser = async () => {

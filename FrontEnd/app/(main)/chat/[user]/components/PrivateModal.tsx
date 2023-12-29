@@ -47,8 +47,8 @@ const PrivateModal = ({
   };
 
   const { data: Users, refetch: UsersRefetch } = useQuery<User[], Error>(
-    ["users"],
-    fetchData_users,
+    ["users", Channel_.id_channel],
+    () => fetchData_users(Channel_.id_channel),
     {
       onError: (error: Error) => {
         console.error("Members query error:", error);
@@ -57,6 +57,8 @@ const PrivateModal = ({
   );
 
   Channel_.type === "PRIVATE" ? (show = true) : (show = false);
+
+  console.log(Users);
 
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
@@ -123,77 +125,80 @@ const PrivateModal = ({
                   </thead>
                   <tbody>
                     <>
-                      {Users.map((user: User) => {
-                        if (
-                          user.id_user === MainUser?.uid ||
-                          isUserInMembers(user) !== false
-                        ) {
-                          Infos.disabled = "btn-disabled";
-                        } else Infos.disabled = "";
-                        user.id_user === MainUser?.uid
-                          ? (Infos.selection =
-                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
-                          : (Infos.selection = "");
-                        user.status === "ONLINE"
-                          ? (Infos.status = "online")
-                          : (Infos.status = "offline");
-                        return (
-                          <tr key={user.username}>
-                            <th>
-                              <div className={`avatar ${Infos.status}`}>
-                                <div className={`w-[50px] ${Infos.selection}`}>
-                                  <Image
-                                    src={user.avatar || groups}
-                                    width={50}
-                                    height={50}
-                                    className="border-[2px] border-palette-green p-[0.5]"
-                                    alt="image"
-                                  />
+                      {Users &&
+                        Users.map((user: User) => {
+                          if (
+                            user.id_user === MainUser?.uid ||
+                            isUserInMembers(user) !== false
+                          ) {
+                            Infos.disabled = "btn-disabled";
+                          } else Infos.disabled = "";
+                          user.id_user === MainUser?.uid
+                            ? (Infos.selection =
+                                "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                            : (Infos.selection = "");
+                          user.status === "ONLINE"
+                            ? (Infos.status = "online")
+                            : (Infos.status = "offline");
+                          return (
+                            <tr key={user.username}>
+                              <th>
+                                <div className={`avatar ${Infos.status}`}>
+                                  <div
+                                    className={`w-[50px] ${Infos.selection}`}
+                                  >
+                                    <Image
+                                      src={user.avatar || groups}
+                                      width={50}
+                                      height={50}
+                                      className="border-[2px] border-palette-green p-[0.5]"
+                                      alt="image"
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </th>
-                            <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
-                              {user.username}
-                            </td>
-                            <td className="font-body font-[500] text-[18px] text-[#424242]">
-                              {Infos.disabled === "btn-disabled" ? (
-                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                  MAIN
-                                </div>
-                              ) : (
-                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
-                                  USER
-                                </div>
-                              )}
-                            </td>
-                            <td className="flex flex-row h-full justify-center items-center">
-                              {Infos.join ? (
-                                <Button
-                                  size="lg"
-                                  className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-                                  onClick={() =>
-                                    joinPrivateChannel(user.id_user)
-                                  }
-                                >
-                                  {Infos.disabled === "btn-disabled" ? (
-                                    <div className="flex flex-row gap-1 items-center text-palette-white">
-                                      Joined
-                                      <LuUserCheck2 />
-                                    </div>
-                                  ) : (
-                                    <div className="flex flex-row gap-1 items-center text-palette-white">
-                                      Invite
-                                      <LuPlus />
-                                    </div>
-                                  )}
-                                </Button>
-                              ) : (
-                                ""
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                              </th>
+                              <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
+                                {user.username}
+                              </td>
+                              <td className="font-body font-[500] text-[18px] text-[#424242]">
+                                {Infos.disabled === "btn-disabled" ? (
+                                  <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
+                                    MAIN
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
+                                    USER
+                                  </div>
+                                )}
+                              </td>
+                              <td className="flex flex-row h-full justify-center items-center">
+                                {Infos.join ? (
+                                  <Button
+                                    size="lg"
+                                    className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+                                    onClick={() =>
+                                      joinPrivateChannel(user.id_user)
+                                    }
+                                  >
+                                    {Infos.disabled === "btn-disabled" ? (
+                                      <div className="flex flex-row gap-1 items-center text-palette-white">
+                                        Joined
+                                        <LuUserCheck2 />
+                                      </div>
+                                    ) : (
+                                      <div className="flex flex-row gap-1 items-center text-palette-white">
+                                        Invite
+                                        <LuPlus />
+                                      </div>
+                                    )}
+                                  </Button>
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </>
                   </tbody>
                 </table>

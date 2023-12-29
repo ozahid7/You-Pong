@@ -19,7 +19,7 @@ import groups from "../../../../../public/groups.svg";
 import Image from "next/image";
 import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
-import { Channel, Member } from "@/types";
+import { Channel, Member, User_Hero } from "@/types";
 import { putData, setData, setFile, getChannel } from "../data/api";
 
 export const getRandomNumber = () => {
@@ -31,10 +31,11 @@ export const getRandomNumber = () => {
 interface HomePage {
   channels: Channel;
   users: Member[];
+  MainUser: User_Hero;
   channelsRefetch: any;
 }
 
-const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
+const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   var setDataObj: Channel = {
     type: channels.type,
     name: channels.name,
@@ -51,6 +52,17 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
   let imageUrl: any;
+  var result: any = undefined;
+  var disabled: boolean = false;
+
+  if (users)
+    users.map((member) => {
+      member.user.id_user === MainUser.uid
+        ? member.user_role === "OWNER"
+          ? (disabled = false)
+          : (disabled = true)
+        : "";
+    });
 
   if (file instanceof Blob || file instanceof File) {
     try {
@@ -64,8 +76,6 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
     imageUrl = channels.avatar;
   }
-
-  var result: any = undefined;
 
   const SendDataToLeader = async () => {
     /// update avatar ///
@@ -144,6 +154,7 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
       <Button
         onPress={onOpen}
         className="rounded-none btn green_button"
+        isDisabled={disabled}
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
