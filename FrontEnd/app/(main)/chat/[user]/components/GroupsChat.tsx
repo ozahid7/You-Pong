@@ -96,7 +96,7 @@ const GroupsChat = ({
       var message = {
         id_channel: channels.id_channel,
         id_sender: MainUser.uid,
-        content: inputValue.trim(),
+        content: messageRef?.current.value,
       };
       socket.emit("newMessage", message);
       messageRef.current.value = null;
@@ -105,10 +105,10 @@ const GroupsChat = ({
     }
   };
 
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-    one = false;
-  };
+  // const handleInputChange = (e: any) => {
+  //   setInputValue(e.target.value);
+  //   one = false;
+  // };
 
   const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
@@ -177,7 +177,7 @@ const GroupsChat = ({
               type="text"
               placeholder={mutedMember.placeholder}
               className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}
               disabled={mutedMember.disabled}
@@ -185,6 +185,7 @@ const GroupsChat = ({
             <button
               type="submit"
               onClick={handleButtonClick}
+              disabled={mutedMember.disabled}
             >
               <LuSend className="h-8 w-8 text-[#497174] xs:w-5 xs:h-5 xs:mr-2" />
             </button>

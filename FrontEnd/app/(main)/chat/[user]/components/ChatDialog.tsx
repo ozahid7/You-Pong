@@ -24,9 +24,9 @@ export const generateRandomKey = () => {
   const randomNumber = Math.floor(Math.random() * 10000) + 1;
   return `${timestamp}-${randomNumber}`;
 };
+var one: boolean = false;
 
 const ChatDialog = ({ main, socket, channel }: Props) => {
-  var one: boolean = false;
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
@@ -74,12 +74,12 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   useEffect(() => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
-        MessagesRefetch();
         setMessages((prevMessages) => [...prevMessages, data]);
       });
+      MessagesRefetch();
       one = true;
     }
-  }, [one, socket]);
+  }, [one]);
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
@@ -92,6 +92,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const whichUSER = (message: Message) => {
     if (message && message.id_channel === channel?.id_channel) {
       if (message.id_sender === main.uid) {
+        one = false;
         return (
           <ChatBubbleMain
             message={message}
@@ -103,6 +104,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
         const member: Member[] = Members.filter(
           (member) => member.user.id_user === message.id_sender
         );
+        one = false;
         return (
           <ChatBubbleSender
             message={message}
@@ -111,7 +113,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           />
         );
       }
-      one = false;
     }
   };
 
