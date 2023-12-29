@@ -92,6 +92,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		) {
 			console.log("emit from provider");
 			globalSocket.emit("online");
+			me.refetch();
 			i++;
 		}
 	}, [globalSocket, path]);
@@ -110,6 +111,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 		return null;
 	};
+
 	useEffect(() => {
 		if (!loged) getTfa();
 		else setTfaVerified(true);

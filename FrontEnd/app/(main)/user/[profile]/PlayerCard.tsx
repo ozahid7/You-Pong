@@ -81,7 +81,7 @@ const PlayerCard = (props: {
 				}
 			});
 		}
-	}, [globalSocket, props.status]);
+	}, [globalSocket.disconnected, globalSocket.connected, props.status]);
 
 	let name = props.username.replace(/[^a-zA-Z]/g, "");
 
