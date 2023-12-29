@@ -16,20 +16,20 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { Background } from "../../../../components";
+import { Background } from "../../../../../components";
 import { Channel, QueryProp } from "@/types";
 import {
   fetchData_getChannels,
   getChannels,
   joinChannel,
   userChannels,
-} from "@/app/(main)/chat/data/api";
+} from "../data/api";
 import {
   IoLockClosedOutline,
   IoLockOpenOutline,
   IoEnterOutline,
 } from "react-icons/io5";
-import groups from "../../../../public/groups.svg";
+import groups from "../../../../../public/groups.svg";
 import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
 import { useQuery } from "react-query";
 

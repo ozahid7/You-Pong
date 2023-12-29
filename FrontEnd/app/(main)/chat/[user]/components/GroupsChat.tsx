@@ -46,7 +46,7 @@ const GroupsChat = ({
     data: channel,
     error: ChannelError,
     isLoading: ChannelLoading,
-    refetch: mainChannel
+    refetch: mainChannel,
   } = useQuery<Channel, Error>(
     ["channel", channels?.id_channel],
     () => fetchData_Channel(channels?.id_channel),
@@ -61,7 +61,7 @@ const GroupsChat = ({
     data: Members,
     error: MembersError,
     isLoading: MembersLoading,
-    refetch: membersRefetch
+    refetch: membersRefetch,
   } = useQuery<Member[], Error>(
     ["Members", channels?.id_channel],
     () => fetchData_getMembers(channels?.id_channel),

@@ -28,7 +28,14 @@ interface Props {
   mainChannelRefetch: any;
 }
 
-const JoinDropDown = ({ disable, user, channel, membersRefetch, channelsRefetch, mainChannelRefetch }: Props) => {
+const JoinDropDown = ({
+  disable,
+  user,
+  channel,
+  membersRefetch,
+  channelsRefetch,
+  mainChannelRefetch,
+}: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
 
   const HandleKick = async () => {

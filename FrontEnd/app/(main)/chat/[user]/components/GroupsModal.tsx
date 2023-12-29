@@ -16,8 +16,8 @@ import {
   CardBody,
 } from "@nextui-org/react";
 import Image from "next/image";
-import groups from "../../../../public/groups.svg";
-import { setData, setFile } from "@/app/(main)/chat/data/api";
+import groups from "../../../../../public/groups.svg";
+import { setData, setFile } from "../data/api";
 import { GroupsInput } from ".";
 
 export var setDataObj: Channel = {

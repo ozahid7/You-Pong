@@ -10,15 +10,20 @@ import {
   Button,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
-import { LuUsers } from "react-icons/lu";
+import { LuPlus, LuUserCheck2, LuUserPlus2, LuUsers } from "react-icons/lu";
 import Image from "next/image";
-import { Background } from "../../../../components";
+import { Background } from "../../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
-import groups from "../../../../public/groups.svg";
+import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
+import {
+  fetchData_Channel,
+  fetchData_users,
+  joinPrivate,
+} from "../data/api";
+import { useQuery } from "react-query";
 
 interface Props {
-  Users: Member[];
   MainUser: User_Hero | undefined;
   Channel_: Channel | null;
   membersRefetch: any;
@@ -26,8 +31,7 @@ interface Props {
   mainChannelRefetch: any;
 }
 
-const MembersEdit = ({
-  Users,
+const PrivateModal = ({
   MainUser,
   Channel_,
   membersRefetch,
@@ -35,13 +39,31 @@ const MembersEdit = ({
   mainChannelRefetch,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  var show: boolean = false;
   var Infos = {
     disabled: "",
-    role: "",
     status: "offline",
     selection: "",
     show: true,
     join: true,
+  };
+
+  const { data: Users, refetch: UsersRefetch } = useQuery<User[], Error>(
+    ["users"],
+    fetchData_users,
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
+    }
+  );
+
+  Channel_.type === "PRIVATE" ? (show = true) : (show = false);
+
+  const joinPrivateChannel = async (id_friend: string) => {
+    const response = await joinPrivate(Channel_.id_channel, id_friend);
+    if (response.message === "Channel Updated Succefully") UsersRefetch();
+    else console.error(response.message);
   };
 
   return (
@@ -49,6 +71,7 @@ const MembersEdit = ({
       <Button
         onPress={onOpen}
         className="rounded-none btn green_button"
+        isDisabled={!show}
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
@@ -57,10 +80,10 @@ const MembersEdit = ({
               className: "text-palette-white border-none",
             }}
           >
-            <LuUsers />
+            <LuUserPlus2 />
           </IconContext.Provider>
           <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-            Members
+            Invite
           </div>
         </div>
       </Button>
@@ -82,7 +105,7 @@ const MembersEdit = ({
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Members
+                Users
               </ModalHeader>
               <ModalBody className="w-[90%]">
                 <table className="table table-lg">
@@ -96,34 +119,24 @@ const MembersEdit = ({
                   </thead>
                   <tbody>
                     <>
-                      {Users.map((user: Member) => {
-                        Infos.role = "";
-                        if (user.user.id_user === MainUser?.uid) {
+                      {Users.map((user: User) => {
+                        if (user.id_user === MainUser?.uid) {
                           Infos.disabled = "btn-disabled";
-                          user.user_role === "MEMBER"
-                            ? (Infos.join = false)
-                            : (Infos.join = true);
-                          user.user_role === "ADMIN"
-                            ? (Infos.show = false)
-                            : (Infos.show = true);
                         } else Infos.disabled = "";
-                        user.user.id_user === MainUser?.uid
+                        user.id_user === MainUser?.uid
                           ? (Infos.selection =
                               "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
                           : (Infos.selection = "");
-                        user.user.status === "ONLINE"
+                        user.status === "ONLINE"
                           ? (Infos.status = "online")
                           : (Infos.status = "offline");
-                        user.user_role === "OWNER" && Infos.show === false
-                          ? (Infos.disabled = "btn-disabled")
-                          : "";
                         return (
-                          <tr key={user.user.username}>
+                          <tr key={user.username}>
                             <th>
                               <div className={`avatar ${Infos.status}`}>
                                 <div className={`w-[50px] ${Infos.selection}`}>
                                   <Image
-                                    src={user.user.avatar || groups}
+                                    src={user.avatar || groups}
                                     width={50}
                                     height={50}
                                     className="border-[2px] border-palette-green p-[0.5]"
@@ -133,34 +146,40 @@ const MembersEdit = ({
                               </div>
                             </th>
                             <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
-                              {user.user.username}
+                              {user.username}
                             </td>
                             <td className="font-body font-[500] text-[18px] text-[#424242]">
-                              {user.user_role == "OWNER" ? (
+                              {Infos.disabled === "btn-disabled" ? (
                                 <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                  OWNER
-                                </div>
-                              ) : user.user_role == "MEMBER" ? (
-                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
-                                  MEMBER
+                                  MAIN
                                 </div>
                               ) : (
-                                <div className="flex flex-row w-fit p-2 text-palette-orange bg-palette-white font-[600] rounded-lg border-[2px] border-palette-white">
-                                  ADMIN
+                                <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
+                                  USER
                                 </div>
                               )}
                             </td>
                             <td className="flex flex-row h-full justify-center items-center">
                               {Infos.join ? (
-                                <JoinDropDown
-                                  disable={Infos.disabled}
-                                  mainChannelRefetch={mainChannelRefetch}
-                                  user={user}
-                                  key={user.user.id_user}
-                                  channel={Channel_}
-                                  membersRefetch={membersRefetch}
-                                  channelsRefetch={channelsRefetch}
-                                ></JoinDropDown>
+                                <Button
+                                  size="lg"
+                                  className={`flex btn ${Infos.disabled} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+                                  onClick={() =>
+                                    joinPrivateChannel(user.id_user)
+                                  }
+                                >
+                                  {Infos.disabled === "btn-disabled" ? (
+                                    <div className="flex flex-row gap-1 items-center text-palette-white">
+                                      Joined
+                                      <LuUserCheck2 />
+                                    </div>
+                                  ) : (
+                                    <div className="flex flex-row gap-1 items-center text-palette-white">
+                                      Invite
+                                      <LuPlus />
+                                    </div>
+                                  )}
+                                </Button>
                               ) : (
                                 ""
                               )}
@@ -181,4 +200,4 @@ const MembersEdit = ({
   );
 };
 
-export default MembersEdit;
+export default PrivateModal;

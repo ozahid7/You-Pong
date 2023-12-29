@@ -15,19 +15,12 @@ import {
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
-import groups from "../../../../public/groups.svg";
+import groups from "../../../../../public/groups.svg";
 import Image from "next/image";
 import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
 import { Channel, Member } from "@/types";
-import {
-  putData,
-  setData,
-  setFile,
-  getChannel,
-} from "@/app/(main)/chat/data/api";
-import { User } from "@/types";
-import { channel } from "diagnostics_channel";
+import { putData, setData, setFile, getChannel } from "../data/api";
 
 export const getRandomNumber = () => {
   const min = 20;
@@ -47,7 +40,7 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
     name: channels.name,
     description: "",
     avatar: channels.avatar,
-    hash: channels.
+    hash: channels.hash,
   };
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
@@ -75,31 +68,53 @@ const ChatEdit = ({ channels, users, channelsRefetch }: HomePage) => {
   var result: any = undefined;
 
   const SendDataToLeader = async () => {
+    /// update avatar ///
     if (imgRef.current?.value !== "") {
       if (imgRef.current?.files)
         result = await setFile(imgRef.current.files[0]);
+      if (result) setDataObj.avatar = result;
+      else setDataObj.avatar = channels.avatar;
     }
+    //////////////////////
+
+    /// update name ///
     if (channels.name !== nameRef.current?.value)
       setDataObj.name = nameRef.current?.value;
+    else setDataObj.name = channels.name;
+    //////////////////////
+
+    /// update description ///
     if (channels.description !== descRef.current?.value)
       setDataObj.description = descRef.current?.value;
-    /// handle password ///
+    else setDataObj.description = channels.description;
+    //////////////////////
+
+    /// update type ///
+    if (selected) setDataObj.type = selected;
+    //////////////////////
+
+    /// update password ///
     if (selected === "PROTECTED") {
-      if (passRef.current && confpassRef.current) {
+      if (!passRef.current.value || !confpassRef.current.value) {
+        passRef.current.value = null;
+        confpassRef.current.value = null;
+        return;
+      } else if (passRef.current.value && confpassRef.current.value) {
         if (passRef.current.value === confpassRef.current.value)
           setDataObj.hash = passRef.current.value;
         else {
           console.error("Password is not identical...");
+          passRef.current.value = null;
+          confpassRef.current.value = null;
           return;
         }
-      } else return;
+      }
     }
     //////////////////////
-    setDataObj.type = selected;
-    setDataObj.avatar = result;
-    imageUrl = channels.avatar;
-    if (setDataObj) result = await putData(setDataObj, channels?.id_channel);
+    console.log(setDataObj);
+    result = await putData(setDataObj, channels?.id_channel);
     if (result?.message === "Channel Updated Succefully") {
+      console.log(result.message);
       channelsRefetch();
       onClose();
     } else {

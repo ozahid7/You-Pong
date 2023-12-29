@@ -1,7 +1,7 @@
 import { Message, User_Hero } from "@/types";
 import Image from "next/image";
 import React from "react";
-import avatar from "../../../../public/avatar.jpeg";
+import avatar from "../../../../../public/avatar.jpeg";
 
 interface Props {
   main: User_Hero;

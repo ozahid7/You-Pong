@@ -39,20 +39,19 @@ var JoinChannels: QueryProp = {
   fetcher: null,
 };
 
-const Chats = () => {
+const Chats = ({ params }) => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
 
-  const { data: MainUser, refetch: MainUserRefetch } = useQuery<User_Hero, Error>(
-    ["MainUser"],
-    fetchData_getMainUser,
-    {
-      onError: (error: Error) => {
-        console.error("Members query error:", error);
-      },
-    }
-  );
+  const { data: MainUser, refetch: MainUserRefetch } = useQuery<
+    User_Hero,
+    Error
+  >(["MainUser"], fetchData_getMainUser, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
 
   const { data: channel, refetch } = useQuery<Channel[], Error>(
     ["userChannels"],
