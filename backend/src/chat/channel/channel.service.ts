@@ -6,6 +6,64 @@ import { channelDto } from '../dto/channel.create.dto';
 export class ChannelService {
   constructor(private prisma: PrismaService) {}
 
+  //GET USERS
+  async getUsers(id_user: string, id_channel: string) {
+    const my_user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+      include: { blocked_user: true, blocked_from: true },
+    });
+    if (!my_user)
+      return {
+        message: 'No such User !',
+        Object: null,
+      };
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id_channel: id_channel,
+      },
+      include: { users: true, bannedUsers: true },
+    });
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        Object: null,
+      };
+
+    const allUsers = await this.prisma.user.findMany({
+      where: {
+        NOT: {
+          id_user: my_user.id_user,
+        },
+      },
+      include: { blocked_user: true, blocked_from: true, channels: true },
+    });
+
+    const users = await Promise.all(
+      allUsers.map((user) => {
+        if (
+          user.blocked_user.filter((block) => block.id_user === my_user.id_user)
+            .length !== 1 &&
+          user.blocked_from.filter((block) => block.id_user === my_user.id_user)
+            .length !== 1 &&
+          user.channels.filter((channel) => channel.id_channel === id_channel)
+            .length !== 1
+        )
+          return user;
+      }),
+    );
+    const result = users.filter((user) => user);
+    if (result.length === 0)
+      return {
+        message: 'There is no users to join !',
+        Object: null,
+      };
+
+    return {
+      message: 'Users founded',
+      Object: result,
+    };
+  }
+
   //GET MANY
   async getChannels(id_user: string) {
     const user = await this.prisma.user.findUnique({
@@ -16,7 +74,7 @@ export class ChannelService {
     if (!user)
       return {
         message: 'No such user !',
-        object: null,
+        Object: null,
       };
     const channels = await this.prisma.channel.findMany({
       include: {
@@ -29,7 +87,7 @@ export class ChannelService {
     if (!channels)
       return {
         message: 'There is no channels !',
-        object: null,
+        Object: null,
       };
     const channelsFiltred = channels.map((channel) => {
       if (
@@ -42,12 +100,12 @@ export class ChannelService {
     if (result.length === 0)
       return {
         message: 'There is no channels to join !',
-        object: null,
+        Object: null,
       };
 
     return {
       message: 'Channels found',
-      object: result,
+      Object: result,
     };
   }
 
@@ -61,7 +119,7 @@ export class ChannelService {
     if (!user)
       return {
         message: 'No such user !',
-        object: null,
+        Object: null,
       };
     const rooms = await this.prisma.room_Chat.findMany({
       where: {
@@ -72,7 +130,7 @@ export class ChannelService {
     if (!rooms)
       return {
         message: 'There is no room chat !',
-        object: null,
+        Object: null,
       };
     const usersFiltred = await Promise.all(
       rooms.map(async (room) => {
@@ -98,11 +156,11 @@ export class ChannelService {
     if (!result)
       return {
         message: 'No such channel !',
-        object: null,
+        Object: null,
       };
     return {
       message: 'Channel found',
-      object: result,
+      Object: result,
     };
   }
 
@@ -122,11 +180,11 @@ export class ChannelService {
     if (!result)
       return {
         message: 'No such channel !',
-        object: null,
+        Object: null,
       };
     return {
       message: 'Channel found',
-      object: result,
+      Object: result,
     };
   }
 
@@ -136,12 +194,12 @@ export class ChannelService {
     if (!rooms)
       return {
         message: "Can't delete rooms !",
-        object: null,
+        Object: null,
       };
     const result = await this.prisma.channel.deleteMany();
     return {
       message: 'Channels Deleted Succesfully',
-      object: result,
+      Object: result,
     };
   }
 
@@ -150,7 +208,7 @@ export class ChannelService {
     if (!id_channel)
       return {
         message: 'No such channel !',
-        object: null,
+        Object: null,
       };
     const rooms = await this.prisma.room_Chat.deleteMany({
       where: { id_channel: id_channel },
@@ -158,7 +216,7 @@ export class ChannelService {
     if (!rooms)
       return {
         message: "Can't delete rooms !",
-        object: null,
+        Object: null,
       };
     const result = await this.prisma.channel.delete({
       where: {
@@ -168,11 +226,11 @@ export class ChannelService {
     if (!result)
       return {
         message: 'No channel to delete !',
-        object: null,
+        Object: null,
       };
     return {
       message: 'Channel Deleted Succesfully',
-      object: result,
+      Object: result,
     };
   }
 
@@ -181,12 +239,12 @@ export class ChannelService {
     if (!channel)
       return {
         message: 'Empty Channel',
-        object: null,
+        Object: null,
       };
     if (channel.type === 'PROTECTED' && !channel.hash)
       return {
         message: 'Password Obligatoire !',
-        object: null,
+        Object: null,
       };
     const user = await this.prisma.user.findUnique({
       where: {
@@ -196,7 +254,7 @@ export class ChannelService {
     if (!user)
       return {
         message: 'No such User !',
-        object: null,
+        Object: null,
       };
     const result = await this.prisma.channel.create({
       data: {
@@ -222,11 +280,11 @@ export class ChannelService {
     if (!room)
       return {
         message: "Can't create a room chat !",
-        object: null,
+        Object: null,
       };
     return {
       message: 'Channel Created Succefully',
-      object: result,
+      Object: result,
     };
   }
 
@@ -245,7 +303,7 @@ export class ChannelService {
     if (!user || !freind)
       return {
         message: 'No such User !',
-        object: null,
+        Object: null,
       };
     const duplicate = await this.prisma.channel.findMany({
       where: {
@@ -264,7 +322,7 @@ export class ChannelService {
     if (mychannel) {
       return {
         message: 'Channel founded successfully',
-        object: mychannel,
+        Object: mychannel,
       };
     }
 
@@ -299,7 +357,7 @@ export class ChannelService {
     if (!room || !myroom)
       return {
         message: "Can't create a room chat !",
-        object: null,
+        Object: null,
       };
     const result = await this.prisma.channel.findUnique({
       where: {
@@ -309,7 +367,7 @@ export class ChannelService {
     });
     return {
       message: 'Channel Created Succefully',
-      object: result,
+      Object: result,
     };
   }
 
@@ -328,7 +386,7 @@ export class ChannelService {
     if (!user || !freind)
       return {
         message: 'No such User !',
-        object: null,
+        Object: null,
       };
     const duplicate = await this.prisma.channel.findMany({
       where: {
@@ -347,7 +405,7 @@ export class ChannelService {
     if (!mychannel) {
       return {
         message: 'No Channel to delete',
-        object: null,
+        Object: null,
       };
     }
     const messages = await this.prisma.message.deleteMany({
@@ -374,7 +432,7 @@ export class ChannelService {
     if (!room || !myroom || !messages)
       return {
         message: "Can't delete a room chat / messages !",
-        object: null,
+        Object: null,
       };
     const result = await this.prisma.channel.delete({
       where: {
@@ -383,7 +441,7 @@ export class ChannelService {
     });
     return {
       message: 'Channel deleted Succefully',
-      object: result,
+      Object: result,
     };
   }
 }

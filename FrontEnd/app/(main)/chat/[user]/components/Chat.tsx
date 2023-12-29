@@ -1,27 +1,66 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend } from "react-icons/lu";
-import { ChatDialog, ChatDropdown } from ".";
-import { Channel, User_Hero } from "@/types";
+import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
+import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
+import { fetchData_Channel, getChannel, getMembers } from "../data/api";
+import { useQuery } from "react-query";
 
 interface HomePage {
   channels: Channel;
   socket: any;
-  user: User_Hero;
+  main: User_Hero;
+  data: Channel[];
+  indexChannels: whichChannel[];
+  index: number;
 }
 
 var one: boolean = false;
+var nameOne: boolean = false;
 
-const Chat = ({ channels, socket, user }: HomePage) => {
+const Chat = ({
+  channels,
+  socket,
+  main,
+  data,
+  indexChannels,
+  index,
+}: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
+
+  const {
+    data: channel,
+    error: ChannelError,
+    isLoading: ChannelLoading,
+  } = useQuery<Channel, Error>(
+    ["channel", channels?.id_channel],
+    () => fetchData_Channel(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Messages query error:", error);
+      },
+    }
+  );
+
+  const retChannel: Channel | null = data
+    ? data.find(
+        (channel) => channel.id_channel === indexChannels[index]?.id_channel
+      )
+    : null;
+
+  // if (retChannel) console.error(retChannel.name);
+
+  const user: User | null = channel
+    ? channel.users.find((user) => user.id_user !== main.uid)
+    : null;
 
   const handleButtonClick = () => {
     if (!one) {
       const message = {
-        id_channel: channels.id_channel,
-        id_sender: user.uid,
-        message: inputValue,
+        id_channel: channel.id_channel,
+        id_sender: main.uid,
+        content: inputValue.trim(),
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
@@ -29,12 +68,12 @@ const Chat = ({ channels, socket, user }: HomePage) => {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
     one = false;
   };
 
-  const handleEnterPress = (e) => {
+  const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
@@ -51,33 +90,34 @@ const Chat = ({ channels, socket, user }: HomePage) => {
               radius="sm"
               color="default"
               className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px] xl_:w-[60px] xl_:h-[60px]"
-              src={channels.avatar}
+              src={user?.avatar}
             />
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
-                {channels.name}
+                {user?.username}
               </div>
             </div>
           </div>
           <div>
-            {/* <GroupDropdown channels={channels}></GroupDropdown> */}
+            <DirectDropdown channels={channels} />
           </div>
         </div>
       </div>
       <div className="flex w-full h-[78%] flex-col justify-center items-center">
-        {/* <ChatDialog
-          channel={channels}
-          main={user}
+        <ChatDialog
+          channel={retChannel}
+          main={main}
           socket={socket}
-        /> */}
+          key={user?.id_user} //just added this
+        />
       </div>
       <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
-        <div className="search_input_chat w-full h-[60%] flex justify-center items-center ">
-          <div className="center w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+        <div className="input input-bordered input-primary w-full h-[60%] flex justify-center items-center ">
+          <div className=" w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
             <input
               type="text"
               placeholder="Type a message here ..."
-              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[84%]"
+              className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
               onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}

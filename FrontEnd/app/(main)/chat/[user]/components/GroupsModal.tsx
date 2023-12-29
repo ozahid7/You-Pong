@@ -16,9 +16,8 @@ import {
   CardBody,
 } from "@nextui-org/react";
 import Image from "next/image";
-import groups from "../../../../public/groups.svg";
-import { fetchData_userChannels, setData, setFile } from "@/app/(main)/chat/data/api";
-import { mutate } from "swr";
+import groups from "../../../../../public/groups.svg";
+import { setData, setFile } from "../data/api";
 import { GroupsInput } from ".";
 
 export var setDataObj: Channel = {
@@ -28,7 +27,7 @@ export var setDataObj: Channel = {
   avatar: null || "",
 };
 
-export default function GroupsModal() {
+export default function GroupsModal({ refetch }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [selected, setSelected] = useState<string>("PUBLIC");
@@ -39,7 +38,7 @@ export default function GroupsModal() {
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
-  var object: { object: any; message: string };
+  var object: { Object: any; message: string };
 
   let imageUrl: any;
 
@@ -83,12 +82,11 @@ export default function GroupsModal() {
 
         setDataObj.avatar = result;
 
-        onClose();
-        // CLOSE THE MODAL Function :)
         object = await setData(setDataObj);
         // SEND DATA TO HAMID RIGHT HERE
-        if (object.object !== null)
-          mutate(fetchData_userChannels);
+        if (object.Object !== null) refetch();
+        onClose();
+        // CLOSE THE MODAL Function :)
       }
       clean();
     }

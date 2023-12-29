@@ -35,6 +35,19 @@ export class ChannelController {
     }
   }
 
+  //Get USERS
+  @UseGuards(AuthGuard('jwt'))
+  @Get('users')
+  async getUsers(@Req() req, @Query('id_channel') id_channel: string) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.getUsers(id_user, id_channel);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to find users', 444);
+    }
+  }
+
   //Get
   @UseGuards(AuthGuard('jwt'))
   @Get('/myChannel/:id_channel')
@@ -133,11 +146,14 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/update/')
   async putChannel(
+    @Req() req,
     @Query('id_channel') id_channel: string,
     @Body() channel: channelDto,
   ) {
     try {
+      const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.putchannel(
+        id_user,
         id_channel,
         channel,
       );

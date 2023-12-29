@@ -12,18 +12,28 @@ import {
 import { IconContext } from "react-icons";
 import { LuUsers } from "react-icons/lu";
 import Image from "next/image";
-import { Background } from "../../../../components";
+import { Background } from "../../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
-import groups from "../../../../public/groups.svg";
+import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
 
 interface Props {
   Users: Member[];
   MainUser: User_Hero | undefined;
   Channel_: Channel | null;
+  membersRefetch: any;
+  channelsRefetch: any;
+  mainChannelRefetch: any;
 }
 
-const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
+const MembersEdit = ({
+  Users,
+  MainUser,
+  Channel_,
+  membersRefetch,
+  channelsRefetch,
+  mainChannelRefetch,
+}: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   var Infos = {
     disabled: "",
@@ -144,9 +154,12 @@ const MembersEdit = ({ Users, MainUser, Channel_ }: Props) => {
                               {Infos.join ? (
                                 <JoinDropDown
                                   disable={Infos.disabled}
+                                  mainChannelRefetch={mainChannelRefetch}
                                   user={user}
                                   key={user.user.id_user}
                                   channel={Channel_}
+                                  membersRefetch={membersRefetch}
+                                  channelsRefetch={channelsRefetch}
                                 ></JoinDropDown>
                               ) : (
                                 ""

@@ -8,54 +8,80 @@ import {
 } from "@nextui-org/react";
 import { LuBellOff, LuTimer } from "react-icons/lu";
 import { Channel, Member } from "@/types";
-import { MuteMember, UnMuteMember, getMembers } from "../data/api";
-import useSWR, { mutate } from "swr";
+import {
+  MuteMember,
+  UnMuteMember,
+  fetchData_getMembers,
+  getMembers,
+} from "../data/api";
+import { useQuery } from "react-query";
 
 interface Props {
   user: Member;
   channel: Channel | null;
+  membersRefetch: any;
   onClose: () => void;
+  channelsRefetch: any;
 }
 
-export default function MuteDropDown({ user, channel, onClose }: Props) {
+export default function MuteDropDown({
+  user,
+  channel,
+  onClose,
+  membersRefetch,
+  channelsRefetch,
+}: Props) {
   const muteRef1 = useRef<HTMLButtonElement>(null);
   const muteRef5 = useRef<HTMLButtonElement>(null);
   const muteRef15 = useRef<HTMLButtonElement>(null);
 
-  console.log(user.member_status);
-
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channel?.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const Handle_1Minute = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      60000
+    );
+    if (success?.message === "Channel Updated Succefully") {
+      membersRefetch();
+      channelsRefetch();
+      const timeoutId = setTimeout(membersRefetch(), 60000);
+      return clearTimeout(timeoutId), onClose();
+    } else console.error(success?.message);
   };
-
-  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
-
-  const Handle_1Minute = () => {
-    MuteMember(channel?.id_channel, user.user.username, 60000);
-    mutate(fetchData_getMembers);
-    onClose();
-  };
-  const Handle_5Minutes = () => {
-    MuteMember(channel?.id_channel, user.user.username, 300000);
-    mutate(fetchData_getMembers);
-    onClose();
-  };
-  const Handle_15Minutes = () => {
-    MuteMember(channel?.id_channel, user.user.username, 900000);
-    mutate(fetchData_getMembers);
-    onClose();
-  };
-
-  const HandleUnmute = () => {
-    if (user.member_status === "MUTED") {
-      UnMuteMember(channel?.id_channel, user.user.username);
-      mutate(fetchData_getMembers);
+  const Handle_5Minutes = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      300000
+    );
+    if (success?.message === "Channel Updated Succefully") {
+      membersRefetch();
       onClose();
+    } else console.error(success?.message);
+  };
+  const Handle_15Minutes = async () => {
+    const success = await MuteMember(
+      channel?.id_channel,
+      user.user.id_user,
+      900000
+    );
+    if (success?.message === "Channel Updated Succefully") {
+      membersRefetch();
+      onClose();
+    } else console.error(success?.message);
+  };
+
+  const HandleUnmute = async () => {
+    if (user.member_status === "MUTED") {
+      const success = await UnMuteMember(
+        channel?.id_channel,
+        user.user.id_user
+      );
+      if (success?.message === "Channel Updated Succefully") {
+        channelsRefetch();
+        membersRefetch();
+        onClose();
+      } else console.error(success?.message);
     }
   };
   return (
@@ -65,13 +91,13 @@ export default function MuteDropDown({ user, channel, onClose }: Props) {
       aria-label="Mute"
     >
       <PopoverTrigger>
-        <Button
+        <button
           className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
           onClick={HandleUnmute}
         >
           <LuBellOff />
           {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (

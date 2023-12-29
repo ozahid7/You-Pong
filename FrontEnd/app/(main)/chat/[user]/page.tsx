@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import {
   Background,
@@ -15,39 +15,110 @@ import {
   GroupsModal,
   JoinModal,
   SearchChat,
+  MiniChatDirect,
 } from "./components";
 import { LuUsers, LuUser } from "react-icons/lu";
 import {
+  fetchData_getChannels,
   fetchData_getMainUser,
   fetchData_userChannels,
-  userChannels,
+  getChannel,
+  getChannels,
 } from "./data/api";
-import useSWR from "swr";
-import { Channel, User_Hero } from "@/types";
+import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
+import { useQuery } from "react-query";
 
 var one: boolean = false;
 var connection: any = null;
+var indexChannels: whichChannel[] = [];
+var indexChannelsDirect: whichChannel[] = [];
+var JoinChannels: QueryProp = {
+  data: null,
+  isLoading: false,
+  error: null,
+  fetcher: null,
+};
 
-const Chats = () => {
+const Chats = ({ params }) => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
+  var redirect: number = 0;
 
-  const { data: MainUser } = useSWR<User_Hero>(
-    "/MainUser",
-    fetchData_getMainUser
+  const { data: MainUser, refetch: MainUserRefetch } = useQuery<
+    User_Hero,
+    Error
+  >(["MainUser"], fetchData_getMainUser, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
+
+  const { data: channel, refetch } = useQuery<Channel[], Error>(
+    ["userChannels"],
+    fetchData_userChannels,
+    {
+      onError: (error: Error) => {
+        console.error("Channels query error:", error);
+      },
+    }
   );
 
-  const { data: channel } = useSWR<Channel[]>(
-    "/myData",
-    fetchData_userChannels
-  );
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: joinRefetch,
+  } = useQuery<Channel[], Error>(["getChannelsJoin"], fetchData_getChannels, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
 
-  if (!channel)
-    return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg" />
-    );
+  useEffect(() => {
+    JoinChannels = {
+      data: null,
+      isLoading: false,
+      error: null,
+      fetcher: null,
+    };
+    JoinChannels.data = data;
+    JoinChannels.error = error;
+    JoinChannels.isLoading = isLoading;
+    JoinChannels.fetcher = joinRefetch;
+    joinRefetch();
+  }, [data]);
+
+  useEffect(() => {
+    indexChannels = [];
+    indexChannelsDirect = [];
+    if (channel) {
+      channel?.map((channel, key) => {
+        const temp: whichChannel = {
+          id_channel: channel.id_channel,
+          index: key,
+          name: channel.name,
+          type: channel.type,
+        };
+        channel.type !== "DIRECT"
+          ? indexChannels.push(temp)
+          : indexChannelsDirect.push(temp);
+      });
+      refetch();
+      //// handle direct message ///
+      const id = params.user;
+      indexChannelsDirect.map(async (channel) => {
+        const result = await getChannel(channel.id_channel);
+        const ret = result.Object.users.find(
+          (user: User) => user.id_user === id
+        );
+        if (ret) setValueDirect(channel.index);
+        else if (ret === undefined) channel.index = 0;
+      });
+      /////////////////////////////
+    }
+  }, [channel]);
 
   //// Socket
   if (MainUser?.uid && !one) {
@@ -123,10 +194,15 @@ const Chats = () => {
                                   channel
                                     ? channel
                                         .filter(
-                                          (obj: any) => obj.type === "DIRECT"
+                                          (obj: Channel) =>
+                                            obj.type === "DIRECT"
                                         )
-                                        .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
+                                        .map((obj: Channel, i) => (
+                                          <MiniChatDirect
+                                            channels={obj}
+                                            main={MainUser}
+                                            key={i}
+                                          />
                                         ))
                                     : []
                                 }
@@ -134,7 +210,8 @@ const Chats = () => {
                                   className:
                                     "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
                                 }}
-                              ></MyTabs>
+                                key="direct"
+                              />
                             </div>
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
@@ -149,19 +226,28 @@ const Chats = () => {
                                         .filter(
                                           (obj: any) => obj.type !== "DIRECT"
                                         )
-                                        .map((obj: any, i) => (
-                                          <MiniChat channels={obj}></MiniChat>
-                                        ))
+                                        .map((obj: any, i) => {
+                                          return (
+                                            <MiniChat
+                                              channels={obj}
+                                              key={i}
+                                            />
+                                          );
+                                        })
                                     : []
                                 }
                                 indicator={{
                                   className:
                                     "bg-palette-green self-center 2xl:w-[52px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
                                 }}
-                              ></MyTabs>
+                                key="groups"
+                              />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
-                                <GroupsModal />
-                                <JoinModal />
+                                <GroupsModal refetch={refetch} />
+                                <JoinModal
+                                  refetch={refetch}
+                                  channels={JoinChannels}
+                                />
                               </NextUIProvider>
                             </div>
                           </SwipeableTabs>
@@ -173,37 +259,47 @@ const Chats = () => {
                     <SwipeableTabs
                       value={valueGroups}
                       className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
+                      key="groups"
                     >
-                      {channel
-                        ? channel
-                            .filter((obj) => obj.type !== "DIRECT")
-                            .map((obj, i) => (
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type !== "DIRECT")
+                          .map((obj, i) => {
+                            return (
                               <GroupsChat
+                                data={channel}
                                 channels={obj}
                                 socket={connection}
-                                user={MainUser}
+                                MainUser={MainUser}
+                                indexChannels={indexChannels}
+                                index={valueGroups}
+                                channelsRefetch={refetch}
+                                joinRefetch={joinRefetch}
                                 key={i}
                               ></GroupsChat>
-                            ))
-                        : ""}
+                            );
+                          })}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
                       value={valueDirect}
                       className="h-full w-full  flex-1  overflow-x-hidden"
+                      key="direct"
                     >
-                      {channel
-                        ? channel
-                            .filter((obj) => obj.type === "DIRECT")
-                            .map((obj, i) => (
-                              <Chat
-                                channels={obj}
-                                socket={connection}
-                                user={MainUser}
-                                key={i}
-                              ></Chat>
-                            ))
-                        : ""}
+                      {channel &&
+                        channel
+                          .filter((obj) => obj.type === "DIRECT")
+                          .map((obj, i) => (
+                            <Chat
+                              data={channel}
+                              channels={obj}
+                              socket={connection}
+                              main={MainUser}
+                              indexChannels={indexChannelsDirect}
+                              index={valueDirect}
+                              key={i}
+                            ></Chat>
+                          ))}
                     </SwipeableTabs>
                   )}
                 </div>

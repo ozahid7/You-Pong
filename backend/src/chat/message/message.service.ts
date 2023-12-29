@@ -16,7 +16,7 @@ export class MessageService {
     if (!me)
       return {
         message: 'No such user !',
-        object: null,
+        Object: null,
       };
     const channel = await this.prisma.channel.findUnique({
       where: {
@@ -27,7 +27,7 @@ export class MessageService {
     if (!channel)
       return {
         message: 'No such channel !',
-        object: null,
+        Object: null,
       };
     if (
       channel.bannedUsers.find((user) => user.id_user === id_user) ||
@@ -35,14 +35,14 @@ export class MessageService {
     ) {
       return {
         message: 'Your not a member in this channel !',
-        object: null,
+        Object: null,
       };
     }
     if (channel) {
       const messages = await this.prisma.message.findMany({
         where: { id_channel: channel.id_channel },
         orderBy: {
-          created_at: 'desc',
+          created_at: 'asc',
         },
         include: { user: true },
       });
@@ -83,16 +83,16 @@ export class MessageService {
       if (result.length !== 0)
         return {
           message: 'Messages founded successfully',
-          object: result,
+          Object: result,
         };
       return {
         message: 'No Messages to display !',
-        object: result,
+        Object: result,
       };
     }
     return {
       message: 'No such channel !',
-      object: null,
+      Object: null,
     };
   }
 

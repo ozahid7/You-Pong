@@ -1,7 +1,5 @@
 import { Channel } from "@/types";
 import axios from "axios";
-// import fs from "fs";
-// import { setDataObj } from "@/components/tools/GroupsModal";
 
 axios.defaults.withCredentials = true;
 
@@ -16,11 +14,38 @@ export const userChannels = async () => {
   }
 };
 
+export const getUsers = async (id_channel: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/chat/channel/users?id_channel=${id_channel}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
 // http://localhost:4000/chat/channel/join/name
 export const joinChannel = async (id_channel: string, password: string) => {
   try {
     const response = await axios.put(
       `http://localhost:4000/chat/channel/join?id_channel=${id_channel}&password=${password}`
+    );
+    return response.data;
+  } catch (error) {
+    // Handle errors here
+    console.error(error);
+    return null;
+  }
+};
+
+// http://localhost:4000/chat/channel/join/name
+export const joinPrivate = async (id_channel: string, id_friend: string) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:4000/chat/channel/joinPrivate/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -300,20 +325,36 @@ export const getMessages = async (id_channel: string) => {
 ////////////////////////////////////////////////////////////
 
 export const fetchData_userChannels = async () => {
-  try {
-    const result = await userChannels();
-    return result;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  const result = await userChannels();
+  return result;
+};
+
+export const fetchData_users = async (id_channel: string) => {
+  const result = await getUsers(id_channel);
+  return result.Object;
 };
 
 export const fetchData_getMainUser = async () => {
-  try {
-    const result = await getMainUser();
+  const result = await getMainUser();
+  return result.userInfo;
+};
 
-    return result.userInfo;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+export const fetchData_getMembers = async (id_channel: string) => {
+  const result = await getMembers(id_channel);
+  return result.Object;
+};
+
+export const fetchData_Messages = async (id_channel: string) => {
+  const result = await getMessages(id_channel);
+  return result.Object;
+};
+
+export const fetchData_Channel = async (id_channel: string) => {
+  const result = await getChannel(id_channel);
+  return result.Object;
+};
+
+export const fetchData_getChannels = async () => {
+  const result = await getChannels();
+  return result.Object;
 };

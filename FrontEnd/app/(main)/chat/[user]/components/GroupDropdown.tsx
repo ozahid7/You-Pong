@@ -4,61 +4,70 @@ import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { Channel, Member, User, User_Hero } from "@/types";
 import { Button } from "@nextui-org/react";
-import { ChatEdit, MembersEdit } from ".";
+import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
-  fetchData_userChannels,
+  fetchData_getMainUser,
+  fetchData_getMembers,
   getChannel,
   getMainUser,
   getMembers,
   leaveChannel,
   userChannels,
 } from "../data/api";
-import useSWR, { useSWRConfig } from "swr";
-import { fetchData_getChannels } from "./JoinModal";
+import { useQuery } from "react-query";
 
 interface HomePage {
   channels: Channel;
+  channelsRefetch: any;
+  joinRefetch: any;
+  mainChannelRefetch: any;
 }
 
-const GroupDropdown = ({ channels }: HomePage) => {
-  const { mutate } = useSWRConfig();
-
-  const Leaving = () => {
-    leaveChannel(channels.id_channel || "");
-    mutate(fetchData_userChannels);
-    mutate(fetchData_getChannels);
-  };
-
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channels.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+const GroupDropdown = ({
+  channels,
+  channelsRefetch,
+  joinRefetch,
+  mainChannelRefetch,
+}: HomePage) => {
+  const Leaving = async () => {
+    const success = await leaveChannel(channels.id_channel);
+    if (success?.message === "Channel Updated Succefully") {
+      channelsRefetch();
+      joinRefetch();
+    } else {
+      console.error(success?.message);
+      channelsRefetch();
     }
   };
 
-  const fetchData_getMainUser = async () => {
-    try {
-      const result = await getMainUser();
-
-      return result.userInfo;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const { data: MainUser } = useQuery<User_Hero, Error>(
+    ["MainUser"],
+    fetchData_getMainUser,
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
     }
-  };
+  );
 
-  const { data: Users } = useSWR<Member[]>("/Users", fetchData_getMembers);
-  const { data: MainUser } = useSWR<User_Hero>(
-    "/MainUser",
-    fetchData_getMainUser
+  const { data: Members, refetch: membersRefetch } = useQuery<Member[], Error>(
+    ["members", channels?.id_channel],
+    () => fetchData_getMembers(channels?.id_channel),
+    {
+      onError: (error: Error) => {
+        console.error("Members query error:", error);
+      },
+    }
   );
 
   return (
     <div className="flex flex-col justify-center relative">
       <div className="dropdown dropdown-bottom dropdown-end">
-        <label tabIndex={0} role="button">
+        <label
+          tabIndex={0}
+          role="button"
+        >
           <IconContext.Provider
             value={{
               color: "",
@@ -76,12 +85,20 @@ const GroupDropdown = ({ channels }: HomePage) => {
           <li>
             <MembersEdit
               MainUser={MainUser}
-              Users={Users || []}
-              Channel_={channels || null}
+              Users={Members}
+              membersRefetch={membersRefetch}
+              channelsRefetch={channelsRefetch}
+              mainChannelRefetch={mainChannelRefetch}
+              Channel_={channels}
             ></MembersEdit>
           </li>
           <li>
-            <ChatEdit channels={channels} users={Users || []}></ChatEdit>
+            <ChatEdit
+              channels={channels}
+              users={Members}
+              MainUser={MainUser}
+              channelsRefetch={channelsRefetch}
+            ></ChatEdit>
           </li>
           <li>
             <Button
@@ -105,6 +122,16 @@ const GroupDropdown = ({ channels }: HomePage) => {
                 </div>
               </div>
             </Button>
+          </li>
+          <li>
+            <PrivateModal
+              MainUser={MainUser}
+              membersRefetch={membersRefetch}
+              channelsRefetch={channelsRefetch}
+              mainChannelRefetch={mainChannelRefetch}
+              Channel_={channels}
+              Members={Members}
+            ></PrivateModal>
           </li>
         </ul>
       </div>

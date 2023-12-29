@@ -8,10 +8,11 @@ interface MyInputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputclass?: string;
   type: string;
   isPassword?: boolean;
+  required: boolean;
 }
 
 const InputGroupPass = forwardRef<HTMLInputElement, MyInputProps>(
-  ({ text, customclass, inputclass, type, isPassword }, ref) => {
+  ({ text, customclass, inputclass, type, isPassword, required }, ref) => {
     let [Icon, setIcon] = useState(false);
 
     const hideIcon = () => {
@@ -31,7 +32,8 @@ const InputGroupPass = forwardRef<HTMLInputElement, MyInputProps>(
           type={type}
           //   defaultValue={text}
           placeholder={text}
-          className={`${inputclass} center placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 pr-2 outline-none  fold:w-[97%]  h-[86%] s:w-[98%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden`}
+          className={`${inputclass} center placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 pr-2 outline-none  fold:w-[97%]  h-[86%] s:w-[98%] sm:w-[97%] md:w-[98%] w-[96%] xl:w-[98%] 2xl:[99%] flex justify-center items-center overflow-hidden `}
+          required={required}
         />
         {isPassword &&
           (Icon ? (

@@ -5,7 +5,7 @@ import { LuUpload } from "react-icons/lu";
 import React, { useEffect, useState } from "react";
 import { useAxios } from "@/utils";
 import { endPoints } from "@/types/Api";
-import { setFile } from "../chat/data/api";
+import { setFile } from "../chat/[user]/data/api";
 import { useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { useRouter } from "next/navigation";

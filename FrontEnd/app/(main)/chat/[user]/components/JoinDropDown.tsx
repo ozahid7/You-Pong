@@ -18,47 +18,55 @@ import {
   UnBanMember,
   getMembers,
 } from "../data/api";
-import useSWR, { mutate } from "swr";
 
 interface Props {
   disable: string;
   user: Member;
   channel: Channel | null;
+  membersRefetch: any;
+  channelsRefetch: any;
+  mainChannelRefetch: any;
 }
 
-const JoinDropDown = ({ disable, user, channel }: Props) => {
+const JoinDropDown = ({
+  disable,
+  user,
+  channel,
+  membersRefetch,
+  channelsRefetch,
+  mainChannelRefetch,
+}: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
-  const fetchData_getMembers = async () => {
-    try {
-      const result = await getMembers(channel?.id_channel || "");
-      return result.object;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+
+  const HandleKick = async () => {
+    const kick = await KickMember(channel?.id_channel, user.user.id_user);
+    if (kick?.message === "Channel Updated Succefully") {
+      membersRefetch();
+      onClose();
+    } else console.error(kick?.message);
   };
 
-  const { error } = useSWR<Member[]>("/Users", fetchData_getMembers);
-
-  if (error) return <div>useSWR: Error found, Fetching data failed!</div>;
-
-  const HandleKick = () => {
-    KickMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
-  };
-
-  const HandleBan = () => {
+  const HandleBan = async () => {
+    let Ban = null;
     user.member_status !== "BANNED"
-      ? BanMember(channel?.id_channel, user.user.id_user)
-      : UnBanMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
+      ? (Ban = await BanMember(channel?.id_channel, user.user.id_user))
+      : (Ban = await UnBanMember(channel?.id_channel, user.user.id_user));
+    if (Ban)
+      if (Ban.message === "Channel Updated Succefully") {
+        membersRefetch();
+      } else console.error(Ban.message);
   };
 
-  const HandleAdmin = () => {
+  const HandleAdmin = async () => {
+    let admin = null;
     user.user_role === "MEMBER"
-      ? SetAdmin(channel?.id_channel, user.user.id_user)
-      : SetMember(channel?.id_channel, user.user.id_user);
-    mutate(fetchData_getMembers);
+      ? (admin = await SetAdmin(channel?.id_channel, user.user.id_user))
+      : (admin = await SetMember(channel?.id_channel, user.user.id_user));
+    if (admin?.message === "Channel Updated Succefully") {
+      membersRefetch();
+    } else console.error(admin?.message);
   };
+
   return (
     <Fragment>
       <Dropdown
@@ -105,6 +113,8 @@ const JoinDropDown = ({ disable, user, channel }: Props) => {
               user={user}
               channel={channel}
               onClose={onClose}
+              membersRefetch={membersRefetch}
+              channelsRefetch={mainChannelRefetch}
             ></MuteDropDown>
           </DropdownItem>
           <DropdownItem

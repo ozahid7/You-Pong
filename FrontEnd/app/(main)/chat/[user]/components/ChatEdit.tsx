@@ -15,45 +15,54 @@ import {
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
-import groups from "../../../../public/groups.svg";
+import groups from "../../../../../public/groups.svg";
 import Image from "next/image";
 import { InputGroup, InputGroupPass } from ".";
 import { Background, Submit } from "@/components";
-import { Channel, Member } from "@/types";
-import {
-  putData,
-  setData,
-  setFile,
-  getChannel,
-} from "@/app/(main)/chat/data/api";
-import { mutate } from "swr";
-import { User } from "@/types";
-import { fetchData_getChannels } from "./JoinModal";
+import { Channel, Member, User_Hero } from "@/types";
+import { putData, setData, setFile, getChannel } from "../data/api";
 
-var setDataObj: Channel = {
-  type: undefined || "",
-  name: undefined || "",
-  description: undefined,
-  avatar: undefined,
+export const getRandomNumber = () => {
+  const min = 20;
+  const max = 100;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 interface HomePage {
   channels: Channel;
   users: Member[];
+  MainUser: User_Hero;
+  channelsRefetch: any;
 }
 
-const ChatEdit = ({ channels, users }: HomePage) => {
+const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
+  var setDataObj: Channel = {
+    type: channels.type,
+    name: channels.name,
+    description: "",
+    avatar: channels.avatar,
+    hash: channels.hash,
+  };
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const confpassRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
-  const [members, setMembers] = useState<number>(0);
-  var m: number = 0;
-
   let imageUrl: any;
+  var result: any = undefined;
+  var disabled: boolean = false;
+
+  if (users)
+    users.map((member) => {
+      member.user.id_user === MainUser.uid
+        ? member.user_role === "OWNER"
+          ? (disabled = false)
+          : (disabled = true)
+        : "";
+    });
 
   if (file instanceof Blob || file instanceof File) {
     try {
@@ -67,22 +76,61 @@ const ChatEdit = ({ channels, users }: HomePage) => {
     // Fallback to channels.avatar or any other default image source if file is not a Blob or File
     imageUrl = channels.avatar;
   }
-  var result: any = undefined;
+
   const SendDataToLeader = async () => {
+    /// update avatar ///
     if (imgRef.current?.value !== "") {
       if (imgRef.current?.files)
         result = await setFile(imgRef.current.files[0]);
+      if (result) setDataObj.avatar = result;
+      else setDataObj.avatar = channels.avatar;
     }
+    //////////////////////
+
+    /// update name ///
     if (channels.name !== nameRef.current?.value)
-      setDataObj.name = nameRef.current?.value || "";
+      setDataObj.name = nameRef.current?.value;
+    else setDataObj.name = channels.name;
+    //////////////////////
+
+    /// update description ///
     if (channels.description !== descRef.current?.value)
       setDataObj.description = descRef.current?.value;
-    setDataObj.type = channels.type;
-    setDataObj.avatar = result;
+    else setDataObj.description = channels.description;
+    //////////////////////
+
+    /// update type ///
+    if (selected) setDataObj.type = selected;
+    //////////////////////
+
+    /// update password ///
+    if (selected === "PROTECTED") {
+      if (!passRef.current.value || !confpassRef.current.value) {
+        passRef.current.value = null;
+        confpassRef.current.value = null;
+        return;
+      } else if (passRef.current.value && confpassRef.current.value) {
+        if (passRef.current.value === confpassRef.current.value)
+          setDataObj.hash = passRef.current.value;
+        else {
+          console.error("Password is not identical...");
+          passRef.current.value = null;
+          confpassRef.current.value = null;
+          return;
+        }
+      }
+    }
+    //////////////////////
+    console.log(setDataObj);
     result = await putData(setDataObj, channels?.id_channel);
-    imageUrl = channels.avatar;
-    mutate(fetchData_getChannels);
-    onClose();
+    if (result?.message === "Channel Updated Succefully") {
+      console.log(result.message);
+      channelsRefetch();
+      onClose();
+    } else {
+      console.error(result?.message);
+      return;
+    }
   };
 
   const handleSelectionChange = (newSelection: string) => {
@@ -90,19 +138,23 @@ const ChatEdit = ({ channels, users }: HomePage) => {
     setDataObj.type = newSelection;
   };
 
-  useEffect(() => {
-    if (users)
-      users.map((obj) => {
-        obj.user.status === "ONLINE" ? (m += 1) : (m += 0);
+  const printOnline = () => {
+    var m: number = 0;
+
+    if (channels)
+      channels.users?.map((obj) => {
+        obj.status === "ONLINE" ? (m += 1) : (m += 0);
       });
-    setMembers(m);
-  }, [users]);
+
+    return m;
+  };
 
   return (
     <Fragment>
       <Button
         onPress={onOpen}
         className="rounded-none btn green_button"
+        isDisabled={disabled}
       >
         <div className="flex flex-row gap-2 w-fit h-fit">
           <IconContext.Provider
@@ -172,7 +224,7 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                           Members: {users.length}
                         </div>
                         <div className="flex font-archivo text-[#00993D]">
-                          Online: {members}
+                          Online: {printOnline()}
                         </div>
                       </div>
                     </div>
@@ -252,16 +304,20 @@ const ChatEdit = ({ channels, users }: HomePage) => {
                               customclass="w-full h-[3rem] self-center"
                             ></InputGroup>
                             <InputGroupPass
+                              ref={passRef}
                               text="New Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
+                              required={true}
                             ></InputGroupPass>
                             <InputGroupPass
+                              ref={confpassRef}
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
+                              required={true}
                             ></InputGroupPass>
                           </CardBody>
                         </Card>
