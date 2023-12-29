@@ -89,7 +89,7 @@ export class ChannelUpdateService {
       where: {
         id_channel_id_user: {
           id_channel: id_channel,
-          id_user: id_user,
+          id_user: id_friend,
         },
       },
       update: {
@@ -99,7 +99,7 @@ export class ChannelUpdateService {
       },
       create: {
         id_channel: id_channel,
-        id_user: id_user,
+        id_user: id_friend,
         user_role: 'MEMBER',
         lefted: false,
       },
@@ -117,11 +117,11 @@ export class ChannelUpdateService {
       include: { users: true, rooms: true },
       data: {
         users: {
-          connect: { id_user: id_user },
+          connect: { id_user: id_friend },
         },
         rooms: {
           connect: {
-            id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+            id_channel_id_user: { id_channel: id_channel, id_user: id_friend },
           },
         },
       },
