@@ -1073,18 +1073,25 @@ export class ChannelUpdateService {
       },
     });
     setTimeout(async () => {
-      await this.prisma.room_Chat.update({
+      const channel = await this.prisma.room_Chat.findUnique({
         where: {
-          id_channel_id_user: {
-            id_channel: channel.id_channel,
-            id_user: user.id_user,
-          },
-          lefted: false,
-        },
-        data: {
-          member_status: 'NONE',
+          id_channel_id_user: { id_channel: id_channel, id_user: id_user },
         },
       });
+      if (channel) {
+        await this.prisma.room_Chat.update({
+          where: {
+            id_channel_id_user: {
+              id_channel: channel.id_channel,
+              id_user: user.id_user,
+            },
+            lefted: false,
+          },
+          data: {
+            member_status: 'NONE',
+          },
+        });
+      }
     }, muteTime);
     if (!result)
       return {

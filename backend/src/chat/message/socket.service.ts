@@ -93,10 +93,10 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               (banned) => user.id_user === banned.id_user,
             ) &&
             !my_user.blocked_from.find(
-              (banned) => user.id_user === banned.id_user,
+              (blocked) => user.id_user === blocked.id_user,
             ) &&
             !my_user.blocked_user.find(
-              (banned) => user.id_user === banned.id_user,
+              (block) => user.id_user === block.id_user,
             )
           )
             return user;
