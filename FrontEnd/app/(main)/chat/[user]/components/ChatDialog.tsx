@@ -61,8 +61,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (data) {
       // Set the initial messages from the database //
       setMessages(data);
-      MessagesRefetch();
-      one = false;
+      // MessagesRefetch();
+      // one = false;
     }
   }, [data]);
 
@@ -71,7 +71,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
       });
-      MessagesRefetch();
+      // MessagesRefetch();
       one = true;
     }
   }, [one]);
