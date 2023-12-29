@@ -37,9 +37,8 @@ const ChatBubbleMain = ({ main, message }: Props) => {
           <div className="w-full h-fit">{main.username}</div>
         </div>
         <div
-          role="button"
           data-theme="mytheme"
-          className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+          className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] break-words "
         >
           {message?.content}
         </div>

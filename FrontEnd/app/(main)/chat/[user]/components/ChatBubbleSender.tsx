@@ -22,10 +22,7 @@ const ChatBubbleSender = ({ member, message }: Props) => {
 
   if (member) {
     return (
-      <div
-        className="chat chat-start p-1"
-        key={member.user?.id_user}
-      >
+      <div className="chat chat-start p-1">
         <div className="chat-image avatar">
           <div className="w-10 rounded-full">
             <Image
@@ -41,10 +38,8 @@ const ChatBubbleSender = ({ member, message }: Props) => {
         </div>
         <div className="w-full h-full dropdown dropdown-hover">
           <div
-            role="button"
-            tabIndex={0}
             data-theme="mytheme"
-            className="chat-bubble chat-bubble-primary text-palette-white w-fit max-w-[80%] overflow-hidden whitespace-pre-wrap"
+            className="chat-bubble chat-bubble-primary text-palette-white w-fit  max-w-[80%] break-words "
           >
             {message.content}
           </div>

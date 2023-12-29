@@ -9,7 +9,6 @@ import { fetchData_Channel, fetchData_getMembers } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
-import { generateRandomKey } from "./ChatDialog";
 import { useQuery } from "react-query";
 
 interface obj {

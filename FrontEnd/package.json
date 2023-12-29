@@ -44,6 +44,7 @@
         "supports-color": "^8.1.1",
         "tailwind-merge": "^2.0.0",
         "utf-8-validate": "^5.0.10",
+        "uuid": "^9.0.1",
         "zustand": "^4.4.7"
     },
     "devDependencies": {

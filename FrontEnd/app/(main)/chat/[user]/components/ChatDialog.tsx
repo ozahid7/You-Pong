@@ -12,6 +12,7 @@ import ChatBubbleSender from "./ChatBubbleSender";
 import { log } from "console";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   main: User_Hero;
@@ -19,17 +20,11 @@ interface Props {
   channel: Channel;
 }
 
-export const generateRandomKey = () => {
-  const timestamp = new Date().getTime();
-  const randomNumber = Math.floor(Math.random() * 10000) + 1;
-  return `${timestamp}-${randomNumber}`;
-};
-var one: boolean = false;
-
 const ChatDialog = ({ main, socket, channel }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
+  var one: boolean = false;
 
   const {
     data: Members,
@@ -97,7 +92,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           <ChatBubbleMain
             message={message}
             main={main}
-            key={generateRandomKey()}
+            key={uuidv4()}
           />
         );
       } else if (message.id_sender !== main.uid && Members) {
@@ -109,7 +104,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
           <ChatBubbleSender
             message={message}
             member={member[0] || null}
-            key={generateRandomKey()}
+            key={uuidv4()}
           />
         );
       }
@@ -119,7 +114,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   return (
     <Fragment>
       <div
-        className="flex flex-col w-full h-full overflow-auto my_scroll_green "
+        className="flex flex-col w-full h-full overflow-y-auto my_scroll_green "
         ref={scrollRef}
       >
         {messages &&
