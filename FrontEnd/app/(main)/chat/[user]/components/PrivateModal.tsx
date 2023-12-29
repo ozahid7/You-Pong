@@ -16,16 +16,13 @@ import { Background } from "../../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
-import {
-  fetchData_Channel,
-  fetchData_users,
-  joinPrivate,
-} from "../data/api";
+import { fetchData_Channel, fetchData_users, joinPrivate } from "../data/api";
 import { useQuery } from "react-query";
 
 interface Props {
-  MainUser: User_Hero | undefined;
-  Channel_: Channel | null;
+  MainUser: User_Hero;
+  Channel_: Channel;
+  Members: Member[];
   membersRefetch: any;
   channelsRefetch: any;
   mainChannelRefetch: any;
@@ -34,6 +31,7 @@ interface Props {
 const PrivateModal = ({
   MainUser,
   Channel_,
+  Members,
   membersRefetch,
   channelsRefetch,
   mainChannelRefetch,
@@ -62,8 +60,14 @@ const PrivateModal = ({
 
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
-    if (response.message === "Channel Updated Succefully") UsersRefetch();
-    else console.error(response.message);
+    if (response.message === "Channel Updated Succefully") {
+      UsersRefetch();
+      membersRefetch();
+    } else console.error(response.message);
+  };
+
+  const isUserInMembers = (user: User) => {
+    return !!Members.find((member) => member.user.id_user === user.id_user);
   };
 
   return (
@@ -120,7 +124,10 @@ const PrivateModal = ({
                   <tbody>
                     <>
                       {Users.map((user: User) => {
-                        if (user.id_user === MainUser?.uid) {
+                        if (
+                          user.id_user === MainUser?.uid ||
+                          isUserInMembers(user) !== false
+                        ) {
                           Infos.disabled = "btn-disabled";
                         } else Infos.disabled = "";
                         user.id_user === MainUser?.uid

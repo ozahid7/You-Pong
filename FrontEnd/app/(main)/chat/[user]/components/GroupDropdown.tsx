@@ -126,6 +126,7 @@ const GroupDropdown = ({
               channelsRefetch={channelsRefetch}
               mainChannelRefetch={mainChannelRefetch}
               Channel_={channels}
+              Members={Members}
             ></PrivateModal>
           </li>
         </ul>
