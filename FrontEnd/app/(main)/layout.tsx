@@ -16,13 +16,14 @@ function RootLayout({ children }: lyoutProps) {
 	return (
 		<UserContextProvider>
 			<main className="flex h-screen w-full background">
-				<SideBar />
-				<main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
-					<NavBar />
-					{children}
-					<MobileSideBar />
-					<InviteProvider />
-				</main>
+				<InviteProvider>
+					<SideBar />
+					<main className="flex flex-col min-h-[800px] h-auto overflow-y-auto my_scroll_orange items-center justify- w-full">
+						<NavBar />
+						{children}
+						<MobileSideBar />
+					</main>
+				</InviteProvider>
 			</main>
 		</UserContextProvider>
 	);

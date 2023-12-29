@@ -3,7 +3,6 @@ import { Map, CustomButton, Mode, MyDialog } from "@/components";
 import { myRoutes } from "@/const";
 import { inviteGame } from "@/utils/game";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { MdCancelPresentation } from "react-icons/md";
 import { Socket } from "socket.io-client";
 

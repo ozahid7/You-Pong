@@ -9,6 +9,7 @@ import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
+import { useGameContext } from "@/providers/InviteProvider";
 
 interface pageProps {
 	params: { user: string };
