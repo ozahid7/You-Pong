@@ -396,11 +396,26 @@ export class ChannelUpdateService {
           NOT: { user_role: 'OWNER' },
         },
       });
-      if (!newOwner)
+      if (!newOwner) {
+        const deleteMessages = await this.prisma.message.deleteMany({
+          where: { id_channel: id_channel },
+        });
+        const deleteRooms = await this.prisma.room_Chat.deleteMany({
+          where: { id_channel: id_channel },
+        });
+        const deleteChannel = await this.prisma.channel.delete({
+          where: { id_channel: id_channel },
+        });
+        if (!deleteChannel || !deleteMessages || !deleteRooms)
+          return {
+            message: "Can't delete the channel !",
+            Object: null,
+          };
         return {
           message: "Can't update a room chat !",
           Object: null,
         };
+      }
       const updatedRoom = await this.prisma.room_Chat.update({
         where: {
           name: newOwner.name,
