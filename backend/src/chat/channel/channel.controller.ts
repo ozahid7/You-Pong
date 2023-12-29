@@ -35,6 +35,19 @@ export class ChannelController {
     }
   }
 
+  //Get USERS
+  @UseGuards(AuthGuard('jwt'))
+  @Get('users')
+  async getUsers(@Req() req, @Query('id_channel') id_channel: string) {
+    try {
+      const id_user: string = req.user.sub;
+      const result = await this.channelService.getUsers(id_user, id_channel);
+      return result;
+    } catch (error) {
+      throw new HttpException('Failed to find users', 444);
+    }
+  }
+
   //Get
   @UseGuards(AuthGuard('jwt'))
   @Get('/myChannel/:id_channel')

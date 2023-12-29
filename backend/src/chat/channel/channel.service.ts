@@ -6,6 +6,64 @@ import { channelDto } from '../dto/channel.create.dto';
 export class ChannelService {
   constructor(private prisma: PrismaService) {}
 
+  //GET USERS
+  async getUsers(id_user: string, id_channel: string) {
+    const my_user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+      include: { blocked_user: true, blocked_from: true },
+    });
+    if (!my_user)
+      return {
+        message: 'No such User !',
+        Object: null,
+      };
+    const channel = await this.prisma.channel.findUnique({
+      where: {
+        id_channel: id_channel,
+      },
+      include: { users: true, bannedUsers: true },
+    });
+    if (!channel)
+      return {
+        message: 'No such channel !',
+        Object: null,
+      };
+
+    const allUsers = await this.prisma.user.findMany({
+      where: {
+        NOT: {
+          id_user: my_user.id_user,
+        },
+      },
+      include: { blocked_user: true, blocked_from: true, channels: true },
+    });
+
+    const users = await Promise.all(
+      allUsers.map((user) => {
+        if (
+          user.blocked_user.filter((block) => block.id_user === my_user.id_user)
+            .length !== 1 &&
+          user.blocked_from.filter((block) => block.id_user === my_user.id_user)
+            .length !== 1 &&
+          user.channels.filter((channel) => channel.id_channel === id_channel)
+            .length !== 1
+        )
+          return user;
+      }),
+    );
+    const result = users.filter((user) => user);
+    if (result.length === 0)
+      return {
+        message: 'There is no users to join !',
+        Object: null,
+      };
+
+    return {
+      message: 'Users founded',
+      Object: result,
+    };
+  }
+
   //GET MANY
   async getChannels(id_user: string) {
     const user = await this.prisma.user.findUnique({
