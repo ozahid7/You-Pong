@@ -12,7 +12,14 @@ import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 
-export const gameContext = createContext<inviteReturn | undefined>(undefined);
+interface gameContextProps {
+	data: inviteReturn;
+	setData: any;
+}
+
+export const gameContext = createContext<gameContextProps | undefined>(
+	undefined
+);
 
 function InviteProvider({ children }: { children: React.ReactNode }) {
 	const globalSocket = useGlobalSocket().globalSocket;
@@ -46,7 +53,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<gameContext.Provider value={data}>
+		<gameContext.Provider value={{ data, setData }}>
 			{children}
 			<ToastContainer />
 		</gameContext.Provider>

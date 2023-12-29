@@ -104,6 +104,9 @@ export default function game({ params }: pageProps) {
 							isOpen={showPlayerLoader}
 							showCounter={setShowCounter}
 							showLoader={setShowPlayerLoder}
+							avatar={user.data.avatar}
+							username={user.data.username}
+							level={user.data.level}
 						/>
 					)}
 				</MyContainer>
