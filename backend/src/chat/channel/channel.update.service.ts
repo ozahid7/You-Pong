@@ -32,6 +32,7 @@ export class ChannelUpdateService {
       where: {
         id_user: id_user,
       },
+      include: { blocked_from: true, blocked_user: true },
     });
     const friend = await this.prisma.user.findUnique({
       where: {
@@ -43,10 +44,30 @@ export class ChannelUpdateService {
         message: 'No such User !',
         Object: null,
       };
+    const room = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+        },
+        user_role: 'OWNER',
+      },
+    });
+    if (!room)
+      return {
+        message: "You can't invite users to this channel !",
+        Object: null,
+      };
     const joined = channel.users.some((user) => {
       return user.id_user === id_friend;
     });
     const banned = channel.bannedUsers.some((user) => {
+      return user.id_user === id_friend;
+    });
+    const blocked = user.blocked_user.some((user) => {
+      return user.id_user === id_friend;
+    });
+    const blockedFrom = user.blocked_from.some((user) => {
       return user.id_user === id_friend;
     });
     if (joined)
@@ -59,7 +80,12 @@ export class ChannelUpdateService {
         message: 'The user is banned !',
         Object: null,
       };
-    const room = await this.prisma.room_Chat.upsert({
+    if (blocked || blockedFrom)
+      return {
+        message: 'The user is blocked !',
+        Object: null,
+      };
+    const new_room = await this.prisma.room_Chat.upsert({
       where: {
         id_channel_id_user: {
           id_channel: id_channel,
@@ -78,7 +104,7 @@ export class ChannelUpdateService {
         lefted: false,
       },
     });
-    if (!room)
+    if (!new_room)
       return {
         message: "Can't upsert a room chat !",
         Object: null,
