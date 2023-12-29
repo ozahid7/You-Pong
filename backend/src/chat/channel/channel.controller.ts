@@ -133,11 +133,14 @@ export class ChannelController {
   @UseGuards(AuthGuard('jwt'))
   @Put('/update/')
   async putChannel(
+    @Req() req,
     @Query('id_channel') id_channel: string,
     @Body() channel: channelDto,
   ) {
     try {
+      const id_user: string = req.user.sub;
       const result = await this.channelUpdateService.putchannel(
+        id_user,
         id_channel,
         channel,
       );

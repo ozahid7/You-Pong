@@ -107,7 +107,7 @@ export class ChannelUpdateService {
   }
 
   //PUT
-  async putchannel(id_channel: string, channel: channelDto) {
+  async putchannel(id_user: string, id_channel: string, channel: channelDto) {
     const chan_name = await this.prisma.channel.findUnique({
       where: {
         id_channel: id_channel,
@@ -118,22 +118,43 @@ export class ChannelUpdateService {
         message: 'No channel to set',
         Object: null,
       };
+    const room = await this.prisma.room_Chat.findUnique({
+      where: {
+        id_channel_id_user: {
+          id_channel: chan_name.id_channel,
+          id_user: id_user,
+        },
+        user_role: 'OWNER',
+      },
+    });
+    if (!room) {
+      return {
+        message: "You can't update this channel !",
+        Object: null,
+      };
+    }
     let updated: channelDto = {
-      name: channel.name,
-      description: channel.description,
-      avatar: channel.avatar,
-      hash: channel.hash,
-      type: channel.type,
+      name: chan_name.name,
+      description: chan_name.description,
+      avatar: chan_name.avatar,
+      hash: chan_name.hash,
+      type: chan_name.type,
     };
-    if (channel.name !== undefined) updated.name = channel.name;
-    if (channel.description != undefined)
+    if (channel.name !== undefined && chan_name.name !== channel.name)
+      updated.name = channel.name;
+    if (
+      channel.description !== undefined &&
+      chan_name.description !== channel.description
+    )
       updated.description = channel.description;
-    if (channel.avatar != undefined) updated.avatar = channel.avatar;
-    if (channel.hash != undefined) updated.hash = channel.hash;
-    if (channel.type != undefined) {
+    if (channel.avatar !== undefined && chan_name.avatar !== channel.avatar)
+      updated.avatar = channel.avatar;
+    if (channel.hash !== undefined && chan_name.hash !== channel.hash)
+      updated.hash = channel.hash;
+    if (channel.type !== undefined && chan_name.type !== channel.type) {
       if (
         channel.type === 'PROTECTED' &&
-        (!channel.hash || channel.hash !== chan_name.hash)
+        (!channel.hash || channel.hash === undefined)
       )
         return {
           message: 'Password Obligatoire !',
