@@ -35,7 +35,10 @@ const GroupDropdown = ({
     if (success?.message === "Channel Updated Succefully") {
       channelsRefetch();
       joinRefetch();
-    } else console.error(success?.message);
+    } else {
+      console.error(success?.message);
+      channelsRefetch();
+    }
   };
 
   const { data: MainUser } = useQuery<User_Hero, Error>(
