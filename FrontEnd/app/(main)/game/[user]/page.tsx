@@ -101,6 +101,7 @@ export default function game({ params }: pageProps) {
 					/>
 					{showPlayerLoader && (
 						<PlayerLoader
+							path={params.user}
 							isOpen={showPlayerLoader}
 							showCounter={setShowCounter}
 							showLoader={setShowPlayerLoder}

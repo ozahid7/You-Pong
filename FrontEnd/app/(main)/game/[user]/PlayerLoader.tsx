@@ -24,6 +24,7 @@ const PlayerLoader = (props: {
 	opponent_uid: string;
 	my_id: string;
 	socket: Socket;
+	path: string;
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
@@ -55,7 +56,16 @@ const PlayerLoader = (props: {
 			},
 			props.socket
 		);
+		router.push(myRoutes.dashboard);
 	};
+	useEffect(() => {
+		console.log(props.path);
+		if (props.path !== "me") {
+			setTimeout(() => {
+				onClose();
+			}, 12000);
+		}
+	}, []);
 
 	return (
 		<MyDialog
@@ -72,7 +82,6 @@ const PlayerLoader = (props: {
 				size={25}
 				onClick={() => {
 					onClose();
-					router.push(myRoutes.dashboard);
 				}}
 				className="absolute z-10 text-gray-400  cursor-pointer  top-0 right-0  rounded-sm"
 			/>

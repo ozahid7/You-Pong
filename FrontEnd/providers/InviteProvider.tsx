@@ -34,7 +34,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 			globalSocket.on("invitation", (obj: inviteReturn) => {
 				console.log("from invitation", obj);
 				setData(obj);
-				notify(obj.username, obj.avatar, true, 5000, "", obj.info);
+				notify(obj.username, obj.avatar, true, 10000, "", obj.info);
 			});
 
 		if (globalSocket.listeners("accepted").length === 0)
@@ -52,7 +52,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 					obj.avatar,
 					false,
 					3000,
-					obj.username.slice(0, 7) + " canceled the game ",
+					obj.username.slice(0, 7) + " canceled the game 😔",
 					obj.info
 				);
 				router.push(myRoutes.dashboard);
@@ -64,7 +64,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				toast.update("toast_id", {
 					render: () => (
 						<div className={style}>
-							{obj.username.slice(0, 7)} has canceled the game
+							{obj.username.slice(0, 7)} has canceled the game 😔
 						</div>
 					),
 					type: toast.TYPE.INFO,

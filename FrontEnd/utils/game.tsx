@@ -35,9 +35,12 @@ export const notify = (
 				backgroundColor: "#EB6440",
 			},
 			icon: false,
-			closeButton: true,
+			closeButton: false,
 			closeOnClick: false,
-			draggable: true,
+
+			draggable: false,
+			pauseOnFocusLoss: false,
+			pauseOnHover: false,
 			progress: undefined,
 			theme: "light",
 		}
