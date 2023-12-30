@@ -29,6 +29,7 @@ const PlayerLoader = (props: {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
 	const otheruser = useGameContext();
+	const accepted = otheruser.accepted;
 	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
 
@@ -59,10 +60,11 @@ const PlayerLoader = (props: {
 		router.push(myRoutes.dashboard);
 	};
 	useEffect(() => {
-		console.log(props.path);
 		if (props.path !== "me") {
 			setTimeout(() => {
-				onClose();
+				console.log("accepted = ", accepted);
+				if (!accepted) onClose();
+				otheruser.setAccepted(false);
 			}, 12000);
 		}
 	}, []);

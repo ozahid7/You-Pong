@@ -15,6 +15,8 @@ import { myRoutes } from "@/const";
 interface gameContextProps {
 	data: inviteReturn;
 	setData: any;
+	accepted: boolean;
+	setAccepted: any;
 }
 
 export const gameContext = createContext<gameContextProps | undefined>(
@@ -24,6 +26,7 @@ export const gameContext = createContext<gameContextProps | undefined>(
 function InviteProvider({ children }: { children: React.ReactNode }) {
 	const globalSocket = useGlobalSocket().globalSocket;
 	const [data, setData] = useState<inviteReturn>();
+	const [accepted, setAccepted] = useState(false);
 	const router = useRouter();
 	const style =
 		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
@@ -40,6 +43,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("accepted").length === 0)
 			globalSocket.on("accepted", (obj: inviteReturn) => {
 				setData(obj);
+				setAccepted(true);
 				console.log("from accepted ", obj);
 			});
 
@@ -75,7 +79,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<gameContext.Provider value={{ data, setData }}>
+		<gameContext.Provider value={{ data, setData, accepted, setAccepted }}>
 			{children}
 			<ToastContainer />
 		</gameContext.Provider>

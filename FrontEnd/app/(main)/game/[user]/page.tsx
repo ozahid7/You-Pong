@@ -32,16 +32,15 @@ export default function game({ params }: pageProps) {
 	useEffect(() => {
 		if (params.user != "me" && params.user.length < 12) {
 			setShowGameOption(false);
-			const mode = params.user.slice(0, 4);
-			const map = params.user.slice(4);
-			console.log("mode = ", mode, "map = ", map);
-			if (mode !== "easy" && mode !== "hard")
+			const mod = params.user.slice(0, 4);
+			const mp = params.user.slice(4);
+			if (mod !== "easy" && mod !== "hard")
 				router.push(myRoutes.dashboard);
-			if (map !== "classic" && map !== "orange" && map !== "green")
+			if (mp !== "classic" && mp !== "orange" && mp !== "green")
 				router.push(myRoutes.dashboard);
 
-			setMode(mode);
-			setMap(map);
+			setMode(mod);
+			setMap(mp);
 			setShowPlayerLoder(true);
 		}
 		setSubmit(true);
@@ -66,7 +65,7 @@ export default function game({ params }: pageProps) {
 				window.removeEventListener("resize", updateSize);
 			};
 		}
-	}, [width, height, submit]);
+	}, [width, height, submit, map, mode]);
 
 	return (
 		<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
