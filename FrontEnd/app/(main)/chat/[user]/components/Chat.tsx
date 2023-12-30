@@ -27,7 +27,6 @@ const Chat = ({
   index,
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState("");
 
   const {
     data: channel,
@@ -49,8 +48,6 @@ const Chat = ({
       )
     : null;
 
-  // if (retChannel) console.error(retChannel.name);
-
   const user: User | null = channel
     ? channel.users.find((user) => user.id_user !== main.uid)
     : null;
@@ -60,17 +57,12 @@ const Chat = ({
       const message = {
         id_channel: channel.id_channel,
         id_sender: main.uid,
-        content: inputValue.trim(),
+        content: messageRef?.current.value.trim(),
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
       one = true;
     }
-  };
-
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-    one = false;
   };
 
   const handleEnterPress = (e: any) => {
@@ -118,7 +110,6 @@ const Chat = ({
               type="text"
               placeholder="Type a message here ..."
               className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
-              onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}
             />

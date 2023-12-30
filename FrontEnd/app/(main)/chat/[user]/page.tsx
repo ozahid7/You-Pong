@@ -181,7 +181,7 @@ const Chats = ({ params }) => {
                         <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="flex h-full w-full justify-center overflow-x-hidden my_scroll_green scrollbar-hide "
+                            className="flex h-full w-full justify-center overflow-x-hidden"
                           >
                             <div className="flex w-full h-full justify-start items-center flex-col">
                               <MyTabs

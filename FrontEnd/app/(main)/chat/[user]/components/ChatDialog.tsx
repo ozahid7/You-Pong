@@ -114,7 +114,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   return (
     <Fragment>
       <div
-        className="flex flex-col w-full h-full overflow-y-auto my_scroll_green "
+        className="flex flex-col w-full h-full overflow-y-auto my_scroll_green scrollbar-hide"
         ref={scrollRef}
       >
         {messages &&
