@@ -17,15 +17,19 @@ const PlayerLoader = (props: {
 	const [isMatched, setIsmatched] = useState(false);
 
 	const otheruser = useGameContext();
+	const [userInfo, setUserInfo] = useState<inviteReturn>();
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
 			setIsmatched(true);
-			props.showLoader(false);
-			props.showCounter(true);
+			setTimeout(() => {
+				props.showLoader(false);
+				props.showCounter(true);
+			}, 2000);
+			setUserInfo(otheruser.data);
 			otheruser.setData(undefined);
 		}
-	}, [otheruser, isMatched]);
+	}, [otheruser, otheruser.data]);
 
 	return (
 		<MyDialog
@@ -47,7 +51,7 @@ const PlayerLoader = (props: {
 							height={500}
 						/>
 						<div className="flex w-full items-center flex-col">
-							<span className="font-body font-bold text-cardtitle text-xl md:text-2xl lg:text-3xl">
+							<span className="font-body font-bold text-palette-green text-xl md:text-2xl lg:text-3xl">
 								{props.username.slice(0, 7)}
 							</span>
 							<span className="font-roboto text-cardtitle text-md">
@@ -65,17 +69,17 @@ const PlayerLoader = (props: {
 							<div className="flex-1 flex flex-col justify-center items-center w-full">
 								<img
 									className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
-									src={otheruser.data.avatar}
+									src={userInfo.avatar}
 									alt=""
 									width={500}
 									height={500}
 								/>
 								<div className="flex w-full items-center flex-col">
-									<span className="font-body font-bold text-cardtitle text-xl md:text-2xl lg:text-3xl">
-										{otheruser.data.username.slice(0, 7)}
+									<span className="font-body font-bold text-palette-green text-xl md:text-2xl lg:text-3xl">
+										{userInfo.username.slice(0, 7)}
 									</span>
 									<span className="font-roboto text-cardtitle text-md">
-										Lvl: 0
+										Lvl: {userInfo.level}
 									</span>
 								</div>
 							</div>

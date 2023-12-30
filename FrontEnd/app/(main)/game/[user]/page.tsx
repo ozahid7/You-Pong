@@ -42,7 +42,7 @@ export default function game({ params }: pageProps) {
 
 			setMode(mode);
 			setMap(map);
-			setShowCounter(true);
+			setShowPlayerLoder(true);
 		}
 		setSubmit(true);
 	}, []);

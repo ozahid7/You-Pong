@@ -31,7 +31,8 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("invitation").length === 0)
 			globalSocket.on("invitation", (obj: inviteReturn) => {
 				console.log("from invitation", obj);
-				notify(obj.username, obj.avatar, obj.info);
+				setData(obj);
+				notify(obj.username, obj.avatar, true, 5000, "", obj.info);
 			});
 
 		if (globalSocket.listeners("accepted").length === 0)

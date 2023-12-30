@@ -16,6 +16,7 @@ import { BsController } from "react-icons/bs";
 import useOtherUser from "@/api/useOtherUser";
 import { UseQueryResult } from "@tanstack/react-query";
 import { UserInfo } from "@/types/Api";
+import { notify } from "@/utils/game";
 
 const PlayerCard = (props: {
 	username: string;
@@ -184,11 +185,20 @@ const PlayerCard = (props: {
 									strokeWidth={0.5}
 									className={`${directIconStyle} sm:bottom-[117px] bottom-24 text-palette-green`}
 									onClick={() => {
-										router.push(
-											myRoutes.game +
-												"/" +
-												otheruser.data.uid
-										);
+										if (otheruser.data.status === "INGAME")
+											notify(
+												props.username,
+												props.avatar,
+												false,
+												2000,
+												"Player Already In Game"
+											);
+										else
+											router.push(
+												myRoutes.game +
+													"/" +
+													otheruser.data.uid
+											);
 									}}
 								/>
 							</>
