@@ -23,10 +23,10 @@ export const notify = (
 			message={message}
 		/>,
 		{
+			toastId: "toast_id",
 			position: "top-center",
 			autoClose: duration,
 			hideProgressBar: false,
-			closeOnClick: true,
 			style: {
 				height: "120px",
 				width: "280px",

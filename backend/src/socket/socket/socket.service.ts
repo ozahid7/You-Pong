@@ -433,11 +433,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             // status: 'ONLINE',
           },
         });
-        console.log('before user check');
         if (my_user && otherUser) {
-          console.log('info game = ', info);
           if (this.privateGame.find((game) => game.id_game)) {
-            console.log('user checked');
             this.removePrivateGame(info.id_sender, info.id_game);
             this.server.to(receiver.id_user).emit('canceled', {
               info,
