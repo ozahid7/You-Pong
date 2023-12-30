@@ -410,6 +410,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() info: infoGame,
   ) {
     try {
+      console.log('hello from cancel');
       const sender = this.users.find((user) => user.id_socket === socket.id);
       const receiver = this.users.find(
         (user) => user.id_user === info.id_receiver,
@@ -432,8 +433,11 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             // status: 'ONLINE',
           },
         });
+        console.log('before user check');
         if (my_user && otherUser) {
-          if (this.privateGame.find((game) => game.id_game === info.id_game)) {
+          console.log('info game = ', info);
+          if (this.privateGame.find((game) => game.id_game)) {
+            console.log('user checked');
             this.removePrivateGame(info.id_sender, info.id_game);
             this.server.to(receiver.id_user).emit('canceled', {
               info,

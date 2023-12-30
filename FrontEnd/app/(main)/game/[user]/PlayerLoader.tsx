@@ -5,6 +5,12 @@ import { useGameContext } from "@/providers/InviteProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { setData } from "../../chat/data/api";
+import { useRouter } from "next/navigation";
+import { myRoutes } from "@/const";
+import { MdCancelPresentation } from "react-icons/md";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { Socket } from "socket.io-client";
+import { cancelGame } from "@/utils/game";
 
 const PlayerLoader = (props: {
 	isOpen: boolean;
@@ -13,10 +19,16 @@ const PlayerLoader = (props: {
 	avatar: string;
 	username: string;
 	level: number;
+	map: string;
+	mode: string;
+	opponent_uid: string;
+	my_id: string;
+	socket: Socket;
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
-
+	const router = useRouter();
 	const otheruser = useGameContext();
+	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
 
 	useEffect(() => {
@@ -31,15 +43,39 @@ const PlayerLoader = (props: {
 		}
 	}, [otheruser, otheruser.data]);
 
+	const onClose = () => {
+		cancelGame(
+			{
+				id_game: "",
+				id_sender: props.my_id,
+				id_receiver: props.opponent_uid,
+				socket_player: props.socket.id,
+				map: props.map,
+				mode: props.mode,
+			},
+			props.socket
+		);
+	};
+
 	return (
 		<MyDialog
 			isOpen={props.isOpen}
-			closemodal={() => {}}
+			closemodal={() => {
+				onClose();
+			}}
 			withCorner={true}
 			withClose={true}
 			customClass="absolute h-[40%] lg:h-[50%] min-h-[400px] w-[80%] max-w-[800px]"
 			conClass="bg-palette-grey border-4 rounded-md border-palette-white "
 		>
+			<MdCancelPresentation
+				size={25}
+				onClick={() => {
+					onClose();
+					router.push(myRoutes.dashboard);
+				}}
+				className="absolute z-10 text-gray-400  cursor-pointer  top-0 right-0  rounded-sm"
+			/>
 			<div className="flex items-center justify-center flex-col h-full">
 				<div className="w-full flex flex-col h:flex-row h-full">
 					<div className="flex-1 flex flex-col justify-center items-center w-full">

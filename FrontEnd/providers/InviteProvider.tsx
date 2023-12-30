@@ -42,14 +42,22 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 			});
 
 		if (globalSocket.listeners("refused").length === 0)
-			globalSocket.on("refused", (obj) => {
+			globalSocket.on("refused", (obj: inviteReturn) => {
 				console.log("refused obj = ", obj);
+				notify(
+					obj.username,
+					obj.avatar,
+					false,
+					3000,
+					obj.username.slice(0, 7) + " has canceled you ",
+					obj.info
+				);
+				router.push(myRoutes.dashboard);
 			});
 
 		if (globalSocket.listeners("canceled").length === 0)
 			globalSocket.on("canceled", (obj: inviteReturn) => {
 				console.log("from cancled = ", obj);
-				router.push(myRoutes.game + "/" + obj.info.mode + obj.info.map);
 			});
 	}, []);
 

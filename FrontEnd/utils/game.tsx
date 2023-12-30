@@ -61,3 +61,8 @@ export const acceptGame = (
 export const refuseGame = (info: infoGame, socket: Socket) => {
 	socket.emit("refuse", info);
 };
+
+export const cancelGame = (info: infoGame, socket: Socket) => {
+	console.log("from cancel");
+	socket.emit("cancel", info);
+};

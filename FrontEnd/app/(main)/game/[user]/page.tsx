@@ -107,6 +107,11 @@ export default function game({ params }: pageProps) {
 							avatar={user.data.avatar}
 							username={user.data.username}
 							level={user.data.level}
+							map={map}
+							mode={mode}
+							opponent_uid={params.user}
+							my_id={user.data.uid}
+							socket={globalSocket}
 						/>
 					)}
 				</MyContainer>

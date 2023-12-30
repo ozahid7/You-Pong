@@ -62,7 +62,7 @@ const MyToast = (props: {
 					</span>
 				</>
 			) : (
-				<span className="text-[16px] drop-shadow-sm font-orbitron text-palette-orange">
+				<span className="text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange">
 					{props.message} 😞
 				</span>
 			)}
