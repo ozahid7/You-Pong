@@ -69,7 +69,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 					),
 					type: toast.TYPE.INFO,
 					autoClose: 5000,
-					toastId: "hi",
+					toastId: "cancel_toast",
 				});
 			});
 	}, []);

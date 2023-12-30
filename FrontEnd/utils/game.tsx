@@ -36,6 +36,7 @@ export const notify = (
 			},
 			icon: false,
 			closeButton: true,
+			closeOnClick: false,
 			draggable: true,
 			progress: undefined,
 			theme: "light",
@@ -54,15 +55,19 @@ export const acceptGame = (
 	router: AppRouterInstance
 ) => {
 	console.log("from accept ", info.id_game);
+	toast.dismiss();
 	socket.emit("accept", info);
 	router.push(myRoutes.game + "/" + info.mode + info.map);
 };
 
 export const refuseGame = (info: infoGame, socket: Socket) => {
+	console.log("from refuse");
+	toast.dismiss();
 	socket.emit("refuse", info);
 };
 
 export const cancelGame = (info: infoGame, socket: Socket) => {
 	console.log("from cancel");
+
 	socket.emit("cancel", info);
 };
