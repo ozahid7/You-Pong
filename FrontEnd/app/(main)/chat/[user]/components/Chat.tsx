@@ -53,7 +53,8 @@ const Chat = ({
     : null;
 
   const handleButtonClick = () => {
-    if (!one) {
+    if (messageRef?.current.value === "") return;
+    if (!one && socket) {
       const message = {
         id_channel: channel.id_channel,
         id_sender: main.uid,

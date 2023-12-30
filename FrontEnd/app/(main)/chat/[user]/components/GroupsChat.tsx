@@ -91,6 +91,7 @@ const GroupsChat = ({
     }
 
   const handleButtonClick = () => {
+    if (messageRef?.current.value === "") return;
     if (!one && socket) {
       var message = {
         id_channel: channels.id_channel,
