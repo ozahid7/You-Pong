@@ -121,11 +121,11 @@ const MembersEdit = ({
                           <tr key={user.user.username}>
                             <th>
                               <div className={`avatar ${Infos.status}`}>
-                                <div className={`w-[50px] ${Infos.selection}`}>
+                                <div className={`w-[60px] ${Infos.selection}`}>
                                   <Image
                                     src={user.user.avatar || groups}
-                                    width={50}
-                                    height={50}
+                                    width={60}
+                                    height={60}
                                     className="border-[2px] border-palette-green p-[0.5]"
                                     alt="image"
                                   />
@@ -150,7 +150,7 @@ const MembersEdit = ({
                                 </div>
                               )}
                             </td>
-                            <td className="flex flex-row h-full justify-center items-center">
+                            <td>
                               {Infos.join ? (
                                 <JoinDropDown
                                   disable={Infos.disabled}

@@ -123,7 +123,7 @@ const PrivateModal = ({
                   </thead>
                   <tbody>
                     <>
-                      {Users &&
+                      {Users ? (
                         Users.map((user: User) => {
                           if (
                             user.id_user === MainUser?.uid ||
@@ -141,9 +141,7 @@ const PrivateModal = ({
                           return (
                             <tr key={user.username}>
                               <th>
-                                <div
-                                  className={`avatar ${Infos.status}`}
-                                >
+                                <div className={`avatar ${Infos.status}`}>
                                   <div
                                     className={`w-[60px] ${Infos.selection} mask mask-squircle`}
                                   >
@@ -198,7 +196,17 @@ const PrivateModal = ({
                               </td>
                             </tr>
                           );
-                        })}
+                        })
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan={100}
+                            className="text-center font-body text-[20px] font-[600]"
+                          >
+                            No users available
+                          </td>
+                        </tr>
+                      )}
                     </>
                   </tbody>
                 </table>

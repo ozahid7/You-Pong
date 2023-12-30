@@ -77,7 +77,7 @@ export default function JoinModal({ refetch, channels }) {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Join a group
+                Join a channel
               </ModalHeader>
               <ModalBody className="w-[95%] max-h-[600px] overflow-auto scrollbar-hide rounded-md">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -93,7 +93,7 @@ export default function JoinModal({ refetch, channels }) {
                       </thead>
                       <tbody>
                         <>
-                          {channels.data &&
+                          {channels.data ? (
                             channels.data
                               .filter(
                                 (obj: any) =>
@@ -101,7 +101,7 @@ export default function JoinModal({ refetch, channels }) {
                                   obj.type !== "PRIVATE"
                               )
                               .map((obj: any, i) => (
-                                <tr key={i} >
+                                <tr key={i}>
                                   <td>
                                     <div className="w-[60px] avatar ">
                                       <Image
@@ -135,7 +135,7 @@ export default function JoinModal({ refetch, channels }) {
                                       )}
                                     </div>
                                   </td>
-                                  <td >
+                                  <td>
                                     {obj.type === "PROTECTED" ? (
                                       <PasswordModal
                                         obj={obj}
@@ -154,7 +154,17 @@ export default function JoinModal({ refetch, channels }) {
                                     )}
                                   </td>
                                 </tr>
-                              ))}
+                              ))
+                          ) : (
+                            <tr>
+                              <td
+                                colSpan={100}
+                                className="text-center font-body text-[20px] font-[600]"
+                              >
+                                No channels available
+                              </td>
+                            </tr>
+                          )}
                         </>
                       </tbody>
                     </table>
