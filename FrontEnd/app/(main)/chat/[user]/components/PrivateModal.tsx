@@ -112,7 +112,7 @@ const PrivateModal = ({
                 Users
               </ModalHeader>
               <ModalBody className="w-[90%]">
-                <table className="table table-lg">
+                <table className="table table-lg ">
                   <thead>
                     <tr className="text-[20px] font-body shadow-sm">
                       <th></th>
@@ -141,14 +141,16 @@ const PrivateModal = ({
                           return (
                             <tr key={user.username}>
                               <th>
-                                <div className={`avatar ${Infos.status}`}>
+                                <div
+                                  className={`avatar ${Infos.status}`}
+                                >
                                   <div
-                                    className={`w-[50px] ${Infos.selection}`}
+                                    className={`w-[60px] ${Infos.selection} mask mask-squircle`}
                                   >
                                     <Image
                                       src={user.avatar || groups}
-                                      width={50}
-                                      height={50}
+                                      width={60}
+                                      height={60}
                                       className="border-[2px] border-palette-green p-[0.5]"
                                       alt="image"
                                     />
@@ -169,7 +171,7 @@ const PrivateModal = ({
                                   </div>
                                 )}
                               </td>
-                              <td className="flex flex-row h-full justify-center items-center">
+                              <td>
                                 {Infos.join ? (
                                   <Button
                                     size="lg"

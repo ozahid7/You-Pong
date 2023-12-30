@@ -101,21 +101,23 @@ export default function JoinModal({ refetch, channels }) {
                                   obj.type !== "PRIVATE"
                               )
                               .map((obj: any, i) => (
-                                <tr key={i}>
+                                <tr key={i} >
                                   <td>
-                                    <Image
-                                      src={obj.avatar || groups}
-                                      width={60}
-                                      height={60}
-                                      className="border-[2px] border-palette-green p-[0.5]"
-                                      alt="image"
-                                    />
+                                    <div className="w-[60px] avatar ">
+                                      <Image
+                                        src={obj.avatar || groups}
+                                        width={60}
+                                        height={60}
+                                        className="border-[2px] border-palette-green p-[0.5]"
+                                        alt="image"
+                                      />
+                                    </div>
                                   </td>
                                   <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
                                     {obj.name}
                                   </td>
-                                  <td className="font-body font-[500] text-[16px] text-[#424242]">
-                                    <div className="font-body font-[500] text-[18px] text-[#424242]">
+                                  <td className="font-body font-[500] text-[#424242]">
+                                    <div className="font-body font-[500] text-[18px] text-[#424242] w-fit">
                                       {obj.type === "PUBLIC" ? (
                                         <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
                                           <div className="text-[20px]">
@@ -133,7 +135,7 @@ export default function JoinModal({ refetch, channels }) {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="flex flex-row">
+                                  <td >
                                     {obj.type === "PROTECTED" ? (
                                       <PasswordModal
                                         obj={obj}
