@@ -45,7 +45,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       this.addUser(id_user, socket.id);
     }
     console.log(this.users);
-    socket.on('receiveMessage', this.receiveMessage);
+    socket.join(id_user);
   }
   handleDisconnect(socket: Socket) {
     this.removeUser(socket.id);
@@ -60,7 +60,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const sender = this.users.find((user) => user.id_socket === socket.id);
     const receiver = this.users.find((user) => user.id_user === info.id_sender);
-    const bannedUser = [];
     if (receiver !== undefined && sender !== undefined) {
       const channel = await this.prisma.channel.findUnique({
         where: {
@@ -87,22 +86,21 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             member_status: 'NONE',
           },
         });
-        let users = channel.users.map(async (user) => {
+        if (!room) return;
+        let users = channel.users.map((user) => {
           if (
-            !channel.bannedUsers.find(
-              (banned) => user.id_user === banned.id_user,
+            !my_user.blocked_from.some(
+              (blocked) => blocked.id_user === user.id_user,
             ) &&
-            !my_user.blocked_from.find(
-              (blocked) => user.id_user === blocked.id_user,
-            ) &&
-            !my_user.blocked_user.find(
-              (block) => user.id_user === block.id_user,
+            !my_user.blocked_user.some(
+              (blocked) => blocked.id_user === user.id_user,
             )
           )
             return user;
         });
-        const filtredUsers = await Promise.all(users.filter((user) => user));
-        if (!room) return;
+        const filtredUsers = await Promise.all(
+          users.filter((user) => user && user !== undefined),
+        );
         const message = await this.prisma.message.create({
           data: {
             content: info.content,
@@ -111,13 +109,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             id_channel: info.id_channel,
           },
         });
-        let us = this.users.map((user) => {
+        let us = filtredUsers.map((filtred) => {
           if (
-            filtredUsers.filter((filtred) => {
-              filtred && filtred.id_user === user.id_user;
-            })
+            this.users.filter((user) => {
+              filtred.id_user === user.id_user;
+            }) !== undefined
           )
-            return user;
+            return filtred;
         });
         const result = await Promise.all(us.filter((user) => user));
         if (message) {
@@ -125,17 +123,10 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           info.id_sender = sender.id_user;
           info.created_at = message.created_at;
           result.map((user) => {
-            if (user)
-              this.server.to(user.id_socket).emit('receiveMessage', info);
+            if (user) this.server.to(user.id_user).emit('receiveMessage', info);
           });
         }
       }
     }
-  }
-  @SubscribeMessage('receiveMessage')
-  async receiveMessage(socket: Socket, info: infoType) {
-    const user = this.users.filter((user) => user.id_socket === socket.id);
-    console.log('user => ', user);
-    console.log('info => ', info);
   }
 }
