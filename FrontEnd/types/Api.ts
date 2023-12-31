@@ -17,7 +17,7 @@ export type tfaEnable = {
 };
 
 export interface Achievement {
-	achievement: { title: string; description: string };
+	achievement: { title: string; description: string; avatar: string };
 	is_owned: boolean;
 }
 
