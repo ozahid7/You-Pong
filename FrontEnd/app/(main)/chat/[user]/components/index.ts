@@ -3,7 +3,7 @@ import ChatDropdown from "./ChatDropdown";
 import ChatEdit from "./ChatEdit";
 import GroupDropdown from "./GroupDropdown";
 import GroupsChat from "./GroupsChat";
-import GroupsModal from "./GroupsModal";
+import CreateModal from "./CreateModal";
 import InputGroup from "./InputGroup";
 import InputGroupPass from "./InputGroupPass";
 import JoinModal from "./JoinModal";
@@ -29,7 +29,7 @@ export {
   ChatEdit,
   GroupDropdown,
   GroupsChat,
-  GroupsModal,
+  CreateModal,
   InputGroup,
   InputGroupPass,
   JoinModal,

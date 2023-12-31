@@ -12,7 +12,7 @@ import {
   MiniChat,
   Chat,
   GroupsChat,
-  GroupsModal,
+  CreateModal,
   JoinModal,
   SearchChat,
   MiniChatDirect,
@@ -243,7 +243,7 @@ const Chats = ({ params }) => {
                                 key="groups"
                               />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
-                                <GroupsModal refetch={refetch} />
+                                <CreateModal refetch={refetch} />
                                 <JoinModal
                                   refetch={refetch}
                                   channels={JoinChannels}

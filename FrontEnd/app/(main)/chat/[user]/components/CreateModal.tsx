@@ -28,7 +28,7 @@ export var setDataObj: Channel = {
   avatar: null || "",
 };
 
-export default function GroupsModal({ refetch }) {
+export default function CreateModal({ refetch }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [selected, setSelected] = useState<string>("PUBLIC");
@@ -119,6 +119,7 @@ export default function GroupsModal({ refetch }) {
   return (
     <Fragment>
       <Link
+        role="button"
         onPress={onOpen}
         className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
       >

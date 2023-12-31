@@ -6,33 +6,15 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Link,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../../components";
 import { Channel, QueryProp } from "@/types";
-import {
-  fetchData_getChannels,
-  getChannels,
-  joinChannel,
-  userChannels,
-} from "../data/api";
-import {
-  IoLockClosedOutline,
-  IoLockOpenOutline,
-  IoEnterOutline,
-} from "react-icons/io5";
+import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import groups from "../../../../../public/groups.svg";
-import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
-import { useQuery } from "react-query";
+import { PasswordModal, SimpleJoinButton } from ".";
 
 interface Props {
   refetch: any;
@@ -53,6 +35,7 @@ export default function JoinModal({ refetch, channels }) {
   return (
     <Fragment>
       <Link
+        role="button"
         onPress={onOpen}
         className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
       >
