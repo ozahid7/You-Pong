@@ -1,30 +1,30 @@
 "use client";
 import { CustomButton, MyDialog, MyInput } from "@/components";
 import { LuUpload } from "react-icons/lu";
-
 import React, { useEffect, useState } from "react";
 import { useAxios } from "@/utils";
-import { endPoints } from "@/types/Api";
-import { setFile } from "../chat/[user]/data/api";
-import { useQueryClient } from "@tanstack/react-query";
+import { UserInfo, endPoints } from "@/types/Api";
+import { setFile } from "../chat/data/api";
+import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import { useUser } from "@/api/getHero";
-import axios from "axios";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { Socket } from "socket.io-client";
 
 interface ProfileSettingsProps {
 	isOpen: boolean;
 	setIsOpen: any;
 	closeModal: any;
+	user: UseQueryResult<UserInfo, Error>;
 }
 
 const ProfileSettings = ({
 	isOpen,
 	setIsOpen,
 	closeModal,
+	user,
 }: ProfileSettingsProps) => {
-	const user = useUser(true);
 	const { username, avatar, isIntra } = user.data;
 	const router = useRouter();
 	const queryClient = useQueryClient();
@@ -42,6 +42,11 @@ const ProfileSettings = ({
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 	const [message, setMessage] = useState("Required");
 	const [loader, setLoder] = useState(false);
+	const ctx = useGlobalSocket();
+	let globalSocket: Socket;
+	if (ctx !== undefined) {
+		globalSocket = ctx.globalSocket;
+	}
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +88,10 @@ const ProfileSettings = ({
 				console.log("update response = ", res);
 				user.refetch();
 				closeModal(false);
+				if (user.data.createdAt === user.data.updatedAt) {
+					console.log("emit from update");
+					globalSocket.emit("online");
+				}
 				router.push(myRoutes.dashboard);
 			} catch (error) {
 				console.log("error = ", error);

@@ -14,7 +14,7 @@ export class FileService {
     if (filename == 'avatar.jpeg') {
       pathname = `./DefaultImages/avatar.jpeg`;
     }
-    if (filename == 'Badge.ong') {
+    if (filename == 'Badge.png') {
       pathname = `./DefaultImages/Badge.png`;
     }
     res.setHeader('Content-Disposition', `attachement; filename=${pathname}`);

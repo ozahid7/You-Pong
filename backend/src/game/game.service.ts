@@ -9,24 +9,24 @@ export class GameService {
   async getMatchs(id_user: string) {
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
-      include: { matchs_player: true, matchs_oppenent: true },
+      include: { matchs_player: true, matchs_opponent: true },
     });
     if (!user) {
       return {
         message: 'No such user !',
-        object: null,
+        Object: null,
       };
     }
     const allMatchs = await this.prisma.match_History.findMany({
       where: {
-        OR: [{ id_player: user.id_user }, { id_oppenent: user.id_user }],
+        OR: [{ id_player: user.id_user }, { id_opponent: user.id_user }],
       },
       orderBy: { updated_at: 'desc' },
     });
     if (allMatchs.length === 0) {
       return {
         message: 'No match yet !',
-        object: null,
+        Object: [],
       };
     }
     const matchs = await Promise.all(
@@ -34,19 +34,19 @@ export class GameService {
         if (id_user === match.id_player) {
           return {
             id_player: match.id_player,
-            id_oppenent: match.id_oppenent,
+            id_opponent: match.id_opponent,
             player_score: match.player_score,
-            oppenent_score: match.oppenent_score,
-            win: match.player_score > match.oppenent_score ? true : false,
+            opponent_score: match.opponent_score,
+            win: match.player_score > match.opponent_score ? true : false,
             updated_at: match.updated_at,
           };
         } else {
           return {
-            id_player: match.id_oppenent,
-            id_oppenent: match.id_player,
-            player_score: match.oppenent_score,
-            oppenent_score: match.player_score,
-            win: match.player_score < match.oppenent_score ? true : false,
+            id_player: match.id_opponent,
+            id_opponent: match.id_player,
+            player_score: match.opponent_score,
+            opponent_score: match.player_score,
+            win: match.player_score < match.opponent_score ? true : false,
             updated_at: match.updated_at,
           };
         }
@@ -55,14 +55,16 @@ export class GameService {
     const match_history = await Promise.all(
       matchs.map(async (match) => {
         const user = await this.prisma.user.findUnique({
-          where: { id_user: match.id_oppenent },
+          where: { id_user: match.id_opponent },
         });
         if (user) {
           return {
+            uid: user.id_user,
             username: user.username,
             avatar: user.avatar,
+            status: user.status,
             player_score: match.player_score,
-            oppenent_score: match.oppenent_score,
+            opponent_score: match.opponent_score,
             win: match.win,
           };
         }
@@ -72,7 +74,7 @@ export class GameService {
     if (!result)
       return {
         message: 'There is no matchs !',
-        Object: null,
+        Object: [],
       };
     return {
       message: 'Matchs founded',

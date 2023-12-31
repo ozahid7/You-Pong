@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -7,8 +7,9 @@ import OverviewCard from "./OverviewCard";
 import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
-import ProfileSettings from "../../settings/ProfileSettings";
 import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface pageProps {
 	params: { profile: string };
@@ -18,7 +19,10 @@ const page = ({ params }: pageProps) => {
 	const { data, isLoading, isFetching } = useOtherUser(params.profile);
 	const user = useUser(true);
 	const isMe = !data || data === undefined ? true : false;
+	const querQlient = useQueryClient();
 	const toShow = !isMe ? data : user.data;
+	const { globalSocket } = useGlobalSocket();
+	querQlient.invalidateQueries({ queryKey: ["matchs", user.data.uid] });
 	const {
 		username,
 		avatar,
@@ -28,12 +32,13 @@ const page = ({ params }: pageProps) => {
 		wins,
 		loses,
 		status,
-		isPending,
+		user_relation,
 		uid,
 		createdAt,
 		updatedAt,
 	} = toShow;
-	if (isLoading || isFetching) return <Loader />;
+
+	if (isLoading || (!data && !user.data)) return <Loader />;
 	else
 		return (
 			<div className="w-full 2xl:w-[92%] xl:min-h-[90vh] pb-24 h-auto  flex flex-col xl:flex-row">
@@ -45,10 +50,11 @@ const page = ({ params }: pageProps) => {
 								username={username}
 								rank={rank}
 								level={level}
-								isPending={isPending}
+								user_relation={user_relation}
 								avatar={avatar}
 								status={status}
 								isMe={isMe}
+								user={user}
 							/>
 							<OverviewCard wins={wins} loses={loses} />
 							<NewGameCard />
@@ -59,7 +65,7 @@ const page = ({ params }: pageProps) => {
 					</div>
 				</div>
 				<div className="w-full flex justify-center min-h-[500px] items-center xl:w-[34%]">
-					<HistoryCard matchs={matchs} />
+					<HistoryCard uid={uid} me={user.data.username} />
 				</div>
 			</div>
 		);

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 
 const IntraButton = ({type}: { type: string }) => {
 

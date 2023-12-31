@@ -1,7 +1,7 @@
 "use client";
 import React, { useLayoutEffect, useState } from "react";
 import { useEffect } from "react";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const withAuth = (Component: any) => {
     return (props: any) => {

@@ -1,4 +1,10 @@
-import { Controller, Get, HttpException, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { GameService } from './game.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -9,9 +15,8 @@ export class GameController {
   //GET MANY
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  async getMatchs(@Req() req) {
+  async getMatchs(@Query('id_user') id_user: string) {
     try {
-      const id_user: string = req.user.sub;
       const result = await this.gameService.getMatchs(id_user);
       return result;
     } catch (error) {
