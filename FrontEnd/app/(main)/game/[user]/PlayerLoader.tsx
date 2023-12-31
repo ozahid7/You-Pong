@@ -25,6 +25,7 @@ const PlayerLoader = (props: {
 	game_id: string;
 	socket: Socket;
 	path: string;
+	setotheruser: any;
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
@@ -41,6 +42,10 @@ const PlayerLoader = (props: {
 				props.showCounter(true);
 			}, 2000);
 			setUserInfo(otheruser.data);
+			props.setotheruser({
+				avatar: otheruser.data.avatar,
+				username: otheruser.data.username,
+			});
 			otheruser.setData(undefined);
 		}
 	}, [otheruser, otheruser.data]);

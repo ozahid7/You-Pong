@@ -10,6 +10,9 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useGameContext } from "@/providers/InviteProvider";
+import useOtherUser from "@/api/useOtherUser";
+import { avatar } from "@nextui-org/theme";
+import { OtherUser } from "@/utils/game";
 
 interface pageProps {
 	params: { user: string };
@@ -28,6 +31,10 @@ export default function game({ params }: pageProps) {
 	const { globalSocket } = useGlobalSocket();
 	const [showGameOption, setShowGameOption] = useState(true);
 	const [submit, setSubmit] = useState(false);
+	const [otherUser, setOtherUser] = useState<OtherUser>({
+		username: undefined,
+		avatar: undefined,
+	});
 
 	useEffect(() => {
 		if (params.user != "me" && params.user.length < 12) {
@@ -72,7 +79,14 @@ export default function game({ params }: pageProps) {
 				<MyContainer>
 					<div className="flex flex-col items-center space-y-2 w-full h-full">
 						<div className="flex  justify-center w-full min-h-[60px] h-[7.5%]">
-							<ScoreCard />
+							{otherUser.avatar !== undefined && (
+								<ScoreCard
+									username={user.data.username}
+									avatar={user.data.avatar}
+									otheravatar={otherUser.avatar}
+									otherusername={otherUser.username}
+								/>
+							)}
 						</div>
 						<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[92%] rounded-md shadow-xl ">
 							<div
@@ -113,6 +127,7 @@ export default function game({ params }: pageProps) {
 							my_id={user.data.uid}
 							socket={globalSocket}
 							game_id={game_id}
+							setotheruser={setOtherUser}
 						/>
 					)}
 				</MyContainer>

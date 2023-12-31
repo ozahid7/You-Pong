@@ -74,3 +74,9 @@ export const cancelGame = (info: infoGame, socket: Socket) => {
 
 	socket.emit("cancel", info);
 };
+
+///types
+export interface OtherUser {
+	avatar: string;
+	username: string;
+}
