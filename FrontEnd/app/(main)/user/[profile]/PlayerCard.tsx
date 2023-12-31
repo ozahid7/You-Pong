@@ -98,6 +98,7 @@ const PlayerCard = (props: {
 			onClick={() => {
 				Remove.mutate();
 				setIcon(addIcon);
+				otheruser.refetch();
 			}}
 			size={100}
 			className={iconsStyle}
@@ -108,6 +109,7 @@ const PlayerCard = (props: {
 			onClick={() => {
 				Add.mutate();
 				setIcon(pendingIcon);
+				otheruser.refetch();
 			}}
 			size={100}
 			className={iconsStyle}
@@ -119,6 +121,7 @@ const PlayerCard = (props: {
 			onClick={() => {
 				Remove.mutate();
 				setIcon(addIcon);
+				otheruser.refetch();
 			}}
 			size={100}
 			className={iconsStyle}
@@ -163,6 +166,7 @@ const PlayerCard = (props: {
 								onClick={() => {
 									Block.mutate();
 									router.push(myRoutes.dashboard);
+									otheruser.refetch();
 								}}
 								size={100}
 								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-red-600 cursor-pointer"

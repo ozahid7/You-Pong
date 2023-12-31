@@ -12,15 +12,13 @@ const SearchBar = (props: { FriendsList: searchUsers }) => {
 	useEffect(() => {
 		setFriendArr(
 			props.FriendsList?.filter((user) =>
-				user.username
-					.toLowerCase()
-					.includes(Input.toLowerCase())
+				user.username.toLowerCase().includes(Input.toLowerCase())
 			)
 		);
 	}, [Input]);
 
 	return (
-		<Combobox  >
+		<Combobox>
 			<div className="flex flex-col h-full  relative justify-center w-full max-w-[220px] sm:max-h-[60px] ">
 				<div className="search_input w-full p-[2px] min-h-[40px] flex justify-center items-center">
 					<div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
@@ -47,12 +45,22 @@ const SearchBar = (props: { FriendsList: searchUsers }) => {
 					leaveFrom="transform scale-100 opacity-100"
 					leaveTo="transform scale-95 opacity-0"
 				>
-					<Combobox.Options hidden={Input === ''} className="bg-white max-h-[400px] overflow-y-auto my_scroll_green  min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute">
+					<Combobox.Options
+						onMouseUp={() => {
+							setInput("");
+						}}
+						hidden={Input === ""}
+						className="bg-white max-h-[400px] overflow-y-auto my_scroll_green  min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute"
+					>
 						{FriendArr?.map((person, index) => (
 							<Combobox.Option
 								className=""
 								key={index}
 								value={person}
+								onClick={() => {
+									console.log("first");
+									setInput("");
+								}}
 							>
 								<Link
 									href={"/user/" + person.username}
