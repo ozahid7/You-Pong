@@ -35,7 +35,7 @@ const page = ({ params }: pageProps) => {
 		updatedAt,
 	} = toShow;
 
-	if (!data && !user.data) return <Loader />;
+	if (isLoading || (!data && !user.data)) return <Loader />;
 	else
 		return (
 			<div className="w-full 2xl:w-[92%] xl:min-h-[90vh] pb-24 h-auto  flex flex-col xl:flex-row">
