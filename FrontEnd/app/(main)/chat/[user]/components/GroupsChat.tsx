@@ -22,8 +22,6 @@ interface obj {
   data: Channel[];
 }
 
-var one: boolean = false;
-
 const GroupsChat = ({
   channels,
   socket,
@@ -92,7 +90,7 @@ const GroupsChat = ({
 
   const handleButtonClick = () => {
     if (messageRef?.current.value === "") return;
-    if (!one && socket) {
+    if (socket) {
       var message = {
         id_channel: channels.id_channel,
         id_sender: MainUser.uid,
@@ -101,20 +99,13 @@ const GroupsChat = ({
       socket.emit("newMessage", message);
       messageRef.current.value = null;
       message = null;
-      one = true;
     }
   };
-
-  // const handleInputChange = (e: any) => {
-  //   setInputValue(e.target.value);
-  //   one = false;
-  // };
 
   const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
-      one = false;
     }
   };
 

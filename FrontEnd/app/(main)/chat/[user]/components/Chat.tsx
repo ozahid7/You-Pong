@@ -15,7 +15,6 @@ interface HomePage {
   index: number;
 }
 
-var one: boolean = false;
 var nameOne: boolean = false;
 
 const Chat = ({
@@ -55,7 +54,7 @@ const Chat = ({
 
   const handleButtonClick = () => {
     if (messageRef?.current.value === "") return;
-    if (!one && socket) {
+    if (socket) {
       const message = {
         id_channel: channel.id_channel,
         id_sender: main.uid,
@@ -63,7 +62,6 @@ const Chat = ({
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
-      one = true;
     }
   };
 
