@@ -5,10 +5,8 @@ import FriendBanner from "./FriendBanner";
 import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
-import { useQuery } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { MyContext } from "@/providers/UserContextProvider";
-import { FriendArr, FriendsReturn, user } from "@/types/Api";
+import { user } from "@/types/Api";
 
 const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
   const { accepted, blocked, pending } = props.friends.data;

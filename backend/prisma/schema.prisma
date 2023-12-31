@@ -97,7 +97,7 @@ model User {
 	friendship_friend Friendship[] @relation("friendship_friend")
 	friendship_user Friendship[] @relation("friendship_user")
 	matchs_player Match_History[] @relation("matchs_player")
-	matchs_oppenent Match_History[] @relation("matchs_oppenent")
+	matchs_opponent Match_History[] @relation("matchs_opponent")
 	achievements Achievement[]
 	@@map("user")
 }
@@ -153,10 +153,10 @@ model Match_History {
 	id_match String @id @default(uuid())
 	id_player String
 	player User @relation("matchs_player", fields: [id_player], references: [id_user])
-	id_oppenent String
-	oppenent User @relation("matchs_oppenent", fields: [id_oppenent], references: [id_user])
+	id_opponent String
+	opponent User @relation("matchs_opponent", fields: [id_opponent], references: [id_user])
 	player_score Int? @default(3)
-	oppenent_score Int? @default(0)
+	opponent_score Int? @default(0)
 	created_at DateTime @default(now())
 	updated_at DateTime @updatedAt
 }
@@ -179,4 +179,6 @@ model Achievement {
 	description String
 	avatar String
 	users User[]
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
 }

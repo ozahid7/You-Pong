@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CustomButton, MyDialog } from "..";
 import { useAxios } from "@/utils";
-import { redirect, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { endPoints, tfaSendCodeData } from "@/types/Api";
 import { myRoutes } from "@/const";
 import { useQueryClient } from "@tanstack/react-query";

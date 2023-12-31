@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { CustomButton, IntraButton, MyCard } from "..";
 import { MdCancelPresentation } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 

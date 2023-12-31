@@ -5,6 +5,8 @@ import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { IoGameControllerOutline } from "react-icons/io5";
+import { QueryCache, useQueryClient } from "@tanstack/react-query";
+
 import {
 	LuLayoutDashboard,
 	LuUsers,
@@ -12,8 +14,9 @@ import {
 	LuSettings,
 	LuLogOut,
 } from "react-icons/lu";
-import { QueryCache, QueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const RenderSideBarElements = (index: number, link: string, name: string) => {
 	const path = usePathname();
@@ -54,12 +57,13 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 		</div>
 	);
 };
-const query = new QueryClient();
 
 const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true);
 	const { username, avatar } = user.data;
+	const { globalSocket } = useGlobalSocket();
+	const query = useQueryClient();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -68,9 +72,10 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
+				query.removeQueries();
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
-				query.removeQueries({queryKey: ['user']})
+				globalSocket.emit("offline");
 				router.push("/");
 			})
 			.catch((e) => {
@@ -80,7 +85,7 @@ const SideBar = () => {
 
 	return (
 		<aside
-			className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-2 border-[#D6E4E5]`}
+			className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-y-2 border-r-2 border-[#D6E4E5]`}
 		>
 			{/* top part */}
 
@@ -108,7 +113,7 @@ const SideBar = () => {
 					{RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
 					{RenderSideBarElements(1, myRoutes.friends, "Friends")}
 					{RenderSideBarElements(2, myRoutes.chat, "Messages")}
-					{RenderSideBarElements(3, myRoutes.game, "Game")}
+					{RenderSideBarElements(3, myRoutes.gameme, "Game")}
 					{RenderSideBarElements(4, myRoutes.settings, "Settings")}
 				</div>
 				{/* bottom part */}

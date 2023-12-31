@@ -122,6 +122,9 @@ export class UserService {
   // create a user
   async create(obj: any) {
     try {
+      let rank = 0;
+      const users = await this.prisma.user.findMany();
+      if (users) rank = users.length + 1;
       const newUser = await this.prisma.user.create({
         data: {
           username: await this.generateUser(obj.username),
@@ -130,7 +133,8 @@ export class UserService {
           lastname: obj.familyName,
           firstname: obj.givenName,
           avatar: obj.avatar,
-          rank: this.rank,
+          rank: rank,
+          // rank: this.rank,
         },
       });
       this.rank++;
@@ -166,7 +170,7 @@ export class UserService {
         achievements: true,
         blocked_from: true,
         blocked_user: true,
-        matchs_oppenent: true,
+        matchs_opponent: true,
         matchs_player: true,
       },
     });
@@ -179,7 +183,7 @@ export class UserService {
         (user) => user.id_user === id_user && user.state === 'PENDING',
       ) ||
         user.friendship_user.find(
-          (user) => user.id_user === id_user && user.state === 'PENDING',
+          (user) => user.id_friend === id_user && user.state === 'PENDING',
         ))
     )
       user_relation = relation.PENDING;
@@ -190,7 +194,7 @@ export class UserService {
         (user) => user.id_user === id_user && user.state === 'ACCEPTED',
       ) ||
         user.friendship_user.find(
-          (user) => user.id_user === id_user && user.state === 'ACCEPTED',
+          (user) => user.id_friend === id_user && user.state === 'ACCEPTED',
         ))
     )
       user_relation = relation.ACCEPTED;
@@ -219,7 +223,7 @@ export class UserService {
       status: user.status,
       channels: user.channels,
       isIntra: user.hash === null ? true : false,
-      matchs_oppenent: user.matchs_oppenent,
+      matchs_opponent: user.matchs_opponent,
       matchs_player: user.matchs_player,
       achievements: user.achievements,
       createdAt: user.created_at,

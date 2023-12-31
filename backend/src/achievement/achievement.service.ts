@@ -13,15 +13,16 @@ export class AchievementService {
     if (!user)
       return {
         message: 'No such User !',
-        object: null,
+        Object: null,
       };
     const achievements = await this.prisma.achievement.findMany({
       include: { users: true },
+      orderBy: { updated_at: 'desc' },
     });
     if (!achievements)
       return {
         message: 'No such Achievements !',
-        object: null,
+        Object: null,
       };
     const result = await Promise.all(
       achievements.map((achievement) => {
@@ -36,11 +37,11 @@ export class AchievementService {
     if (!result)
       return {
         message: 'Failed to get owned achievements !',
-        object: null,
+        Object: null,
       };
     return {
       message: 'Achievements founded Successfully !',
-      object: result,
+      Object: result,
     };
   }
 }

@@ -17,20 +17,28 @@ export type tfaEnable = {
 };
 
 export interface Achievement {
-	achievement: { title: string; description: string };
+	achievement: { title: string; description: string; avatar: string };
 	is_owned: boolean;
 }
 
 export type achievementReturn = {
 	message: string;
-	object: Achievement[];
+	Object: Achievement[];
+};
+
+export type matchReturn = {
+	message: string;
+	Object: match[];
 };
 
 export interface match {
 	avatar: string;
-	user: string;
-	wins: string | "0";
-	loses: string | "0";
+	username: string;
+	player_score: string;
+	opponent_score: string;
+	win: boolean;
+	status: string;
+	uid: string;
 }
 
 export type UserInfo = {
@@ -40,9 +48,9 @@ export type UserInfo = {
 	loses: number;
 	rank: number;
 	uid: string;
+	user_relation: number;
 	tfaStatus: boolean;
 	username: string;
-	isPending: boolean;
 	createdAt: string;
 	updatedAt: string;
 	status: string;
@@ -59,11 +67,11 @@ export type UserToShow = {
 	avatar: string;
 	username: string;
 	level: number;
+	user_relation: number;
 	rank: number;
 	wins: number;
 	loses: number;
 	uid: string;
-	isPending: boolean;
 	status: string;
 	tfaStatus: boolean;
 	achievements: Achievement[];
@@ -86,6 +94,7 @@ export const endPoints = {
 	getFriend: "friend",
 	getFile: "upload",
 	getAchiv: "/achievement",
+	getMatchs: "/game",
 	updateInfo: "user/update",
 };
 

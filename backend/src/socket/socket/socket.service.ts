@@ -37,7 +37,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     id_game: string;
     id_player: string;
     socket_player: string;
-    id_oppenent: string;
+    id_opponent: string;
     map: map;
     mode: mode;
   }[] = [];
@@ -65,7 +65,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       id_player,
       map,
       mode,
-      id_oppenent: null,
+      id_opponent: null,
       socket_player,
     });
   }
@@ -97,12 +97,12 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && my_user !== undefined) {
-          const user = await this.prisma.user.update({
+          const user = await this.prisma.user.updateMany({
             where: { id_user: my_user.id_user },
             data: { status: 'ONLINE' },
           });
           if (user) {
-            console.log('ONLINE');
+            console.log('ONLINE ,');
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -128,7 +128,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && my_user !== undefined) {
           if (duplicate === 1) {
-            const user = await this.prisma.user.update({
+            const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
               data: { status: 'OFFLINE' },
             });
@@ -140,7 +140,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               });
             }
           } else if (sender.inGame) {
-            const user = await this.prisma.user.update({
+            const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
               data: { status: 'ONLINE' },
             });
@@ -173,7 +173,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && my_user !== undefined) {
-          const user = await this.prisma.user.update({
+          const user = await this.prisma.user.updateMany({
             where: { id_user: my_user.id_user },
             data: { status: 'INGAME' },
           });
@@ -203,7 +203,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && my_user !== undefined) {
-          const user = await this.prisma.user.update({
+          const user = await this.prisma.user.updateMany({
             where: { id_user: my_user.id_user },
             data: { status: 'ONLINE' },
           });
@@ -236,7 +236,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           if (user.id_user === sender.id_user) duplicate++;
         });
         if (my_user && my_user !== undefined && duplicate === 1) {
-          const user = await this.prisma.user.update({
+          const user = await this.prisma.user.updateMany({
             where: { id_user: my_user.id_user },
             data: { status: 'OFFLINE' },
           });
@@ -279,12 +279,11 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user) {
-          info.id_game = new Date() + info.id_sender + info.id_receiver;
           info.socket_player = sender.id_socket;
           this.addPrivateGame(
-            sender.id_socket,
             info.id_game,
             info.id_sender,
+            sender.id_socket,
             info.map,
             info.mode,
           );
@@ -334,7 +333,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             const game = await this.prisma.match_History.create({
               data: {
                 id_player: my_user.id_user,
-                id_oppenent: otherUser.id_user,
+                id_opponent: otherUser.id_user,
               },
             });
             if (game) {
@@ -342,6 +341,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
                 info,
                 username: my_user.username,
                 avatar: my_user.avatar,
+                level: my_user.level,
                 id_match: game.id_match,
               });
             }
@@ -409,6 +409,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() info: infoGame,
   ) {
     try {
+      console.log('hello from cancel');
       const sender = this.users.find((user) => user.id_socket === socket.id);
       const receiver = this.users.find(
         (user) => user.id_user === info.id_receiver,
@@ -432,6 +433,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && otherUser) {
+          console.log('game id = ', info.id_game);
+          console.log('game = ', this.privateGame);
           if (this.privateGame.find((game) => game.id_game === info.id_game)) {
             this.removePrivateGame(info.id_sender, info.id_game);
             this.server.to(receiver.id_user).emit('canceled', {
