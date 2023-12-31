@@ -271,7 +271,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         sender &&
         sender !== undefined &&
         receiver &&
-        receiver !== undefined
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
       ) {
         const my_user = await this.prisma.user.findUnique({
           where: {
@@ -313,18 +314,17 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         sender &&
         sender !== undefined &&
         receiver &&
-        receiver !== undefined
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
       ) {
         const my_user = await this.prisma.user.findUnique({
           where: {
             id_user: sender.id_user,
-            // status: 'ONLINE',
           },
         });
         const otherUser = await this.prisma.user.findUnique({
           where: {
             id_user: receiver.id_user,
-            // status: 'ONLINE',
           },
         });
         if (my_user && otherUser) {
@@ -373,18 +373,17 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         sender &&
         sender !== undefined &&
         receiver &&
-        receiver !== undefined
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
       ) {
         const my_user = await this.prisma.user.findUnique({
           where: {
             id_user: sender.id_user,
-            // status: 'ONLINE',
           },
         });
         const otherUser = await this.prisma.user.findUnique({
           where: {
             id_user: receiver.id_user,
-            // status: 'ONLINE',
           },
         });
         if (my_user && otherUser) {
@@ -418,23 +417,20 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         sender &&
         sender !== undefined &&
         receiver &&
-        receiver !== undefined
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
       ) {
         const my_user = await this.prisma.user.findUnique({
           where: {
             id_user: sender.id_user,
-            // status: 'ONLINE',
           },
         });
         const otherUser = await this.prisma.user.findUnique({
           where: {
             id_user: receiver.id_user,
-            // status: 'ONLINE',
           },
         });
         if (my_user && otherUser) {
-          console.log('game id = ', info.id_game);
-          console.log('game = ', this.privateGame);
           if (this.privateGame.find((game) => game.id_game === info.id_game)) {
             this.removePrivateGame(info.id_sender, info.id_game);
             this.server.to(receiver.id_user).emit('canceled', {
