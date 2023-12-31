@@ -279,7 +279,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user) {
-          info.id_game = new Date() + info.id_sender + info.id_receiver;
           info.socket_player = sender.id_socket;
           this.addPrivateGame(
             info.id_game,
@@ -434,7 +433,9 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && otherUser) {
-          if (this.privateGame.find((game) => game.id_game)) {
+          console.log('game id = ', info.id_game);
+          console.log('game = ', this.privateGame);
+          if (this.privateGame.find((game) => game.id_game === info.id_game)) {
             this.removePrivateGame(info.id_sender, info.id_game);
             this.server.to(receiver.id_user).emit('canceled', {
               info,

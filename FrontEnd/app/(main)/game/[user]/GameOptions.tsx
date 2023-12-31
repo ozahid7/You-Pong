@@ -3,6 +3,7 @@ import { Map, CustomButton, Mode, MyDialog } from "@/components";
 import { myRoutes } from "@/const";
 import { inviteGame } from "@/utils/game";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { MdCancelPresentation } from "react-icons/md";
 import { Socket } from "socket.io-client";
 
@@ -17,8 +18,13 @@ export default function GameSettings(props: {
 	opponent_uid?: string;
 	socket?: Socket;
 	my_id: string;
+	game_id: string;
 }) {
 	const router = useRouter();
+
+	useEffect(() => {
+		console.log("id game from game setting = ", props.game_id);
+	}, []);
 
 	return (
 		<>
@@ -72,7 +78,7 @@ export default function GameSettings(props: {
 								handleclick={() => {
 									inviteGame(
 										{
-											id_game: "",
+											id_game: props.game_id,
 											id_sender: props.my_id,
 											id_receiver: props.opponent_uid,
 											socket_player: props.socket.id,

@@ -67,6 +67,9 @@ export default function game({ params }: pageProps) {
 		}
 	}, [width, height, submit, map, mode]);
 
+	const [game_id, SetGameId] = useState(
+		new Date() + user.data.uid + params.user
+	);
 	return (
 		<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
 			<div className="flex w-[88%] h-[90%]">
@@ -97,6 +100,7 @@ export default function game({ params }: pageProps) {
 						opponent_uid={params.user}
 						my_id={user.data.uid}
 						socket={globalSocket}
+						game_id={game_id}
 					/>
 					{showPlayerLoader && (
 						<PlayerLoader
@@ -112,6 +116,7 @@ export default function game({ params }: pageProps) {
 							opponent_uid={params.user}
 							my_id={user.data.uid}
 							socket={globalSocket}
+							game_id={game_id}
 						/>
 					)}
 				</MyContainer>

@@ -5,6 +5,7 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { infoGame } from "@/types/game";
 import { acceptGame, refuseGame } from "@/utils/game";
 import { useRouter } from "next/navigation";
+import { gameContext, useGameContext } from "@/providers/InviteProvider";
 
 const MyToast = (props: {
 	userName: string;
@@ -15,6 +16,7 @@ const MyToast = (props: {
 }) => {
 	const router = useRouter();
 	const { globalSocket } = useGlobalSocket();
+	const { setAccepted } = useGameContext();
 
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
@@ -42,6 +44,7 @@ const MyToast = (props: {
 						</div>
 						<button
 							onClick={() => {
+								setAccepted(true);
 								acceptGame(props.info, globalSocket, router);
 							}}
 							className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm"
