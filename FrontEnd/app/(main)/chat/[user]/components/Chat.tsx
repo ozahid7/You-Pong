@@ -27,7 +27,7 @@ const Chat = ({
   index,
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState("");
+  var text: string;
 
   const {
     data: channel,
@@ -49,28 +49,22 @@ const Chat = ({
       )
     : null;
 
-  // if (retChannel) console.error(retChannel.name);
-
   const user: User | null = channel
     ? channel.users.find((user) => user.id_user !== main.uid)
     : null;
 
   const handleButtonClick = () => {
-    if (!one) {
+    if (messageRef?.current.value === "") return;
+    if (!one && socket) {
       const message = {
         id_channel: channel.id_channel,
         id_sender: main.uid,
-        content: inputValue.trim(),
+        content: messageRef?.current.value.trim(),
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
       one = true;
     }
-  };
-
-  const handleInputChange = (e: any) => {
-    setInputValue(e.target.value);
-    one = false;
   };
 
   const handleEnterPress = (e: any) => {
@@ -79,6 +73,10 @@ const Chat = ({
       handleButtonClick();
     }
   };
+
+  user?.status === "ONLINE"
+    ? (text = "text-[#00993D]")
+    : (text = "text-[#686868]");
 
   return (
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">
@@ -95,6 +93,11 @@ const Chat = ({
             <div className="flex flex-col">
               <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
                 {user?.username}
+              </div>
+              <div
+                className={`${text} font-[700] text-[15px] font-orbitron sm_:block xs:hidden`}
+              >
+                {user?.status}
               </div>
             </div>
           </div>
@@ -118,7 +121,6 @@ const Chat = ({
               type="text"
               placeholder="Type a message here ..."
               className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
-              onChange={handleInputChange}
               onKeyDown={handleEnterPress}
               ref={messageRef}
             />

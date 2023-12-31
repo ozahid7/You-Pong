@@ -91,11 +91,12 @@ const GroupsChat = ({
     }
 
   const handleButtonClick = () => {
+    if (messageRef?.current.value === "") return;
     if (!one && socket) {
       var message = {
         id_channel: channels.id_channel,
         id_sender: MainUser.uid,
-        content: messageRef?.current.value,
+        content: messageRef?.current.value.trim(),
       };
       socket.emit("newMessage", message);
       messageRef.current.value = null;

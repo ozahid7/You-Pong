@@ -6,32 +6,15 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Button,
   useDisclosure,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Link,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../../components";
 import { Channel, QueryProp } from "@/types";
-import {
-  fetchData_getChannels,
-  getChannels,
-  joinChannel,
-  userChannels,
-} from "../data/api";
-import {
-  IoLockClosedOutline,
-  IoLockOpenOutline,
-  IoEnterOutline,
-} from "react-icons/io5";
+import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import groups from "../../../../../public/groups.svg";
-import { InputGroupPass, PasswordModal, SimpleJoinButton } from ".";
-import { useQuery } from "react-query";
+import { PasswordModal, SimpleJoinButton } from ".";
 
 interface Props {
   refetch: any;
@@ -51,14 +34,13 @@ export default function JoinModal({ refetch, channels }) {
 
   return (
     <Fragment>
-      <Button
-        size="sm"
+      <Link
+        role="button"
         onPress={onOpen}
-        className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md  orange_button border-none hover:border-none"
+        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
       >
         Join
-        {/* <LuPlusSquare /> */}
-      </Button>
+      </Link>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -77,7 +59,7 @@ export default function JoinModal({ refetch, channels }) {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Join a group
+                Join a channel
               </ModalHeader>
               <ModalBody className="w-[95%] max-h-[600px] overflow-auto scrollbar-hide rounded-md">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -93,7 +75,7 @@ export default function JoinModal({ refetch, channels }) {
                       </thead>
                       <tbody>
                         <>
-                          {channels.data &&
+                          {channels.data ? (
                             channels.data
                               .filter(
                                 (obj: any) =>
@@ -103,19 +85,21 @@ export default function JoinModal({ refetch, channels }) {
                               .map((obj: any, i) => (
                                 <tr key={i}>
                                   <td>
-                                    <Image
-                                      src={obj.avatar || groups}
-                                      width={60}
-                                      height={60}
-                                      className="border-[2px] border-palette-green p-[0.5]"
-                                      alt="image"
-                                    />
+                                    <div className="w-[60px] avatar ">
+                                      <Image
+                                        src={obj.avatar || groups}
+                                        width={60}
+                                        height={60}
+                                        className="border-[2px] border-palette-green p-[0.5]"
+                                        alt="image"
+                                      />
+                                    </div>
                                   </td>
                                   <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
                                     {obj.name}
                                   </td>
-                                  <td className="font-body font-[500] text-[16px] text-[#424242]">
-                                    <div className="font-body font-[500] text-[18px] text-[#424242]">
+                                  <td className="font-body font-[500] text-[#424242]">
+                                    <div className="font-body font-[500] text-[18px] text-[#424242] w-fit">
                                       {obj.type === "PUBLIC" ? (
                                         <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
                                           <div className="text-[20px]">
@@ -133,7 +117,7 @@ export default function JoinModal({ refetch, channels }) {
                                       )}
                                     </div>
                                   </td>
-                                  <td className="flex flex-row">
+                                  <td>
                                     {obj.type === "PROTECTED" ? (
                                       <PasswordModal
                                         obj={obj}
@@ -152,7 +136,17 @@ export default function JoinModal({ refetch, channels }) {
                                     )}
                                   </td>
                                 </tr>
-                              ))}
+                              ))
+                          ) : (
+                            <tr>
+                              <td
+                                colSpan={100}
+                                className="text-center font-body text-[20px] font-[600]"
+                              >
+                                No channels available
+                              </td>
+                            </tr>
+                          )}
                         </>
                       </tbody>
                     </table>

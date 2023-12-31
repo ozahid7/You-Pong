@@ -12,7 +12,7 @@ import {
   MiniChat,
   Chat,
   GroupsChat,
-  GroupsModal,
+  CreateModal,
   JoinModal,
   SearchChat,
   MiniChatDirect,
@@ -181,7 +181,7 @@ const Chats = ({ params }) => {
                         <div className="flex h-full w-full">
                           <SwipeableTabs
                             value={value}
-                            className="flex h-full w-full justify-center overflow-x-hidden my_scroll_green scrollbar-hide "
+                            className="flex h-full w-full justify-center overflow-x-hidden"
                           >
                             <div className="flex w-full h-full justify-start items-center flex-col">
                               <MyTabs
@@ -243,7 +243,7 @@ const Chats = ({ params }) => {
                                 key="groups"
                               />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
-                                <GroupsModal refetch={refetch} />
+                                <CreateModal refetch={refetch} />
                                 <JoinModal
                                   refetch={refetch}
                                   channels={JoinChannels}

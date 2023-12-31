@@ -123,16 +123,20 @@ const GroupDropdown = ({
               </div>
             </Button>
           </li>
-          <li>
-            <PrivateModal
-              MainUser={MainUser}
-              membersRefetch={membersRefetch}
-              channelsRefetch={channelsRefetch}
-              mainChannelRefetch={mainChannelRefetch}
-              Channel_={channels}
-              Members={Members}
-            ></PrivateModal>
-          </li>
+          {channels.type === "PRIVATE" ? (
+            <li>
+              <PrivateModal
+                MainUser={MainUser}
+                membersRefetch={membersRefetch}
+                channelsRefetch={channelsRefetch}
+                mainChannelRefetch={mainChannelRefetch}
+                Channel_={channels}
+                Members={Members}
+              ></PrivateModal>
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
     </div>
