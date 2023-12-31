@@ -1,7 +1,7 @@
 import { myRoutes } from "@/const";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { BsController } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 
@@ -41,6 +41,10 @@ const Banner = ({
 	);
 	const directIconStyle =
 		"z-10 h-6 w-6 bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute cursor-pointer";
+
+	useEffect(() => {
+		console.log("me = ", me, opponent);
+	}, []);
 
 	return (
 		<div className={classname}>
