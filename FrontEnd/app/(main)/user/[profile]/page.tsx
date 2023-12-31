@@ -9,6 +9,7 @@ import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface pageProps {
 	params: { profile: string };
@@ -18,8 +19,10 @@ const page = ({ params }: pageProps) => {
 	const { data, isLoading, isFetching } = useOtherUser(params.profile);
 	const user = useUser(true);
 	const isMe = !data || data === undefined ? true : false;
+	const querQlient = useQueryClient();
 	const toShow = !isMe ? data : user.data;
 	const { globalSocket } = useGlobalSocket();
+	querQlient.invalidateQueries({ queryKey: ["matchs", user.data.uid] });
 	const {
 		username,
 		avatar,
