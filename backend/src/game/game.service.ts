@@ -59,8 +59,10 @@ export class GameService {
         });
         if (user) {
           return {
+            uid: user.id_user,
             username: user.username,
             avatar: user.avatar,
+            status: user.status,
             player_score: match.player_score,
             opponent_score: match.opponent_score,
             win: match.win,

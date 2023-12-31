@@ -48,7 +48,7 @@ export const notify = (
 };
 
 export const inviteGame = (info: infoGame, socket: Socket) => {
-	console.log("socket from invite = ", socket.id);
+	console.log(" from invite = ");
 	socket.emit("invite", info);
 };
 
@@ -57,7 +57,7 @@ export const acceptGame = (
 	socket: Socket,
 	router: AppRouterInstance
 ) => {
-	console.log("from accept ", info.id_game);
+	console.log("from accept ");
 	toast.dismiss();
 	socket.emit("accept", info);
 	router.push(myRoutes.game + "/" + info.mode + info.map);

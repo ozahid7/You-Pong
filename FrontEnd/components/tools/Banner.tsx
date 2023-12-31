@@ -1,4 +1,5 @@
 import { myRoutes } from "@/const";
+import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BsController } from "react-icons/bs";
@@ -12,6 +13,8 @@ interface BannerProps {
 	loses: string;
 	style?: string;
 	me: string;
+	status: string;
+	uid: string;
 }
 
 const Banner = ({
@@ -22,6 +25,8 @@ const Banner = ({
 	loses,
 	style,
 	me,
+	status,
+	uid,
 }: BannerProps) => {
 	const start = isGreen ? "from-[#508286]" : "from-[#E97152]";
 	const router = useRouter();
@@ -45,7 +50,15 @@ const Banner = ({
 					strokeWidth={0.5}
 					className={`${directIconStyle} text-palette-green top-2 right-2`}
 					onClick={() => {
-						router.push(myRoutes.game + "/" + "");
+						if (status === "INGAME")
+							notify(
+								opponent,
+								avatar,
+								false,
+								2000,
+								"Player Already In Game"
+							);
+						else router.push(myRoutes.game + "/" + uid);
 					}}
 				/>
 			)}

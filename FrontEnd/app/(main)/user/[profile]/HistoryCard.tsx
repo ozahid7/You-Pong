@@ -41,6 +41,8 @@ const HistoryCard = (props: { uid: string; me: string }) => {
 										loses={e.opponent_score}
 										key={index}
 										me={props.me}
+										status={e.status}
+										uid={e.uid}
 									/>
 								))}
 							</div>

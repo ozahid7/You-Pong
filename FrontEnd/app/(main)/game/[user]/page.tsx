@@ -32,30 +32,26 @@ export default function game({ params }: pageProps) {
 	useEffect(() => {
 		if (params.user != "me" && params.user.length < 12) {
 			setShowGameOption(false);
-			const mod = params.user.slice(0, 4);
-			const mp = params.user.slice(4);
-			if (mod !== "easy" && mod !== "hard")
+			const mode = params.user.slice(0, 4);
+			const map = params.user.slice(4);
+			if (mode !== "easy" && mode !== "hard")
 				router.push(myRoutes.dashboard);
-			if (mp !== "classic" && mp !== "orange" && mp !== "green")
+			if (map !== "classic" && map !== "orange" && map !== "green")
 				router.push(myRoutes.dashboard);
 
-			setMode(mod);
-			setMap(mp);
+			setMode(mode);
+			setMap(map);
 			setShowPlayerLoder(true);
 		}
 		setSubmit(true);
 	}, []);
 
 	useEffect(() => {
-		// Setup Matter.js
-		if (submit) {
-			const h = ref.current;
-			// Create a renderer and specify the container
+		if (showPlayerLoader) {
 			const updateSize = () => {
 				setHeight(window.innerHeight);
 				setWidht(window.innerWidth);
 			};
-
 			window.addEventListener("resize", updateSize);
 			updateSize();
 			const game = new Game(ref.current, map);
@@ -65,7 +61,7 @@ export default function game({ params }: pageProps) {
 				window.removeEventListener("resize", updateSize);
 			};
 		}
-	}, [width, height, submit, map, mode]);
+	}, [width, height, showPlayerLoader, submit]);
 
 	const [game_id, SetGameId] = useState(
 		new Date() + user.data.uid + params.user

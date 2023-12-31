@@ -37,6 +37,8 @@ export interface match {
 	player_score: string;
 	opponent_score: string;
 	win: boolean;
+	status: string;
+	uid: string;
 }
 
 export type UserInfo = {
