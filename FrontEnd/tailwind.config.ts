@@ -63,6 +63,8 @@ const config: Config = {
           orange: "#EB6440",
           white: "#F0F5F5",
           grey: "#D9E4E5",
+          dark: "#424242",
+          clear: "#686868",
         },
         placeholdercolor: "#A0A0A0",
         orangeborder: "#D46345",

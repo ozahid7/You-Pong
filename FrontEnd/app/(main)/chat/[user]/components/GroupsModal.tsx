@@ -14,6 +14,7 @@ import {
   Tab,
   Card,
   CardBody,
+  Link,
 } from "@nextui-org/react";
 import Image from "next/image";
 import groups from "../../../../../public/groups.svg";
@@ -117,14 +118,12 @@ export default function GroupsModal({ refetch }) {
 
   return (
     <Fragment>
-      <Button
+      <Link
         onPress={onOpen}
-        size="lg"
-        className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md green_button border-none hover:border-none"
+        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
       >
         Create
-        {/* <LuPlusSquare /> */}
-      </Button>
+      </Link>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

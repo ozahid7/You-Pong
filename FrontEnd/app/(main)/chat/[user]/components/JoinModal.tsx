@@ -14,6 +14,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Link,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../../components";
@@ -51,14 +52,12 @@ export default function JoinModal({ refetch, channels }) {
 
   return (
     <Fragment>
-      <Button
-        size="sm"
+      <Link
         onPress={onOpen}
-        className="flex max-w-[90px] btn xs:btn-xs sm:btn-sm md:btn-md lg:btn-lg bg-palette-green font-body font-[600] text-[#EFF5F5] hover:text-palette-white hover:bg-palette-white rounded-md  orange_button border-none hover:border-none"
+        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
       >
         Join
-        {/* <LuPlusSquare /> */}
-      </Button>
+      </Link>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
