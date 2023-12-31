@@ -22,10 +22,6 @@ export default function GameSettings(props: {
 }) {
 	const router = useRouter();
 
-	useEffect(() => {
-		console.log("id game from game setting = ", props.game_id);
-	}, []);
-
 	return (
 		<>
 			<MyDialog

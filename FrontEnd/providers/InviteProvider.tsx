@@ -50,6 +50,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("refused").length === 0)
 			globalSocket.on("refused", (obj: inviteReturn) => {
 				console.log("refused obj = ", obj);
+				setData(undefined);
 				notify(
 					obj.username,
 					obj.avatar,
@@ -64,6 +65,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("canceled").length === 0)
 			globalSocket.on("canceled", (obj: inviteReturn) => {
 				console.log("from cancled = ", obj);
+				setData(undefined);
 				toast.update("toast_id", {
 					render: () => (
 						<div className={style}>

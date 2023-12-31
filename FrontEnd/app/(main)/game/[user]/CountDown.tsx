@@ -16,7 +16,6 @@ const MyCountDown = (props: { isOpen: boolean; setIsOpen: any }) => {
 
 			setTimeout(() => {
 				props.setIsOpen(false);
-				globalSocket.emit("inGame");
 			}, 5000);
 			return () => clearInterval(time);
 		}

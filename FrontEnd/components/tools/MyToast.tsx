@@ -16,7 +16,7 @@ const MyToast = (props: {
 }) => {
 	const router = useRouter();
 	const { globalSocket } = useGlobalSocket();
-	const { setAccepted } = useGameContext();
+	const { setAccepted, setData } = useGameContext();
 
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
@@ -44,7 +44,6 @@ const MyToast = (props: {
 						</div>
 						<button
 							onClick={() => {
-								setAccepted(true);
 								acceptGame(props.info, globalSocket, router);
 							}}
 							className="bg-palette-green p-2 drop-shadow-md hover:opacity-70 focus:animate-pulse rounded-md text-white text-sm"
@@ -54,6 +53,7 @@ const MyToast = (props: {
 						<button
 							onClick={() => {
 								refuseGame(props.info, globalSocket);
+								setData(undefined);
 							}}
 							className="bg-palette-orange p-2 drop-shadow-md hover:opacity-70 rounded-md text-sm text-white"
 						>

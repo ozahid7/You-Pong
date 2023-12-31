@@ -84,9 +84,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [me]);
 
 	useEffect(() => {
+		console.log("path = ", path);
 		if (
 			globalSocket &&
-			path !== "/game" &&
+			path.slice(0, 5) !== "/game" &&
 			toEmit &&
 			me.data.createdAt !== me.data.updatedAt
 		) {

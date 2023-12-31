@@ -4,7 +4,6 @@ import Loader from "@/components/tools/Loader";
 import { useGameContext } from "@/providers/InviteProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
-import { setData } from "../../chat/data/api";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { MdCancelPresentation } from "react-icons/md";
@@ -30,12 +29,11 @@ const PlayerLoader = (props: {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
 	const otheruser = useGameContext();
-	const accepted = otheruser.accepted;
+	const { setData } = otheruser;
 	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
 
 	useEffect(() => {
-		console.log("id game from player loader = ", props.game_id);
 		if (otheruser.data && otheruser.data !== undefined) {
 			setIsmatched(true);
 			setTimeout(() => {
@@ -46,6 +44,10 @@ const PlayerLoader = (props: {
 			otheruser.setData(undefined);
 		}
 	}, [otheruser, otheruser.data]);
+
+	useEffect(() => {
+		props.socket.emit("inGame");
+	}, []);
 
 	const onClose = () => {
 		console.log("onClose ");
@@ -61,38 +63,8 @@ const PlayerLoader = (props: {
 			props.socket
 		);
 		router.push(myRoutes.dashboard);
+		setData(undefined);
 	};
-
-	const onRefuse = () => {
-		console.log("onRefuse");
-		refuseGame(
-			{
-				id_game: "",
-				id_sender: props.my_id,
-				id_receiver: props.opponent_uid,
-				socket_player: props.socket.id,
-				map: props.map,
-				mode: props.mode,
-			},
-			props.socket
-		);
-		router.push(myRoutes.dashboard);
-	};
-
-	const [validate, setValidate] = useState(false);
-
-	useEffect(() => {
-		setTimeout(() => {
-			setValidate(true);
-		}, 12000);
-	});
-
-	useEffect(() => {
-		if (props.path !== "me" && validate) {
-			console.log("acptd ... = ", accepted);
-			if (!accepted) onRefuse();
-		}
-	}, [accepted, validate]);
 
 	return (
 		<MyDialog
