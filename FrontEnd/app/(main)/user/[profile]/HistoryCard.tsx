@@ -29,13 +29,13 @@ const HistoryCard = (props: { matchs: match[] }) => {
                         place={"top"}
                     />
                     <div className="w-full xl:h-[90%] h:h-[84%] h-[88%] items-center relative flex justify-center overflow-auto my_scroll_green mb-2">
-                        {props.matchs.length < 1 && (
+                        {/* {props.matchs.length < 1 && (
                             <span className="absolute font-audio text-xl text-gray-400">
                                 No match yet
                             </span>
-                        )}
+                        )} */}
                         <div className=" flex w-[90%] min-w-[180px] h-[100%] flex-col items-center space-y-10">
-                            {props.matchs.map((e, index) => (
+                            {/* {props.matchs.map((e, index) => (
                                 <Banner
                                     isGreen={e.wins >= e.loses ? true : false}
                                     userName={e.user}
@@ -44,7 +44,7 @@ const HistoryCard = (props: { matchs: match[] }) => {
                                     loses={e.loses}
                                     key={index}
                                 />
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                 </div>
