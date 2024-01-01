@@ -157,10 +157,11 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   return (
     <Fragment>
       <div
-        aria-disabled={disabled}
         role="button"
-        onClick={onOpen}
-        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+        onClick={!disabled ? onOpen : undefined}
+        className={` ${
+          disabled ? "line-through" : ""
+        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuSettings />
         <div className="w-fit h-fit">Edit</div>

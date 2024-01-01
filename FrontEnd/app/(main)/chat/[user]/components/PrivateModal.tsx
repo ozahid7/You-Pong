@@ -63,7 +63,14 @@ const PrivateModal = ({
 
   if (isLoading) <Loader />;
 
-  Channel_.type === "PRIVATE" ? (show = true) : (show = false);
+  if (Members)
+    Members.map((member) => {
+      member.user.id_user === MainUser.uid
+        ? member.user_role === "OWNER"
+          ? (show = false)
+          : (show = true)
+        : "";
+    });
 
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
@@ -80,10 +87,11 @@ const PrivateModal = ({
   return (
     <Fragment>
       <div
-        onClick={onOpen}
+        onClick={show ? undefined : onOpen}
         role="button"
-        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
-        aria-disabled={!show}
+        className={`${
+          show ? "line-through" : ""
+        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuUserPlus2 />
         <div className="h-fit w-fit">Invite</div>

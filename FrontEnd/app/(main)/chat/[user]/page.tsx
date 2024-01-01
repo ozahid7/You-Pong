@@ -149,6 +149,7 @@ const Chats = ({ params }) => {
         else if (ret === undefined) channel.index = 0;
       });
       /////////////////////////////
+      directRefetch();
     }
   }, [channelsDirect, channelsGroups]);
 
