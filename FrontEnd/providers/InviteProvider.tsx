@@ -47,6 +47,13 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				setData(obj);
 			});
 
+		if (globalSocket.listeners("acceptedGame").length === 0)
+			globalSocket.on("acceptedGame", (obj: inviteReturn) => {
+				console.log("from acceptedGame ", obj);
+				setAccepted(true);
+				setData(obj);
+			});
+
 		if (globalSocket.listeners("refused").length === 0)
 			globalSocket.on("refused", (obj: inviteReturn) => {
 				console.log("refused obj = ", obj);

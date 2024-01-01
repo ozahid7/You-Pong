@@ -51,7 +51,11 @@ const PlayerLoader = (props: {
 	}, [otheruser, otheruser.data]);
 
 	useEffect(() => {
-		props.socket.emit("inGame");
+		props.socket.emit("inGame", {
+			id_sender: props.my_id,
+			map: props.map,
+			mode: props.mode,
+		});
 	}, []);
 
 	const onClose = () => {
