@@ -51,13 +51,7 @@ const MiniBanner = (props: {
 	}, []);
 
 	return (
-		<div
-			data-tooltip-content={message}
-			data-tooltip-id="rank_image"
-			data-tooltip-place="bottom"
-			data-tooltip-hidden={!props.isRank}
-			className={className}
-		>
+		<div className={className}>
 			<div className={customClass}></div>
 			<div
 				className={`w-full max-h-[100px] sm:min-h-full  bg-gradient-to-r ${start} ${end} flex items-center justify-between h:justify-around px-2 sm:px-3`}
@@ -69,16 +63,18 @@ const MiniBanner = (props: {
 					<>
 						<Tooltip
 							id="rank_image"
-							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey font-semibold drop-shadow-lg z-10"
+							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey drop-shadow-lg font-semibold z-10"
 							style={{
 								backgroundColor: "#46686A",
 								color: "#fff",
 							}}
 							opacity={1}
-							float={true}
 							place={"right"}
 						/>
 						<img
+							data-tooltip-content={message}
+							data-tooltip-id="rank_image"
+							data-tooltip-hidden={!props.isRank}
 							className="border-2 max-w-[20px] h:max-w-[30px] flex border-white rounded-sm object-contain"
 							src={avatar}
 							alt=""

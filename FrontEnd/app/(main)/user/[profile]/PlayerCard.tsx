@@ -21,7 +21,7 @@ const PlayerCard = (props: {
 	param: string;
 	avatar: string;
 	username: string;
-	rank: number;
+	rank: string;
 	level: number;
 	isMe: boolean;
 	user_relation: number;
@@ -241,7 +241,7 @@ const PlayerCard = (props: {
 									isRank={true}
 									value={props.rank.toString()}
 									name="Rank"
-									rank="PANDORA"
+									rank={props.rank}
 								/>
 							</div>
 						</div>
