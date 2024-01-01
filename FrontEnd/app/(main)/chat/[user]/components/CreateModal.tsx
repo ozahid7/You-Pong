@@ -113,17 +113,11 @@ export default function CreateModal({ refetch }) {
 
   const clean = () => {
     setFilee(groups);
+    setDataObj.name = "Channel";
     setDataObj.description = "Change this description";
-    setDataObj.avatar = null || groups;
-    // if (descRef.current.value !== null)
-    //   descRef.current.value = null;
-    // nameRef.current.value = null;
-    // imgRef.current.value = null;
-    // if (setDataObj.type == "PROTECTED") {
-    //   passRef.current.value = null;
-    //   passConfRef.current.value = null;
-    // }
+    setDataObj.avatar = null;
   };
+
   const close = () => {
     onClose();
     clean();
@@ -194,7 +188,7 @@ export default function CreateModal({ refetch }) {
                       aria-label="Options"
                       size="lg"
                       radius="sm"
-                      className=" w-full h-fit flex justify-center"
+                      className=" w-full h-fit flex justify-center "
                     >
                       <Tab
                         key="PUBLIC"
