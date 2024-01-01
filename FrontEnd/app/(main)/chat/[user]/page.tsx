@@ -127,7 +127,7 @@ const Chats = ({ params }) => {
     // handle channels search
     indexChannels.map((channel) => {
       if (channel.id_channel === id)
-        return setValue(1), setValueGroups(channel.index);
+        return setValue(1), setValueGroups(channel.index );
     });
 
     // handle direct search
