@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { LuMoreHorizontal, LuSend } from "react-icons/lu";
+import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
 import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
 import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
+import { TbSend } from "react-icons/tb";
 
 interface HomePage {
   channels: Channel;
@@ -93,14 +94,14 @@ const Chat = ({
                 {user?.username}
               </div>
               <div
-                className={`${text} font-[700] text-[15px] font-orbitron sm_:block xs:hidden`}
+                className={`${text} font-[600] text-[13px] font-orbitron sm_:block xs:hidden`}
               >
                 {user?.status}
               </div>
             </div>
           </div>
           <div>
-            <DirectDropdown channels={channels} />
+            <DirectDropdown />
           </div>
         </div>
       </div>
@@ -126,7 +127,7 @@ const Chat = ({
               type="submit"
               onClick={handleButtonClick}
             >
-              <LuSend className="h-8 w-8 text-[#497174] xs:w-5 xs:h-5 xs:mr-2" />
+              <TbSend className="h-[30px] w-[30px] text-[#497174]" />
             </button>
           </div>
         </div>

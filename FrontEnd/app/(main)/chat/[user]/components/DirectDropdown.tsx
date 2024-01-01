@@ -1,24 +1,21 @@
 "use client";
-import React from "react";
+import React, { Fragment } from "react";
 import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut, LuGamepad, LuUserX } from "react-icons/lu";
 import { Channel, Member, User, User_Hero } from "@/types";
-import { Button } from "@nextui-org/react";
-import { ChatEdit, MembersEdit } from ".";
+import { Button, Modal } from "@nextui-org/react";
+import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { Menu } from "@headlessui/react";
 
-interface HomePage {
-  channels: Channel;
-}
+interface HomePage {}
 
-const DirectDropdown = ({ channels }: HomePage) => {
+const DirectDropdown = () => {
   return (
     <div className="flex flex-col justify-center relative">
-      <div className="dropdown dropdown-bottom dropdown-end">
-        <label
-          tabIndex={0}
-          role="button"
-        >
+      <Menu>
+        <Menu.Button>
           <IconContext.Provider
             value={{
               color: "",
@@ -28,64 +25,49 @@ const DirectDropdown = ({ channels }: HomePage) => {
           >
             <FiChevronDown />
           </IconContext.Provider>
-        </label>
-        <ul
-          tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
+        </Menu.Button>
+        <Menu.Items
+          className="flex flex-col border-2 border-palette-green  h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+          unmount={false}
         >
-          <li>
-            <Button className="rounded-none btn green_button">
-              <div className="flex flex-row gap-2 w-fit h-fit">
-                <IconContext.Provider
-                  value={{
-                    size: "25px",
-                    className: "text-palette-white border-none",
-                  }}
-                >
-                  <LuUser />
-                </IconContext.Provider>
-                <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-                  Profile
-                </div>
-              </div>
-            </Button>
-          </li>
-          <li>
-            <Button className="rounded-none btn green_button">
-              <div className="flex flex-row gap-2 w-fit h-fit">
-                <IconContext.Provider
-                  value={{
-                    size: "25px",
-                    className: "text-palette-white border-none",
-                  }}
-                >
-                  <LuGamepad />
-                </IconContext.Provider>
-                <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-                  Play a game
-                </div>
-              </div>
-            </Button>
-          </li>
-          <li>
-		  <Button className="rounded-none btn orange_button">
-              <div className="flex flex-row gap-2 w-fit h-fit">
-                <IconContext.Provider
-                  value={{
-                    size: "25px",
-                    className: "text-palette-white border-none",
-                  }}
-                >
-                  <LuUserX />
-                </IconContext.Provider>
-                <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-                  Block
-                </div>
-              </div>
-            </Button>
-          </li>
-        </ul>
-      </div>
+          <Menu.Item
+            key="members"
+            as="div"
+          >
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+            >
+              <LuUser />
+              <p className="w-fit h-fit">Profile</p>
+            </div>
+          </Menu.Item>
+          <Menu.Item
+            key="leave"
+            as="div"
+          >
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+            >
+              <LuGamepad />
+              <p className="w-fit h-fit">Play</p>
+            </div>
+          </Menu.Item>
+          <Menu.Item
+            key="invite"
+            as="div"
+          >
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
+            >
+              <LuUserX />
+              <p className="w-fit h-fit">Block</p>
+            </div>
+          </Menu.Item>
+        </Menu.Items>
+      </Menu>
     </div>
   );
 };
