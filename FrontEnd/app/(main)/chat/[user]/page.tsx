@@ -115,6 +115,8 @@ const Chats = ({ params }) => {
   useEffect(() => {
     indexChannels = [];
     indexChannelsDirect = [];
+    var last: number = 0;
+
     if (channelsGroups) {
       channelsGroups?.map((channel, key) => {
         const temp: whichChannel = {
@@ -123,9 +125,10 @@ const Chats = ({ params }) => {
           name: channel.name,
           type: channel.type,
         };
+        last = temp.index;
         indexChannels.push(temp);
       });
-
+      setValueGroups(last);
       refetch();
     }
     if (channelsDirect) {
