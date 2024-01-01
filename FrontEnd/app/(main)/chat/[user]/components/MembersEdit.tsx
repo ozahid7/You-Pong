@@ -46,24 +46,16 @@ const MembersEdit = ({
 
   return (
     <Fragment>
-      <Button
-        onPress={onOpen}
-        className="rounded-none btn green_button"
+      <div
+        role="button"
+        onClick={onOpen}
+        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
       >
-        <div className="flex flex-row gap-2 w-fit h-fit">
-          <IconContext.Provider
-            value={{
-              size: "25px",
-              className: "text-palette-white border-none",
-            }}
-          >
-            <LuUsers />
-          </IconContext.Provider>
-          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-            Members
-          </div>
+        <LuUsers />
+        <div className="h-fit w-fit">
+          Members
         </div>
-      </Button>
+      </div>
       <Modal
         isOpen={isOpen}
         placement="center"
@@ -72,6 +64,7 @@ const MembersEdit = ({
         size="3xl"
         backdrop="blur"
         className="w-full"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(onClose) => (

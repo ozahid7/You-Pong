@@ -41,8 +41,8 @@ const PlayerCard = (props: {
 	const [textColor, setTextColor] = useState("");
 	const { globalSocket } = useGlobalSocket();
 	const Block = blockuser(props.uid, undefined);
-	const Add = adduser(props.uid);
-	const Remove = removeuser(props.uid);
+	const Add = adduser(props.uid, props.username);
+	const Remove = removeuser(props.uid, props.username);
 	const direct = todirect(props.uid);
 	const otheruser = useOtherUser(props.param);
 

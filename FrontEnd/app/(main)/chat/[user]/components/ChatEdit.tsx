@@ -12,6 +12,7 @@ import {
   CardBody,
   useDisclosure,
   Button,
+  Link,
 } from "@nextui-org/react";
 import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
@@ -151,25 +152,16 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
 
   return (
     <Fragment>
-      <Button
-        onPress={onOpen}
-        className="rounded-none btn green_button"
-        isDisabled={disabled}
+      <div
+        aria-disabled={disabled}
+        role="button"
+        onClick={onOpen}
+        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+        // isDisabled={disabled}
       >
-        <div className="flex flex-row gap-2 w-fit h-fit">
-          <IconContext.Provider
-            value={{
-              size: "25px",
-              className: "text-palette-white border-none",
-            }}
-          >
-            <LuSettings />
-          </IconContext.Provider>
-          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-            Edit group
-          </div>
-        </div>
-      </Button>
+        <LuSettings />
+        <div className="w-fit h-fit">Edit</div>
+      </div>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -178,6 +170,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         className=" w-full"
         backdrop="blur"
         placement="center"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(onClose) => (
@@ -188,7 +181,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Edit a group
+                Edit a channel
               </ModalHeader>
               <ModalBody className="w-[60%]">
                 <div className="flex justify-evenly items-center flex-col gap-3">

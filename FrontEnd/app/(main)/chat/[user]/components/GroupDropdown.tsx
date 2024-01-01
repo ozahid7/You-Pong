@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import React, { Fragment } from "react";
 import { IconContext } from "react-icons";
 import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
 import { Channel, Member, User, User_Hero } from "@/types";
-import { Button } from "@nextui-org/react";
+import { Button, Modal } from "@nextui-org/react";
 import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
@@ -16,6 +16,7 @@ import {
   userChannels,
 } from "../data/api";
 import { useQuery } from "react-query";
+import { Menu } from "@headlessui/react";
 
 interface HomePage {
   channels: Channel;
@@ -63,11 +64,8 @@ const GroupDropdown = ({
 
   return (
     <div className="flex flex-col justify-center relative">
-      <div className="dropdown dropdown-bottom dropdown-end">
-        <label
-          tabIndex={0}
-          role="button"
-        >
+      <Menu>
+        <Menu.Button>
           <IconContext.Provider
             value={{
               color: "",
@@ -77,12 +75,15 @@ const GroupDropdown = ({
           >
             <FiChevronDown />
           </IconContext.Provider>
-        </label>
-        <ul
-          tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 bg-palette-white rounded-box w-52 gap-2"
+        </Menu.Button>
+        <Menu.Items
+          className="flex flex-col border-2 border-palette-green  h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+          unmount={false}
         >
-          <li>
+          <Menu.Item
+            key="members"
+            as="div"
+          >
             <MembersEdit
               MainUser={MainUser}
               Users={Members}
@@ -91,40 +92,38 @@ const GroupDropdown = ({
               mainChannelRefetch={mainChannelRefetch}
               Channel_={channels}
             ></MembersEdit>
-          </li>
-          <li>
+          </Menu.Item>
+          <Menu.Item
+            key="chat"
+            as="div"
+          >
             <ChatEdit
               channels={channels}
               users={Members}
               MainUser={MainUser}
               channelsRefetch={channelsRefetch}
             ></ChatEdit>
-          </li>
-          <li>
-            <Button
-              key={"3xl"}
-              className="flex btn bg-palette-orange border-none text-[#EFF5F5] rounded-md center orange_button"
+          </Menu.Item>
+          <Menu.Item
+            key="leave"
+            as="div"
+          >
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
               onClick={() => {
                 Leaving();
               }}
             >
-              <div className="flex flex-row gap-2 w-fit h-fit">
-                <IconContext.Provider
-                  value={{
-                    size: "25px",
-                    className: "text-white border-none",
-                  }}
-                >
-                  <LuLogOut />
-                </IconContext.Provider>
-                <div className="flex text-white font-body font-[600] bg-transparent text-[15px] mt-1">
-                  Leave group
-                </div>
-              </div>
-            </Button>
-          </li>
+              <LuLogOut />
+              <p className="w-fit h-fit">Leave</p>
+            </div>
+          </Menu.Item>
           {channels.type === "PRIVATE" ? (
-            <li>
+            <Menu.Item
+              key="invite"
+              as="div"
+            >
               <PrivateModal
                 MainUser={MainUser}
                 membersRefetch={membersRefetch}
@@ -133,12 +132,12 @@ const GroupDropdown = ({
                 Channel_={channels}
                 Members={Members}
               ></PrivateModal>
-            </li>
+            </Menu.Item>
           ) : (
             ""
           )}
-        </ul>
-      </div>
+        </Menu.Items>
+      </Menu>
     </div>
   );
 };
