@@ -234,6 +234,35 @@ export class UserService {
 
   //GET
   async getUserChannels(id_user: string) {
-    return (await this.findService.finduserById(id_user)).channels;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id_user: id_user,
+      },
+      include: { channels: true },
+    });
+    if (!user)
+      return {
+        message: 'No such user !',
+        Object: { direct: null, groups: null },
+      };
+    let groups = null;
+    let direct = null;
+
+    const groupsChannels = user.channels.map((channel) => {
+      if (channel.type !== 'DIRECT') return channel;
+    });
+    groups = groupsChannels.filter((channel) => channel);
+
+    const directChannels = user.channels.map((channel) => {
+      if (channel.type === 'DIRECT') return channel;
+    });
+    direct = directChannels.filter((channel) => channel);
+
+    if (!groups || groups === undefined || groups.length === 0) groups = null;
+    if (!direct || direct === undefined || direct.length === 0) direct = null;
+    return {
+      message: 'Channels found',
+      Object: { direct, groups },
+    };
   }
 }
