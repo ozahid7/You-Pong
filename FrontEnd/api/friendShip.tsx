@@ -39,7 +39,7 @@ export const searchusers = () => {
 	return useQuery({ queryKey: ["search"], queryFn: searchUsers });
 };
 
-export const adduser = (uid: string) => {
+export const adduser = (uid: string, username?: string) => {
 	const query = useQueryClient();
 	const addUser = async () => {
 		try {
@@ -48,6 +48,7 @@ export const adduser = (uid: string) => {
 				friendsEndPoint.add + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
+			query.invalidateQueries({ queryKey: ["otheruser", username] });
 			return response;
 		} catch (error) {
 			console.log("add user error = ", error);
@@ -56,7 +57,7 @@ export const adduser = (uid: string) => {
 	return useMutation({ mutationFn: addUser });
 };
 
-export const removeuser = (uid: string) => {
+export const removeuser = (uid: string, username?: string) => {
 	const query = useQueryClient();
 	const removeUser = async () => {
 		try {
@@ -65,6 +66,7 @@ export const removeuser = (uid: string) => {
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
+			query.invalidateQueries({ queryKey: ["otheruser", username] });
 			return response;
 		} catch (error) {
 			console.log("remove user error =", error);

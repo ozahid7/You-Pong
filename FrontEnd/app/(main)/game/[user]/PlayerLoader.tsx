@@ -53,13 +53,12 @@ const PlayerLoader = (props: {
 	useEffect(() => {
 		props.socket.emit("inGame", {
 			id_sender: props.my_id,
-			map: props.map,
-			mode: props.mode,
+			map: props.map.toUpperCase(),
+			mode: props.mode.toUpperCase(),
 		});
 	}, []);
 
 	const onClose = () => {
-		console.log("onClose ");
 		cancelGame(
 			{
 				id_game: props.game_id,
