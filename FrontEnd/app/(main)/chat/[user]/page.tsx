@@ -21,7 +21,8 @@ import { LuUsers, LuUser } from "react-icons/lu";
 import {
   fetchData_getChannels,
   fetchData_getMainUser,
-  fetchData_userChannels,
+  fetchData_userChannels_Channel,
+  fetchData_userChannels_Direct,
   getChannel,
   getChannels,
 } from "./data/api";
@@ -57,14 +58,32 @@ const Chats = ({ params }) => {
   );
 
   const {
-    data: channel,
+    data: channelsDirect,
+    refetch: directRefetch,
+    isLoading: directLoading,
+  } = useQuery<Channel[], Error>(
+    ["userChannels_Direct"],
+    fetchData_userChannels_Direct,
+    {
+      onError: (error: Error) => {
+        console.error("Channels query error:", error);
+      },
+    }
+  );
+
+  const {
+    data: channelsGroups,
     refetch,
-    isLoading: channelsLoading,
-  } = useQuery<Channel[], Error>(["userChannels"], fetchData_userChannels, {
-    onError: (error: Error) => {
-      console.error("Channels query error:", error);
-    },
-  });
+    isLoading: groupsLoading,
+  } = useQuery<Channel[], Error>(
+    ["userChannels"],
+    fetchData_userChannels_Channel,
+    {
+      onError: (error: Error) => {
+        console.error("Channels query error:", error);
+      },
+    }
+  );
 
   const {
     data,
@@ -77,7 +96,7 @@ const Chats = ({ params }) => {
     },
   });
 
-  if (MainLoading || channelsLoading || isLoading) <Loader />;
+  if (MainLoading || directLoading || isLoading || groupsLoading) <Loader />;
 
   useEffect(() => {
     JoinChannels = {
@@ -96,19 +115,29 @@ const Chats = ({ params }) => {
   useEffect(() => {
     indexChannels = [];
     indexChannelsDirect = [];
-    if (channel) {
-      channel?.map((channel, key) => {
+    if (channelsGroups) {
+      channelsGroups?.map((channel, key) => {
         const temp: whichChannel = {
           id_channel: channel.id_channel,
           index: key,
           name: channel.name,
           type: channel.type,
         };
-        channel.type !== "DIRECT"
-          ? indexChannels.push(temp)
-          : indexChannelsDirect.push(temp);
+        indexChannels.push(temp);
       });
+
       refetch();
+    }
+    if (channelsDirect) {
+      channelsDirect?.map((channel, key) => {
+        const temp: whichChannel = {
+          id_channel: channel.id_channel,
+          index: key,
+          name: channel.name,
+          type: channel.type,
+        };
+        indexChannelsDirect.push(temp);
+      });
       //// handle direct message ///
       const id = params.user;
       indexChannelsDirect.map(async (channel) => {
@@ -121,13 +150,13 @@ const Chats = ({ params }) => {
       });
       /////////////////////////////
     }
-  }, [channel]);
+  }, [channelsDirect, channelsGroups]);
 
   const handleResultId = (id: string) => {
     // handle channels search
     indexChannels.map((channel) => {
       if (channel.id_channel === id)
-        return setValue(1), setValueGroups(channel.index );
+        return setValue(1), setValueGroups(channel.index);
     });
 
     // handle direct search
@@ -167,7 +196,8 @@ const Chats = ({ params }) => {
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid pr-5">
                     <ChatHeading text="Chats" />
                     <SearchChat
-                      object={channel}
+                      object={channelsGroups}
+                      direct={channelsDirect}
                       main={MainUser}
                       onResultIdChange={handleResultId}
                     />
@@ -212,19 +242,14 @@ const Chats = ({ params }) => {
                                   setValueDirect(valueDirect);
                                 }}
                                 labels={
-                                  channel
-                                    ? channel
-                                        .filter(
-                                          (obj: Channel) =>
-                                            obj.type === "DIRECT"
-                                        )
-                                        .map((obj: Channel, i) => (
-                                          <MiniChatDirect
-                                            channels={obj}
-                                            main={MainUser}
-                                            key={i}
-                                          />
-                                        ))
+                                  channelsDirect
+                                    ? channelsDirect.map((obj: Channel, i) => (
+                                        <MiniChatDirect
+                                          channels={obj}
+                                          main={MainUser}
+                                          key={i}
+                                        />
+                                      ))
                                     : []
                                 }
                                 indicator={{
@@ -242,19 +267,15 @@ const Chats = ({ params }) => {
                                   setValueGroups(valueGroups);
                                 }}
                                 labels={
-                                  channel
-                                    ? channel
-                                        .filter(
-                                          (obj: any) => obj.type !== "DIRECT"
-                                        )
-                                        .map((obj: any, i) => {
-                                          return (
-                                            <MiniChat
-                                              channels={obj}
-                                              key={i}
-                                            />
-                                          );
-                                        })
+                                  channelsGroups
+                                    ? channelsGroups.map((obj: any, i) => {
+                                        return (
+                                          <MiniChat
+                                            channels={obj}
+                                            key={i}
+                                          />
+                                        );
+                                      })
                                     : []
                                 }
                                 indicator={{
@@ -282,24 +303,22 @@ const Chats = ({ params }) => {
                       className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
                       key="groups"
                     >
-                      {channel &&
-                        channel
-                          .filter((obj) => obj.type !== "DIRECT")
-                          .map((obj, i) => {
-                            return (
-                              <GroupsChat
-                                data={channel}
-                                channels={obj}
-                                socket={connection}
-                                MainUser={MainUser}
-                                indexChannels={indexChannels}
-                                index={valueGroups}
-                                channelsRefetch={refetch}
-                                joinRefetch={joinRefetch}
-                                key={i}
-                              ></GroupsChat>
-                            );
-                          })}
+                      {channelsGroups &&
+                        channelsGroups.map((obj, i) => {
+                          return (
+                            <GroupsChat
+                              data={channelsGroups}
+                              channels={obj}
+                              socket={connection}
+                              MainUser={MainUser}
+                              indexChannels={indexChannels}
+                              index={valueGroups}
+                              channelsRefetch={refetch}
+                              joinRefetch={joinRefetch}
+                              key={i}
+                            ></GroupsChat>
+                          );
+                        })}
                     </SwipeableTabs>
                   ) : (
                     <SwipeableTabs
@@ -307,20 +326,18 @@ const Chats = ({ params }) => {
                       className="h-full w-full  flex-1  overflow-x-hidden"
                       key="direct"
                     >
-                      {channel &&
-                        channel
-                          .filter((obj) => obj.type === "DIRECT")
-                          .map((obj, i) => (
-                            <Chat
-                              data={channel}
-                              channels={obj}
-                              socket={connection}
-                              main={MainUser}
-                              indexChannels={indexChannelsDirect}
-                              index={valueDirect}
-                              key={i}
-                            ></Chat>
-                          ))}
+                      {channelsDirect &&
+                        channelsDirect.map((obj, i) => (
+                          <Chat
+                            data={channelsDirect}
+                            channels={obj}
+                            socket={connection}
+                            main={MainUser}
+                            indexChannels={indexChannelsDirect}
+                            index={valueDirect}
+                            key={i}
+                          ></Chat>
+                        ))}
                     </SwipeableTabs>
                   )}
                 </div>

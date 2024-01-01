@@ -8,12 +8,13 @@ import { getChannel } from "../data/api";
 
 interface Props {
   object: Channel[];
+  direct: Channel[];
   main: User_Hero;
   onResultIdChange: (id: string) => void;
 }
 
-const SearchChat = ({ object, onResultIdChange, main }: Props) => {
-  const [FriendArr, setFriendArr] = useState(object);
+const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
+  const [FriendArr, setFriendArr] = useState<Channel[]>(object);
   const [Input, setInput] = useState("");
   const [mychannel, setMyChannel] = useState<Channel | null>(null);
 
@@ -24,6 +25,12 @@ const SearchChat = ({ object, onResultIdChange, main }: Props) => {
           user.name.toLowerCase().includes(Input.toLowerCase())
         )
       );
+    if (direct) {
+      direct.filter((user) => {
+        user.name.toLowerCase().includes(Input.toLowerCase());
+        setFriendArr((prevChannels) => [...prevChannels, user]);
+      });
+    }
   }, [Input]);
 
   useEffect(() => {
