@@ -102,6 +102,8 @@ const PlayerLoader = (props: {
 							width={500}
 							height={500}
 						/>
+						<button className=""></button>
+
 						<div className="flex w-full items-center flex-col">
 							<span className="font-body font-bold text-palette-green text-xl md:text-2xl lg:text-3xl">
 								{props.username.slice(0, 7)}

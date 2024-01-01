@@ -40,7 +40,6 @@ export const searchusers = () => {
 };
 
 export const adduser = (uid: string, username?: string) => {
-	console.log("user name = ", username);
 	const query = useQueryClient();
 	const addUser = async () => {
 		try {
