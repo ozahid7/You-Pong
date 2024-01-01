@@ -326,13 +326,11 @@ export const getMessages = async (id_channel: string) => {
 
 export const fetchData_userChannels_Direct = async () => {
   const result = await userChannels();
-  console.log(result);
   return result.Object.direct;
 };
 
 export const fetchData_userChannels_Channel = async () => {
   const result = await userChannels();
-  console.log(result);
   return result.Object.groups;
 };
 

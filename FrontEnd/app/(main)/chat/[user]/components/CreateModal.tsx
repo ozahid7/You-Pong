@@ -177,6 +177,7 @@ export default function CreateModal({ refetch }) {
                       onChange={(event) => {
                         setFilee(event.target.files?.[0] as File);
                       }}
+                      accept="image/png, image/jpeg, image/gif, image/bmp, image/svg+xml, image/webp"
                     />
                   </div>
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
