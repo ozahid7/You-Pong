@@ -6,7 +6,6 @@ import { Channel, Member, User, User_Hero } from "@/types";
 import { Button, Modal } from "@nextui-org/react";
 import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
-import { useQuery } from "react-query";
 import { Menu } from "@headlessui/react";
 
 interface HomePage {}

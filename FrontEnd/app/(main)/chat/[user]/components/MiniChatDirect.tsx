@@ -3,6 +3,7 @@ import { Channel, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel } from "../data/api";
 import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 interface HomeProps {
   channels: Channel;
@@ -24,6 +25,8 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
     }
   );
 
+  if (ChannelLoading) <Loader />;
+
   const user: User | null = data
     ? data.users.find((user) => user.id_user !== main.uid) || null
     : null;
@@ -37,7 +40,7 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
         className="flex w-[44px] h-[44px] "
         src={user?.avatar}
       />
-      <div className="flex w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block text-[#424242] font-archivo font-[800] text-[19px] flex-col content-center debug">
+      <div className="flex w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block text-[#424242] font-archivo font-[800] text-[19px] flex-col content-center">
         <p className="whitespace-nowrap overflow-hidden text-ellipsis">
           {user?.username}
         </p>

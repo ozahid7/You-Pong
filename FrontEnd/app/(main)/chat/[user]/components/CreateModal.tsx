@@ -25,7 +25,7 @@ export var setDataObj: Channel = {
   type: "PUBLIC",
   name: "Channel",
   description: "Change this description",
-  avatar: null || "",
+  avatar: null,
 };
 
 export default function CreateModal({ refetch }) {
@@ -33,12 +33,14 @@ export default function CreateModal({ refetch }) {
 
   const [selected, setSelected] = useState<string>("PUBLIC");
   const [file, setFilee] = useState<any>(null);
+  const [valid, setValid] = useState<boolean>(false);
 
   const imgRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
+
   var object: { Object: any; message: string };
 
   let imageUrl: any;
@@ -61,36 +63,47 @@ export default function CreateModal({ refetch }) {
   const CreateGroupDATA = async () => {
     var result = null;
 
-    setDataObj.name = nameRef.current?.value || randomInt(1, 100).toString();
-    if (nameRef.current?.value) {
-      if (descRef.current?.value)
-        setDataObj.description = descRef.current?.value;
-      if (setDataObj.type == "PROTECTED") {
-        if (
-          passRef.current?.value &&
-          passConfRef.current?.value === passRef.current?.value
-        )
-          setDataObj.hash = passRef.current?.value;
-        else setDataObj.hash = null || "";
-      }
+    setValid(false);
+
+    // Handle image //
+    if (imgRef.current?.value !== "" && imgRef.current?.files) {
+      result = await setFile(imgRef.current.files[0]);
+    } else result = await setFile(null);
+    setDataObj.avatar = result;
+    /////////////////
+
+    // Handle Name //
+    if (nameRef?.current.value) setDataObj.name = nameRef?.current.value;
+    /////////////////
+
+    // Handle Description //
+    if (descRef?.current.value) setDataObj.description = descRef?.current.value;
+    ///////////////////////
+
+    // Handle password //
+    if (setDataObj.type == "PROTECTED") {
       if (
-        (setDataObj.type == "PROTECTED" && setDataObj.hash) ||
-        setDataObj.type != "PROTECTED"
-      ) {
-        if (imgRef.current?.value !== "" && imgRef.current?.files) {
-          result = await setFile(imgRef.current.files[0]);
-        } else result = await setFile(null);
-
-        setDataObj.avatar = result;
-
-        object = await setData(setDataObj);
-        // SEND DATA TO HAMID RIGHT HERE
-        if (object.Object !== null) refetch();
-        onClose();
-        // CLOSE THE MODAL Function :)
+        passRef.current?.value &&
+        passConfRef.current?.value === passRef.current?.value
+      )
+        setDataObj.hash = passRef.current?.value;
+      else {
+        passConfRef.current.value = null;
+        passRef.current.value = null;
+        setValid(true);
+        return;
       }
-      clean();
     }
+    ////////////////////
+
+    // Send data
+    object = await setData(setDataObj);
+    // SEND DATA TO HAMID RIGHT HERE
+    if (object.Object !== null) refetch();
+    onClose();
+    // CLOSE THE MODAL Function :)
+
+    clean();
   };
 
   const handleSelectionChange = (newSelection: string) => {
@@ -100,17 +113,11 @@ export default function CreateModal({ refetch }) {
 
   const clean = () => {
     setFilee(groups);
+    setDataObj.name = "Channel";
     setDataObj.description = "Change this description";
-    setDataObj.avatar = null || groups;
-    // if (descRef.current.value !== null)
-    //   descRef.current.value = null;
-    // nameRef.current.value = null;
-    // imgRef.current.value = null;
-    // if (setDataObj.type == "PROTECTED") {
-    //   passRef.current.value = null;
-    //   passConfRef.current.value = null;
-    // }
+    setDataObj.avatar = null;
   };
+
   const close = () => {
     onClose();
     clean();
@@ -144,7 +151,7 @@ export default function CreateModal({ refetch }) {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Create a group
+                Create a channel
               </ModalHeader>
               <ModalBody className="w-[60%]">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -170,6 +177,7 @@ export default function CreateModal({ refetch }) {
                       onChange={(event) => {
                         setFilee(event.target.files?.[0] as File);
                       }}
+                      accept="image/png, image/jpeg, image/gif, image/bmp, image/svg+xml, image/webp"
                     />
                   </div>
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
@@ -181,12 +189,12 @@ export default function CreateModal({ refetch }) {
                       aria-label="Options"
                       size="lg"
                       radius="sm"
-                      className=" w-full h-fit flex justify-center"
+                      className=" w-full h-fit flex justify-center "
                     >
                       <Tab
                         key="PUBLIC"
                         title="PUBLIC"
-                        className="w-full font-body"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
@@ -208,7 +216,7 @@ export default function CreateModal({ refetch }) {
                       <Tab
                         key="PRIVATE"
                         title="PRIVATE"
-                        className="w-full font-body"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
@@ -230,10 +238,10 @@ export default function CreateModal({ refetch }) {
                       <Tab
                         key="PROTECTED"
                         title="PROTECTED"
-                        className="w-full font-body text-red-500"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
-                          <CardBody className="gap-6 bg">
+                          <CardBody className="gap-6 ">
                             <GroupsInput
                               ref={nameRef}
                               text="Channel name"
@@ -247,16 +255,20 @@ export default function CreateModal({ refetch }) {
                               customclass="w-full h-[3rem] self-center"
                             ></GroupsInput>
                             <GroupsInput
+                              isPassword={true}
                               ref={passRef}
                               text="Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
+                              isValid={valid}
                             ></GroupsInput>
                             <GroupsInput
+                              isPassword={true}
                               ref={passConfRef}
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
+                              isValid={valid}
                             ></GroupsInput>
                           </CardBody>
                         </Card>
