@@ -39,7 +39,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				setData(obj);
 				notify(obj.username, obj.avatar, true, 10000, "", obj.info);
 			});
-
 		if (globalSocket.listeners("accepted").length === 0)
 			globalSocket.on("accepted", (obj: inviteReturn) => {
 				console.log("from accepted ......", obj);
@@ -76,6 +75,30 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 					autoClose: 5000,
 					toastId: "cancel_toast",
 				});
+			});
+
+		//Random game accepted
+		if (globalSocket.listeners("acceptedGame").length === 0)
+			globalSocket.on("acceptedGame", (obj: inviteReturn) => {
+				console.log("from acceptedGame ", obj);
+				setAccepted(true);
+				setData(obj);
+			});
+
+		//Random game Cancled
+		if (globalSocket.listeners("canceledGame").length === 0)
+			globalSocket.on("canceledGame", (obj: inviteReturn) => {
+				console.log("canceledGame = ", obj);
+				setData(undefined);
+				toast.update("toast_id", {
+					render: () => (
+						<div className={style}>Something went Wrong 😔</div>
+					),
+					type: toast.TYPE.INFO,
+					autoClose: 3000,
+					toastId: "canceledGame_toast",
+				});
+				router.push(myRoutes.dashboard);
 			});
 	}, []);
 

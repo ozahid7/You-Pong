@@ -13,3 +13,9 @@ export interface inviteReturn {
 	username: string;
 	level: number;
 }
+
+export interface infoPlayer {
+	id_sender: string;
+	map: string;
+	mode: string;
+}
