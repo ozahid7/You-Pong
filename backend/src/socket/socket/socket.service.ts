@@ -150,13 +150,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         },
       });
       if (game) {
-        this.server.to(player.id_socket).emit('acceptedGame', {
+        this.server.to(opponent.id_socket).emit('acceptedGame', {
           username: player_user.username,
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: game.id_match,
         });
-        this.server.to(opponent.id_socket).emit('acceptedGame', {
+        this.server.to(player.id_socket).emit('acceptedGame', {
           username: opponent_user.username,
           avatar: opponent_user.avatar,
           level: opponent_user.level,
