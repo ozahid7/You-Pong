@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { LuMoreHorizontal, LuSend } from "react-icons/lu";
+import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
 import { Channel, Member, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
@@ -10,6 +10,7 @@ import { User } from "@/types";
 import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
 import { useQuery } from "react-query";
+import { TbSend, TbSendOff } from "react-icons/tb";
 
 interface obj {
   channels: Channel;
@@ -21,8 +22,6 @@ interface obj {
   joinRefetch: any;
   data: Channel[];
 }
-
-var one: boolean = false;
 
 const GroupsChat = ({
   channels,
@@ -92,7 +91,7 @@ const GroupsChat = ({
 
   const handleButtonClick = () => {
     if (messageRef?.current.value === "") return;
-    if (!one && socket) {
+    if (socket) {
       var message = {
         id_channel: channels.id_channel,
         id_sender: MainUser.uid,
@@ -101,20 +100,13 @@ const GroupsChat = ({
       socket.emit("newMessage", message);
       messageRef.current.value = null;
       message = null;
-      one = true;
     }
   };
-
-  // const handleInputChange = (e: any) => {
-  //   setInputValue(e.target.value);
-  //   one = false;
-  // };
 
   const handleEnterPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleButtonClick();
-      one = false;
     }
   };
 
@@ -187,7 +179,11 @@ const GroupsChat = ({
               onClick={handleButtonClick}
               disabled={mutedMember.disabled}
             >
-              <LuSend className="h-8 w-8 text-[#497174] xs:w-5 xs:h-5 xs:mr-2" />
+              {mutedMember.disabled === false ? (
+                <TbSend className="h-[30px] w-[30px] text-[#497174]" />
+              ) : (
+                <TbSendOff className="h-[30px] w-[30px] text-[#497174]" />
+              )}
             </button>
           </div>
         </div>

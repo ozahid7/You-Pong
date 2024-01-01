@@ -7,7 +7,7 @@ interface HomeProps {
 
 const MiniChat = ({ channels }: HomeProps) => {
   return (
-    <div className="flex w-full h-full 3xl_:w-[19.5rem] 2xl_:w-[18rem] xl_:w-[14.5rem] lg_:w-[13rem] md_:w-[8rem] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
+    <div className="flex w-full h-[60px] 3xl_:w-[19.5rem] 2xl_:w-[18rem] xl_:w-[14.5rem] lg_:w-[13rem] md_:w-[8rem] rounded-sm shadow-md shadow-[rgba(0,0,0,0.25)] items-center justify-evenly flex-row bg-[#EFF5F5]">
       <Avatar
         isBordered
         radius="sm"
