@@ -17,6 +17,7 @@ import {
 } from "../data/api";
 import { useQuery } from "react-query";
 import { Menu } from "@headlessui/react";
+import Loader from "@/components/tools/Loader";
 
 interface HomePage {
   channels: Channel;
@@ -41,9 +42,8 @@ const GroupDropdown = ({
       channelsRefetch();
     }
   };
-// TODO protect data (isloading)
 
-  const { data: MainUser } = useQuery<User_Hero, Error>(
+  const { data: MainUser, isLoading } = useQuery<User_Hero, Error>(
     ["MainUser"],
     fetchData_getMainUser,
     {
@@ -53,7 +53,11 @@ const GroupDropdown = ({
     }
   );
 
-  const { data: Members, refetch: membersRefetch } = useQuery<Member[], Error>(
+  const {
+    data: Members,
+    refetch: membersRefetch,
+    isLoading: membersLoading,
+  } = useQuery<Member[], Error>(
     ["members", channels?.id_channel],
     () => fetchData_getMembers(channels?.id_channel),
     {
@@ -62,6 +66,8 @@ const GroupDropdown = ({
       },
     }
   );
+
+  if (isLoading || membersLoading) <Loader />;
 
   return (
     <div className="flex flex-col justify-center relative">

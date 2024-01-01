@@ -3,13 +3,12 @@ import { Channel, User, User_Hero } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel } from "../data/api";
 import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 interface HomeProps {
   channels: Channel;
   main: User_Hero;
 }
-// TODO protect data (isloading)
-
 
 const MiniChatDirect = ({ channels, main }: HomeProps) => {
   const {
@@ -25,6 +24,8 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
       },
     }
   );
+
+  if (ChannelLoading) <Loader />;
 
   const user: User | null = data
     ? data.users.find((user) => user.id_user !== main.uid) || null

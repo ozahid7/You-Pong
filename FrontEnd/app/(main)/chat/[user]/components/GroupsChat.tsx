@@ -11,6 +11,7 @@ import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { TbSend, TbSendOff } from "react-icons/tb";
+import Loader from "@/components/tools/Loader";
 
 interface obj {
   channels: Channel;
@@ -34,12 +35,10 @@ const GroupsChat = ({
   joinRefetch,
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState("");
   var mutedMember = {
     placeholder: "Type a message here ...",
     disabled: false,
   };
-  // TODO protect data (isloading)
 
   const {
     data: channel,
@@ -70,6 +69,8 @@ const GroupsChat = ({
       },
     }
   );
+
+  if (ChannelLoading || MembersLoading) <Loader />;
 
   const retChannel: Channel | null = data
     ? data.find(

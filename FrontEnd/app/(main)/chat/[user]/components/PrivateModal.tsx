@@ -18,6 +18,7 @@ import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
 import { fetchData_Channel, fetchData_users, joinPrivate } from "../data/api";
 import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 interface Props {
   MainUser: User_Hero;
@@ -46,7 +47,11 @@ const PrivateModal = ({
     join: true,
   };
 
-  const { data: Users, refetch: UsersRefetch } = useQuery<User[], Error>(
+  const {
+    data: Users,
+    refetch: UsersRefetch,
+    isLoading,
+  } = useQuery<User[], Error>(
     ["users", Channel_.id_channel],
     () => fetchData_users(Channel_.id_channel),
     {
@@ -55,6 +60,8 @@ const PrivateModal = ({
       },
     }
   );
+
+  if (isLoading) <Loader />;
 
   Channel_.type === "PRIVATE" ? (show = true) : (show = false);
 

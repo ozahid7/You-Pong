@@ -28,6 +28,7 @@ import {
 import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
 import { useQuery } from "react-query";
+import Loader from "@/components/tools/Loader";
 
 var one: boolean = false;
 var connection: any = null;
@@ -46,25 +47,25 @@ const Chats = ({ params }) => {
   const [valueGroups, setValueGroups] = useState<number>(0);
   var redirect: number = 0;
 
-  // TODO protect data (isloading)
-  const { data: MainUser } = useQuery<
-    User_Hero,
-    Error
-  >(["MainUser"], fetchData_getMainUser, {
-    onError: (error: Error) => {
-      console.error("Members query error:", error);
-    },
-  });
-
-  const { data: channel, refetch } = useQuery<Channel[], Error>(
-    ["userChannels"],
-    fetchData_userChannels,
+  const { data: MainUser, isLoading: MainLoading } = useQuery<User_Hero, Error>(
+    ["MainUser"],
+    fetchData_getMainUser,
     {
       onError: (error: Error) => {
-        console.error("Channels query error:", error);
+        console.error("Members query error:", error);
       },
     }
   );
+
+  const {
+    data: channel,
+    refetch,
+    isLoading: channelsLoading,
+  } = useQuery<Channel[], Error>(["userChannels"], fetchData_userChannels, {
+    onError: (error: Error) => {
+      console.error("Channels query error:", error);
+    },
+  });
 
   const {
     data,
@@ -76,6 +77,8 @@ const Chats = ({ params }) => {
       console.error("Members query error:", error);
     },
   });
+
+  if (MainLoading || channelsLoading || isLoading) <Loader />;
 
   useEffect(() => {
     JoinChannels = {
