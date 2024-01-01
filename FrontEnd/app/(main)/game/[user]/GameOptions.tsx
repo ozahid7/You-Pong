@@ -1,10 +1,13 @@
 "use client";
 import { Map, CustomButton, Mode, MyDialog } from "@/components";
 import { myRoutes } from "@/const";
-import { inviteGame } from "@/utils/game";
+import { UserInfo } from "@/types/Api";
+import { inviteGame, notify } from "@/utils/game";
+import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { MdCancelPresentation } from "react-icons/md";
+import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
 export default function GameSettings(props: {
@@ -19,8 +22,12 @@ export default function GameSettings(props: {
 	socket?: Socket;
 	my_id: string;
 	game_id: string;
+	status: string;
+	user: UseQueryResult<UserInfo, Error>;
 }) {
 	const router = useRouter();
+	const style =
+		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
 
 	return (
 		<>
@@ -72,19 +79,34 @@ export default function GameSettings(props: {
 								color="orange"
 								otherclass="max-w-[300px] mt-10 w-[60%] min-h-[40px]"
 								handleclick={() => {
-									inviteGame(
-										{
-											id_game: props.game_id,
-											id_sender: props.my_id,
-											id_receiver: props.opponent_uid,
-											socket_player: props.socket.id,
-											map: props.map,
-											mode: props.mode,
-										},
-										props.socket
-									);
-									props.setIsOpen(false);
-									props.showPlayerLoader(true);
+									props.user.refetch().then((responce) => {
+										if (responce.data.status === "INGAME") {
+											notify(
+												"",
+												"",
+												false,
+												2000,
+												"You are already in game 🤬"
+											);
+											router.push(myRoutes.dashboard);
+										} else {
+											inviteGame(
+												{
+													id_game: props.game_id,
+													id_sender: props.my_id,
+													id_receiver:
+														props.opponent_uid,
+													socket_player:
+														props.socket.id,
+													map: props.map,
+													mode: props.mode,
+												},
+												props.socket
+											);
+											props.setIsOpen(false);
+											props.showPlayerLoader(true);
+										}
+									});
 								}}
 							/>
 						</div>

@@ -70,12 +70,13 @@ const MiniBanner = (props: {
 							}}
 							opacity={1}
 							place={"right"}
+							positionStrategy={"absolute"}
 						/>
 						<img
 							data-tooltip-content={message}
 							data-tooltip-id="rank_image"
 							data-tooltip-hidden={!props.isRank}
-							className="border-2 max-w-[20px] h:max-w-[30px] flex border-white rounded-sm object-contain"
+							className="border-2 max-w-[20px] h:max-w-[26px] flex border-white rounded-sm object-contain"
 							src={avatar}
 							alt=""
 							width={90}

@@ -4,7 +4,7 @@ import { useAxios } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export const blockuser = (uid: string, setInvalid: any) => {
+export const blockuser = (uid: string) => {
 	const query = useQueryClient();
 
 	const blockUser = async () => {
@@ -76,7 +76,7 @@ export const removeuser = (uid: string, username?: string) => {
 	return useMutation({ mutationFn: removeUser });
 };
 
-export const unblockuser = (uid: string, setInvalid: any) => {
+export const unblockuser = (uid: string) => {
 	const query = useQueryClient();
 	const unblockUser = async () => {
 		try {
@@ -84,7 +84,6 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 				"put",
 				friendsEndPoint.unblock + "?id_friend=" + uid
 			);
-			setInvalid(true);
 			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
@@ -95,7 +94,7 @@ export const unblockuser = (uid: string, setInvalid: any) => {
 	return useMutation({ mutationFn: unblockUser });
 };
 
-export const acceptuser = (uid: string, setInvalid: any) => {
+export const acceptuser = (uid: string) => {
 	const query = useQueryClient();
 	const acceptkUser = async () => {
 		try {
@@ -112,7 +111,7 @@ export const acceptuser = (uid: string, setInvalid: any) => {
 	return useMutation({ mutationFn: acceptkUser });
 };
 
-export const declineuser = (uid: string, setInvalid: any) => {
+export const declineuser = (uid: string) => {
 	const query = useQueryClient();
 	const declineUser = async () => {
 		try {
