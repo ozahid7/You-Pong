@@ -28,7 +28,7 @@ import { GameModule } from './game/game.module';
     AchievementModule,
     FriendModule,
     SocketModule,
-    GameModule
+    GameModule,
   ],
 })
 export class AppModule {}

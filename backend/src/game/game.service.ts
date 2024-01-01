@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AchievementService } from 'src/achievement/achievement.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GameService {
-  constructor(
-    private prisma: PrismaService,
-    private achievement: AchievementService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   //GET MANY
   async getMatchs(id_user: string) {
@@ -86,6 +82,137 @@ export class GameService {
     };
   }
 
+  //PUT
+  async putAchievements(id_user: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+      include: {
+        achievements: true,
+        matchs_player: true,
+        matchs_opponent: true,
+      },
+    });
+    if (!user)
+      return {
+        message: 'No such User !',
+        Object: null,
+      };
+    const achievements = await this.prisma.achievement.findMany({
+      include: { users: true },
+    });
+    if (!achievements)
+      return {
+        message: 'No such Achievements !',
+        Object: null,
+      };
+
+    // Play & win
+    if (
+      user.victory >= 1 &&
+      user.achievements.find((achiev) => achiev.id_achievement === '1') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '1' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Level up
+    if (
+      user.level >= 3 &&
+      user.achievements.find((achiev) => achiev.id_achievement === '2') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '2' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Play & win
+    if (
+      (user.matchs_opponent.length >= 1 || user.matchs_player.length >= 1) &&
+      user.achievements.find((achiev) => achiev.id_achievement === '3') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '3' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Runked Up
+    if (
+      user.rank === 'PANDORA' &&
+      user.achievements.find((achiev) => achiev.id_achievement === '4') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '4' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Cleansheet
+    const matchs = (await this.getMatchs(id_user)).Object;
+    let someMatches: typeof matchs = null;
+    if (matchs.length !== 0) someMatches = matchs.slice(0, 1);
+    if (
+      someMatches &&
+      someMatches.filter(
+        (match) => match.win === true && match.opponent_score === 0,
+      ) &&
+      user.achievements.find((achiev) => achiev.id_achievement === '5') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '5' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Hat Trick
+    if (matchs.length !== 0) someMatches = matchs.slice(0, 3);
+    if (
+      someMatches &&
+      someMatches.filter((match) => match.win === false) !== undefined &&
+      user.achievements.find((achiev) => achiev.id_achievement === '6') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '6' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+
+    // Level up
+    if (
+      user.level >= 8 &&
+      user.achievements.find((achiev) => achiev.id_achievement === '7') ===
+        undefined
+    ) {
+      await this.prisma.achievement.update({
+        where: { id_achievement: '7' },
+        data: {
+          users: { connect: { id_user: user.id_user } },
+        },
+      });
+    }
+  }
+
   //PUT RANK
   async putRank(id_user: string) {
     const user = await this.prisma.user.findUnique({
@@ -133,14 +260,14 @@ export class GameService {
         where: { id_user: player.id_user },
         data: {
           victory: player.victory + 1,
-          level: player.level + 0.45,
+          level: player.level + 1.25,
         },
       });
       const updateOpponent = await this.prisma.user.update({
         where: { id_user: opponent.id_user },
         data: {
-          victory: opponent.defeats + 1,
-          level: opponent.level + 0.15,
+          defeats: opponent.defeats + 1,
+          level: opponent.level + 0.75,
         },
       });
       if (!updatePlayer || !updateOpponent)
@@ -149,15 +276,15 @@ export class GameService {
       const updatePlayer = await this.prisma.user.update({
         where: { id_user: player.id_user },
         data: {
-          victory: player.defeats + 1,
-          level: player.level + 0.15,
+          defeats: player.defeats + 1,
+          level: player.level + 0.75,
         },
       });
       const updateOpponent = await this.prisma.user.update({
         where: { id_user: opponent.id_user },
         data: {
           victory: opponent.victory + 1,
-          level: opponent.level + 0.45,
+          level: opponent.level + 1.25,
         },
       });
       if (!updatePlayer || !updateOpponent)
@@ -165,7 +292,7 @@ export class GameService {
     }
     this.putRank(player.id_user);
     this.putRank(opponent.id_user);
-    this.achievement.putAchievements(player.id_user);
-    this.achievement.putAchievements(opponent.id_user);
+    this.putAchievements(player.id_user);
+    this.putAchievements(opponent.id_user);
   }
 }
