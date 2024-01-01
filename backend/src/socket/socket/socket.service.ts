@@ -10,8 +10,6 @@ import {
 } from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
-import { on } from 'events';
-import { log } from 'util';
 
 export enum map {
   GREEN,
@@ -132,12 +130,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       socket_player,
     });
   }
-
-  // async removePrivateGame(id_player: string, id_game: string) {
-  //   this.privateGame = this.privateGame.filter(
-  //     (user) => user.id_player !== id_player && user.id_game !== id_game,
-  //   );
-  // }
 
   async launch_game(player, opponent) {
     const player_user = await this.prisma.user.findUnique({
@@ -378,8 +370,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: sender.id_user, status: 'INGAME' });
-
-            //logic matching
             this.matching(info, sender.id_user, sender.id_socket);
           }
         }
@@ -531,7 +521,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && otherUser) {
           if (this.privateGame.find((game) => game.id_game === info.id_game)) {
-            // this.removePrivateGame(info.id_sender, info.id_game);
             this.removePrvGame(info.socket_player);
             const game = await this.prisma.match_History.create({
               data: {
@@ -591,7 +580,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && otherUser) {
           if (this.privateGame.find((game) => game.id_game === info.id_game)) {
-            // this.removePrivateGame(info.id_sender, info.id_game);
             this.removePrvGame(info.socket_player);
             this.server.to(receiver.id_socket).emit('refused', {
               info,
@@ -636,7 +624,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         });
         if (my_user && otherUser) {
           if (this.privateGame.find((game) => game.id_game === info.id_game)) {
-            // this.removePrivateGame(info.id_sender, info.id_game);
             this.removePrvGame(info.socket_player);
             this.server.to(receiver.id_user).emit('canceled', {
               info,
