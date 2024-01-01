@@ -7,7 +7,6 @@ import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import useFriends from "@/api/useFriends";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { LuMessageSquarePlus } from "react-icons/lu";
@@ -19,8 +18,9 @@ import { UserInfo } from "@/types/Api";
 import { notify } from "@/utils/game";
 
 const PlayerCard = (props: {
-	username: string;
+	param: string;
 	avatar: string;
+	username: string;
 	rank: number;
 	level: number;
 	isMe: boolean;
@@ -44,7 +44,7 @@ const PlayerCard = (props: {
 	const Add = adduser(props.uid);
 	const Remove = removeuser(props.uid);
 	const direct = todirect(props.uid);
-	const otheruser = useOtherUser(props.username);
+	const otheruser = useOtherUser(props.param);
 
 	useEffect(() => {
 		if (props.isMe)
@@ -98,7 +98,6 @@ const PlayerCard = (props: {
 			onClick={() => {
 				Remove.mutate();
 				setIcon(addIcon);
-				otheruser.refetch();
 			}}
 			size={100}
 			className={iconsStyle}
@@ -166,7 +165,6 @@ const PlayerCard = (props: {
 								onClick={() => {
 									Block.mutate();
 									router.push(myRoutes.dashboard);
-									otheruser.refetch();
 								}}
 								size={100}
 								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-red-600 cursor-pointer"
@@ -181,6 +179,7 @@ const PlayerCard = (props: {
 									strokeWidth={2.5}
 									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-orange`}
 									onClick={() => {
+										console.log("first");
 										direct.mutate();
 									}}
 								/>

@@ -132,6 +132,7 @@ export const declineuser = (uid: string, setInvalid: any) => {
 
 export const todirect = (uid: string) => {
 	const router = useRouter();
+
 	const toDirect = async () => {
 		try {
 			const response = await useAxios(
@@ -139,7 +140,7 @@ export const todirect = (uid: string) => {
 				chatEndPoint.direct + "?id_friend=" + uid
 			);
 			console.log("todirect response = ", response);
-			router.push("chat" + "/" + uid);
+			router.push(myRoutes.chat + "/" + uid);
 			return response;
 		} catch (error) {
 			console.log("to direct error = ", error);

@@ -53,6 +53,7 @@ const page = ({ params }: pageProps) => {
 								user_relation={user_relation}
 								avatar={avatar}
 								status={status}
+								param={params.profile}
 								isMe={isMe}
 								user={user}
 							/>
