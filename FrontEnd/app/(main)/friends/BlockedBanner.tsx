@@ -15,7 +15,7 @@ const BlockedBanner = (props: {
 	friends: any;
 }) => {
 	const [enabled, setEnabled] = useState(true);
-	const unblock = unblockuser(props.uid, props.SetInvalidData);
+	const unblock = unblockuser(props.uid);
 
 	if (unblock.isPending || props.friends.isFetching)
 		return <MiniLoader customClass="m-auto" />;
