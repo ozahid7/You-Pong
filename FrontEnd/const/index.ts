@@ -17,7 +17,7 @@ export const myRoutes = {
 	dashboard: "/user/profile",
 	settings: "/settings",
 	friends: "/friends",
-	chat: "/chat",
+	chat: "/chat/user",
 	game: "/game",
 	gameme: "/game/me",
 	notfound: "/user",

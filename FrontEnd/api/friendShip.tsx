@@ -142,7 +142,7 @@ export const todirect = (uid: string) => {
 				chatEndPoint.direct + "?id_friend=" + uid
 			);
 			console.log("todirect response = ", response);
-			router.push(myRoutes.chat + "/" + uid);
+			router.push("/chat" + "/" + uid);
 			return response;
 		} catch (error) {
 			console.log("to direct error = ", error);
