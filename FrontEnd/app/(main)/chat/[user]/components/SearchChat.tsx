@@ -46,10 +46,10 @@ const SearchChat = ({ object, onResultIdChange, main }: Props) => {
   return (
     <Combobox>
       <div className="flex flex-col m-1 relative justify-center w-[96%] h-[9%] ">
-        <div className="search_input_chat md_:h-[88%] sm_:h-[70%] w-full p-[2px] min-h-[40px] flex justify-center items-center">
-          <div className="center  outline-none w-[98%] h-[98%]  flex justify-center items-center overflow-hidden">
+        <div className="search_input_chat h-full w-full p-[2px] min-h-[40px] flex justify-center items-center">
+          <div className="center  outline-none w-[98%] h-[95%]  flex justify-center items-center overflow-hidden">
             <LuSearch
-              className="m-1 text-palette-green xs:w-[25px] sm_:block xxs:hidden
+              className="m-1 text-[#9C9C9C] xs:w-[25px] sm_:block xxs:hidden
                   3xl_:w-8 3xl_:h-8 2xl_:w-7 2xl_:h-7 lg_:w-6 lg_:h-6 md_:w-5 md_:h-5"
             />
             <Combobox.Input
@@ -60,7 +60,7 @@ const SearchChat = ({ object, onResultIdChange, main }: Props) => {
               }}
               value={Input}
               placeholder="Search"
-              className="flex center text-palette-green sm:placeholder-opacity-100 xxs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-full 2xl_:placeholder:text-[28px] lg_:placeholder:text-[25px] md_:placeholder:text-[20px]"
+              className="flex center text-[#9C9C9C] sm:placeholder-opacity-100 xxs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-[98%] w-full "
             />
           </div>
         </div>

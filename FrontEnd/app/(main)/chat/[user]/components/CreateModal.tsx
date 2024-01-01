@@ -144,7 +144,7 @@ export default function CreateModal({ refetch }) {
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                Create a group
+                Create a channel
               </ModalHeader>
               <ModalBody className="w-[60%]">
                 <div className="flex justify-evenly items-center flex-col gap-3">
@@ -190,6 +190,7 @@ export default function CreateModal({ refetch }) {
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
+                            <div></div>
                             <GroupsInput
                               ref={nameRef}
                               text="Channel name"
