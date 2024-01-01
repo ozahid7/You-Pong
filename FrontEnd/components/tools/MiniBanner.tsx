@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Tooltip } from "react-tooltip";
 
 const MiniBanner = (props: {
 	isGreen: boolean;
@@ -7,6 +8,8 @@ const MiniBanner = (props: {
 	value: string;
 	valueStyle?: string;
 	nameStyle?: string;
+	isRank?: boolean;
+	rank?: string;
 	className?: string;
 }) => {
 	const start = props.isGreen ? "from-[#508286]" : "from-[#E97152]";
@@ -19,7 +22,7 @@ const MiniBanner = (props: {
 		props.nameStyle
 	);
 	const className = twMerge(
-		"max-w-[300px] flex overflow-clip rounded-sm drop-shadow-md h-full font-body h:w-[80%] md:min-h-[45px] min-h-[34px] h:min-h-[40px] w-full",
+		"max-w-[300px] flex  rounded-sm drop-shadow-md h-full font-body h:w-[80%] md:min-h-[45px] min-h-[34px] h:min-h-[40px] w-full",
 		props.className
 	);
 	const end = props.isGreen ? "to-[#9DBBBD]" : "to-[#ECAC9B]";
@@ -27,21 +30,63 @@ const MiniBanner = (props: {
 		props.isGreen ? "bg-palette-green" : "bg-palette-orange"
 	}`;
 
+	const [avatar, setAvatar] = useState("");
+	const [message, setMessage] = useState("");
+
+	//choose rank
+	useEffect(() => {
+		if (props.rank === "BIOS") {
+			setAvatar("/bios.png");
+			setMessage("Bios 🥺");
+		} else if (props.rank === "COMODORE") {
+			setMessage("Comodore 😌");
+			setAvatar("/comodor.png");
+		} else if (props.rank === "FREAX") {
+			setMessage("Freax 🙁");
+			setAvatar("/freax.png");
+		} else {
+			setMessage("Pandora 😍");
+			setAvatar("/pandora.png");
+		}
+	}, []);
+
 	return (
-		<div className={className}>
+		<div
+			data-tooltip-content={message}
+			data-tooltip-id="rank_image"
+			data-tooltip-place="bottom"
+			data-tooltip-hidden={!props.isRank}
+			className={className}
+		>
 			<div className={customClass}></div>
 			<div
 				className={`w-full max-h-[100px] sm:min-h-full  bg-gradient-to-r ${start} ${end} flex items-center justify-between h:justify-around px-2 sm:px-3`}
 			>
 				<p className={namestyle}>{props.name}</p>
-				<p className={valuestyle}>{props.value}</p>
-				{/* <img
-					className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm object-contain"
-					src={"/bios.svg"}
-					alt=""
-					width={90}
-					height={90}
-				/> */}
+				{!props.isRank ? (
+					<p className={valuestyle}>{props.value}</p>
+				) : (
+					<>
+						<Tooltip
+							id="rank_image"
+							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey font-semibold drop-shadow-lg z-10"
+							style={{
+								backgroundColor: "#46686A",
+								color: "#fff",
+							}}
+							opacity={1}
+							float={true}
+							place={"right"}
+						/>
+						<img
+							className="border-2 max-w-[20px] h:max-w-[30px] flex border-white rounded-sm object-contain"
+							src={avatar}
+							alt=""
+							width={90}
+							height={90}
+						/>
+					</>
+				)}
 			</div>
 		</div>
 	);

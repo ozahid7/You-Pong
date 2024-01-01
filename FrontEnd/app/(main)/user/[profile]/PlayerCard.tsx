@@ -238,8 +238,10 @@ const PlayerCard = (props: {
 
 								<MiniBanner
 									isGreen={false}
+									isRank={true}
 									value={props.rank.toString()}
 									name="Rank"
+									rank="PANDORA"
 								/>
 							</div>
 						</div>
