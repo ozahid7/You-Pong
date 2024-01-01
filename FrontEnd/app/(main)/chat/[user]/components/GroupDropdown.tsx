@@ -41,6 +41,7 @@ const GroupDropdown = ({
       channelsRefetch();
     }
   };
+// TODO protect data (isloading)
 
   const { data: MainUser } = useQuery<User_Hero, Error>(
     ["MainUser"],

@@ -8,6 +8,8 @@ interface HomeProps {
   channels: Channel;
   main: User_Hero;
 }
+// TODO protect data (isloading)
+
 
 const MiniChatDirect = ({ channels, main }: HomeProps) => {
   const {
@@ -37,7 +39,7 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
         className="flex w-[44px] h-[44px] "
         src={user?.avatar}
       />
-      <div className="flex w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block text-[#424242] font-archivo font-[800] text-[19px] flex-col content-center debug">
+      <div className="flex w-[70%] h-[80%] overflow-hidden xxs:hidden sm:block text-[#424242] font-archivo font-[800] text-[19px] flex-col content-center">
         <p className="whitespace-nowrap overflow-hidden text-ellipsis">
           {user?.username}
         </p>

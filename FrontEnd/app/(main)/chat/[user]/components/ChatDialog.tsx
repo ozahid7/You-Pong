@@ -19,6 +19,7 @@ interface Props {
   socket: any;
   channel: Channel;
 }
+// TODO protect data (isloading)
 
 const ChatDialog = ({ main, socket, channel }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);

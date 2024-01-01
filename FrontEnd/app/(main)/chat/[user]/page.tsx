@@ -46,7 +46,8 @@ const Chats = ({ params }) => {
   const [valueGroups, setValueGroups] = useState<number>(0);
   var redirect: number = 0;
 
-  const { data: MainUser, refetch: MainUserRefetch } = useQuery<
+  // TODO protect data (isloading)
+  const { data: MainUser } = useQuery<
     User_Hero,
     Error
   >(["MainUser"], fetchData_getMainUser, {
