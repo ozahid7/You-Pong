@@ -1,5 +1,4 @@
 import Chat from "./Chat";
-import ChatDropdown from "./ChatDropdown";
 import ChatEdit from "./ChatEdit";
 import GroupDropdown from "./GroupDropdown";
 import GroupsChat from "./GroupsChat";
@@ -25,7 +24,6 @@ import PrivateModal from "./PrivateModal";
 
 export {
   Chat,
-  ChatDropdown,
   ChatEdit,
   GroupDropdown,
   GroupsChat,

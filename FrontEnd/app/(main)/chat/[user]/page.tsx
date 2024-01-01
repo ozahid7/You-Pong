@@ -45,7 +45,6 @@ const Chats = ({ params }) => {
   const [value, setValue] = useState<number>(0);
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
-  var redirect: number = 0;
 
   const { data: MainUser, isLoading: MainLoading } = useQuery<User_Hero, Error>(
     ["MainUser"],
@@ -124,6 +123,20 @@ const Chats = ({ params }) => {
     }
   }, [channel]);
 
+  const handleResultId = (id: string) => {
+    // handle channels search
+    indexChannels.map((channel) => {
+      if (channel.id_channel === id)
+        return setValue(1), setValueGroups(channel.index);
+    });
+
+    // handle direct search
+    indexChannelsDirect.map((channel) => {
+      if (channel.id_channel === id)
+        return setValue(0), setValueDirect(channel.index);
+    });
+  };
+
   //// Socket
   if (MainUser?.uid && !one) {
     connection = io(`http://localhost:4000/chat?id_user=${MainUser.uid}`, {
@@ -153,7 +166,11 @@ const Chats = ({ params }) => {
                 <div className="flex flex-row w-full h-full items-center ">
                   <div className="flex h-[90%] w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid pr-5">
                     <ChatHeading text="Chats" />
-                    {/* <SearchChat object={channel} /> */}
+                    <SearchChat
+                      object={channel}
+                      main={MainUser}
+                      onResultIdChange={handleResultId}
+                    />
                     <div className="flex h-full w-full flex-row justify-center items-center">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">

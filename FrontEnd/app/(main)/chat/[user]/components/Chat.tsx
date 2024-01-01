@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
-import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
+import { ChatDialog, DirectDropdown } from ".";
 import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel, getMembers } from "../data/api";
