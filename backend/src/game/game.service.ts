@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { AchievementService } from 'src/achievement/achievement.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GameService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private achievement: AchievementService,
+  ) {}
 
   //GET MANY
   async getMatchs(id_user: string) {
@@ -80,5 +84,64 @@ export class GameService {
       message: 'Matchs founded',
       Object: result,
     };
+  }
+
+  //PUT LEVEL & RANK
+  async putLvlRank(id_match: string) {
+    const match = await this.prisma.match_History.findUnique({
+      where: { id_match: id_match },
+    });
+    if (!match) {
+      return {
+        message: 'No such match !',
+        Object: null,
+      };
+    }
+    const player = await this.prisma.user.findUnique({
+      where: { id_user: match.id_player },
+    });
+    const opponent = await this.prisma.user.findUnique({
+      where: { id_user: match.id_opponent },
+    });
+    if (!player || !opponent) {
+      return {
+        message: 'No such user !',
+        Object: null,
+      };
+    }
+
+    if (match.player_score > match.opponent_score) {
+      const updatePlayer = await this.prisma.user.update({
+        where: { id_user: player.id_user },
+        data: {
+          victory: player.victory + 1,
+          level: player.level + 0.45,
+        },
+      });
+      const updateOpponent = await this.prisma.user.update({
+        where: { id_user: opponent.id_user },
+        data: {
+          victory: opponent.defeats + 1,
+          level: opponent.level + 0.15,
+        },
+      });
+    } else {
+      const updatePlayer = await this.prisma.user.update({
+        where: { id_user: player.id_user },
+        data: {
+          victory: player.defeats + 1,
+          level: player.level + 0.15,
+        },
+      });
+      const updateOpponent = await this.prisma.user.update({
+        where: { id_user: opponent.id_user },
+        data: {
+          victory: opponent.victory + 1,
+          level: opponent.level + 0.45,
+        },
+      });
+    }
+    this.achievement.putAchievements(player.id_user);
+    this.achievement.putAchievements(opponent.id_user);
   }
 }
