@@ -23,6 +23,14 @@ enum user_status {
 	INGAME
 }
 
+//USER_RANK (pandora, bios, freax, commodore)
+enum user_rank {
+	PANDORA
+	BIOS
+	FREAX
+	COMMODORE
+}
+
 //CHANNEL_TYPE (private, public, protected, direct)
 enum channel_type {
 	PRIVATE
@@ -82,7 +90,7 @@ model User {
 	victory Int @default(0)
 	defeats Int @default(0)
 	level Float @default(0.0)
-	rank Int? @default(0)
+	rank user_rank @default(BIOS)
 	status user_status @default(OFFLINE)
 	created_at DateTime @default(now())
 	updated_at DateTime @updatedAt

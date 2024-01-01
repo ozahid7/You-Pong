@@ -50,9 +50,7 @@ export class userDto {
   @IsOptional()
   @IsNumber()
   level: number;
-  @IsOptional()
-  @IsNumber()
-  rank: number;
+  rank: 'PANDORA' | 'BIOS' | 'FREAX' | 'COMMODORE';
   status: 'ONLINE' | 'OFFLINE' | 'INGAME';
   created_at: Date;
   updated_at: Date;

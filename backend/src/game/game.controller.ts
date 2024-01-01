@@ -1,16 +1,10 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import { GameService } from './game.service';
+import { Controller, Get, HttpException, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GameService } from './game.service';
 
 @Controller('game')
 export class GameController {
-  constructor(private gameService: GameService) {}
+    constructor(private gameService: GameService) {}
 
   //GET MANY
   @UseGuards(AuthGuard('jwt'))

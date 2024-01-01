@@ -22,7 +22,6 @@ export enum relation {
 @Injectable()
 export class UserService {
   private id: number = 157;
-  private rank: number = 1;
 
   async generateUser(usename: string): Promise<string> {
     let res: string = usename + this.id.toString().padStart(3, '0');
@@ -122,9 +121,7 @@ export class UserService {
   // create a user
   async create(obj: any) {
     try {
-      let rank = 0;
       const users = await this.prisma.user.findMany();
-      if (users) rank = users.length + 1;
       const newUser = await this.prisma.user.create({
         data: {
           username: await this.generateUser(obj.username),
@@ -133,11 +130,8 @@ export class UserService {
           lastname: obj.familyName,
           firstname: obj.givenName,
           avatar: obj.avatar,
-          rank: rank,
-          // rank: this.rank,
         },
       });
-      this.rank++;
       return newUser;
     } catch (error) {
       if (error.code === 'P2002') {
