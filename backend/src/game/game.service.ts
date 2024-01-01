@@ -86,16 +86,37 @@ export class GameService {
     };
   }
 
+  //PUT RANK
+  async putRank(id_user: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+    });
+    if (!user) {
+      console.error('No such user !');
+    }
+    let xp: number = user.victory - user.defeats;
+    let your_rank = user.rank;
+    if (xp < 4) your_rank = 'BIOS';
+    else if (xp > 3 && xp < 6) your_rank = 'FREAX';
+    else if (xp > 5 && xp < 9) your_rank = 'COMMODORE';
+    else if (xp > 8) your_rank = 'PANDORA';
+
+    if (your_rank !== user.rank) {
+      const update = await this.prisma.user.update({
+        where: { id_user: id_user },
+        data: { rank: your_rank },
+      });
+      if (!update) console.error("Can't update user rank !");
+    }
+  }
+
   //PUT LEVEL & RANK
   async putLvlRank(id_match: string) {
     const match = await this.prisma.match_History.findUnique({
       where: { id_match: id_match },
     });
     if (!match) {
-      return {
-        message: 'No such match !',
-        Object: null,
-      };
+      console.error('No such match !');
     }
     const player = await this.prisma.user.findUnique({
       where: { id_user: match.id_player },
@@ -104,10 +125,7 @@ export class GameService {
       where: { id_user: match.id_opponent },
     });
     if (!player || !opponent) {
-      return {
-        message: 'No such user !',
-        Object: null,
-      };
+      console.error('No such user !');
     }
 
     if (match.player_score > match.opponent_score) {
@@ -125,6 +143,8 @@ export class GameService {
           level: opponent.level + 0.15,
         },
       });
+      if (!updatePlayer || !updateOpponent)
+        console.error("Can't update user victory / level !");
     } else {
       const updatePlayer = await this.prisma.user.update({
         where: { id_user: player.id_user },
@@ -140,7 +160,11 @@ export class GameService {
           level: opponent.level + 0.45,
         },
       });
+      if (!updatePlayer || !updateOpponent)
+        console.error("Can't update user victory / level !");
     }
+    this.putRank(player.id_user);
+    this.putRank(opponent.id_user);
     this.achievement.putAchievements(player.id_user);
     this.achievement.putAchievements(opponent.id_user);
   }

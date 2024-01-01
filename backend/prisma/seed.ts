@@ -30,14 +30,14 @@ async function achievements() {
         id_achievement: '4',
         title: 'Ranked Up',
         description:
-          'Congratulations on surpassing the initial challenges and becoming a Pandora',
+          'Congratulations on your remarkable achievement of reaching the PANDORA rank!',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
         id_achievement: '5',
-        title: 'Ranked Up',
+        title: 'Cleansheet',
         description:
-          'Congratulations on surpassing the initial challenges and get Freax card',
+          'Congratulations on maintaining a cleansheet in your last game!',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {

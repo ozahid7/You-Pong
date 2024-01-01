@@ -129,9 +129,15 @@ export class AchievementService {
       });
     }
 
-    // Runked Up
+    // Cleansheet
+    const matchs = (await this.game.getMatchs(id_user)).Object;
+    let someMatches: typeof matchs = null;
+    if (matchs.length !== 0) someMatches = matchs.slice(0, 1);
     if (
-      user.rank === 'FREAX' &&
+      someMatches &&
+      someMatches.filter(
+        (match) => match.win === true && match.opponent_score === 0,
+      ) &&
       user.achievements.find((achiev) => achiev.id_achievement === '5') ===
         undefined
     ) {
@@ -144,12 +150,10 @@ export class AchievementService {
     }
 
     // Hat Trick
-    const matchs = (await this.game.getMatchs(id_user)).Object;
-    let threeMatchs: typeof matchs = null;
-    if (matchs.length !== 0) threeMatchs = matchs.slice(0, 3);
+    if (matchs.length !== 0) someMatches = matchs.slice(0, 3);
     if (
-      threeMatchs &&
-      threeMatchs.filter((match) => match.win === false) !== undefined &&
+      someMatches &&
+      someMatches.filter((match) => match.win === false) !== undefined &&
       user.achievements.find((achiev) => achiev.id_achievement === '6') ===
         undefined
     ) {
