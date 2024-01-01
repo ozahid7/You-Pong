@@ -72,25 +72,15 @@ const PrivateModal = ({
 
   return (
     <Fragment>
-      <Button
-        onPress={onOpen}
-        className="rounded-none btn green_button"
-        isDisabled={!show}
+      <div
+        onClick={onOpen}
+        role="button"
+        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+        aria-disabled={!show}
       >
-        <div className="flex flex-row gap-2 w-fit h-fit">
-          <IconContext.Provider
-            value={{
-              size: "25px",
-              className: "text-palette-white border-none",
-            }}
-          >
-            <LuUserPlus2 />
-          </IconContext.Provider>
-          <div className="flex text-palette-white font-body font-[600] text-[15px] mt-1">
-            Invite
-          </div>
-        </div>
-      </Button>
+        <LuUserPlus2 />
+        <div className="h-fit w-fit">Invite</div>
+      </div>
       <Modal
         isOpen={isOpen}
         placement="center"
@@ -99,6 +89,7 @@ const PrivateModal = ({
         size="3xl"
         backdrop="blur"
         className="w-full"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(onClose) => (
