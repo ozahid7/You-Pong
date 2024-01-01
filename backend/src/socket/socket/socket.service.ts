@@ -10,6 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
+import { GameService } from 'src/game/game.service';
 
 export enum map {
   GREEN,
@@ -36,7 +37,10 @@ export interface infoPlayer {
 @Injectable()
 @WebSocketGateway()
 export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private gameService: GameService,
+  ) {}
   private users: { id_user: string; id_socket: string; inGame: boolean }[] = [];
 
   private privateGame: {
@@ -162,18 +166,19 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           level: opponent_user.level,
           id_match: game.id_match,
         });
+        this.gameService.putLvlRank(game.id_match);
       } else {
         this.server.to(player.id_socket).emit('canceledGame', {
           username: player_user.username,
           avatar: player_user.avatar,
           level: player_user.level,
-          id_match: game.id_match,
+          id_match: '',
         });
         this.server.to(opponent.id_socket).emit('canceledGame', {
           username: opponent_user.username,
           avatar: opponent_user.avatar,
           level: opponent_user.level,
-          id_match: game.id_match,
+          id_match: '',
         });
       }
     }
@@ -536,6 +541,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
                 level: my_user.level,
                 id_match: game.id_match,
               });
+              this.gameService.putLvlRank(game.id_match);
             }
           } else {
             this.server.to(sender.id_user).emit('canceled', {

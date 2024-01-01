@@ -6,47 +6,48 @@ async function achievements() {
     await prisma.$connect();
     const achievements = [
       {
+        id_achievement: '1',
         title: 'Play & Win',
         description:
           'Experience the wonder and excitement of gaming for the first time',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
+        id_achievement: '2',
         title: 'Level Up',
         description:
           'Congratulations on surpassing the initial challenges and becoming a Level 3',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
+        id_achievement: '3',
         title: 'Play & win',
         description:
           'Play your first ranked game and prove your skills in the competitive arena',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
+        id_achievement: '4',
         title: 'Ranked Up',
         description:
-          'Congratulations on surpassing the initial challenges and becoming a Rank 1',
+          'Congratulations on your remarkable achievement of reaching the PANDORA rank!',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
-        title: 'Challenge',
+        id_achievement: '5',
+        title: 'Cleansheet',
         description:
-        'Achieve your first victory by eliminating an opponent in your first game',
+          'Congratulations on maintaining a cleansheet in your last game!',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
-        title: 'Ranked Up',
-        description:
-          'Congratulations on surpassing the initial challenges and becoming a Rank 6',
-        avatar: 'http://localhost:4000/file/Badge.png',
-      },
-      {
+        id_achievement: '6',
         title: 'Hat Trick',
         description: 'Achieve three victories in a short span of time',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
+        id_achievement: '7',
         title: 'Level Up',
         description:
           'Congratulations on surpassing the initial challenges and becoming a Level 8',
