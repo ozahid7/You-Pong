@@ -16,6 +16,7 @@ import useOtherUser from "@/api/useOtherUser";
 import { UseQueryResult } from "@tanstack/react-query";
 import { UserInfo } from "@/types/Api";
 import { notify } from "@/utils/game";
+import { useQueryClient } from "react-query";
 
 const PlayerCard = (props: {
 	param: string;
@@ -44,6 +45,7 @@ const PlayerCard = (props: {
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
 	const direct = todirect(props.uid);
+	const queryClient = useQueryClient();
 	const otheruser = useOtherUser(props.param);
 
 	useEffect(() => {
@@ -134,7 +136,7 @@ const PlayerCard = (props: {
 			: props.user_relation === 0
 			? setIcon(pendingIcon)
 			: setIcon(removeIcon);
-	}, [isFriend, isPending]);
+	}, [otheruser.isFetched]);
 	return (
 		<div className="flex justify-center  z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
 			<MyCard otherclass="">
@@ -179,7 +181,6 @@ const PlayerCard = (props: {
 									strokeWidth={2.5}
 									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-orange`}
 									onClick={() => {
-										console.log("first");
 										direct.mutate();
 									}}
 								/>
@@ -234,6 +235,7 @@ const PlayerCard = (props: {
 									isGreen={true}
 									value={props.level.toString()}
 									name="Level"
+									isLevel={true}
 								/>
 
 								<MiniBanner

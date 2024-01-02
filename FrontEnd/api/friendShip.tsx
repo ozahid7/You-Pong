@@ -15,6 +15,9 @@ export const blockuser = (uid: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["friends"] });
+			query.removeQueries({
+				queryKey: ["otheruser", "hamidjafy"],
+			});
 			return response;
 		} catch (error) {
 			console.log("error : ", error);
