@@ -8,29 +8,28 @@ async function achievements() {
       {
         id_achievement: '1',
         title: 'Play & Win',
-        description:
-          'Experience the wonder and excitement of gaming for the first time',
+        description: 'Achieve your first win in the game',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
         id_achievement: '2',
         title: 'Level Up',
         description:
-          'Congratulations on surpassing the initial challenges and becoming a Level 3',
+        'Congratulations on surpassing the initial challenges and becoming a Level 3',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
         id_achievement: '3',
-        title: 'Play & win',
+        title: 'FirstServe',
         description:
-          'Play your first ranked game and prove your skills in the competitive arena',
+          'Experience the wonder and excitement of gaming for the first time',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
         id_achievement: '4',
         title: 'Ranked Up',
         description:
-          'Congratulations on your remarkable achievement of reaching the PANDORA rank!',
+          'Congratulations on your impressive feat of ascending to the PANDORA rank !',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
@@ -43,7 +42,7 @@ async function achievements() {
       {
         id_achievement: '6',
         title: 'Hat Trick',
-        description: 'Achieve three victories in a short span of time',
+        description: 'Win Three Consecutive Games',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {

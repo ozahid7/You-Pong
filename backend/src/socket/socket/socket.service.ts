@@ -184,14 +184,27 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  async pushToQueue(
+    queue: {
+      id_user: string;
+      id_socket: string;
+    }[],
+    id_user: string,
+    id_socket: string,
+  ) {
+    if (queue.find((waiting) => id_user === waiting.id_user) === undefined) {
+      queue.push({
+        id_user: id_user,
+        id_socket: id_socket,
+      });
+    }
+  }
+
   async matching(info: infoPlayer, id_user: string, id_socket: string) {
     const mode_map = `${info.map}_${info.mode}`;
     switch (mode_map) {
       case 'CLASSIC_HARD':
-        this.classicHard.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.classicHard, id_user, id_socket);
         if (this.classicHard.length > 1) {
           const player = this.classicHard.shift();
           const opponent = this.classicHard.shift();
@@ -199,10 +212,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         }
         break;
       case 'ORANGE_HARD':
-        this.orangeHard.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.orangeHard, id_user, id_socket);
         if (this.orangeHard.length > 1) {
           const player = this.orangeHard.shift();
           const opponent = this.orangeHard.shift();
@@ -210,10 +220,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         }
         break;
       case 'GREEN_HARD':
-        this.greenHard.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.greenHard, id_user, id_socket);
         if (this.greenHard.length > 1) {
           const player = this.greenHard.shift();
           const opponent = this.greenHard.shift();
@@ -221,10 +228,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         }
         break;
       case 'CLASSIC_EASY':
-        this.classicEasy.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.classicEasy, id_user, id_socket);
         if (this.classicEasy.length > 1) {
           const player = this.classicEasy.shift();
           const opponent = this.classicEasy.shift();
@@ -232,10 +236,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         }
         break;
       case 'ORANGE_EASY':
-        this.orangeEasy.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.orangeEasy, id_user, id_socket);
         if (this.orangeEasy.length > 1) {
           const player = this.orangeEasy.shift();
           const opponent = this.orangeEasy.shift();
@@ -243,10 +244,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
         }
         break;
       case 'GREEN_EASY':
-        this.greenEasy.push({
-          id_user: id_user,
-          id_socket: id_socket,
-        });
+        this.pushToQueue(this.greenEasy, id_user, id_socket);
         if (this.greenEasy.length > 1) {
           const player = this.greenEasy.shift();
           const opponent = this.greenEasy.shift();
@@ -402,17 +400,20 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && my_user !== undefined) {
-          const user = await this.prisma.user.updateMany({
-            where: { id_user: my_user.id_user },
-            data: { status: 'ONLINE' },
-          });
-          if (user) {
-            console.log('ONLINE');
-            this.removePlayer(sender.id_socket);
-            sender.inGame = false;
-            this.server
-              .to(sender.id_socket)
-              .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
+          if (!sender.inGame && my_user.status === 'INGAME') return;
+          else {
+            const user = await this.prisma.user.updateMany({
+              where: { id_user: my_user.id_user },
+              data: { status: 'ONLINE' },
+            });
+            if (user) {
+              console.log('ONLINE');
+              this.removePlayer(sender.id_socket);
+              sender.inGame = false;
+              this.server
+                .to(sender.id_socket)
+                .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
+            }
           }
         }
       }
@@ -612,7 +613,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() info: infoGame,
   ) {
     try {
-      console.log('hello from cancel');
       const sender = this.users.find((user) => user.id_socket === socket.id);
       const receiver = this.users.find(
         (user) => user.id_user === info.id_receiver,

@@ -108,7 +108,7 @@ export class GameService {
 
     // Play & win
     if (
-      user.victory >= 1 &&
+      user.victory > 0 &&
       user.achievements.find((achiev) => achiev.id_achievement === '1') ===
         undefined
     ) {
@@ -122,7 +122,7 @@ export class GameService {
 
     // Level up
     if (
-      user.level >= 3 &&
+      user.level > 2 &&
       user.achievements.find((achiev) => achiev.id_achievement === '2') ===
         undefined
     ) {
@@ -134,9 +134,9 @@ export class GameService {
       });
     }
 
-    // Play & win
+    // FirstServe
     if (
-      (user.matchs_opponent.length >= 1 || user.matchs_player.length >= 1) &&
+      (user.matchs_opponent.length > 0 || user.matchs_player.length > 0) &&
       user.achievements.find((achiev) => achiev.id_achievement === '3') ===
         undefined
     ) {
@@ -186,7 +186,8 @@ export class GameService {
     if (matchs.length !== 0) someMatches = matchs.slice(0, 3);
     if (
       someMatches &&
-      someMatches.filter((match) => match.win === false) !== undefined &&
+      someMatches.length === 3 &&
+      someMatches.some((match) => match.win === false) !== undefined &&
       user.achievements.find((achiev) => achiev.id_achievement === '6') ===
         undefined
     ) {
