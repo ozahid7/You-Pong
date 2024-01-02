@@ -114,7 +114,8 @@ const Chat = ({
               user={user?.username}
               uid={user?.id_user}
               status={user?.status}
-              // setDataInvalid={props.SetInvalidData}
+              size={25}
+              style="text-palette-green border-none"
             />
           </div>
         </div>
