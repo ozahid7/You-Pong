@@ -7,6 +7,9 @@ import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
 import { TbSend } from "react-icons/tb";
 import Loader from "@/components/tools/Loader";
+import { MyDropdown } from "@/components";
+import { menuUserElements } from "@/const";
+import { FiChevronDown } from "react-icons/fi";
 
 interface HomePage {
   channels: Channel;
@@ -104,7 +107,15 @@ const Chat = ({
             </div>
           </div>
           <div>
-            <DirectDropdown />
+            <MyDropdown
+              icon={FiChevronDown}
+              placement="right-0"
+              menuElements={menuUserElements}
+              user={user?.username}
+              uid={user?.id_user}
+              status={user?.status}
+              // setDataInvalid={props.SetInvalidData}
+            />
           </div>
         </div>
       </div>
