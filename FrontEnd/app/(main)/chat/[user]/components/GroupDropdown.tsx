@@ -77,7 +77,7 @@ const GroupDropdown = ({
             value={{
               color: "",
               size: "25px",
-              className: " text-palette-green border-none test",
+              className: " text-palette-green border-none",
             }}
           >
             <FiChevronDown />

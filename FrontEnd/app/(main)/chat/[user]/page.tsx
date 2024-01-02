@@ -190,8 +190,8 @@ const Chats = ({ params }) => {
   }
 
   return (
-    <div className="flex w-full h-[90%] justify-center items-center">
-      <div className="flex w-[88%] h-[90%]">
+    <div className="h-full min-h-[600px] w-full make_center">
+      <div className="flex justify-center w-[90%] max-w-[1200px] min-w-[260px] min-h-[600px] h-[90%]">
         <MyContainer>
           <div className="flex w-full h-full min-h-[900px] flex-col py-5 ">
             <Background>
@@ -339,6 +339,7 @@ const Chats = ({ params }) => {
                             main={MainUser}
                             indexChannels={indexChannelsDirect}
                             index={valueDirect}
+                            directRefetch={directRefetch}
                             key={i}
                           ></Chat>
                         ))}

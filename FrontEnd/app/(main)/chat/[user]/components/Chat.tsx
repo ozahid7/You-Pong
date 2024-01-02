@@ -7,6 +7,9 @@ import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
 import { TbSend } from "react-icons/tb";
 import Loader from "@/components/tools/Loader";
+import { MyDropdown } from "@/components";
+import { menuUserElements } from "@/const";
+import { FiChevronDown } from "react-icons/fi";
 
 interface HomePage {
   channels: Channel;
@@ -15,6 +18,7 @@ interface HomePage {
   data: Channel[];
   indexChannels: whichChannel[];
   index: number;
+  directRefetch: any;
 }
 
 var nameOne: boolean = false;
@@ -26,6 +30,7 @@ const Chat = ({
   data,
   indexChannels,
   index,
+  directRefetch,
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   var text: string;
@@ -104,7 +109,17 @@ const Chat = ({
             </div>
           </div>
           <div>
-            <DirectDropdown />
+            <MyDropdown
+              icon={FiChevronDown}
+              placement="right-0"
+              menuElements={menuUserElements}
+              user={user?.username}
+              uid={user?.id_user}
+              status={user?.status}
+              size={25}
+              style="text-palette-green border-none"
+              Refetch={directRefetch}
+            />
           </div>
         </div>
       </div>
