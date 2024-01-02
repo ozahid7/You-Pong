@@ -23,10 +23,11 @@ const MyDropdown = (props: {
   setDataInvalid?: any;
   uid?: string;
   status?: string;
+  Refetch?: any;
 }) => {
   const router = useRouter();
   const user = useUser(true);
-  const block = blockuser(props.uid);
+  const block = blockuser(props.uid, props.Refetch);
   const { globalSocket } = useGlobalSocket();
   const query = useQueryClient();
   const handleLogout = async () => {

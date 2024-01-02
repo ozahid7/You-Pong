@@ -339,6 +339,7 @@ const Chats = ({ params }) => {
                             main={MainUser}
                             indexChannels={indexChannelsDirect}
                             index={valueDirect}
+                            directRefetch={directRefetch}
                             key={i}
                           ></Chat>
                         ))}

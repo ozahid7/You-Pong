@@ -18,6 +18,7 @@ interface HomePage {
   data: Channel[];
   indexChannels: whichChannel[];
   index: number;
+  directRefetch: any;
 }
 
 var nameOne: boolean = false;
@@ -29,6 +30,7 @@ const Chat = ({
   data,
   indexChannels,
   index,
+  directRefetch,
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   var text: string;
@@ -116,6 +118,7 @@ const Chat = ({
               status={user?.status}
               size={25}
               style="text-palette-green border-none"
+              Refetch={directRefetch}
             />
           </div>
         </div>
