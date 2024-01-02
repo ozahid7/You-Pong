@@ -18,6 +18,10 @@ const NavBar = () => {
 	} whitespace-nowrap`;
 	const search = searchusers();
 
+	const tmp = level.toFixed(1);
+
+	const editedLevel = tmp.endsWith(".0") ? tmp.slice(0, tmp.length - 2) : tmp;
+
 	return (
 		<nav className="flex justify-end w-full items-center px-4 h:px-8 sm:px-14 py-6">
 			<div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
@@ -44,7 +48,7 @@ const NavBar = () => {
 							</div>
 						</div>
 						<span className="text-palette-grey font-light">
-							Lvl: {level}
+							Lvl: {editedLevel}
 						</span>
 					</div>
 					<MyDropdown
