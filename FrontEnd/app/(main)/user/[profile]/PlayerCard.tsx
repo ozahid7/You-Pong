@@ -194,7 +194,7 @@ const PlayerCard = (props: {
 												props.avatar,
 												false,
 												2000,
-												"Player Already In Game"
+												"Player Already In Game 😞"
 											);
 										else
 											router.push(

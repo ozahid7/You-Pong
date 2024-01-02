@@ -17,9 +17,9 @@ const RequestBanner = (props: {
 	SetInvalidData: any;
 }) => {
 	const [enabled, setEnabled] = useState(false);
-	const block = blockuser(props.uid, props.SetInvalidData);
-	const accept = acceptuser(props.uid, props.SetInvalidData);
-	const decline = declineuser(props.uid, props.SetInvalidData);
+	const block = blockuser(props.uid);
+	const accept = acceptuser(props.uid);
+	const decline = declineuser(props.uid);
 
 	if (decline.isPending || accept.isPending || block.isPending)
 		return <MiniLoader customClass="m-auto" />;

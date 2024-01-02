@@ -111,6 +111,8 @@ export default function game({ params }: pageProps) {
 						my_id={user.data.uid}
 						socket={globalSocket}
 						game_id={game_id}
+						status={user.data.status}
+						user={user}
 					/>
 					{showPlayerLoader && (
 						<PlayerLoader

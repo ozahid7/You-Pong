@@ -10,6 +10,7 @@ import axios from "axios";
 import { blockuser } from "@/api/friendShip";
 import { useUser } from "@/api/getHero";
 import { notify } from "@/utils/game";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const MyDropdown = (props: {
 	icon: any;
@@ -25,7 +26,8 @@ const MyDropdown = (props: {
 }) => {
 	const router = useRouter();
 	const user = useUser(true);
-	const block = blockuser(props.user, props.setDataInvalid);
+	const block = blockuser(props.user);
+	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -62,6 +64,7 @@ const MyDropdown = (props: {
 			router.push(e);
 		} else if (e === "logout") {
 			handleLogout();
+			globalSocket.emit("offline");
 		} else if (e === "/user/profile") router.push(myRoutes.dashboard);
 	};
 
