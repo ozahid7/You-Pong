@@ -17,6 +17,7 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { UserInfo } from "@/types/Api";
 import { notify } from "@/utils/game";
 import { useQueryClient } from "react-query";
+import { Tooltip } from "react-tooltip";
 
 const PlayerCard = (props: {
 	param: string;
@@ -207,9 +208,24 @@ const PlayerCard = (props: {
 								/>
 							</>
 						)}
+						<Tooltip
+							id="user_name"
+							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey drop-shadow-lg font-semibold z-10"
+							style={{
+								backgroundColor: "#46686A",
+								color: "#fff",
+							}}
+							opacity={1}
+							place={"top"}
+							positionStrategy={"absolute"}
+						/>
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">
-								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl lg:text-4xl text-cardtitle drop-shadow">
+								<h2
+									data-tooltip-content={props.username}
+									data-tooltip-id="user_name"
+									className="font-extrabold mt-2 font-russo text-2xl h:text-3xl lg:text-4xl text-cardtitle drop-shadow"
+								>
 									{name}
 								</h2>
 								{textColor.length > 0 ? (

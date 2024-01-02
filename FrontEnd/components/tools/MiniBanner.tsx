@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { Tooltip } from "react-tooltip";
+import { defaultavatar } from "@/const";
 
 const MiniBanner = (props: {
 	isGreen: boolean;
@@ -82,7 +83,7 @@ const MiniBanner = (props: {
 							data-tooltip-id="rank_image"
 							data-tooltip-hidden={!props.isRank}
 							className="border-2 max-w-[20px] h:max-w-[26px] flex border-white rounded-sm object-contain"
-							src={avatar}
+							src={avatar || defaultavatar}
 							alt=""
 							width={90}
 							height={90}

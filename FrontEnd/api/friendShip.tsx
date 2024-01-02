@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 export const blockuser = (uid: string, refetch?: any, username?: string) => {
 	const query = useQueryClient();
-	console.log("username = ", username);
 	const blockUser = async () => {
 		try {
 			const response = await useAxios(

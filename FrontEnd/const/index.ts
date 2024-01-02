@@ -24,6 +24,7 @@ export const myRoutes = {
 };
 
 export const socketurl = "http://localhost:4000";
+export const defaultavatar = "defaultavatar.png";
 
 //render react icons
 export const navMenuElements = [
