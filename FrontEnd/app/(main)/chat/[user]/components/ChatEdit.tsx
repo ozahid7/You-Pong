@@ -146,9 +146,9 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   const printOnline = () => {
     var m: number = 0;
 
-    if (channels)
-      channels.users?.map((obj) => {
-        obj.status === "ONLINE" ? (m += 1) : (m += 0);
+    if (users)
+      users?.map((obj) => {
+        obj.user.status === "ONLINE" ? (m += 1) : (m += 0);
       });
 
     return m;
