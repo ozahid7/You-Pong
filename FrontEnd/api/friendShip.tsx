@@ -4,9 +4,9 @@ import { useAxios } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export const blockuser = (uid: string) => {
+export const blockuser = (uid: string, refetch?: any, username?: string) => {
 	const query = useQueryClient();
-
+	console.log("username = ", username);
 	const blockUser = async () => {
 		try {
 			const response = await useAxios(
@@ -15,9 +15,9 @@ export const blockuser = (uid: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["friends"] });
-			query.removeQueries({
-				queryKey: ["otheruser", "hamidjafy"],
-			});
+			if (username !== undefined)
+				query.removeQueries({ queryKey: ["otheruser", username] });
+			refetch();
 			return response;
 		} catch (error) {
 			console.log("error : ", error);

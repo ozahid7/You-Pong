@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
-import { ChatDialog, ChatDropdown, DirectDropdown } from ".";
+import { ChatDialog, DirectDropdown } from ".";
 import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel, getMembers } from "../data/api";
 import { useQuery } from "react-query";
 import { TbSend } from "react-icons/tb";
+import Loader from "@/components/tools/Loader";
+import { MyDropdown } from "@/components";
+import { menuUserElements } from "@/const";
+import { FiChevronDown } from "react-icons/fi";
 
 interface HomePage {
   channels: Channel;
@@ -14,6 +18,7 @@ interface HomePage {
   data: Channel[];
   indexChannels: whichChannel[];
   index: number;
+  directRefetch: any;
 }
 
 var nameOne: boolean = false;
@@ -25,6 +30,7 @@ const Chat = ({
   data,
   indexChannels,
   index,
+  directRefetch,
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   var text: string;
@@ -42,6 +48,8 @@ const Chat = ({
       },
     }
   );
+
+  if (!channel || ChannelLoading) <Loader />;
 
   const retChannel: Channel | null = data
     ? data.find(
@@ -101,7 +109,17 @@ const Chat = ({
             </div>
           </div>
           <div>
-            <DirectDropdown />
+            <MyDropdown
+              icon={FiChevronDown}
+              placement="right-0"
+              menuElements={menuUserElements}
+              user={user?.username}
+              uid={user?.id_user}
+              status={user?.status}
+              size={25}
+              style="text-palette-green border-none"
+              Refetch={directRefetch}
+            />
           </div>
         </div>
       </div>
@@ -113,13 +131,13 @@ const Chat = ({
           key={user?.id_user} //just added this
         />
       </div>
-      <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
-        <div className="input input-bordered input-primary w-full h-[60%] flex justify-center items-center ">
-          <div className=" w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
+        <div className="search_input_chat w-full h-[60%] flex justify-center items-center min-w-[40px] max-w-[600px]">
+          <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden gap-1">
             <input
               type="text"
               placeholder="Type a message here ..."
-              className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
+              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
               onKeyDown={handleEnterPress}
               ref={messageRef}
             />
@@ -127,7 +145,7 @@ const Chat = ({
               type="submit"
               onClick={handleButtonClick}
             >
-              <TbSend className="h-[30px] w-[30px] text-[#497174]" />
+              <TbSend className="h-[30px] w-[30px] text-[#497174] mr-2" />
             </button>
           </div>
         </div>

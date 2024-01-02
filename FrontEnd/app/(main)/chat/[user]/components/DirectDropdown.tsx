@@ -1,17 +1,24 @@
 "use client";
 import React, { Fragment } from "react";
 import { IconContext } from "react-icons";
-import { LuSettings2, LuUser, LuLogOut, LuGamepad, LuUserX } from "react-icons/lu";
+import {
+  LuSettings2,
+  LuUser,
+  LuLogOut,
+  LuGamepad,
+  LuUserX,
+} from "react-icons/lu";
 import { Channel, Member, User, User_Hero } from "@/types";
 import { Button, Modal } from "@nextui-org/react";
-import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
-import { useQuery } from "react-query";
 import { Menu } from "@headlessui/react";
+import Link from "next/link";
 
-interface HomePage {}
+interface HomePage {
+  user: User;
+}
 
-const DirectDropdown = () => {
+const DirectDropdown = ({ user }: HomePage) => {
   return (
     <div className="flex flex-col justify-center relative">
       <Menu>
@@ -34,37 +41,40 @@ const DirectDropdown = () => {
             key="members"
             as="div"
           >
-            <div
+            <Link
               role="button"
               className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+              href={`http://localhost:3000/user/${user?.username}`}
             >
               <LuUser />
               <p className="w-fit h-fit">Profile</p>
-            </div>
+            </Link>
           </Menu.Item>
           <Menu.Item
             key="leave"
             as="div"
           >
-            <div
+            <Link
               role="button"
               className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
+              href={""}
             >
               <LuGamepad />
               <p className="w-fit h-fit">Play</p>
-            </div>
+            </Link>
           </Menu.Item>
           <Menu.Item
             key="invite"
             as="div"
           >
-            <div
+            <Link
               role="button"
               className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
+              href={""}
             >
               <LuUserX />
               <p className="w-fit h-fit">Block</p>
-            </div>
+            </Link>
           </Menu.Item>
         </Menu.Items>
       </Menu>

@@ -11,6 +11,7 @@ import { MyDropdown } from "@/components";
 import { FiChevronDown } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { TbSend, TbSendOff } from "react-icons/tb";
+import Loader from "@/components/tools/Loader";
 
 interface obj {
   channels: Channel;
@@ -34,7 +35,6 @@ const GroupsChat = ({
   joinRefetch,
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState("");
   var mutedMember = {
     placeholder: "Type a message here ...",
     disabled: false,
@@ -69,6 +69,8 @@ const GroupsChat = ({
       },
     }
   );
+
+  if (ChannelLoading || MembersLoading) <Loader />;
 
   const retChannel: Channel | null = data
     ? data.find(
@@ -161,15 +163,13 @@ const GroupsChat = ({
           key={channels?.id_channel}
         />
       </div>
-      <div className="flex w-[95%] h-[10%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
-        <div className="input input-bordered input-primary w-full h-[60%] flex justify-center items-center ">
-          {/* search_input_chat */}
-          <div className=" w-[98%] h-[90%] outline-none flex justify-center items-center overflow-hidden">
+      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
+        <div className="search_input_chat w-full h-[60%] flex justify-center items-center min-w-[40px] max-w-[600px]">
+          <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden gap-1">
             <input
               type="text"
               placeholder={mutedMember.placeholder}
-              className=" text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[94%]"
-              // onChange={handleInputChange}
+              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
               onKeyDown={handleEnterPress}
               ref={messageRef}
               disabled={mutedMember.disabled}
@@ -180,9 +180,9 @@ const GroupsChat = ({
               disabled={mutedMember.disabled}
             >
               {mutedMember.disabled === false ? (
-                <TbSend className="h-[30px] w-[30px] text-[#497174]" />
+                <TbSend className="h-[30px] w-[30px] text-[#497174] mr-2" />
               ) : (
-                <TbSendOff className="h-[30px] w-[30px] text-[#497174]" />
+                <TbSendOff className="h-[30px] w-[30px] text-[#497174] mr-2" />
               )}
             </button>
           </div>
