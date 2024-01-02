@@ -6,7 +6,7 @@ import { MdOutlineSettings } from "react-icons/md";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { myRoutes } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { LuMessageSquarePlus } from "react-icons/lu";
@@ -16,6 +16,8 @@ import useOtherUser from "@/api/useOtherUser";
 import { UseQueryResult } from "@tanstack/react-query";
 import { UserInfo } from "@/types/Api";
 import { notify } from "@/utils/game";
+import { useQueryClient } from "react-query";
+import { Tooltip } from "react-tooltip";
 
 const PlayerCard = (props: {
 	param: string;
@@ -40,10 +42,11 @@ const PlayerCard = (props: {
 	const [subcolor, setSubColor] = useState("");
 	const [textColor, setTextColor] = useState("");
 	const { globalSocket } = useGlobalSocket();
-	const Block = blockuser(props.uid);
+	const Block = blockuser(props.uid, () => {}, props.username);
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
 	const direct = todirect(props.uid);
+	const queryClient = useQueryClient();
 	const otheruser = useOtherUser(props.param);
 
 	useEffect(() => {
@@ -134,7 +137,7 @@ const PlayerCard = (props: {
 			: props.user_relation === 0
 			? setIcon(pendingIcon)
 			: setIcon(removeIcon);
-	}, [isFriend, isPending]);
+	}, [otheruser.isFetched]);
 	return (
 		<div className="flex justify-center  z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">
 			<MyCard otherclass="">
@@ -146,7 +149,7 @@ const PlayerCard = (props: {
 						<div className="w-[80%] pt-4 md:pt-2 h-[90%] md:w-[60%] md:pb-[60%] xl:w-[80%] xl:h-[80%] relative">
 							<img
 								className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-								src={props.avatar}
+								src={props.avatar || defaultavatar}
 								alt="avatar"
 							/>
 						</div>
@@ -179,7 +182,6 @@ const PlayerCard = (props: {
 									strokeWidth={2.5}
 									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-orange`}
 									onClick={() => {
-										console.log("first");
 										direct.mutate();
 									}}
 								/>
@@ -206,9 +208,24 @@ const PlayerCard = (props: {
 								/>
 							</>
 						)}
+						<Tooltip
+							id="user_name"
+							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey drop-shadow-lg font-semibold z-10"
+							style={{
+								backgroundColor: "#46686A",
+								color: "#fff",
+							}}
+							opacity={1}
+							place={"top"}
+							positionStrategy={"absolute"}
+						/>
 						<div className="sm:w-[86%] h-[76%] mt-4 w-full flex flex-col justify-evenly space-y-1 relative">
 							<div className=" w-full relative space-x-1  flex">
-								<h2 className="font-extrabold mt-2 font-russo text-2xl h:text-3xl lg:text-4xl text-cardtitle drop-shadow">
+								<h2
+									data-tooltip-content={props.username}
+									data-tooltip-id="user_name"
+									className="font-extrabold mt-2 font-russo text-2xl h:text-3xl lg:text-4xl text-cardtitle drop-shadow"
+								>
 									{name}
 								</h2>
 								{textColor.length > 0 ? (
@@ -234,6 +251,7 @@ const PlayerCard = (props: {
 									isGreen={true}
 									value={props.level.toString()}
 									name="Level"
+									isLevel={true}
 								/>
 
 								<MiniBanner

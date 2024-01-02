@@ -11,7 +11,7 @@
     "dependencies": {
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
-        "@headlessui/react": "^1.7.17",
+        "@headlessui/react": "^0.0.0-insiders.3b961a6",
         "@mui/joy": "^5.0.0-beta.15",
         "@nextui-org/button": "^2.0.26",
         "@nextui-org/react": "^2.2.9",

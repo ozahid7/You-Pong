@@ -33,6 +33,8 @@ const PlayerLoader = (props: {
 	const { setData } = otheruser;
 	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
+	let editedLevel2: number | string;
+	let editedLevel1: number | string;
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
@@ -42,6 +44,10 @@ const PlayerLoader = (props: {
 				props.showCounter(true);
 			}, 2000);
 			setUserInfo(otheruser.data);
+			editedLevel2 = userInfo.level.toFixed(1);
+			editedLevel2 = editedLevel2.endsWith(".0")
+				? editedLevel2.slice(0, editedLevel2.length - 2)
+				: editedLevel2;
 			props.setotheruser({
 				avatar: otheruser.data.avatar,
 				username: otheruser.data.username,
@@ -73,6 +79,11 @@ const PlayerLoader = (props: {
 		router.push(myRoutes.dashboard);
 		setData(undefined);
 	};
+
+	editedLevel1 = props.level.toFixed(1);
+	editedLevel1 = editedLevel1.endsWith(".0")
+		? editedLevel1.slice(0, editedLevel1.length - 2)
+		: editedLevel1;
 
 	return (
 		<MyDialog
@@ -109,7 +120,7 @@ const PlayerLoader = (props: {
 								{props.username.slice(0, 7)}
 							</span>
 							<span className="font-roboto text-cardtitle text-md">
-								Lvl: {props.level}
+								Lvl: {editedLevel1}
 							</span>
 						</div>
 					</div>
@@ -133,7 +144,7 @@ const PlayerLoader = (props: {
 										{userInfo.username.slice(0, 7)}
 									</span>
 									<span className="font-roboto text-cardtitle text-md">
-										Lvl: {userInfo.level}
+										Lvl: {editedLevel2}
 									</span>
 								</div>
 							</div>
