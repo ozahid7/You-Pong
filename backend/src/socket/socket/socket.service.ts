@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -11,6 +11,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
+import { renderDto } from 'src/game/dto';
 
 export enum map {
   GREEN,
@@ -649,4 +650,51 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log('Error in cancel : ', error);
     }
   }
+    // ---------------- adam start here ----------------------
+
+    private ball: {
+      x: number;
+      y: number;
+      speed: number;
+      radius: number;
+      color: string;
+      dx: number;
+      dy: number;
+    } = {
+      x: 60,
+      y: 60,
+      speed: 0.9,
+      radius: 10,
+      color: '',
+      dx: 5,
+      dy: 0,
+    };
+    @SubscribeMessage('updateFrame')
+    async updateFrame(
+      @ConnectedSocket() socket: Socket,
+      @MessageBody() dto: renderDto,
+    ) {
+      try {
+        const theGame = this.prisma.match_History.findUnique({
+          where: {
+            id_match: dto.id_match,
+          },
+        });
+        if (!theGame)
+          throw new NotFoundException('Game not found');
+        else {
+          // if ball touchs the wall
+          if (this.ball.x + this.ball.radius >= dto.fieald.width || this.ball.x - this.ball.radius <= 0) {
+            this.ball.dx = -this.ball.dx;
+          }
+          this.ball.x += this.ball.dx;
+          dto.ball.x = this.ball.x
+          this.server.to((await theGame).id_player).emit('render', dto);
+          this.server.to((await theGame).id_opponent).emit('render', dto);
+        }
+      } catch (error) {
+        throw new BadGatewayException(error);
+      }
+    }
+    // ---------------- adam end here ----------------------
 }
