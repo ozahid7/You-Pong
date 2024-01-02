@@ -33,8 +33,8 @@ const PlayerLoader = (props: {
 	const { setData } = otheruser;
 	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
-	let editedLevel2: number | string;
-	let editedLevel1: number | string;
+	let editedLevel2;
+	let editedLevel1;
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
@@ -44,10 +44,6 @@ const PlayerLoader = (props: {
 				props.showCounter(true);
 			}, 2000);
 			setUserInfo(otheruser.data);
-			editedLevel2 = userInfo.level.toFixed(1);
-			editedLevel2 = editedLevel2.endsWith(".0")
-				? editedLevel2.slice(0, editedLevel2.length - 2)
-				: editedLevel2;
 			props.setotheruser({
 				avatar: otheruser.data.avatar,
 				username: otheruser.data.username,
@@ -79,6 +75,13 @@ const PlayerLoader = (props: {
 		router.push(myRoutes.dashboard);
 		setData(undefined);
 	};
+
+	if (userInfo) {
+		editedLevel2 = userInfo.level.toFixed(1);
+		editedLevel2 = editedLevel2.endsWith(".0")
+			? editedLevel2.slice(0, editedLevel2.length - 2)
+			: editedLevel2;
+	}
 
 	editedLevel1 = props.level.toFixed(1);
 	editedLevel1 = editedLevel1.endsWith(".0")
