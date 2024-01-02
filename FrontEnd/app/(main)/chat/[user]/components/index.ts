@@ -1,11 +1,8 @@
 import Chat from "./Chat";
-import ChatDropdown from "./ChatDropdown";
 import ChatEdit from "./ChatEdit";
 import GroupDropdown from "./GroupDropdown";
 import GroupsChat from "./GroupsChat";
 import CreateModal from "./CreateModal";
-import InputGroup from "./InputGroup";
-import InputGroupPass from "./InputGroupPass";
 import JoinModal from "./JoinModal";
 import MembersEdit from "./MembersEdit";
 import MiniChat from "./MiniChat";
@@ -25,13 +22,10 @@ import PrivateModal from "./PrivateModal";
 
 export {
   Chat,
-  ChatDropdown,
   ChatEdit,
   GroupDropdown,
   GroupsChat,
   CreateModal,
-  InputGroup,
-  InputGroupPass,
   JoinModal,
   MembersEdit,
   MiniChat,

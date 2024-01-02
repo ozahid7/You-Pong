@@ -353,7 +353,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     try {
       const sender = this.users.find((user) => user.id_socket === socket.id);
-      if (sender && sender !== undefined && sender.id_user === info.id_sender) {
+      if (
+        sender &&
+        sender !== undefined &&
+        info &&
+        info !== undefined &&
+        sender.id_user === info.id_sender
+      ) {
         const my_user = await this.prisma.user.findUnique({
           where: {
             id_user: sender.id_user,

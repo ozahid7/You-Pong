@@ -31,6 +31,7 @@ const MyCountDown = (props: { isOpen: boolean; setIsOpen: any }) => {
 			conClass=" rounded-md bg- border-palette-white "
 		>
 			<div className="flex items-center justify-center flex-col h-full">
+				<button></button>
 				<span className=" font-body font-extrabold drop-shadow-lg text-palette-white text-[100px]   sm:text-[200px]">
 					<span>{counter}</span>
 				</span>

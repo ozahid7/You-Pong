@@ -42,7 +42,7 @@ const GroupsInput = forwardRef<HTMLInputElement, GroupsInputProps>(
       <>
         <div
           className={` ${customclass} ${
-            isValid ? "my_input_error animate-shake" : "my_input"
+            isValid ? "search_input_chat_error animate-shake" : "search_input_chat"
           }  max-w-[400px] overflow-hidden z-10 relative w-full min-w-[120px] p-[2px] max-h-[50px] sm:max-h-[60px]  min-h-[45px] h-[12%] flex justify-center items-center`}
         >
           <input
@@ -51,7 +51,7 @@ const GroupsInput = forwardRef<HTMLInputElement, GroupsInputProps>(
             placeholder={text}
             className={` ${
               isPassword ? "pr-12" : "pr-2"
-            }  center  placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 outline-none h-full w-full flex justify-center items-center overflow-hidden`}
+            }  center  placeholder-placeholdercolor placeholder:text-sm placeholder:font-body sm:placeholder:text-md text-gray-500 pl-5 outline-none h-[96%] w-[99%] flex justify-center items-center overflow-hidden font-body font-[600]`}
           />
           {isPassword &&
             (Icon ? (
@@ -68,11 +68,6 @@ const GroupsInput = forwardRef<HTMLInputElement, GroupsInputProps>(
               />
             ))}
         </div>
-        {isValid && (
-          <span className="text-[#ff0000] text-[12px] text-center">
-            {message}
-          </span>
-        )}
       </>
     );
   }

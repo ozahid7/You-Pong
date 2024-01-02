@@ -46,7 +46,7 @@ export type UserInfo = {
 	matchs: match[];
 	level: number;
 	loses: number;
-	rank: number;
+	rank: string;
 	uid: string;
 	user_relation: number;
 	tfaStatus: boolean;
@@ -68,7 +68,7 @@ export type UserToShow = {
 	username: string;
 	level: number;
 	user_relation: number;
-	rank: number;
+	rank: string;
 	wins: number;
 	loses: number;
 	uid: string;

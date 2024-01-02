@@ -11,7 +11,7 @@ import {
 import React, { useRef } from "react";
 import { joinChannel } from "../data/api";
 import { IoEnterOutline } from "react-icons/io5";
-import InputGroupPass from "./InputGroupPass";
+import GroupsInput from "./GroupsInput";
 
 interface Props {
   obj: Channel;
@@ -62,14 +62,13 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
                 Set password
               </ModalHeader>
               <ModalBody>
-                <InputGroupPass
+                <GroupsInput
                   ref={passRef}
                   text="Password"
                   type="password"
                   customclass="w-full h-[3rem] self-center border-red-500 "
                   isPassword={true}
-                  required={true}
-                ></InputGroupPass>
+                ></GroupsInput>
               </ModalBody>
               <ModalFooter>
                 <Button

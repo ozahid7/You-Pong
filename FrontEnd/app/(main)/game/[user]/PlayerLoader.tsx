@@ -51,11 +51,14 @@ const PlayerLoader = (props: {
 	}, [otheruser, otheruser.data]);
 
 	useEffect(() => {
-		props.socket.emit("inGame");
+		props.socket.emit("inGame", {
+			id_sender: props.my_id,
+			map: props.map.toUpperCase(),
+			mode: props.mode.toUpperCase(),
+		});
 	}, []);
 
 	const onClose = () => {
-		console.log("onClose ");
 		cancelGame(
 			{
 				id_game: props.game_id,
@@ -99,6 +102,8 @@ const PlayerLoader = (props: {
 							width={500}
 							height={500}
 						/>
+						<button className=""></button>
+
 						<div className="flex w-full items-center flex-col">
 							<span className="font-body font-bold text-palette-green text-xl md:text-2xl lg:text-3xl">
 								{props.username.slice(0, 7)}

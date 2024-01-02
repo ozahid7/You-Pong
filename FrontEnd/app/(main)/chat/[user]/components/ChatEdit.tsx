@@ -18,7 +18,7 @@ import { IconContext } from "react-icons";
 import { LuSettings, LuUser } from "react-icons/lu";
 import groups from "../../../../../public/groups.svg";
 import Image from "next/image";
-import { InputGroup, InputGroupPass } from ".";
+import { GroupsInput } from ".";
 import { Background, Submit } from "@/components";
 import { Channel, Member, User_Hero } from "@/types";
 import { putData, setData, setFile, getChannel } from "../data/api";
@@ -49,9 +49,12 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   const passRef = useRef<HTMLInputElement>(null);
   const confpassRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [file, setFilee] = useState<any>(null);
   const [selected, setSelected] = useState<string>(channels.type);
+  const [valid, setValid] = useState<boolean>(false);
+
   let imageUrl: any;
   var result: any = undefined;
   var disabled: boolean = false;
@@ -79,6 +82,8 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   }
 
   const SendDataToLeader = async () => {
+    setValid(false);
+
     /// update avatar ///
     if (imgRef.current?.value !== "") {
       if (imgRef.current?.files)
@@ -89,14 +94,12 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
     //////////////////////
 
     /// update name ///
-    if (channels.name !== nameRef.current?.value)
-      setDataObj.name = nameRef.current?.value;
+    if (nameRef.current?.value) setDataObj.name = nameRef.current?.value;
     else setDataObj.name = channels.name;
     //////////////////////
 
     /// update description ///
-    if (channels.description !== descRef.current?.value)
-      setDataObj.description = descRef.current?.value;
+    if (descRef.current?.value) setDataObj.description = descRef.current?.value;
     else setDataObj.description = channels.description;
     //////////////////////
 
@@ -114,7 +117,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         if (passRef.current.value === confpassRef.current.value)
           setDataObj.hash = passRef.current.value;
         else {
-          console.error("Password is not identical...");
+          setValid(true);
           passRef.current.value = null;
           confpassRef.current.value = null;
           return;
@@ -123,6 +126,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
     }
     //////////////////////
     console.log(setDataObj);
+
     result = await putData(setDataObj, channels?.id_channel);
     if (result?.message === "Channel Updated Succefully") {
       console.log(result.message);
@@ -153,11 +157,11 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   return (
     <Fragment>
       <div
-        aria-disabled={disabled}
         role="button"
-        onClick={onOpen}
-        className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
-        // isDisabled={disabled}
+        onClick={!disabled ? onOpen : undefined}
+        className={` ${
+          disabled ? "line-through" : ""
+        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuSettings />
         <div className="w-fit h-fit">Edit</div>
@@ -200,6 +204,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                       Choose a picture
                     </label>
                     <input
+                      accept="image/png, image/jpeg, image/gif, image/bmp, image/svg+xml, image/webp"
                       ref={imgRef}
                       id="files"
                       className="hidden"
@@ -236,82 +241,82 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                       <Tab
                         key="PUBLIC"
                         title="PUBLIC"
-                        className="w-full font-body"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <InputGroup
+                            <GroupsInput
                               ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
-                            <InputGroup
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
-                              text={channels.description || ""}
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
                       <Tab
                         key="PRIVATE"
                         title="PRIVATE"
-                        className="w-full font-body"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
-                            <InputGroup
+                            <GroupsInput
                               ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
-                            <InputGroup
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
-                              text={channels.description || ""}
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
                       <Tab
                         key="PROTECTED"
                         title="PROTECTED"
-                        className="w-full font-body text-red-500"
+                        className="w-full font-body font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 bg">
-                            <InputGroup
+                            <GroupsInput
                               ref={nameRef}
                               text={channels.name}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
-                            <InputGroup
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={descRef}
-                              text={channels.description || ""}
+                              text={channels.description}
                               type="text"
                               customclass="w-full h-[3rem] self-center"
-                            ></InputGroup>
-                            <InputGroupPass
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={passRef}
                               text="New Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
-                              required={true}
-                            ></InputGroupPass>
-                            <InputGroupPass
+                              isValid={valid}
+                            ></GroupsInput>
+                            <GroupsInput
                               ref={confpassRef}
                               text="Confirm Password"
                               type="password"
                               customclass="w-full h-[3rem] self-center"
                               isPassword={true}
-                              required={true}
-                            ></InputGroupPass>
+                              isValid={valid}
+                            ></GroupsInput>
                           </CardBody>
                         </Card>
                       </Tab>
