@@ -687,6 +687,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           if (this.ball.x + this.ball.radius >= dto.fieald.width || this.ball.x - this.ball.radius <= 0) {
             this.ball.dx = -this.ball.dx;
           }
+          this.ball.x += this.ball.dx;
+          dto.ball.x = this.ball.x
           this.server.to((await theGame).id_player).emit('render', dto);
           this.server.to((await theGame).id_opponent).emit('render', dto);
         }
