@@ -6,7 +6,7 @@ import { MdOutlineSettings } from "react-icons/md";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { myRoutes } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { LuMessageSquarePlus } from "react-icons/lu";
@@ -149,7 +149,7 @@ const PlayerCard = (props: {
 						<div className="w-[80%] pt-4 md:pt-2 h-[90%] md:w-[60%] md:pb-[60%] xl:w-[80%] xl:h-[80%] relative">
 							<img
 								className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-								src={props.avatar}
+								src={props.avatar || defaultavatar}
 								alt="avatar"
 							/>
 						</div>

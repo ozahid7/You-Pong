@@ -78,7 +78,7 @@ const MyDropdown = (props: {
 				</Menu.Button>
 				<Menu.Items
 					as="div"
-					className={`flex flex-col border-2 border-palette-green  h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full ${props.placement} absolute`}
+					className={`flex flex-col border-2 border-palette-green divide-y  h-auto outline-none w-auto rounded-md drop-shadow-lg z-[1000] bg-palette-white top-full ${props.placement} absolute`}
 				>
 					{props.menuElements?.map((elm) => (
 						<Menu.Item key={elm.href} as={Fragment}>
@@ -87,9 +87,9 @@ const MyDropdown = (props: {
 									onClick={() => {
 										handelClick(elm.href);
 									}}
-									className={`py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4  ${
+									className={`py-2 z-10 px-4 min-w-[150px] cursor-pointer  font-body font-bold flex items-center space-x-4  ${
 										active
-											? "bg-palette-orange text-white"
+											? "bg-palette-orange rounded-sm text-white"
 											: " text-palette-green"
 									}`}
 								>

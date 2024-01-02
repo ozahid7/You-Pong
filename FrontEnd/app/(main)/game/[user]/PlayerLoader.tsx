@@ -144,7 +144,7 @@ const PlayerLoader = (props: {
 										{userInfo.username.slice(0, 7)}
 									</span>
 									<span className="font-roboto text-cardtitle text-md">
-										Lvl: {editedLevel}
+										Lvl: {editedLevel2}
 									</span>
 								</div>
 							</div>
