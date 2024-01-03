@@ -86,7 +86,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
 
   const whichUSER = (message: Message) => {
     if (message && message.id_channel === channel?.id_channel) {
-      if (message.id_sender === main.uid) {
+      if (message.id_sender === main?.uid) {
         one = false;
         return (
           <ChatBubbleMain
@@ -95,7 +95,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
             key={uuidv4()}
           />
         );
-      } else if (message.id_sender !== main.uid && Members) {
+      } else if (message.id_sender !== main?.uid && Members) {
         const member: Member[] = Members.filter(
           (member) => member.user.id_user === message.id_sender
         );
