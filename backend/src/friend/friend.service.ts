@@ -266,7 +266,7 @@ export class friendService {
             id_friend: user.id_user,
           },
         ],
-        state: { in: ['ACCEPTED', 'PENDING'] },
+        state: 'PENDING',
       },
     });
     if (!duplicate)

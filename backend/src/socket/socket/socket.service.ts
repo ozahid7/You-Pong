@@ -674,7 +674,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('request')
+  @SubscribeMessage('addRequest')
   async addRequest(
     @ConnectedSocket() socket: Socket,
     @MessageBody() id_receiver: string,
@@ -700,11 +700,53 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
         if (my_user && otherUser) {
-          this.server.to(receiver.id_user).emit('notif');
+          this.server.to(receiver.id_user).emit('addNotif', {
+            id_user: my_user.id_user,
+            username: my_user.username,
+            avatar: my_user.avatar,
+          });
         }
       }
     } catch (error) {
-      console.log('Error in request : ', error);
+      console.log('Error in add request : ', error);
+    }
+  }
+
+  @SubscribeMessage('removeRequest')
+  async removeRequest(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() id_receiver: string,
+  ) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      const receiver = this.users.find((user) => user.id_user === id_receiver);
+      if (
+        sender &&
+        sender !== undefined &&
+        receiver &&
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
+      ) {
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+        });
+        const otherUser = await this.prisma.user.findUnique({
+          where: {
+            id_user: receiver.id_user,
+          },
+        });
+        if (my_user && otherUser) {
+          this.server.to(receiver.id_user).emit('removeNotif', {
+            id_user: my_user.id_user,
+            username: my_user.username,
+            avatar: my_user.avatar,
+          });
+        }
+      }
+    } catch (error) {
+      console.log('Error in remove request : ', error);
     }
   }
 
