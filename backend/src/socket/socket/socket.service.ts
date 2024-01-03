@@ -1,4 +1,8 @@
-import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -22,6 +26,14 @@ export enum mode {
   HARD,
   EASY,
 }
+// export interface infoRequest {
+//   id_game: string;
+//   id_sender: string;
+//   id_receiver: string;
+//   socket_player: string;
+//   map: map;
+//   mode: mode;
+// }
 export interface infoGame {
   id_game: string;
   id_sender: string;
@@ -32,6 +44,7 @@ export interface infoGame {
 }
 export interface infoPlayer {
   id_sender: string;
+  is_public: boolean;
   map: string;
   mode: string;
 }
@@ -116,13 +129,17 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   async addPrivateGame(
     id_game: string,
     id_player: string,
+    id_opponent: string,
     socket_player: string,
     map: map,
     mode: mode,
   ) {
     if (
       this.privateGame.find(
-        (game) => game.id_game === id_game && game.id_player === id_player,
+        (game) =>
+          game.id_game === id_game &&
+          game.id_player === id_player &&
+          game.id_opponent === id_opponent,
       )
     )
       this.removePrvGame(socket_player);
@@ -131,7 +148,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       id_player,
       map,
       mode,
-      id_opponent: null,
+      id_opponent: id_opponent,
       socket_player,
     });
   }
@@ -380,7 +397,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: sender.id_user, status: 'INGAME' });
-            this.matching(info, sender.id_user, sender.id_socket);
+            if (info.is_public)
+              this.matching(info, sender.id_user, sender.id_socket);
           }
         }
       }
@@ -488,6 +506,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           this.addPrivateGame(
             info.id_game,
             info.id_sender,
+            info.id_receiver,
             sender.id_socket,
             info.map,
             info.mode,
@@ -650,51 +669,88 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log('Error in cancel : ', error);
     }
   }
-    // ---------------- adam start here ----------------------
 
-    private ball: {
-      x: number;
-      y: number;
-      speed: number;
-      radius: number;
-      color: string;
-      dx: number;
-      dy: number;
-    } = {
-      x: 60,
-      y: 60,
-      speed: 0.9,
-      radius: 10,
-      color: '',
-      dx: 5,
-      dy: 0,
-    };
-    @SubscribeMessage('updateFrame')
-    async updateFrame(
-      @ConnectedSocket() socket: Socket,
-      @MessageBody() dto: renderDto,
-    ) {
-      try {
-        const theGame = this.prisma.match_History.findUnique({
+  @SubscribeMessage('request')
+  async addRequest(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() id_receiver: string,
+  ) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      const receiver = this.users.find((user) => user.id_user === id_receiver);
+      if (
+        sender &&
+        sender !== undefined &&
+        receiver &&
+        receiver !== undefined &&
+        sender.id_user !== receiver.id_user
+      ) {
+        const my_user = await this.prisma.user.findUnique({
           where: {
-            id_match: dto.id_match,
+            id_user: sender.id_user,
           },
         });
-        if (!theGame)
-          throw new NotFoundException('Game not found');
-        else {
-          // if ball touchs the wall
-          if (this.ball.x + this.ball.radius >= dto.fieald.width || this.ball.x - this.ball.radius <= 0) {
-            this.ball.dx = -this.ball.dx;
-          }
-          this.ball.x += this.ball.dx;
-          dto.ball.x = this.ball.x
-          this.server.to((await theGame).id_player).emit('render', dto);
-          this.server.to((await theGame).id_opponent).emit('render', dto);
+        const otherUser = await this.prisma.user.findUnique({
+          where: {
+            id_user: receiver.id_user,
+          },
+        });
+        if (my_user && otherUser) {
+          this.server.to(receiver.id_user).emit('notif');
         }
-      } catch (error) {
-        throw new BadGatewayException(error);
       }
+    } catch (error) {
+      console.log('Error in request : ', error);
     }
-    // ---------------- adam end here ----------------------
+  }
+
+  // ---------------- adam start here ----------------------
+
+  private ball: {
+    x: number;
+    y: number;
+    speed: number;
+    radius: number;
+    color: string;
+    dx: number;
+    dy: number;
+  } = {
+    x: 60,
+    y: 60,
+    speed: 0.9,
+    radius: 10,
+    color: '',
+    dx: 5,
+    dy: 0,
+  };
+  @SubscribeMessage('updateFrame')
+  async updateFrame(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: renderDto,
+  ) {
+    try {
+      const theGame = this.prisma.match_History.findUnique({
+        where: {
+          id_match: dto.id_match,
+        },
+      });
+      if (!theGame) throw new NotFoundException('Game not found');
+      else {
+        // if ball touchs the wall
+        if (
+          this.ball.x + this.ball.radius >= dto.fieald.width ||
+          this.ball.x - this.ball.radius <= 0
+        ) {
+          this.ball.dx = -this.ball.dx;
+        }
+        this.ball.x += this.ball.dx;
+        dto.ball.x = this.ball.x;
+        this.server.to((await theGame).id_player).emit('render', dto);
+        this.server.to((await theGame).id_opponent).emit('render', dto);
+      }
+    } catch (error) {
+      throw new BadGatewayException(error);
+    }
+  }
+  // ---------------- adam end here ----------------------
 }
