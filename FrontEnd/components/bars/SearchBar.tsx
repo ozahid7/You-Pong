@@ -58,7 +58,6 @@ const SearchBar = (props: { FriendsList: searchUsers }) => {
 								key={index}
 								value={person}
 								onClick={() => {
-									console.log("first");
 									setInput("");
 								}}
 							>
@@ -69,7 +68,7 @@ const SearchBar = (props: { FriendsList: searchUsers }) => {
 									<img
 										src={person.avatar}
 										alt="logo"
-										className="h-8   object-contain border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
+										className="h-8 aspect-1  object-cover border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
 									/>
 									<span className="font-body text-palette-green text-lg font-bold">
 										{person.username.length > 11

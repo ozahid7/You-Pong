@@ -1,4 +1,4 @@
-import { myRoutes } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -64,16 +64,16 @@ const Banner = ({
 			)}
 			<div className={customClass}></div>
 			<div
-				className={`w-full max-h-[100px] sm:min-h-full  bg-gradient-to-r ${start} ${end} flex items-center justify-between px-2 sm:px-3`}
+				className={`w-full max-h-[100px] sm:min-h-full pl-8 px-3 bg-gradient-to-r ${start} ${end} flex items-center justify-between`}
 			>
-				<div className="w-[17%] pb-[17%] xxs:w-[80px] xxs:h-[60px] sm:min-w-[64px 2xl:min-w-[76px] 2xl:min-h-[70px] sm:min-h-[60px]  relative">
+				<div className="w-[10%] min-w-[45px] drop-shadow-md border-2 border-white h:w-[12%] md:w-[12%] xl:w-[14%] max-w-[160px] aspect-1 object-cover rounded-md">
 					<img
-						className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-						src={avatar}
+						className=" h-[100%] w-[100%] aspect-1 absolute object-cover rounded-sm"
+						src={avatar || defaultavatar}
 						alt="avatar"
 					/>
 				</div>
-				<div className="h-full px-2 w-full flex flex-col items-center justify-center h:justify-around  h:flex-row">
+				<div className="h-full px-2 w-[80%]  flex flex-col items-center justify-center h:justify-around  h:flex-row">
 					<span
 						data-tooltip-id="banner_tooltip"
 						data-tooltip-content={opponent}

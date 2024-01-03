@@ -124,7 +124,7 @@ export default function game({ params }: pageProps) {
 						status={user.data.status}
 						user={user}
 					/>
-					{showPlayerLoader && user.data.status !== "INGAME" && (
+					{showPlayerLoader && (
 						<PlayerLoader
 							path={params.user}
 							isOpen={showPlayerLoader}

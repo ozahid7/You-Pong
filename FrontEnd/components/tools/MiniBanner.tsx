@@ -24,7 +24,7 @@ const MiniBanner = (props: {
 		props.nameStyle
 	);
 	const className = twMerge(
-		"max-w-[300px] flex  rounded-sm drop-shadow-md h-full font-body h:w-[80%] md:min-h-[45px] min-h-[34px] h:min-h-[40px] w-full",
+		"max-w-[300px] flex shadow-md rounded-sm  h-full font-body h:w-[80%] md:min-h-[45px] min-h-[34px] h:min-h-[40px] w-full",
 		props.className
 	);
 	const end = props.isGreen ? "to-[#9DBBBD]" : "to-[#ECAC9B]";
@@ -69,10 +69,11 @@ const MiniBanner = (props: {
 					<>
 						<Tooltip
 							id="rank_image"
-							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey drop-shadow-lg font-semibold z-10"
+							className="greenTooltip max-w-[160px] font-body border-2 border-palette-grey drop-shadow-lg font-semibold z-100"
 							style={{
 								backgroundColor: "#46686A",
 								color: "#fff",
+								zIndex: 10,
 							}}
 							opacity={1}
 							place={"right"}
@@ -82,7 +83,7 @@ const MiniBanner = (props: {
 							data-tooltip-content={message}
 							data-tooltip-id="rank_image"
 							data-tooltip-hidden={!props.isRank}
-							className="border-2 max-w-[20px] h:max-w-[26px] flex border-white rounded-sm object-contain"
+							className="border-2 max-w-[20px] h:max-w-[26px] flex border-white rounded-sm object-contain z-100"
 							src={avatar || defaultavatar}
 							alt=""
 							width={90}

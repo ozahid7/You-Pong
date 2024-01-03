@@ -5,7 +5,7 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { infoGame } from "@/types/game";
 import { acceptGame, refuseGame } from "@/utils/game";
 import { useRouter } from "next/navigation";
-import { gameContext, useGameContext } from "@/providers/InviteProvider";
+import { gameContext, useGameContext } from "@/providers/SocketProvider";
 
 const MyToast = (props: {
 	userName: string;
