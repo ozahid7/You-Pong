@@ -44,7 +44,7 @@ const FriendBanner = (props: {
 							className="font-body text-palette-green text-lg font-bold"
 						>
 							{props.userName.length > 7
-								? props.userName.slice(0, 4) + "..."
+								? props.userName.slice(0, 7) + "."
 								: props.userName}
 						</span>
 						<span className="font-light text-cardtitle text-sm">
@@ -57,8 +57,8 @@ const FriendBanner = (props: {
 						onClick={() => {
 							direct.mutate();
 						}}
-						size={35}
-						className="cursor-pointer mt-1 text-palette-green"
+						size={40}
+						className="cursor-pointer bg-white p-1 drop-shadow-md rounded-md text-palette-green"
 					/>
 					<MyToggle
 						otherclass="h-[38px] hidden sm:flex min-w-[120px]"

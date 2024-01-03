@@ -146,7 +146,7 @@ const PlayerCard = (props: {
 					</h3>
 					<div className="w-[38%] pt-6 sm:pt-8 flex items-center justify-center h-full">
 						<img
-							className=" w-[28%] drop-shadow-md border border-palette-white h:w-[20%] md:w-[24%] sm:w-[21%] xl:w-[30%] max-w-[160px] aspect-1 absolute object-cover rounded-md"
+							className=" w-[28%] drop-shadow-md border-2 border-white h:w-[20%] md:w-[24%] sm:w-[21%] xl:w-[30%] max-w-[160px] aspect-1 absolute object-cover rounded-md"
 							src={props.avatar || defaultavatar}
 							alt="avatar"
 						/>

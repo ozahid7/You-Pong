@@ -39,7 +39,7 @@ const BlockedBanner = (props: {
 							className="font-body text-palette-green text-lg font-bold"
 						>
 							{props.userName.length > 7
-								? props.userName.slice(0, 4) + "..."
+								? props.userName.slice(0, 7) + "."
 								: props.userName}
 						</span>
 						<span className="font-light text-cardtitle text-sm">

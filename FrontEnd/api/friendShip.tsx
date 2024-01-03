@@ -50,6 +50,7 @@ export const adduser = (uid: string, username?: string) => {
 				friendsEndPoint.add + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
+			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["otheruser", username] });
 			return response;
 		} catch (error) {
@@ -60,6 +61,7 @@ export const adduser = (uid: string, username?: string) => {
 };
 
 export const removeuser = (uid: string, username?: string) => {
+	console.log("user name = ", username);
 	const query = useQueryClient();
 	const removeUser = async () => {
 		try {
