@@ -1,17 +1,81 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
+import {
+  LuMoreHorizontal,
+  LuSend,
+  LuSendHorizonal,
+  LuSmile,
+} from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
 import { Channel, Member, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, fetchData_getMembers } from "../data/api";
 import { User } from "@/types";
 import { MyDropdown } from "@/components";
-import { FiChevronDown } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { TbSend, TbSendOff } from "react-icons/tb";
 import Loader from "@/components/tools/Loader";
+import { Menu } from "@headlessui/react";
+import { IconContext } from "react-icons";
+import {
+  MdOutlineFaceRetouchingOff,
+  MdOutlineFaceUnlock,
+} from "react-icons/md";
+
+interface EmojiProps {
+  onEmojiSelect: any;
+  disable: boolean;
+}
+
+const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
+  const emojis = ["😀", "😂", "👍", "❤️", "😍", "😎", "🎉"];
+
+  return (
+    <Menu
+      as="div"
+      className="relative text-left"
+    >
+      <Menu.Button className="flex self-center text-[20px] text-palette-green">
+        {({ active }) => (
+          <div
+            className={`${
+              active ? "text-palette-orange" : "text-palette-green"
+            } text-[30px] hover:text-palette-orange`}
+          >
+            {disable ? <MdOutlineFaceRetouchingOff /> : <MdOutlineFaceUnlock />}
+          </div>
+        )}
+      </Menu.Button>
+      <Menu.Items className="absolute bottom-0 mb-10 right-0 z-10 bg-white rounded-md shadow-lg overflow-hidden">
+        <div className="flex p-2 space-x-1">
+          {emojis.map((emoji) => (
+            <Menu.Item
+              key={emoji}
+              as="button"
+              className={`text-xl`}
+              disabled={disable}
+            >
+              {({ active }) => (
+                <div
+                  role="button"
+                  className={` ${
+                    active
+                      ? "bg-palette-orange text-white"
+                      : "text-palette-green"
+                  } rounded-md`}
+                  onClick={() => onEmojiSelect(emoji)}
+                >
+                  {emoji}
+                </div>
+              )}
+            </Menu.Item>
+          ))}
+        </div>
+      </Menu.Items>
+    </Menu>
+  );
+};
 
 interface obj {
   channels: Channel;
@@ -70,6 +134,13 @@ const GroupsChat = ({
     }
   );
 
+  const addEmoji = (emoji) => {
+    if (messageRef.current && !mutedMember.disabled) {
+      messageRef.current.value += emoji;
+      messageRef.current.focus(); // Optional: bring focus back to input after emoji selection
+    }
+  };
+
   if (ChannelLoading || MembersLoading) <Loader />;
 
   const retChannel: Channel | null = data
@@ -79,7 +150,7 @@ const GroupsChat = ({
     : null;
 
   const retMember: Member | null = Members
-    ? Members.find((member) => member.user.id_user === MainUser.uid)
+    ? Members.find((member) => member.user.id_user === MainUser?.uid)
     : null;
 
   if (retMember)
@@ -163,7 +234,7 @@ const GroupsChat = ({
           key={channels?.id_channel}
         />
       </div>
-      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
+      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center gap-2">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center min-w-[40px] max-w-[600px]">
           <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden gap-1">
             <input
@@ -186,6 +257,12 @@ const GroupsChat = ({
               )}
             </button>
           </div>
+        </div>
+        <div className="w-fit h-[60%] flex items-center justify-center">
+          <EmojiDropDown
+            onEmojiSelect={addEmoji}
+            disable={mutedMember.disabled}
+          />
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   var result: any = undefined;
   var disabled: boolean = false;
 
-  if (users)
+  if (users && MainUser)
     users.map((member) => {
       member.user.id_user === MainUser.uid
         ? member.user_role === "OWNER"
