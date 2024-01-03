@@ -7,7 +7,13 @@ import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
 import { HiBan } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { defaultavatar, myRoutes } from "@/const";
-import { adduser, blockuser, removeuser, todirect } from "@/api/friendShip";
+import {
+	adduser,
+	blockuser,
+	declineuser,
+	removeuser,
+	todirect,
+} from "@/api/friendShip";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { LuMessageSquarePlus } from "react-icons/lu";
 import { BsController } from "react-icons/bs";
@@ -45,6 +51,7 @@ const PlayerCard = (props: {
 	const Block = blockuser(props.uid, () => {}, props.username);
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
+	const Decline = declineuser(props.uid);
 	const direct = todirect(props.uid);
 	const otheruser = useOtherUser(props.param);
 
@@ -98,8 +105,10 @@ const PlayerCard = (props: {
 	const pendingIcon = (
 		<FaUserClock
 			onClick={() => {
-				Remove.mutate();
-				setIcon(addIcon);
+				Remove.mutateAsync().then(() => {
+					otheruser.refetch();
+					setIcon(addIcon);
+				});
 			}}
 			size={100}
 			className={iconsStyle}
@@ -108,9 +117,10 @@ const PlayerCard = (props: {
 	const addIcon = (
 		<FaUserPlus
 			onClick={() => {
-				Add.mutate();
-				setIcon(pendingIcon);
-				otheruser.refetch();
+				Add.mutateAsync().then(() => {
+					otheruser.refetch();
+					setIcon(pendingIcon);
+				});
 			}}
 			size={100}
 			className={iconsStyle}
@@ -120,9 +130,10 @@ const PlayerCard = (props: {
 	const removeIcon = (
 		<FaUserMinus
 			onClick={() => {
-				Remove.mutate();
-				setIcon(addIcon);
-				otheruser.refetch();
+				Remove.mutateAsync().then(() => {
+					otheruser.refetch();
+					setIcon(addIcon);
+				});
 			}}
 			size={100}
 			className={iconsStyle}

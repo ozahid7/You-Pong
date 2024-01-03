@@ -50,8 +50,6 @@ export const adduser = (uid: string, username?: string) => {
 				friendsEndPoint.add + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
-			query.invalidateQueries({ queryKey: ["search"] });
-			query.invalidateQueries({ queryKey: ["otheruser", username] });
 			return response;
 		} catch (error) {
 			console.log("add user error = ", error);
@@ -61,7 +59,6 @@ export const adduser = (uid: string, username?: string) => {
 };
 
 export const removeuser = (uid: string, username?: string) => {
-	console.log("user name = ", username);
 	const query = useQueryClient();
 	const removeUser = async () => {
 		try {
@@ -70,7 +67,6 @@ export const removeuser = (uid: string, username?: string) => {
 				friendsEndPoint.decline + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
-			query.invalidateQueries({ queryKey: ["otheruser", username] });
 			return response;
 		} catch (error) {
 			console.log("remove user error =", error);
@@ -80,7 +76,8 @@ export const removeuser = (uid: string, username?: string) => {
 	return useMutation({ mutationFn: removeUser });
 };
 
-export const unblockuser = (uid: string) => {
+export const unblockuser = (uid: string, username?: string) => {
+	console.log("username = ", username);
 	const query = useQueryClient();
 	const unblockUser = async () => {
 		try {

@@ -27,7 +27,7 @@ const MyDropdown = (props: {
 }) => {
 	const router = useRouter();
 	const user = useUser(true);
-	const block = blockuser(props.uid, props.Refetch);
+	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
 	const handleLogout = async () => {

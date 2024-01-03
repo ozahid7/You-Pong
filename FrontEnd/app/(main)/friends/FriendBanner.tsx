@@ -16,7 +16,7 @@ const FriendBanner = (props: {
 	SetInvalidData: any;
 }) => {
 	const [enabled, setEnabled] = useState(false);
-	const block = blockuser(props.uid);
+	const block = blockuser(props.uid, () => {}, props.userName);
 	const direct = todirect(props.uid);
 
 	if (block.isPending || direct.isPending)

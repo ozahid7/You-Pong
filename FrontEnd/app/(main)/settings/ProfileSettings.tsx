@@ -141,7 +141,7 @@ const ProfileSettings = ({
 			: setInvalidCurrentPass(false);
 		user.data.createdAt === user.data.updatedAt && userName.length === 0
 			? setInvalidUser(true)
-			: setInvalidUser(false);
+			: "";
 		setSubmit(true);
 	};
 
