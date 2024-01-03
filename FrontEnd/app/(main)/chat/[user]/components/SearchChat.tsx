@@ -19,18 +19,24 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
   const [mychannel, setMyChannel] = useState<Channel | null>(null);
 
   useEffect(() => {
-    if (object)
-      setFriendArr(
-        object.filter((user) =>
-          user.name.toLowerCase().includes(Input.toLowerCase())
-        )
+    let newFriendArr = [];
+
+    if (object) {
+      newFriendArr = object.filter((user) =>
+        user.name.toLowerCase().includes(Input.toLowerCase())
       );
-    if (direct) {
-      direct.filter((user) => {
-        user.name.toLowerCase().includes(Input.toLowerCase());
-        setFriendArr((prevChannels) => [...prevChannels, user]);
-      });
     }
+
+    if (direct) {
+      const filteredDirect = direct.filter((user) =>
+        user.name.toLowerCase().includes(Input.toLowerCase())
+      );
+      newFriendArr = [...newFriendArr, ...filteredDirect];
+    }
+
+    console.log("search channels:", newFriendArr);
+
+    setFriendArr(newFriendArr);
   }, [Input]);
 
   useEffect(() => {
