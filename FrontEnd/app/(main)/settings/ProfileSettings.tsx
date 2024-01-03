@@ -182,7 +182,7 @@ const ProfileSettings = ({
 						<img
 							src={selectedFile || defaultavatar}
 							alt="logo"
-							className="h-20 h:h-24 object-cover border-2 max-w-[180px] max-h-[180px] border-palette-green rounded-md sm:h-28 md:h-32 lg:h-36"
+							className="h-20 h:h-24 aspect-1 object-cover border-2 max-w-[180px] max-h-[180px] border-palette-green rounded-md sm:h-28 md:h-32 lg:h-36"
 						/>
 						<div className="relative  w-auto flex justify-center">
 							<input

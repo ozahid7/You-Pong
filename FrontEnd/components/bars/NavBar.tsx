@@ -27,7 +27,7 @@ const NavBar = () => {
 			<div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
 				{search.data && <SearchBar FriendsList={search.data} />}
 				<img
-					className="border-2 hidden cursor-pointer s:flex border-white rounded-sm object-contain"
+					className="border-2 hidden aspect-1 cursor-pointer s:flex border-white rounded-sm object-cover"
 					src={avatar || defaultavatar}
 					alt=""
 					onClick={() => {

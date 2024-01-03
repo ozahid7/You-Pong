@@ -144,16 +144,14 @@ const PlayerCard = (props: {
 					<h3 className=" whitespace-nowrap absolute top-2 left-4 sm:left-8 sm:top-4   text-cardtitle  text-[12px] h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
 						Player Card
 					</h3>
-					<div className="sm:w-[40%] w-[34%] md:pt-4 flex flex-col justify-center items-center h-[60%] md:h-[80%]">
-						<div className="w-[80%] pt-4 md:pt-2 h-[90%] md:w-[60%] md:pb-[60%] xl:w-[80%] xl:h-[80%] relative">
-							<img
-								className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-								src={props.avatar || defaultavatar}
-								alt="avatar"
-							/>
-						</div>
+					<div className="w-[38%] pt-6 sm:pt-8 flex items-center justify-center h-full">
+						<img
+							className=" w-[28%] drop-shadow-md border border-palette-white h:w-[20%] md:w-[24%] sm:w-[21%] xl:w-[30%] max-w-[160px] aspect-1 absolute object-cover rounded-md"
+							src={props.avatar || defaultavatar}
+							alt="avatar"
+						/>
 					</div>
-					<div className="w-[62%] h-full pr-1 sm:pr-0 flex flex-col items-center justify-center pt-1 sm:pt-2 relative">
+					<div className="w-[62%]  h-full pr-1 sm:pr-0 flex flex-col items-center justify-center pt-1 sm:pt-2 relative">
 						{props.isMe ? (
 							<MdOutlineSettings
 								onClick={() => {
