@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { Tooltip } from "react-tooltip";
+import { defaultavatar } from "@/const";
 
 const MiniBanner = (props: {
 	isGreen: boolean;
@@ -10,6 +11,7 @@ const MiniBanner = (props: {
 	nameStyle?: string;
 	isRank?: boolean;
 	rank?: string;
+	isLevel?: boolean;
 	className?: string;
 }) => {
 	const start = props.isGreen ? "from-[#508286]" : "from-[#E97152]";
@@ -50,6 +52,10 @@ const MiniBanner = (props: {
 		}
 	}, []);
 
+	const tmp = props.isLevel
+		? parseFloat(props.value).toFixed(1)
+		: props.value;
+	const value = tmp.endsWith(".0") ? tmp.slice(0, tmp.length - 2) : tmp;
 	return (
 		<div className={className}>
 			<div className={customClass}></div>
@@ -58,7 +64,7 @@ const MiniBanner = (props: {
 			>
 				<p className={namestyle}>{props.name}</p>
 				{!props.isRank ? (
-					<p className={valuestyle}>{props.value}</p>
+					<p className={valuestyle}>{value}</p>
 				) : (
 					<>
 						<Tooltip
@@ -77,7 +83,7 @@ const MiniBanner = (props: {
 							data-tooltip-id="rank_image"
 							data-tooltip-hidden={!props.isRank}
 							className="border-2 max-w-[20px] h:max-w-[26px] flex border-white rounded-sm object-contain"
-							src={avatar}
+							src={avatar || defaultavatar}
 							alt=""
 							width={90}
 							height={90}

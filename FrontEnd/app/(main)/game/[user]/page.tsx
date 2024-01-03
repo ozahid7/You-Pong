@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MyContainer, ScoreCard } from "@/components";
 import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
@@ -13,6 +13,7 @@ import { useGameContext } from "@/providers/InviteProvider";
 import useOtherUser from "@/api/useOtherUser";
 import { avatar } from "@nextui-org/theme";
 import { OtherUser } from "@/utils/game";
+import Loader from "@/components/tools/Loader";
 
 interface pageProps {
 	params: { user: string };
@@ -35,6 +36,7 @@ export default function game({ params }: pageProps) {
 		username: undefined,
 		avatar: undefined,
 	});
+	const [checker, setChecker] = useState(false);
 
 	useEffect(() => {
 		if (params.user != "me" && params.user.length < 12) {
@@ -51,6 +53,13 @@ export default function game({ params }: pageProps) {
 			setShowPlayerLoder(true);
 		}
 		setSubmit(true);
+	}, []);
+
+	useLayoutEffect(() => {
+		if (user.data && user.data.status === "INGAME") {
+			router.push(myRoutes.dashboard);
+		}
+		if (user.data) setChecker(true);
 	}, []);
 
 	useEffect(() => {
@@ -73,6 +82,7 @@ export default function game({ params }: pageProps) {
 	const [game_id, SetGameId] = useState(
 		new Date() + user.data.uid + params.user
 	);
+	if (!checker) return <Loader />;
 	return (
 		<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
 			<div className="flex w-[88%] h-[90%]">
@@ -114,7 +124,7 @@ export default function game({ params }: pageProps) {
 						status={user.data.status}
 						user={user}
 					/>
-					{showPlayerLoader && (
+					{showPlayerLoader && user.data.status !== "INGAME" && (
 						<PlayerLoader
 							path={params.user}
 							isOpen={showPlayerLoader}

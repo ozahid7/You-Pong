@@ -14,7 +14,6 @@ import {
 	LuSettings,
 	LuLogOut,
 } from "react-icons/lu";
-import { QueryClient } from "@tanstack/react-query";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 
@@ -85,7 +84,7 @@ const SideBar = () => {
 
 	return (
 		<aside
-			className={` text-white pb-3 2xl:min-w-[280px] w-[100px] bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-y-2 border-r-2 border-[#D6E4E5]`}
+			className={` text-white pb-3 2xl:min-w-[280px] w-[100px]  bg-[#537073] min-h-screen hidden sm:flex flex-col rounded-sm justify-between items-center border-y-2 border-r-2 border-[#D6E4E5]`}
 		>
 			{/* top part */}
 
@@ -107,7 +106,7 @@ const SideBar = () => {
 				</div>
 			</div>
 
-			<div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between overflow-y-auto ">
+			<div className=" 2xl:w-[94%] w-[88%] h-full px-2 pb-3 pt-8 bg-[#4F777A] shadow-xl rounded-sm flex flex-col justify-between my_scroll_orange overflow-y-auto ">
 				{/* middle part */}
 				<div className="h-auto flex flex-col space-y-5">
 					{RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
