@@ -32,7 +32,7 @@ const PlayerCard = (props: {
 	user: UseQueryResult<UserInfo, Error>;
 }) => {
 	const iconsStyle =
-		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg drop-shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
+		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
 	const directIconStyle =
 		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute  xl:w-[12%] xl:h-[12%] h:right-3  right-1  cursor-pointer";
 	const [isFriend, setIsFriend] = useState(false);
@@ -46,7 +46,6 @@ const PlayerCard = (props: {
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
 	const direct = todirect(props.uid);
-	const queryClient = useQueryClient();
 	const otheruser = useOtherUser(props.param);
 
 	useEffect(() => {

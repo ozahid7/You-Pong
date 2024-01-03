@@ -119,9 +119,9 @@ const SideBar = () => {
 
 				<div className="h-full w-full  pb-6 justify-end flex flex-col space-y-6 items-center px-2">
 					<Link className="h-auto w-[92%] " href={myRoutes.dashboard}>
-						<div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
+						<div className="w-full py-3 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
 							<img
-								className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
+								className="border-2 min-w-[40px] xl:max-w-[45px] hidden s:flex border-white rounded-sm object-contain"
 								src={avatar || defaultavatar}
 								alt=""
 								width={100}

@@ -38,7 +38,6 @@ const PlayerLoader = (props: {
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
-			console.log("hello from matched");
 			setIsmatched(true);
 			setTimeout(() => {
 				props.showLoader(false);
@@ -58,6 +57,7 @@ const PlayerLoader = (props: {
 			id_sender: props.my_id,
 			map: props.map.toUpperCase(),
 			mode: props.mode.toUpperCase(),
+			is_public: props.path === "me",
 		});
 	}, []);
 
@@ -78,7 +78,6 @@ const PlayerLoader = (props: {
 	};
 
 	if (userInfo && userInfo !== undefined) {
-		console.log(userInfo);
 		editedLevel2 = userInfo.level.toFixed(1);
 		editedLevel2 = editedLevel2.endsWith(".0")
 			? editedLevel2.slice(0, editedLevel2.length - 2)

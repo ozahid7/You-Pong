@@ -123,7 +123,10 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           info.id_sender = sender.id_user;
           info.created_at = message.created_at;
           result.map((user) => {
-            if (user) this.server.to(user.id_user).emit('receiveMessage', info);
+            if (user) {
+              this.server.to(user.id_user).emit('receiveMessage', info);
+              this.server.to(user.id_user).emit('notif');
+            }
           });
         }
       }
