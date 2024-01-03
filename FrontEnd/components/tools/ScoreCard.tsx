@@ -1,5 +1,5 @@
 import { defaultavatar } from "@/const";
-import { useGameContext } from "@/providers/InviteProvider";
+import { useGameContext } from "@/providers/SocketProvider";
 import React, { ReactNode } from "react";
 
 const ScoreCard = (props: {

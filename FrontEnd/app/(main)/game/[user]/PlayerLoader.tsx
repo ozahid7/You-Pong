@@ -1,7 +1,7 @@
 "use client";
 import { MyDialog } from "@/components";
 import Loader from "@/components/tools/Loader";
-import { useGameContext } from "@/providers/InviteProvider";
+import { useGameContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
