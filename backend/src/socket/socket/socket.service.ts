@@ -515,6 +515,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             info,
             username: my_user.username,
             avatar: my_user.avatar,
+            level: my_user.level,
           });
         }
       }
@@ -575,6 +576,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               info,
               username: my_user.username,
               avatar: my_user.avatar,
+              level: my_user.level,
             });
           }
         }
@@ -618,6 +620,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               info,
               username: my_user.username,
               avatar: my_user.avatar,
+              level: my_user.level,
             });
           }
         }
@@ -661,6 +664,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
               info,
               username: my_user.username,
               avatar: my_user.avatar,
+              level: my_user.level,
             });
           }
         }
