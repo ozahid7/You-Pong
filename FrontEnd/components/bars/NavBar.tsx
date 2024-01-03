@@ -3,7 +3,7 @@ import React from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { MyDropdown } from "..";
 import SearchBar from "./SearchBar";
-import { myRoutes, navMenuElements } from "@/const";
+import { defaultavatar, myRoutes, navMenuElements } from "@/const";
 import { useRouter } from "next/navigation";
 import { searchusers } from "@/api/friendShip";
 import { useUser } from "@/api/getHero";
@@ -27,8 +27,8 @@ const NavBar = () => {
 			<div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
 				{search.data && <SearchBar FriendsList={search.data} />}
 				<img
-					className="border-2 hidden cursor-pointer s:flex border-white rounded-sm object-contain"
-					src={avatar}
+					className="border-2 hidden aspect-1 cursor-pointer s:flex border-white rounded-sm object-cover"
+					src={avatar || defaultavatar}
 					alt=""
 					onClick={() => {
 						router.push(myRoutes.dashboard);

@@ -61,7 +61,7 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
 			<img
 				src={path || defaultavatar}
 				alt="logo"
-				className="h-10  object-contain border-2 max-w-[220px] max-h-[220px] border-white  rounded-md sm:h-14 md:h-16"
+				className="h-10  object-cover aspect-1 border-2 max-w-[220px] max-h-[220px] border-white drop-shadow-md rounded-md sm:h-14 md:h-16"
 			/>
 		);
 	};

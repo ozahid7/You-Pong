@@ -34,7 +34,7 @@ const HistoryCard = (props: { uid: string; me: string }) => {
 							<div className=" flex w-[90%] min-w-[180px] h-[100%] flex-col items-center space-y-10">
 								{matchs.map((e, index) => (
 									<Banner
-										isGreen={!e.win}
+										isGreen={e.win}
 										opponent={e.username}
 										avatar={e.avatar}
 										wins={e.player_score}
