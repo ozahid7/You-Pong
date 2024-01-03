@@ -15,8 +15,8 @@ import { myRoutes } from "@/const";
 interface gameContextProps {
 	data: inviteReturn;
 	setData: any;
-	accepted: boolean;
-	setAccepted: any;
+	viewed: boolean;
+	setViewed: any;
 }
 
 export const gameContext = createContext<gameContextProps | undefined>(
@@ -26,13 +26,21 @@ export const gameContext = createContext<gameContextProps | undefined>(
 function InviteProvider({ children }: { children: React.ReactNode }) {
 	const globalSocket = useGlobalSocket().globalSocket;
 	const [data, setData] = useState<inviteReturn>();
-	const [accepted, setAccepted] = useState(false);
+	const [viewed, setViewed] = useState(true);
 	const router = useRouter();
 	const style =
 		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
 
 	useEffect(() => {
-		console.log("from invite provider");
+		console.log("from socket provider");
+
+		if (globalSocket.listeners("notif").length === 0)
+			globalSocket.on("notif", () => {
+				console.log("from notif");
+				setViewed(false);
+				notify("", "", false, 2000, "You have a new friend Request 👥");
+			});
+
 		if (globalSocket.listeners("invitation").length === 0)
 			globalSocket.on("invitation", (obj: inviteReturn) => {
 				console.log("from invitation", obj);
@@ -42,7 +50,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("accepted").length === 0)
 			globalSocket.on("accepted", (obj: inviteReturn) => {
 				console.log("from accepted ......", obj);
-				setAccepted(true);
 				setData(obj);
 			});
 
@@ -102,7 +109,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<gameContext.Provider value={{ data, setData, accepted, setAccepted }}>
+		<gameContext.Provider value={{ data, setData, viewed, setViewed }}>
 			{children}
 			<ToastContainer />
 		</gameContext.Provider>

@@ -16,8 +16,15 @@ import {
 } from "react-icons/lu";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useEffect, useState } from "react";
+import { useGameContext } from "@/providers/SocketProvider";
 
-const RenderSideBarElements = (index: number, link: string, name: string) => {
+const RenderSideBarElements = (
+	index: number,
+	link: string,
+	name: string,
+	notif?: boolean
+) => {
 	const path = usePathname();
 	const router = useRouter();
 
@@ -38,10 +45,10 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 	return (
 		<div onClick={goTo}>
 			<div
-				className={`flex px-4 cursor-pointer items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
+				className={`flex px-4 cursor-pointer relative items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
 					path === link
 						? "bg-palette-green text-palette-orange  rounded-md"
-						: "text-white"
+						: "text-white rounded-md"
 				} `}
 			>
 				{elm}
@@ -52,6 +59,9 @@ const RenderSideBarElements = (index: number, link: string, name: string) => {
 				>
 					{name}
 				</span>
+				{!notif && index === 1 && (
+					<span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
+				)}
 			</div>
 		</div>
 	);
@@ -63,6 +73,7 @@ const SideBar = () => {
 	const { username, avatar } = user.data;
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
+	const { viewed, setViewed } = useGameContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -110,7 +121,12 @@ const SideBar = () => {
 				{/* middle part */}
 				<div className="h-auto flex flex-col space-y-5">
 					{RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
-					{RenderSideBarElements(1, myRoutes.friends, "Friends")}
+					{RenderSideBarElements(
+						1,
+						myRoutes.friends,
+						"Friends",
+						viewed
+					)}
 					{RenderSideBarElements(2, myRoutes.chat, "Messages")}
 					{RenderSideBarElements(3, myRoutes.gameme, "Game")}
 					{RenderSideBarElements(4, myRoutes.settings, "Settings")}
