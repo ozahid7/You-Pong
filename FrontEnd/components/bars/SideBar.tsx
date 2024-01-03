@@ -1,6 +1,6 @@
 "use client";
 
-import { apiHost, myRoutes } from "@/const";
+import { apiHost, defaultavatar, myRoutes } from "@/const";
 import axios from "axios";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -122,7 +122,7 @@ const SideBar = () => {
 						<div className="w-full py-1 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
 							<img
 								className="border-2 min-w-[50px] xl:max-w-[60px] hidden s:flex border-white rounded-sm object-contain"
-								src={avatar}
+								src={avatar || defaultavatar}
 								alt=""
 								width={100}
 								height={100}

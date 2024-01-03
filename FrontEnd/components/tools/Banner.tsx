@@ -1,4 +1,4 @@
-import { myRoutes } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -69,7 +69,7 @@ const Banner = ({
 				<div className="w-[17%] pb-[17%] xxs:w-[80px] xxs:h-[60px] sm:min-w-[64px 2xl:min-w-[76px] 2xl:min-h-[70px] sm:min-h-[60px]  relative">
 					<img
 						className=" h-[100%] w-[100%] absolute object-contain rounded-md"
-						src={avatar}
+						src={avatar || defaultavatar}
 						alt="avatar"
 					/>
 				</div>

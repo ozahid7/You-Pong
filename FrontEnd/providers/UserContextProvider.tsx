@@ -147,6 +147,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				setIsOpen={() => {}}
 				closeModal={() => {}}
 				user={me}
+				globalSocket={globalSocket}
+				setGlobalSocket={setGlobalSocket}
 			/>
 		);
 	} else if (

@@ -5,7 +5,7 @@ import { useGameContext } from "@/providers/InviteProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { myRoutes } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { MdCancelPresentation } from "react-icons/md";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { Socket } from "socket.io-client";
@@ -38,6 +38,7 @@ const PlayerLoader = (props: {
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
+			console.log("hello from matched");
 			setIsmatched(true);
 			setTimeout(() => {
 				props.showLoader(false);
@@ -76,7 +77,8 @@ const PlayerLoader = (props: {
 		setData(undefined);
 	};
 
-	if (userInfo) {
+	if (userInfo && userInfo !== undefined) {
+		console.log(userInfo);
 		editedLevel2 = userInfo.level.toFixed(1);
 		editedLevel2 = editedLevel2.endsWith(".0")
 			? editedLevel2.slice(0, editedLevel2.length - 2)
@@ -111,7 +113,7 @@ const PlayerLoader = (props: {
 					<div className="flex-1 flex flex-col justify-center items-center w-full">
 						<img
 							className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
-							src={props.avatar}
+							src={props.avatar || defaultavatar}
 							alt=""
 							width={500}
 							height={500}
@@ -137,7 +139,7 @@ const PlayerLoader = (props: {
 							<div className="flex-1 flex flex-col justify-center items-center w-full">
 								<img
 									className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
-									src={userInfo.avatar}
+									src={userInfo.avatar || defaultavatar}
 									alt=""
 									width={500}
 									height={500}

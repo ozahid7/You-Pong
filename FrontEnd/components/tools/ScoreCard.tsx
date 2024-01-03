@@ -1,3 +1,4 @@
+import { defaultavatar } from "@/const";
 import { useGameContext } from "@/providers/InviteProvider";
 import React, { ReactNode } from "react";
 
@@ -16,7 +17,7 @@ const ScoreCard = (props: {
 					<div className="flex items-center gap-2">
 						<img
 							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm object-contain"
-							src={props.avatar}
+							src={props.avatar || defaultavatar}
 							alt=""
 							width={90}
 							height={90}
@@ -44,7 +45,7 @@ const ScoreCard = (props: {
 						</div>
 						<img
 							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm object-contain"
-							src={props.otheravatar}
+							src={props.otheravatar || defaultavatar}
 							alt=""
 							width={90}
 							height={90}
