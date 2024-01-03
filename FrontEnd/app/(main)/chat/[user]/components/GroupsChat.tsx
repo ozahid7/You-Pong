@@ -79,7 +79,7 @@ const GroupsChat = ({
     : null;
 
   const retMember: Member | null = Members
-    ? Members.find((member) => member.user.id_user === MainUser.uid)
+    ? Members.find((member) => member.user.id_user === MainUser?.uid)
     : null;
 
   if (retMember)
