@@ -28,8 +28,8 @@ interface EmojiProps {
   disable: boolean;
 }
 
-const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
-  const emojis = ["😀", "😂", "👍", "❤️", "😍", "😎", "🎉"];
+export const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
+  const emojis: string[] = ["😀", "😂", "👍", "❤️", "😍", "😎", "🎉"];
 
   return (
     <Menu
@@ -134,7 +134,7 @@ const GroupsChat = ({
     }
   );
 
-  const addEmoji = (emoji) => {
+  const addEmoji = (emoji: string) => {
     if (messageRef.current && !mutedMember.disabled) {
       messageRef.current.value += emoji;
       messageRef.current.focus(); // Optional: bring focus back to input after emoji selection
@@ -251,9 +251,9 @@ const GroupsChat = ({
               disabled={mutedMember.disabled}
             >
               {mutedMember.disabled === false ? (
-                <TbSend className="h-[30px] w-[30px] text-[#497174] mr-2" />
+                <TbSend className="h-[30px] w-[30px] text-palette-green mr-2 hover:text-palette-orange" />
               ) : (
-                <TbSendOff className="h-[30px] w-[30px] text-[#497174] mr-2" />
+                <TbSendOff className="h-[30px] w-[30px] text-palette-green mr-2 hover:text-palette-orange" />
               )}
             </button>
           </div>

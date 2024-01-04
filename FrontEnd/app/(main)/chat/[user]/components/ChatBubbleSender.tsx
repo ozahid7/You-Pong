@@ -21,9 +21,9 @@ const ChatBubbleSender = ({ member, message }: Props) => {
 
   if (member) {
     return (
-      <div className="chat chat-start p-1">
-        <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
+      <div className="chat chat-start p-1 ">
+        <div className="chat-image avatar ">
+          <div className="w-10 rounded-md border-[2px] border-palette-white">
             <Image
               width={40}
               height={40}
@@ -33,19 +33,19 @@ const ChatBubbleSender = ({ member, message }: Props) => {
           </div>
         </div>
         <div className="flex chat-header items-center gap-1">
-          <div className="w-fit h-fit">{member.user?.username}</div>
-        </div>
-        <div className="w-full h-full dropdown dropdown-hover">
-          <div
-            data-theme="mytheme"
-            className="chat-bubble chat-bubble-primary text-palette-white w-fit  max-w-[80%] break-words "
-          >
-            {message.content}
+          <div className="w-fit h-fit font-body font-[600]">
+            {member.user?.username}
           </div>
-          <time className="text-xs opacity-50">
-            {formatPrismaDate(message.created_at)}
-          </time>
         </div>
+        <div
+          data-theme="mytheme"
+          className="chat-bubble chat-bubble-primary text-palette-white w-fit  max-w-[80%] break-words "
+        >
+          {message.content}
+        </div>
+        <time className="chat-footer text-xs opacity-50">
+          {formatPrismaDate(message.created_at)}
+        </time>
       </div>
     );
   }

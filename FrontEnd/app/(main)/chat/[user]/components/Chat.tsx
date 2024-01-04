@@ -10,6 +10,7 @@ import Loader from "@/components/tools/Loader";
 import { MyDropdown } from "@/components";
 import { menuUserElements } from "@/const";
 import { FiChevronDown } from "react-icons/fi";
+import { EmojiDropDown } from "./GroupsChat";
 
 interface HomePage {
   channels: Channel;
@@ -34,6 +35,13 @@ const Chat = ({
 }: HomePage) => {
   const messageRef = useRef<HTMLInputElement>(null);
   var text: string;
+
+  const addEmoji = (emoji: string) => {
+    if (messageRef.current) {
+      messageRef.current.value += emoji;
+      messageRef.current.focus(); // Optional: bring focus back to input after emoji selection
+    }
+  };
 
   const {
     data: channel,
@@ -131,7 +139,7 @@ const Chat = ({
           key={user?.id_user} //just added this
         />
       </div>
-      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center">
+      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center gap-2">
         <div className="search_input_chat w-full h-[60%] flex justify-center items-center min-w-[40px] max-w-[600px]">
           <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden gap-1">
             <input
@@ -145,9 +153,15 @@ const Chat = ({
               type="submit"
               onClick={handleButtonClick}
             >
-              <TbSend className="h-[30px] w-[30px] text-[#497174] mr-2" />
+              <TbSend className="h-[30px] w-[30px] text-palette-green mr-2 hover:text-palette-orange" />
             </button>
           </div>
+        </div>
+        <div className="w-fit h-[60%] flex items-center justify-center">
+          <EmojiDropDown
+            onEmojiSelect={addEmoji}
+            disable={false}
+          />
         </div>
       </div>
     </div>
