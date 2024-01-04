@@ -125,7 +125,11 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           result.map((user) => {
             if (user) {
               this.server.to(user.id_user).emit('receiveMessage', info);
-              this.server.to(user.id_user).emit('notif');
+              this.server.to(user.id_user).emit('addNotif', {
+                id_user: my_user.id_user,
+                username: my_user.username,
+                avatar: my_user.avatar,
+              });
             }
           });
         }
