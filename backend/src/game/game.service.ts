@@ -68,16 +68,20 @@ export class GameService {
           where: { id_user: match.id_opponent },
           include: { blocked_from: true, blocked_user: true },
         });
-        if (
-          user &&
-          user.blocked_from.find((block) => id_user === block.id_user) ===
-            undefined &&
-          user.blocked_user.find((block) => id_user === block.id_user) ===
-            undefined &&
-          user.blocked_from.find((block) => _id === block.id_user) ===
-            undefined &&
-          user.blocked_user.find((block) => _id === block.id_user) === undefined
-        ) {
+        let is_blocked: boolean = false;
+        if (user) {
+          if (
+            user.blocked_from.find((block) => id_user === block.id_user) ===
+              undefined &&
+            user.blocked_user.find((block) => id_user === block.id_user) ===
+              undefined &&
+            user.blocked_from.find((block) => _id === block.id_user) ===
+              undefined &&
+            user.blocked_user.find((block) => _id === block.id_user) ===
+              undefined
+          ) {
+            is_blocked = true;
+          }
           return {
             uid: user.id_user,
             username: user.username,
@@ -86,6 +90,7 @@ export class GameService {
             player_score: match.player_score,
             opponent_score: match.opponent_score,
             win: match.win,
+            is_blocked: is_blocked,
           };
         }
       }),

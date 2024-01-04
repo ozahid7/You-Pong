@@ -218,59 +218,101 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  async filterQueue(
+    queue: {
+      id_user: string;
+      id_socket: string;
+    }[],
+    id_user: string,
+  ) {
+    const user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+      include: { blocked_from: true, blocked_user: true },
+    });
+    if (!user) return [];
+    const filtresQueue = queue.map((q) => {
+      if (
+        !user.blocked_from.some((block) => block.id_user === q.id_user) &&
+        !user.blocked_user.some((block) => block.id_user === q.id_user) &&
+        q.id_user !== id_user
+      )
+        return q;
+    });
+    return await Promise.all(filtresQueue.filter((q) => q && q !== undefined));
+  }
+
   async matching(info: infoPlayer, id_user: string, id_socket: string) {
     const mode_map = `${info.map}_${info.mode}`;
-    switch (mode_map) {
-      case 'CLASSIC_HARD':
-        this.pushToQueue(this.classicHard, id_user, id_socket);
-        if (this.classicHard.length > 1) {
-          const player = this.classicHard.shift();
-          const opponent = this.classicHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'ORANGE_HARD':
-        this.pushToQueue(this.orangeHard, id_user, id_socket);
-        if (this.orangeHard.length > 1) {
-          const player = this.orangeHard.shift();
-          const opponent = this.orangeHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'GREEN_HARD':
-        this.pushToQueue(this.greenHard, id_user, id_socket);
-        if (this.greenHard.length > 1) {
-          const player = this.greenHard.shift();
-          const opponent = this.greenHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'CLASSIC_EASY':
-        this.pushToQueue(this.classicEasy, id_user, id_socket);
-        if (this.classicEasy.length > 1) {
-          const player = this.classicEasy.shift();
-          const opponent = this.classicEasy.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'ORANGE_EASY':
-        this.pushToQueue(this.orangeEasy, id_user, id_socket);
-        if (this.orangeEasy.length > 1) {
-          const player = this.orangeEasy.shift();
-          const opponent = this.orangeEasy.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'GREEN_EASY':
-        this.pushToQueue(this.greenEasy, id_user, id_socket);
-        if (this.greenEasy.length > 1) {
-          const player = this.greenEasy.shift();
-          const opponent = this.greenEasy.shift();
-          this.launch_game(player, opponent);
-        }
-      default:
-        console.error('Invalid map or mode !');
-        break;
+    const player = this.users.find(
+      (user) => user.id_user === id_user && user.id_socket === user.id_socket,
+    );
+    let filtred;
+    if (player) {
+      switch (mode_map) {
+        case 'CLASSIC_HARD':
+          filtred = await this.filterQueue(this.classicHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.classicHard = this.classicHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.classicHard, id_user, id_socket);
+          break;
+        case 'ORANGE_HARD':
+          filtred = await this.filterQueue(this.orangeHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.orangeHard = this.orangeHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.orangeHard, id_user, id_socket);
+          break;
+        case 'GREEN_HARD':
+          filtred = await this.filterQueue(this.greenHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.greenHard = this.greenHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.greenHard, id_user, id_socket);
+          break;
+        case 'CLASSIC_EASY':
+          filtred = await this.filterQueue(this.classicEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.classicEasy = this.classicEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.classicEasy, id_user, id_socket);
+          break;
+        case 'ORANGE_EASY':
+          filtred = await this.filterQueue(this.orangeEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.orangeEasy = this.orangeEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.orangeEasy, id_user, id_socket);
+          break;
+        case 'GREEN_EASY':
+          filtred = await this.filterQueue(this.greenEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.greenEasy = this.greenEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.greenEasy, id_user, id_socket);
+          break;
+        default:
+          console.error(`Invalid map or mode : ${mode_map} !`);
+          break;
+      }
     }
   }
 
