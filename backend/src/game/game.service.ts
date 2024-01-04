@@ -6,12 +6,22 @@ export class GameService {
   constructor(private prisma: PrismaService) {}
 
   //GET MANY
-  async getMatchs(id_user: string) {
+  async getMatchs(id_user: string, _id: string) {
+    const my_user = await this.prisma.user.findUnique({
+      where: { id_user: _id },
+      include: {
+        matchs_player: true,
+        matchs_opponent: true,
+      },
+    });
     const user = await this.prisma.user.findUnique({
       where: { id_user: id_user },
-      include: { matchs_player: true, matchs_opponent: true },
+      include: {
+        matchs_player: true,
+        matchs_opponent: true,
+      },
     });
-    if (!user) {
+    if (!user || !my_user) {
       return {
         message: 'No such user !',
         Object: null,
@@ -56,8 +66,18 @@ export class GameService {
       matchs.map(async (match) => {
         const user = await this.prisma.user.findUnique({
           where: { id_user: match.id_opponent },
+          include: { blocked_from: true, blocked_user: true },
         });
-        if (user) {
+        if (
+          user &&
+          user.blocked_from.find((block) => id_user === block.id_user) ===
+            undefined &&
+          user.blocked_user.find((block) => id_user === block.id_user) ===
+            undefined &&
+          user.blocked_from.find((block) => _id === block.id_user) ===
+            undefined &&
+          user.blocked_user.find((block) => _id === block.id_user) === undefined
+        ) {
           return {
             uid: user.id_user,
             username: user.username,
@@ -164,7 +184,7 @@ export class GameService {
       }
 
       // Cleansheet
-      const matchs = (await this.getMatchs(id_user)).Object;
+      const matchs = (await this.getMatchs(id_user, id_user)).Object;
       let someMatches: typeof matchs = null;
       if (matchs.length !== 0) someMatches = matchs.slice(0, 1);
       if (
@@ -270,14 +290,14 @@ export class GameService {
           where: { id_user: player.id_user },
           data: {
             victory: player.victory + 1,
-            level: player.level + 1.25,
+            level: player.level + 0.6,
           },
         });
         const updateOpponent = await this.prisma.user.update({
           where: { id_user: opponent.id_user },
           data: {
             defeats: opponent.defeats + 1,
-            level: opponent.level + 0.75,
+            level: opponent.level + 0.1,
           },
         });
         if (!updatePlayer || !updateOpponent)
@@ -287,14 +307,14 @@ export class GameService {
           where: { id_user: player.id_user },
           data: {
             defeats: player.defeats + 1,
-            level: player.level + 0.75,
+            level: player.level + 0.1,
           },
         });
         const updateOpponent = await this.prisma.user.update({
           where: { id_user: opponent.id_user },
           data: {
             victory: opponent.victory + 1,
-            level: opponent.level + 1.25,
+            level: opponent.level + 0.6,
           },
         });
         if (!updatePlayer || !updateOpponent)
