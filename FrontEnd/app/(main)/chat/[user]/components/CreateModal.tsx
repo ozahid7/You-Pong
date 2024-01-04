@@ -128,7 +128,7 @@ export default function CreateModal({ refetch }) {
       <Link
         role="button"
         onPress={onOpen}
-        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
+        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange underline"
       >
         Create
       </Link>
