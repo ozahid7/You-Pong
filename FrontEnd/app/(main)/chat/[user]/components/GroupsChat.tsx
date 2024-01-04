@@ -259,12 +259,12 @@ const GroupsChat = ({
               </button>
             </div>
           </div>
-        <div className="w-fit h-full flex items-center justify-center">
-          <EmojiDropDown
-            onEmojiSelect={addEmoji}
-            disable={mutedMember.disabled}
-          />
-        </div>
+          <div className="w-fit h-full flex items-center justify-center">
+            <EmojiDropDown
+              onEmojiSelect={addEmoji}
+              disable={mutedMember.disabled}
+            />
+          </div>
         </div>
       </div>
     </div>

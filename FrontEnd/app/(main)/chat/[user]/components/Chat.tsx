@@ -94,8 +94,8 @@ const Chat = ({
     : (text = "text-[#686868]");
 
   return (
-    <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">
-      <div className="flex w-full h-[10%] justify-center items-end">
+    <div className="flex h-full w-full flex-col flex-grow flex-wrap gap-2">
+      <div className="flex w-full h-[10%] justify-center items-end mt-2">
         <div className="flex flex-row h-[80%] w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid">
           <div className="flex flex-row gap-4 items-center xl_:mb-5">
             <Avatar
@@ -131,7 +131,7 @@ const Chat = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full h-[78%] flex-col justify-center items-center">
+      <div className="flex w-full h-[71%] flex-col justify-center items-center">
         <ChatDialog
           channel={retChannel}
           main={main}
@@ -139,29 +139,31 @@ const Chat = ({
           key={user?.id_user} //just added this
         />
       </div>
-      <div className="flex w-[95%] h-[12%] justify-center border-t-white border-t-[2px] border-solid items-end self-center gap-2">
-        <div className="search_input_chat w-full h-[60%] flex justify-center items-center min-w-[40px] max-w-[600px]">
-          <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden gap-1">
-            <input
-              type="text"
-              placeholder="Type a message here ..."
-              className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
-              onKeyDown={handleEnterPress}
-              ref={messageRef}
-            />
-            <button
-              type="submit"
-              onClick={handleButtonClick}
-            >
-              <TbSend className="h-[30px] w-[30px] text-palette-green mr-2 hover:text-palette-orange" />
-            </button>
+      <div className="w-[95%] h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1 ">
+        <div className="flex w-full h-full items-end mt-1 gap-2">
+          <div className="search_input_chat w-full h-[89%] flex justify-center items-center min-w-[40px] max-w-[600px]">
+            <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden ">
+              <input
+                type="text"
+                placeholder="Type a message here ..."
+                className="center text-[#9C9C9C] text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
+                onKeyDown={handleEnterPress}
+                ref={messageRef}
+              />
+              <button
+                type="submit"
+                onClick={handleButtonClick}
+              >
+                <TbSend className="h-[30px] w-[30px] text-palette-green mr-2 hover:text-palette-orange" />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="w-fit h-[60%] flex items-center justify-center">
-          <EmojiDropDown
-            onEmojiSelect={addEmoji}
-            disable={false}
-          />
+          <div className="w-fit h-full flex items-center justify-center">
+            <EmojiDropDown
+              onEmojiSelect={addEmoji}
+              disable={false}
+            />
+          </div>
         </div>
       </div>
     </div>
