@@ -1,7 +1,6 @@
 import { Message, User_Hero } from "@/types";
 import Image from "next/image";
 import React from "react";
-import avatar from "../../../../../public/avatar.jpeg";
 
 interface Props {
   main: User_Hero;
@@ -24,25 +23,27 @@ const ChatBubbleMain = ({ main, message }: Props) => {
     return (
       <div className="chat chat-end p-1 ">
         <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
+          <div className="w-10 rounded-md border-[2px] border-palette-white">
             <Image
               width={40}
               height={40}
               alt="Main user's avatar"
-              src={main.avatar || avatar}
+              src={main.avatar}
             />
           </div>
         </div>
         <div className="flex chat-header items-center gap-1">
-          <div className="w-full h-fit">{main.username}</div>
+          <div className="w-fit h-fit font-body font-[600]">
+            {main.username}
+          </div>
         </div>
         <div
           data-theme="mytheme"
-          className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] break-words "
+          className="chat-bubble chat-bubble-primary text-palette-white font-nunito font-[600] w-fit max-w-[80%] break-words "
         >
           {message?.content}
         </div>
-        <time className="text-xs opacity-50">
+        <time className="chat-footer text-xs opacity-50">
           {formatPrismaDate(message.created_at)}
         </time>
       </div>

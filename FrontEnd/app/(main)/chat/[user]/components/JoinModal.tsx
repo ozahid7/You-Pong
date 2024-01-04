@@ -37,7 +37,7 @@ export default function JoinModal({ refetch, channels }) {
       <Link
         role="button"
         onPress={onOpen}
-        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange"
+        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange underline"
       >
         Join
       </Link>
@@ -49,6 +49,7 @@ export default function JoinModal({ refetch, channels }) {
         scrollBehavior="inside"
         backdrop="blur"
         placement="center"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(close) => (

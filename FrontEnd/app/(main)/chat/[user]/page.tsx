@@ -30,6 +30,7 @@ import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
+import { redirect } from "next/navigation";
 
 var one: boolean = false;
 var connection: any = null;
@@ -193,7 +194,6 @@ const Chats = ({ params }) => {
     <div className="h-full min-h-[600px] w-full make_center">
       <div className="flex justify-center w-[90%] max-w-[1200px] min-w-[260px] min-h-[600px] h-[90%]">
         <MyContainer>
-          <div className="flex w-full h-full min-h-[900px] flex-col py-5 ">
             <Background>
               <div className="w-[95%] h-full">
                 <div className="flex flex-row w-full h-full items-center ">
@@ -214,13 +214,13 @@ const Chats = ({ params }) => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
                                 <LuUser className="text-[white]" />
                                 <div className="xxs:hidden lg_:block">
                                   DIRECT
                                 </div>
                               </div>,
-                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
                                 <LuUsers className="text-[white]" />
                                 <div className="xxs:hidden lg_:block">
                                   CHANNELS
@@ -348,7 +348,6 @@ const Chats = ({ params }) => {
                 </div>
               </div>
             </Background>
-          </div>
         </MyContainer>
       </div>
     </div>
