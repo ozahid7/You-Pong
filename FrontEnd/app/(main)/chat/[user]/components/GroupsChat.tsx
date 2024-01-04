@@ -226,7 +226,7 @@ const GroupsChat = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full h-[74%] flex-col justify-center items-center">
+      <div className="flex w-full h-[71%] flex-col justify-center items-center">
         <ChatDialog
           main={MainUser}
           socket={socket}
@@ -236,12 +236,12 @@ const GroupsChat = ({
       </div>
       <div className="w-[95%] h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1">
         <div className="flex w-full h-full gap-2 mt-1 items-end">
-          <div className="search_input_chat w-full h-[86%] flex justify-center items-center min-w-[40px] max-w-[600px]">
+          <div className="search_input_chat w-full h-[60px] flex justify-center items-center min-w-[40px] max-w-[600px]">
             <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden ">
               <input
                 type="text"
                 placeholder={mutedMember.placeholder}
-                className="center text-[#9C9C9C] text-[16px] xs:placeholder:text-[12px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
+                className="center text-[#9C9C9C] text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
                 onKeyDown={handleEnterPress}
                 ref={messageRef}
                 disabled={mutedMember.disabled}

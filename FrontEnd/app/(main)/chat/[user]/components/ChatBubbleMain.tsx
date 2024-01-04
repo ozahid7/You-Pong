@@ -39,7 +39,7 @@ const ChatBubbleMain = ({ main, message }: Props) => {
         </div>
         <div
           data-theme="mytheme"
-          className="chat-bubble chat-bubble-secondary text-palette-white w-fit max-w-[80%] break-words "
+          className="chat-bubble chat-bubble-primary text-palette-white font-body font-[500] w-fit max-w-[80%] break-words "
         >
           {message?.content}
         </div>
