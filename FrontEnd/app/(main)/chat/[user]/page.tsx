@@ -214,13 +214,13 @@ const Chats = ({ params }) => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
                                 <LuUser className="text-[white]" />
                                 <div className="xxs:hidden lg_:block">
                                   DIRECT
                                 </div>
                               </div>,
-                              <div className="flex w-fit h-fit text-[#686868] 3xl_:text-[170%] 2xl_:text-[150%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
                                 <LuUsers className="text-[white]" />
                                 <div className="xxs:hidden lg_:block">
                                   CHANNELS
