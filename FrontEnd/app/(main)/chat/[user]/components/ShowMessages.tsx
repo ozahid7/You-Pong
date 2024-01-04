@@ -40,14 +40,14 @@ const ShowMessages = ({ message, main, channel, Members }: props) => {
         another = true;
         today_ = false;
       } else if (!today_) return;
-      return "Today " + formatPrismaDate(timestamp);
+      return "Today";
     } else if (date.toDateString() === yesterday) {
       if (yesterday_) {
         today_ = true;
         another = true;
         yesterday_ = false;
       } else return;
-      return "Yesterday " + formatPrismaDate(timestamp);
+      return "Yesterday";
     } else {
       if (another) {
         today_ = true;
