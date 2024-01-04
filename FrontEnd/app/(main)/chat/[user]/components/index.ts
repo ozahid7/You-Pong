@@ -19,6 +19,7 @@ import MiniChatDirect from "./MiniChatDirect";
 import PasswordModal from "./PasswordModal";
 import SimpleJoinButton from "./SimpleJoinButton";
 import PrivateModal from "./PrivateModal";
+import ShowMessages from "./ShowMessages";
 
 export {
   Chat,
@@ -42,4 +43,5 @@ export {
   PasswordModal,
   SimpleJoinButton,
   PrivateModal,
+  ShowMessages,
 };

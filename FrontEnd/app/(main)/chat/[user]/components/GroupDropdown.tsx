@@ -39,7 +39,6 @@ const GroupDropdown = ({
       joinRefetch();
     } else {
       console.error(success?.message);
-      channelsRefetch();
     }
   };
 
