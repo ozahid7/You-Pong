@@ -1,7 +1,6 @@
 import { Message, User_Hero } from "@/types";
 import Image from "next/image";
 import React from "react";
-import avatar from "../../../../../public/avatar.jpeg";
 
 interface Props {
   main: User_Hero;
@@ -29,7 +28,7 @@ const ChatBubbleMain = ({ main, message }: Props) => {
               width={40}
               height={40}
               alt="Main user's avatar"
-              src={main.avatar || avatar}
+              src={main.avatar}
             />
           </div>
         </div>
