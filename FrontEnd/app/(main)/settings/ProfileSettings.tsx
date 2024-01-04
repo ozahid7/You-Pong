@@ -18,8 +18,8 @@ interface ProfileSettingsProps {
 	setIsOpen: any;
 	closeModal: any;
 	user: UseQueryResult<UserInfo, Error>;
-	globalSocket: Socket;
-	setGlobalSocket: any;
+	globalSocket?: Socket;
+	setGlobalSocket?: any;
 }
 
 const ProfileSettings = ({
@@ -170,7 +170,7 @@ const ProfileSettings = ({
 				setToDefault();
 			}}
 			withCorner={false}
-			customClass="absolute h-[64%] w-[90%] sm:w-[66%] max-w-[700px]"
+			customClass="absolute h-[80%] w-[90%] sm:w-[66%] max-w-[700px]"
 		>
 			{!loader ? (
 				<form
