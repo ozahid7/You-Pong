@@ -17,7 +17,7 @@ import {
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useEffect, useState } from "react";
-import { useGameContext } from "@/providers/SocketProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 const RenderSideBarElements = (
 	index: number,
@@ -73,7 +73,7 @@ const SideBar = () => {
 	const { username, avatar } = user.data;
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
-	const { viewed, setViewed } = useGameContext();
+	const { viewed, setViewed } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;

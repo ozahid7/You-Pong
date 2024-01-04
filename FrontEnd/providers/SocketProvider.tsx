@@ -11,21 +11,23 @@ import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-interface gameContextProps {
+interface globalContextProps {
 	data: inviteReturn;
 	setData: any;
 	viewed: boolean;
 	setViewed: any;
 }
 
-export const gameContext = createContext<gameContextProps | undefined>(
+export const globalContext = createContext<globalContextProps | undefined>(
 	undefined
 );
 
 function InviteProvider({ children }: { children: React.ReactNode }) {
 	const globalSocket = useGlobalSocket().globalSocket;
 	const [data, setData] = useState<inviteReturn>();
+	const query = useQueryClient();
 	const [viewed, setViewed] = useState(true);
 	const router = useRouter();
 	const style =
@@ -34,11 +36,20 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		console.log("from socket provider");
 
-		if (globalSocket.listeners("notif").length === 0)
-			globalSocket.on("notif", () => {
-				console.log("from notif");
+		//notification
+		if (globalSocket.listeners("addNotif").length === 0)
+			globalSocket.on("addNotif", (obj) => {
+				console.log("from notif", obj);
+				//hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext
 				setViewed(false);
-				notify("", "", false, 2000, "You have a new friend Request 👥");
+				notify(
+					obj.username,
+					obj.avatar,
+					false,
+					5000,
+					"Sent you a friend request 👥"
+				);
+				query.invalidateQueries({ queryKey: ["friends"] });
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)
@@ -109,15 +120,15 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<gameContext.Provider value={{ data, setData, viewed, setViewed }}>
+		<globalContext.Provider value={{ data, setData, viewed, setViewed }}>
 			{children}
 			<ToastContainer />
-		</gameContext.Provider>
+		</globalContext.Provider>
 	);
 }
 
-export const useGameContext = () => {
-	return useContext(gameContext);
+export const useGlobalContext = () => {
+	return useContext(globalContext);
 };
 
 export default InviteProvider;

@@ -5,7 +5,7 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { infoGame } from "@/types/game";
 import { acceptGame, refuseGame } from "@/utils/game";
 import { useRouter } from "next/navigation";
-import { gameContext, useGameContext } from "@/providers/SocketProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 const MyToast = (props: {
 	userName: string;
@@ -16,7 +16,7 @@ const MyToast = (props: {
 }) => {
 	const router = useRouter();
 	const { globalSocket } = useGlobalSocket();
-	const { setAccepted, setData } = useGameContext();
+	const { setData } = useGlobalContext();
 
 	return (
 		<div className="h-[100px] flex flex-col items-center justify-center mb-8 w-full bg-white">
@@ -64,10 +64,37 @@ const MyToast = (props: {
 						Invite You To A New Game ?
 					</span>
 				</>
-			) : (
+			) : props.avatar === undefined ? (
 				<span className="text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange">
 					{props.message}
 				</span>
+			) : (
+				<>
+					<div className="flex items-center justify-around w-full h-full max-h-[80px]">
+						<div className="w-auto   max-w-[200px]">
+							<div className="w-[60%] pb-[60%] mx-auto relative">
+								<img
+									className=" h-[100%] drop-shadow-md w-[100%] border-b border-palette-orange absolute object-contain rounded-md"
+									src={props.avatar}
+									alt="avatar"
+								/>
+							</div>
+							<MyToolTip id="username" />
+							<span
+								data-tooltip-id="username"
+								data-tooltip-content={props.userName}
+								className="font-body text-palette-green text-sm font-bold"
+							>
+								{props.userName.length > 20
+									? props.userName.slice(0, 20)
+									: props.userName}
+							</span>
+						</div>
+					</div>
+					<span className="text-[14px] drop-shadow-md font-orbitron text-cardtitle">
+						{props.message}
+					</span>
+				</>
 			)}
 		</div>
 	);

@@ -9,7 +9,6 @@ import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import { useGameContext } from "@/providers/InviteProvider";
 import useOtherUser from "@/api/useOtherUser";
 import { avatar } from "@nextui-org/theme";
 import { OtherUser } from "@/utils/game";
@@ -98,7 +97,7 @@ export default function game({ params }: pageProps) {
 								/>
 							)}
 						</div>
-						<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[92%] rounded-md shadow-xl ">
+						<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl ">
 							<div
 								ref={ref}
 								className="flex   w-full max-w-[700px] rounded-md overflow-hidden h-full"

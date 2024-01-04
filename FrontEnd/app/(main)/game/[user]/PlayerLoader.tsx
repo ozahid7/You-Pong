@@ -1,7 +1,7 @@
 "use client";
 import { MyDialog } from "@/components";
 import Loader from "@/components/tools/Loader";
-import { useGameContext } from "@/providers/SocketProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ const PlayerLoader = (props: {
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
-	const otheruser = useGameContext();
+	const otheruser = useGlobalContext();
 	const { setData } = otheruser;
 	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
