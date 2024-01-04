@@ -198,10 +198,10 @@ const GroupsChat = ({
     <div className="flex h-full pt-4 pb-14 w-full flex-col flex-grow flex-wrap justify-between">
       <div className="flex w-full h-[10%] justify-center items-end">
         <div className="flex flex-row h-[80%] w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid">
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex flex-row gap-4 items-center xl_:mb-5">
             <Avatar
               isBordered
-              radius="sm"
+              radius="none"
               color="default"
               className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px] xl_:w-[60px] xl_:h-[60px]"
               src={channels?.avatar}
