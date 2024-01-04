@@ -117,7 +117,7 @@ const PlayerCard = (props: {
 				Add.mutateAsync().then(() => {
 					otheruser.refetch();
 					setIcon(pendingIcon);
-					globalSocket.emit("request", otheruser.data.uid);
+					globalSocket.emit("addRequest", otheruser.data.uid);
 				});
 			}}
 			size={100}

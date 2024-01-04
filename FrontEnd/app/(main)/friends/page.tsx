@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import useFriends from "@/api/useFriends";
 import Loader from "@/components/tools/Loader";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { useGameContext } from "@/providers/SocketProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 const page = () => {
 	const [Input, setInput] = useState("");
 	const friends = useFriends();
-	const { setViewed } = useGameContext();
+	const { setViewed } = useGlobalContext();
 
 	useEffect(() => {
 		setViewed(true);

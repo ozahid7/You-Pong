@@ -84,7 +84,7 @@ const GroupDropdown = ({
           </IconContext.Provider>
         </Menu.Button>
         <Menu.Items
-          className="flex flex-col border-2 border-palette-green  h-auto outline-none w-auto rounded-sm drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+          className="flex flex-col border-2 border-palette-green divide-y rounded-md h-auto outline-none w-auto drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
           unmount={false}
         >
           <Menu.Item
