@@ -203,7 +203,7 @@ const GroupsChat = ({
               isBordered
               radius="none"
               color="default"
-              className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px] xl_:w-[60px] xl_:h-[60px]"
+              className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px]"
               src={channels?.avatar}
             />
             <div className="flex flex-col">

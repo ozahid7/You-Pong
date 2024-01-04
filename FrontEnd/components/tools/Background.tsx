@@ -1,6 +1,7 @@
 import React from "react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+
 export function Background({ children }: Props) {
   return (
     <div className=" flex flex-col justify-center max-w-[1200px] items-center h-[100%] overflow-y-auto">

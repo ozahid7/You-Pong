@@ -49,6 +49,7 @@ export default function JoinModal({ refetch, channels }) {
         scrollBehavior="inside"
         backdrop="blur"
         placement="center"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(close) => (

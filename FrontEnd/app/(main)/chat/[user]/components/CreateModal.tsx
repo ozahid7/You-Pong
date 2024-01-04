@@ -141,6 +141,7 @@ export default function CreateModal({ refetch }) {
         scrollBehavior="inside"
         backdrop="blur"
         placement="center"
+        isDismissable={false}
       >
         <ModalContent className="">
           {(close) => (
