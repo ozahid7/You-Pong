@@ -129,6 +129,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
                 id_user: my_user.id_user,
                 username: my_user.username,
                 avatar: my_user.avatar,
+                is_message: true,
               });
             }
           });
