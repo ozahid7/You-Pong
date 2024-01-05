@@ -50,7 +50,7 @@ const PlayerCard = (props: {
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
 	const direct = todirect(props.uid);
-	const otheruser = useOtherUser(props.param);
+	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
 		if (props.isMe)
@@ -234,7 +234,7 @@ const PlayerCard = (props: {
 								>
 									{name}
 								</h2>
-								{textColor.length > 0 ? (
+								{textColor.length > 0 && props.user.data ? (
 									<p
 										className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
 									>
@@ -243,14 +243,16 @@ const PlayerCard = (props: {
 								) : (
 									<></>
 								)}
-								<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
-									<span
-										className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
-									></span>
-									<span
-										className={`relative inline-flex rounded-full w-2 h-2 sm:h-3 sm:w-3 ${subcolor} `}
-									></span>
-								</span>
+								{props.user.data && (
+									<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
+										<span
+											className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
+										></span>
+										<span
+											className={`relative inline-flex rounded-full w-2 h-2 sm:h-3 sm:w-3 ${subcolor} `}
+										></span>
+									</span>
+								)}
 							</div>
 							<div className="flex flex-col justify-between h-auto space-y-3 w-[80%] sm:w-[90%]">
 								<MiniBanner
