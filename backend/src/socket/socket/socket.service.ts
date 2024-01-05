@@ -746,6 +746,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             id_user: my_user.id_user,
             username: my_user.username,
             avatar: my_user.avatar,
+            is_message: false,
           });
         }
       }
@@ -757,11 +758,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('removeRequest')
   async removeRequest(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() id_receiver: string,
+    @MessageBody() info: { id_receiver: string; is_message: boolean },
   ) {
     try {
       const sender = this.users.find((user) => user.id_socket === socket.id);
-      const receiver = this.users.find((user) => user.id_user === id_receiver);
+      const receiver = this.users.find(
+        (user) => user.id_user === info.id_receiver,
+      );
       if (
         sender &&
         sender !== undefined &&
@@ -784,6 +787,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             id_user: my_user.id_user,
             username: my_user.username,
             avatar: my_user.avatar,
+            is_message: info.is_message,
           });
         }
       }
