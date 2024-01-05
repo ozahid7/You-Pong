@@ -40,16 +40,21 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("addNotif").length === 0)
 			globalSocket.on("addNotif", (obj) => {
 				console.log("from notif", obj);
-				//hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext
-				setViewed(false);
-				notify(
-					obj.username,
-					obj.avatar,
-					false,
-					5000,
-					"Sent you a friend request 👥"
-				);
-				query.invalidateQueries({ queryKey: ["friends"] });
+				const message = obj.is_message
+					? "dir message dyalk hna"
+					: "Sent you a friend request 👥";
+
+				notify(obj.username, obj.avatar, false, 5000, message);
+				if (!obj.is_message) {
+					//hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext linterface dyal context kayn lfo9
+					//context atb9a t3ayt lih mn ay blassa b useGlobalContext()
+					setViewed(false);
+					query.invalidateQueries({ queryKey: ["friends"] });
+				}
+				//dir logique dyak hna
+				if (obj.is_message) {
+					//###################
+				}
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)
