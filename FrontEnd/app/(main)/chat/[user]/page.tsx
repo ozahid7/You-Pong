@@ -31,6 +31,7 @@ import { io } from "socket.io-client";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 var one: boolean = false;
 var connection: any = null;
@@ -49,6 +50,12 @@ const Chats = ({ params }) => {
   const [valueGroups, setValueGroups] = useState<number>(0);
   const { globalSocket } = useGlobalSocket();
   let setGlobal = globalSocket.io;
+
+  const { setViewed } = useGlobalContext();
+
+  useEffect(() => {
+    setViewed(true);
+  }, []);
 
   const { data: MainUser, isLoading: MainLoading } = useQuery<User_Hero, Error>(
     ["MainUser"],
