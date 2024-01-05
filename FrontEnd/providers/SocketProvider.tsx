@@ -48,6 +48,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				if (!obj.is_message) {
 					//hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext linterface dyal context kayn lfo9
 					//context atb9a t3ayt lih mn ay blassa b useGlobalContext()
+					//boolean khaso ykoun state o dowez setState dyalo f context atb9a tchongih mn ayi blassa
 					setViewed(false);
 					query.invalidateQueries({ queryKey: ["friends"] });
 				}
