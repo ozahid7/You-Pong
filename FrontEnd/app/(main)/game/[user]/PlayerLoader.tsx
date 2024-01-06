@@ -5,11 +5,12 @@ import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { defaultavatar, myRoutes } from "@/const";
+import { defaultavatar, myRoutes, socketurl } from "@/const";
 import { MdCancelPresentation } from "react-icons/md";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import { cancelGame, refuseGame } from "@/utils/game";
+import { useGameContext } from "./GameProvider";
 
 const PlayerLoader = (props: {
 	isOpen: boolean;
@@ -26,13 +27,15 @@ const PlayerLoader = (props: {
 	socket: Socket;
 	path: string;
 	setotheruser: any;
+	setToStart: any;
+	setGameSocket: any;
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
 	const otheruser = useGlobalContext();
 	const { setData } = otheruser;
-	const { globalSocket } = useGlobalSocket();
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
+	const { setGameSocket, setSubmit } = useGameContext();
 	let editedLevel2;
 	let editedLevel1;
 
@@ -53,6 +56,26 @@ const PlayerLoader = (props: {
 	}, [otheruser, otheruser.data]);
 
 	useEffect(() => {
+		const socket = io(socketurl + "/game", {
+			transports: ["websocket"],
+			transportOptions: {
+				polling: {
+					extraHeaders: {
+						"Sec-WebSocket-Version": "13",
+						"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
+						"Sec-WebSocket-Extensions":
+							"permessage-deflate; client_max_window_bits",
+					},
+				},
+			},
+			autoConnect: true,
+		});
+		if (socket) {
+			setGameSocket(socket);
+			props.setToStart(true);
+			props.setGameSocket(socket);
+			setSubmit(true);
+		}
 		props.socket.emit("inGame", {
 			id_sender: props.my_id,
 			map: props.map.toUpperCase(),

@@ -135,7 +135,7 @@ const SideBar = () => {
 
 				<div className="h-full w-full  pb-6 justify-end flex flex-col space-y-6 items-center px-2">
 					<Link className="h-auto w-[92%] " href={myRoutes.dashboard}>
-						<div className="w-full py-3 h-auto 2xl:bg-palette-grey rounded-md flex justify-around items-center">
+						<div className="w-full py-3 h-auto 2xl:bg-palette-grey rounded-md flex justify-evenly items-center">
 							<img
 								className="border-2 min-w-[40px] aspect-1 xl:max-w-[40px] hidden s:flex border-white rounded-sm object-cover"
 								src={avatar || defaultavatar}
@@ -145,7 +145,7 @@ const SideBar = () => {
 							/>
 							<p className="text-gray-500 break-all text-center hidden 2xl:flex overflow-hidden font-bold font-body text-2xl drop-shadow-sm">
 								{username.length > 9
-									? username.slice(0, 7) + "..."
+									? username.slice(0, 9) + "."
 									: username}
 							</p>
 						</div>
