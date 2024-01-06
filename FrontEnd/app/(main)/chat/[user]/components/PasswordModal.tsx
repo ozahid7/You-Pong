@@ -8,10 +8,11 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { joinChannel } from "../data/api";
 import { IoEnterOutline } from "react-icons/io5";
 import GroupsInput from "./GroupsInput";
+import { Background } from "@/components";
 
 interface Props {
   obj: Channel;
@@ -20,10 +21,16 @@ interface Props {
 }
 
 const PasswordModal = ({ obj, close, refetch }: Props) => {
+  const [valid, setValid] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const passRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setValid(false);
+  }, []);
+
   const join = async () => {
+    setValid(false);
     if (passRef.current) {
       const response = await joinChannel(
         obj.id_channel,
@@ -31,12 +38,18 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
       );
       if (response.message !== "Password Incorrect") {
         refetch();
+        Manualclose();
         close();
       } else {
         passRef.current.value = null;
-        console.error(response.message);
+        setValid(true);
       }
     }
+  };
+
+  const Manualclose = () => {
+    setValid(false);
+    onClose();
   };
 
   return (
@@ -52,34 +65,35 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onClose={onClose}
+        onClose={Manualclose}
         closeButton
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Set password
-              </ModalHeader>
-              <ModalBody>
-                <GroupsInput
-                  ref={passRef}
-                  text="Password"
-                  type="password"
-                  customclass="w-full h-[3rem] self-center border-red-500 "
-                  isPassword={true}
-                ></GroupsInput>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  className="btn font-body"
-                  onPress={join}
-                >
-                  Submit
-                </Button>
-              </ModalFooter>
+              <Background>
+                <ModalHeader className="flex flex-col gap-1">
+                  Set password
+                </ModalHeader>
+                <ModalBody>
+                  <GroupsInput
+                    ref={passRef}
+                    text="Password"
+                    type="password"
+                    customclass="w-full h-[3rem] self-center border-red-500 "
+                    isPassword={true}
+                    isValid={valid}
+                  ></GroupsInput>
+                </ModalBody>
+                <ModalFooter>
+                  <button
+                    className="btn font-body bg-palette-green hover:bg-palette-orange rounded-md text-palette-white"
+                    onClick={join}
+                  >
+                    Submit
+                  </button>
+                </ModalFooter>
+              </Background>
             </>
           )}
         </ModalContent>
