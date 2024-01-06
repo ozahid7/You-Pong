@@ -50,7 +50,7 @@ const Chats = ({ params }) => {
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
   const { globalSocket } = useGlobalSocket();
-  const { setViewedChat, setShowNotification } = useGlobalContext();
+  const { setViewedChat } = useGlobalContext();
   let setGlobal = globalSocket.io;
 
   useEffect(() => {

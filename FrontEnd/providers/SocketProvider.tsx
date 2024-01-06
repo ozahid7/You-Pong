@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
 import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -20,8 +20,6 @@ interface globalContextProps {
   setViewed: any;
   viewedChat: boolean;
   setViewedChat: any;
-  showNotification: boolean;
-  setShowNotification: any;
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
@@ -37,13 +35,14 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const style =
     "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
-  const [showNotification, setShowNotification] = useState<boolean>(true);
+  const pathname = usePathname();
+  const params = useParams();
+  const isChatRoute = pathname === `/chat/${params.user}`;
 
-  isChatRoute ? setShowNotification(true) : setShowNotification(false);
+  console.log("ischatup", isChatRoute);
 
   useEffect(() => {
     console.log("from socket provider");
-
     //notification
     if (globalSocket.listeners("addNotif").length === 0)
       globalSocket.on("addNotif", (obj) => {
@@ -62,8 +61,8 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         }
         //dir logique dyak hna
         else if (obj.is_message) {
-          console.log(showNotification);
-          if (showNotification) {
+          console.log("ischat", isChatRoute);
+          if (!isChatRoute) {
             notify(obj.username, obj.avatar, false, 2000, message);
             setViewedChat(false);
             query.invalidateQueries({ queryKey: ["messages"] });
@@ -134,7 +133,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         });
         router.push(myRoutes.dashboard);
       });
-  }, []);
+  }, [isChatRoute]);
 
   return (
     <globalContext.Provider
@@ -145,8 +144,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         setViewed,
         viewedChat,
         setViewedChat,
-        showNotification,
-        setShowNotification,
       }}
     >
       {children}
