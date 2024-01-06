@@ -32,6 +32,7 @@ import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
+import { usePathname, useRouter } from "next/navigation";
 
 var one: boolean = false;
 var connection: any = null;
@@ -49,12 +50,11 @@ const Chats = ({ params }) => {
   const [valueDirect, setValueDirect] = useState<number>(0);
   const [valueGroups, setValueGroups] = useState<number>(0);
   const { globalSocket } = useGlobalSocket();
+  const { setViewedChat, setShowNotification } = useGlobalContext();
   let setGlobal = globalSocket.io;
 
-  const { setViewed } = useGlobalContext();
-
   useEffect(() => {
-    setViewed(true);
+    setViewedChat(true);
   }, []);
 
   const { data: MainUser, isLoading: MainLoading } = useQuery<User_Hero, Error>(
@@ -182,9 +182,8 @@ const Chats = ({ params }) => {
 
   // Socket
   if (MainUser?.uid && !one) {
-    connection = setGlobal.socket("/chat");
+    connection = setGlobal.socket("/");
     one = true;
-    console.log("mysocket", connection);
   }
 
   return (

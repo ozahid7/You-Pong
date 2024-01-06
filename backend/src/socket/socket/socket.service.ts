@@ -411,7 +411,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log('Error in disconnect : ', error);
     }
   }
-  
+
   @SubscribeMessage('newMessage')
   async newMessage(
     @MessageBody() info: infoType,
@@ -484,20 +484,20 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           result.map((user) => {
             if (user) {
               this.server.to(user.id_user).emit('receiveMessage', info);
-              this.server.to(user.id_user).emit('addNotif', {
-                id_user: my_user.id_user,
-                username: my_user.username,
-                avatar: my_user.avatar,
-                is_message: true,
-              });
+              if (user.id_user !== info.id_sender) {
+                this.server.to(user.id_user).emit('addNotif', {
+                  id_user: my_user.id_user,
+                  username: my_user.username,
+                  avatar: my_user.avatar,
+                  is_message: true,
+                });
+              }
             }
           });
         }
       }
     }
   }
-
-
 
   @SubscribeMessage('inGame')
   async inGame(

@@ -12,6 +12,7 @@ import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { v4 as uuidv4 } from "uuid";
 import ShowMessages from "./ShowMessages";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 interface Props {
   main: User_Hero;

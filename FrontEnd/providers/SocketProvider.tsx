@@ -18,6 +18,10 @@ interface globalContextProps {
   setData: any;
   viewed: boolean;
   setViewed: any;
+  viewedChat: boolean;
+  setViewedChat: any;
+  showNotification: boolean;
+  setShowNotification: any;
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
@@ -29,9 +33,13 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<inviteReturn>();
   const query = useQueryClient();
   const [viewed, setViewed] = useState(true);
+  const [viewedChat, setViewedChat] = useState(true);
   const router = useRouter();
   const style =
     "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
+  const [showNotification, setShowNotification] = useState<boolean>(true);
+
+  isChatRoute ? setShowNotification(true) : setShowNotification(false);
 
   useEffect(() => {
     console.log("from socket provider");
@@ -41,11 +49,11 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
       globalSocket.on("addNotif", (obj) => {
         console.log("from notif", obj);
         const message = obj.is_message
-          ? "Sent you a message"
+          ? "Sent you a message 💬"
           : "Sent you a friend request 👥";
 
-        notify(obj.username, obj.avatar, false, 5000, message);
         if (!obj.is_message) {
+          notify(obj.username, obj.avatar, false, 5000, message);
           //hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext linterface dyal context kayn lfo9
           //context atb9a t3ayt lih mn ay blassa b useGlobalContext()
           //boolean khaso ykoun state o dowez setState dyalo f context atb9a tchongih mn ayi blassa
@@ -53,9 +61,13 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
           query.invalidateQueries({ queryKey: ["friends"] });
         }
         //dir logique dyak hna
-        if (obj.is_message) {
-          setViewed(true);
-          console.log("is_message", obj.is_message);
+        else if (obj.is_message) {
+          console.log(showNotification);
+          if (showNotification) {
+            notify(obj.username, obj.avatar, false, 2000, message);
+            setViewedChat(false);
+            query.invalidateQueries({ queryKey: ["messages"] });
+          }
         }
       });
 
@@ -125,7 +137,18 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <globalContext.Provider value={{ data, setData, viewed, setViewed }}>
+    <globalContext.Provider
+      value={{
+        data,
+        setData,
+        viewed,
+        setViewed,
+        viewedChat,
+        setViewedChat,
+        showNotification,
+        setShowNotification,
+      }}
+    >
       {children}
       <ToastContainer />
     </globalContext.Provider>
