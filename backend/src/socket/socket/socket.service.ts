@@ -34,6 +34,12 @@ export enum mode {
 //   map: map;
 //   mode: mode;
 // }
+export interface infoType {
+  id_channel: string;
+  id_sender: string;
+  content: string;
+  created_at: Date;
+}
 export interface infoGame {
   id_game: string;
   id_sender: string;
@@ -405,6 +411,93 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log('Error in disconnect : ', error);
     }
   }
+  
+  @SubscribeMessage('newMessage')
+  async newMessage(
+    @MessageBody() info: infoType,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    const receiver = this.users.find((user) => user.id_user === info.id_sender);
+    if (receiver !== undefined && sender !== undefined) {
+      const channel = await this.prisma.channel.findUnique({
+        where: {
+          id_channel: info.id_channel,
+        },
+        include: { users: true, bannedUsers: true },
+      });
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: info.id_sender,
+        },
+        include: {
+          blocked_user: true,
+          blocked_from: true,
+        },
+      });
+      if (my_user && channel) {
+        const room = await this.prisma.room_Chat.findUnique({
+          where: {
+            id_channel_id_user: {
+              id_channel: info.id_channel,
+              id_user: my_user.id_user,
+            },
+            member_status: 'NONE',
+          },
+        });
+        if (!room) return;
+        let users = channel.users.map((user) => {
+          if (
+            !my_user.blocked_from.some(
+              (blocked) => blocked.id_user === user.id_user,
+            ) &&
+            !my_user.blocked_user.some(
+              (blocked) => blocked.id_user === user.id_user,
+            )
+          )
+            return user;
+        });
+        const filtredUsers = await Promise.all(
+          users.filter((user) => user && user !== undefined),
+        );
+        const message = await this.prisma.message.create({
+          data: {
+            content: info.content,
+            id_sender: sender.id_user,
+            name_room: room.name,
+            id_channel: info.id_channel,
+          },
+        });
+        let us = filtredUsers.map((filtred) => {
+          if (
+            this.users.filter((user) => {
+              filtred.id_user === user.id_user;
+            }) !== undefined
+          )
+            return filtred;
+        });
+        const result = await Promise.all(us.filter((user) => user));
+        if (message) {
+          console.log('send message');
+          info.id_sender = sender.id_user;
+          info.created_at = message.created_at;
+          result.map((user) => {
+            if (user) {
+              this.server.to(user.id_user).emit('receiveMessage', info);
+              this.server.to(user.id_user).emit('addNotif', {
+                id_user: my_user.id_user,
+                username: my_user.username,
+                avatar: my_user.avatar,
+                is_message: true,
+              });
+            }
+          });
+        }
+      }
+    }
+  }
+
+
 
   @SubscribeMessage('inGame')
   async inGame(
