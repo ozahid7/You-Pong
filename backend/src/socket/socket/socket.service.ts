@@ -340,6 +340,9 @@ export class SocketService
           info.created_at = message.created_at;
           result.map((user) => {
             if (user) {
+              const recv = this.users.find((u) => user.id_user === u.id_user);
+              let in_chat: boolean = false;
+              if (recv && recv !== undefined) in_chat = recv.inChat;
               this.server.to(user.id_user).emit('receiveMessage', info);
               if (user.id_user !== info.id_sender) {
                 this.server.to(user.id_user).emit('addNotif', {
@@ -347,7 +350,7 @@ export class SocketService
                   username: my_user.username,
                   avatar: my_user.avatar,
                   is_message: true,
-                  in_chat: this.in_chat,
+                  in_chat: in_chat,
                 });
               }
             }
@@ -760,7 +763,7 @@ export class SocketService
           },
         });
         if (my_user) {
-          this.in_chat = true;
+          sender.inChat = true;
         }
       }
     } catch (error) {
@@ -780,7 +783,7 @@ export class SocketService
           },
         });
         if (my_user) {
-          this.in_chat = false;
+          sender.inChat = false;
         }
       }
     } catch (error) {
