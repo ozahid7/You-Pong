@@ -347,6 +347,7 @@ export class SocketService
                   username: my_user.username,
                   avatar: my_user.avatar,
                   is_message: true,
+                  in_chat: this.in_chat,
                 });
               }
             }
@@ -697,6 +698,7 @@ export class SocketService
             username: my_user.username,
             avatar: my_user.avatar,
             is_message: false,
+            in_chat: false,
           });
         }
       }
@@ -743,6 +745,46 @@ export class SocketService
       }
     } catch (error) {
       console.log('Error in remove request : ', error);
+    }
+  }
+
+  @SubscribeMessage('inChat')
+  async inChat(@ConnectedSocket() socket: Socket) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+
+      if (sender && sender !== undefined) {
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+        });
+        if (my_user) {
+          this.in_chat = true;
+        }
+      }
+    } catch (error) {
+      console.log('Error in inChat : ', error);
+    }
+  }
+
+  @SubscribeMessage('outChat')
+  async outChat(@ConnectedSocket() socket: Socket) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+
+      if (sender && sender !== undefined) {
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+        });
+        if (my_user) {
+          this.in_chat = false;
+        }
+      }
+    } catch (error) {
+      console.log('Error in outChat : ', error);
     }
   }
 

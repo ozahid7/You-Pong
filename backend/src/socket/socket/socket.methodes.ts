@@ -6,6 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SocketMethodes {
   constructor(protected prisma: PrismaService) {}
 
+  protected in_chat: boolean = false;
+
   protected users: { id_user: string; id_socket: string; inGame: boolean }[] =
     [];
 
