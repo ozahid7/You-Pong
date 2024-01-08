@@ -55,14 +55,9 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
         if (!obj.is_message) {
           notify(obj.username, obj.avatar, false, 5000, message);
-          //hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext linterface dyal context kayn lfo9
-          //context atb9a t3ayt lih mn ay blassa b useGlobalContext()
-          //boolean khaso ykoun state o dowez setState dyalo f context atb9a tchongih mn ayi blassa
           setViewed(false);
           query.invalidateQueries({ queryKey: ["friends"] });
-        }
-        //dir logique dyak hna
-        else if (obj.is_message) {
+        } else if (obj.is_message) {
           if (!obj.in_chat) {
             notify(obj.username, obj.avatar, false, 2000, message);
             setViewedChat(false);
