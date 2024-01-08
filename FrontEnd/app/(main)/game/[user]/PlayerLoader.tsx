@@ -28,7 +28,6 @@ const PlayerLoader = (props: {
 	path: string;
 	setotheruser: any;
 	setToStart: any;
-	setGameSocket: any;
 }) => {
 	const [isMatched, setIsmatched] = useState(false);
 	const router = useRouter();
@@ -39,49 +38,32 @@ const PlayerLoader = (props: {
 	let editedLevel2;
 	let editedLevel1;
 
-	useEffect(() => {
-		if (otheruser.data && otheruser.data !== undefined) {
-			setIsmatched(true);
-			setTimeout(() => {
-				props.showLoader(false);
-				props.showCounter(true);
-			}, 2000);
-			setUserInfo(otheruser.data);
-			props.setotheruser({
-				avatar: otheruser.data.avatar,
-				username: otheruser.data.username,
-			});
-			otheruser.setData(undefined);
-		}
-	}, [otheruser, otheruser.data]);
+	// useEffect(() => {
+	// 	if (otheruser.data && otheruser.data !== undefined) {
+	// 		setIsmatched(true);
+	// 		setTimeout(() => {
+	// 			props.showLoader(false);
+	// 			props.showCounter(true);
+	// 		}, 2000);
+	// 		setUserInfo(otheruser.data);
+	// 		props.setotheruser({
+	// 			avatar: otheruser.data.avatar,
+	// 			username: otheruser.data.username,
+	// 		});
+	// 		otheruser.setData(undefined);
+	// 	}
+	// }, [otheruser, otheruser.data]);
 
 	useEffect(() => {
-		const socket = io(socketurl + "/game", {
-			transports: ["websocket"],
-			transportOptions: {
-				polling: {
-					extraHeaders: {
-						"Sec-WebSocket-Version": "13",
-						"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-						"Sec-WebSocket-Extensions":
-							"permessage-deflate; client_max_window_bits",
-					},
-				},
-			},
-			autoConnect: true,
-		});
-		if (socket) {
-			setGameSocket(socket);
-			props.setToStart(true);
-			props.setGameSocket(socket);
-			setSubmit(true);
-		}
+		props.setToStart(true);
+
 		props.socket.emit("inGame", {
 			id_sender: props.my_id,
 			map: props.map.toUpperCase(),
 			mode: props.mode.toUpperCase(),
 			is_public: props.path === "me",
 		});
+		props.showLoader(false);
 	}, []);
 
 	const onClose = () => {

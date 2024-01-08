@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
 import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 

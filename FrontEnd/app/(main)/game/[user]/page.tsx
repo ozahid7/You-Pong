@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { MyContainer, ScoreCard } from "@/components";
 import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
 import MyCountDown from "./CountDown";
@@ -9,13 +8,9 @@ import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import useOtherUser from "@/api/useOtherUser";
-import { avatar } from "@nextui-org/theme";
 import { OtherUser } from "@/utils/game";
 import Loader from "@/components/tools/Loader";
 import GameProvider, { useGameContext } from "./GameProvider";
-import { globalContext } from "@/providers/SocketProvider";
-import { Socket } from "socket.io-client";
 
 interface pageProps {
 	params: { user: string };
@@ -50,7 +45,6 @@ export default function game({ params }: pageProps) {
 
 	// sockets
 	const { globalSocket } = useGlobalSocket();
-	const [gameSocket, setGameSocket] = useState<Socket>(null);
 
 	//gameData
 	const gameContext = useGameContext();
@@ -80,23 +74,21 @@ export default function game({ params }: pageProps) {
 	}, []);
 
 	useEffect(() => {
-		if (ref.current && gameSocket) {
-			if (gameSocket) {
-				const updateSize = () => {
-					setHeight(window.innerHeight);
-					setWidht(window.innerWidth);
-				};
-				window.addEventListener("resize", updateSize);
-				updateSize();
-				const game = new Game(ref.current, map);
+		if (ref.current) {
+			const updateSize = () => {
+				setHeight(window.innerHeight);
+				setWidht(window.innerWidth);
+			};
 
-				return () => {
-					game.destroy();
-					window.removeEventListener("resize", updateSize);
-				};
-			}
+			// window.addEventListener("resize", updateSize);
+			updateSize();
+			const game = new Game(ref.current, map, globalSocket, mode);
+
+			return () => {
+				// game.destroy();
+			};
 		}
-	}, [width, height, ref.current, gameSocket]);
+	}, [ref.current]);
 
 	const [game_id, SetGameId] = useState(
 		new Date() + user.data.uid + params.user
@@ -104,8 +96,8 @@ export default function game({ params }: pageProps) {
 	if (!checker) return <Loader />;
 	return (
 		<GameProvider>
-			<div className="flex w-full h-[90%] max-w-[1400px] justify-center items-center ">
-				<div className="flex w-[88%] h-[90%]">
+			<div className="flex w-full h-[90%] max-w-[1400px] justify-center ">
+				{/* <div className="flex w-[88%] h-[100vh]">
 					<MyContainer>
 						<div className="flex flex-col items-center space-y-2 w-full h-full">
 							<div className="flex  justify-center w-full min-h-[60px] h-[7.5%]">
@@ -117,56 +109,52 @@ export default function game({ params }: pageProps) {
 										otherusername={otherUser.username}
 									/>
 								)}
-							</div>
-							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl ">
-								<div
-									ref={ref}
-									className="flex   w-full max-w-[700px] rounded-md overflow-hidden h-full"
-								></div>
-							</div>
-						</div>
-						<MyCountDown
-							isOpen={showCounter}
-							setIsOpen={setShowCounter}
-						/>
-						<GameSettings
-							isOpen={showGameOption}
-							setIsOpen={setShowGameOption}
-							showPlayerLoader={setShowPlayerLoder}
-							setMode={setMode}
-							setMap={setMap}
-							map={map}
-							mode={mode}
-							opponent_uid={params.user}
-							my_id={user.data.uid}
-							socket={globalSocket}
-							game_id={game_id}
-							status={user.data.status}
-							user={user}
-						/>
-						{showPlayerLoader && (
-							<PlayerLoader
-								path={params.user}
-								isOpen={showPlayerLoader}
-								showCounter={setShowCounter}
-								showLoader={setShowPlayerLoder}
-								avatar={user.data.avatar}
-								username={user.data.username}
-								level={user.data.level}
-								map={map}
-								mode={mode}
-								opponent_uid={params.user}
-								my_id={user.data.uid}
-								socket={globalSocket}
-								game_id={game_id}
-								setotheruser={setOtherUser}
-								setToStart={setToStart}
-								setGameSocket={setGameSocket}
-							/>
-						)}
-					</MyContainer>
-				</div>
+							</div> */}
+				{/* <div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl "> */}
+				<div
+					ref={ref}
+					className="flex   w-[600px] h-[800px] rounded-md overflow-hidden"
+				></div>
+				{/* </div> */}
 			</div>
+			<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
+			<GameSettings
+				isOpen={showGameOption}
+				setIsOpen={setShowGameOption}
+				showPlayerLoader={setShowPlayerLoder}
+				setMode={setMode}
+				setMap={setMap}
+				map={map}
+				mode={mode}
+				opponent_uid={params.user}
+				my_id={user.data.uid}
+				socket={globalSocket}
+				game_id={game_id}
+				status={user.data.status}
+				user={user}
+			/>
+			{showPlayerLoader && (
+				<PlayerLoader
+					path={params.user}
+					isOpen={showPlayerLoader}
+					showCounter={setShowCounter}
+					showLoader={setShowPlayerLoder}
+					avatar={user.data.avatar}
+					username={user.data.username}
+					level={user.data.level}
+					map={map}
+					mode={mode}
+					opponent_uid={params.user}
+					my_id={user.data.uid}
+					socket={globalSocket}
+					game_id={game_id}
+					setotheruser={setOtherUser}
+					setToStart={setToStart}
+				/>
+			)}
+			{/* </MyContainer>
+				</div>
+			</div> */}
 		</GameProvider>
 	);
 }
