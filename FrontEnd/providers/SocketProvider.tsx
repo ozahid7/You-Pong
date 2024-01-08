@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
 import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -18,6 +18,8 @@ interface globalContextProps {
 	setData: any;
 	viewed: boolean;
 	setViewed: any;
+	viewedChat: boolean;
+	setViewedChat: any;
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
@@ -29,32 +31,38 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const [data, setData] = useState<inviteReturn>();
 	const query = useQueryClient();
 	const [viewed, setViewed] = useState(true);
+	const [viewedChat, setViewedChat] = useState(true);
+
 	const router = useRouter();
 	const style =
 		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
+	const pathname = usePathname();
+	const params = useParams();
+
+	pathname === `/chat/${params.user}`
+		? globalSocket.emit("inChat")
+		: globalSocket.emit("outChat");
 
 	useEffect(() => {
 		console.log("from socket provider");
-
 		//notification
 		if (globalSocket.listeners("addNotif").length === 0)
 			globalSocket.on("addNotif", (obj) => {
 				console.log("from notif", obj);
 				const message = obj.is_message
-					? "dir message dyalk hna"
+					? "Sent you a message 💬"
 					: "Sent you a friend request 👥";
 
-				notify(obj.username, obj.avatar, false, 5000, message);
 				if (!obj.is_message) {
-					//hada boolean bach kan hayd hadik no9ta 7amra dyal notif kayn f context lta7t dir dyalk o zido fcontext linterface dyal context kayn lfo9
-					//context atb9a t3ayt lih mn ay blassa b useGlobalContext()
-					//boolean khaso ykoun state o dowez setState dyalo f context atb9a tchongih mn ayi blassa
+					notify(obj.username, obj.avatar, false, 5000, message);
 					setViewed(false);
 					query.invalidateQueries({ queryKey: ["friends"] });
-				}
-				//dir logique dyak hna
-				if (obj.is_message) {
-					//###################
+				} else if (obj.is_message) {
+					if (!obj.in_chat) {
+						notify(obj.username, obj.avatar, false, 2000, message);
+						setViewedChat(false);
+						query.invalidateQueries({ queryKey: ["messages"] });
+					}
 				}
 			});
 
@@ -126,7 +134,16 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	return (
-		<globalContext.Provider value={{ data, setData, viewed, setViewed }}>
+		<globalContext.Provider
+			value={{
+				data,
+				setData,
+				viewed,
+				setViewed,
+				viewedChat,
+				setViewedChat,
+			}}
+		>
 			{children}
 			<ToastContainer />
 		</globalContext.Provider>

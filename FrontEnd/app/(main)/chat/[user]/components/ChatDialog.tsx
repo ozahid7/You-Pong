@@ -7,12 +7,12 @@ import {
   getMembers,
   getMessages,
 } from "../data/api";
-import ChatBubbleMain from "./ChatBubbleMain";
-import ChatBubbleSender from "./ChatBubbleSender";
 import { log } from "console";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import ShowMessages from "./ShowMessages";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 interface Props {
   main: User_Hero;
@@ -61,8 +61,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (data) {
       // Set the initial messages from the database //
       setMessages(data);
-      // MessagesRefetch();
-      // one = false;
     }
   }, [data]);
 
@@ -71,7 +69,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
       });
-      // MessagesRefetch();
       one = true;
     }
   }, [one]);
@@ -84,33 +81,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   }, [shouldScrollToBottom, messages]);
 
-  const whichUSER = (message: Message) => {
-    if (message && message.id_channel === channel?.id_channel) {
-      if (message.id_sender === main?.uid) {
-        one = false;
-        return (
-          <ChatBubbleMain
-            message={message}
-            main={main}
-            key={uuidv4()}
-          />
-        );
-      } else if (message.id_sender !== main?.uid && Members) {
-        const member: Member[] = Members.filter(
-          (member) => member.user.id_user === message.id_sender
-        );
-        one = false;
-        return (
-          <ChatBubbleSender
-            message={message}
-            member={member[0] || null}
-            key={uuidv4()}
-          />
-        );
-      }
-    }
-  };
-
   return (
     <Fragment>
       <div
@@ -119,7 +89,15 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       >
         {messages &&
           messages.map((message) => {
-            return whichUSER(message);
+            return (
+              <ShowMessages
+                message={message}
+                main={main}
+                channel={channel}
+                Members={Members}
+                key={uuidv4()}
+              />
+            );
           })}
       </div>
     </Fragment>

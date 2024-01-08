@@ -190,6 +190,12 @@ export class ChannelService {
 
   //DELETE MANY
   async deleteChannels() {
+    const messages = await this.prisma.message.deleteMany();
+    if (!messages)
+      return {
+        message: "Can't delete messages !",
+        Object: null,
+      };
     const rooms = await this.prisma.room_Chat.deleteMany();
     if (!rooms)
       return {
@@ -208,6 +214,14 @@ export class ChannelService {
     if (!id_channel)
       return {
         message: 'No such channel !',
+        Object: null,
+      };
+    const messages = await this.prisma.message.deleteMany({
+      where: { id_channel: id_channel },
+    });
+    if (!messages)
+      return {
+        message: "Can't delete messages !",
         Object: null,
       };
     const rooms = await this.prisma.room_Chat.deleteMany({

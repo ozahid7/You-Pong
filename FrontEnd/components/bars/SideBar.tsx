@@ -59,7 +59,7 @@ const RenderSideBarElements = (
 				>
 					{name}
 				</span>
-				{!notif && index === 1 && (
+				{!notif && (index === 1 || index === 2) && (
 					<span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
 				)}
 			</div>
@@ -73,7 +73,7 @@ const SideBar = () => {
 	const { username, avatar } = user.data;
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
-	const { viewed, setViewed } = useGlobalContext();
+	const { viewed, setViewed, viewedChat } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -127,7 +127,12 @@ const SideBar = () => {
 						"Friends",
 						viewed
 					)}
-					{RenderSideBarElements(2, myRoutes.chat, "Messages")}
+					{RenderSideBarElements(
+						2,
+						myRoutes.chat,
+						"Messages",
+						viewedChat
+					)}
 					{RenderSideBarElements(3, myRoutes.gameme, "Game")}
 					{RenderSideBarElements(4, myRoutes.settings, "Settings")}
 				</div>

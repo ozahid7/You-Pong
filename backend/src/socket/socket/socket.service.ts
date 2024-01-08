@@ -16,141 +16,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
+import { infoGame, infoPlayer, infoType, map, mode } from './socket.interfaces';
+import { SocketMethodes } from './socket.methodes';
 
-export enum map {
-  GREEN,
-  CLASSIC,
-  ORANGE,
-}
-export enum mode {
-  HARD,
-  EASY,
-}
-// export interface infoRequest {
-//   id_game: string;
-//   id_sender: string;
-//   id_receiver: string;
-//   socket_player: string;
-//   map: map;
-//   mode: mode;
-// }
-export interface infoGame {
-  id_game: string;
-  id_sender: string;
-  id_receiver: string;
-  socket_player: string;
-  map: map;
-  mode: mode;
-}
-export interface infoPlayer {
-  id_sender: string;
-  is_public: boolean;
-  map: string;
-  mode: string;
-}
 @Injectable()
 @WebSocketGateway()
-export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
+export class SocketService
+  extends SocketMethodes
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
-    private prisma: PrismaService,
+    prisma: PrismaService,
     private gameService: GameService,
-  ) {}
-  private users: { id_user: string; id_socket: string; inGame: boolean }[] = [];
-
-  private privateGame: {
-    id_game: string;
-    id_player: string;
-    socket_player: string;
-    id_opponent: string;
-    map: map;
-    mode: mode;
-  }[] = [];
-
-  private classicHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private orangeHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private greenHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private classicEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private orangeEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private greenEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-
-  async addUser(id_user: string, id_socket: string) {
-    this.users.push({ id_user, id_socket, inGame: false });
-  }
-
-  async removeUser(id_socket: string) {
-    this.users = this.users.filter((user) => user.id_socket !== id_socket);
-  }
-
-  async removePrvGame(id_socket: string) {
-    this.privateGame = this.privateGame.filter(
-      (game) => game.socket_player !== id_socket,
-    );
-  }
-
-  async removePlayer(id_socket: string) {
-    this.classicEasy = this.classicEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.classicHard = this.classicHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.orangeEasy = this.orangeEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.orangeHard = this.orangeHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.greenEasy = this.greenEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.greenHard = this.greenHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-  }
-
-  async addPrivateGame(
-    id_game: string,
-    id_player: string,
-    id_opponent: string,
-    socket_player: string,
-    map: map,
-    mode: mode,
   ) {
-    if (
-      this.privateGame.find(
-        (game) =>
-          game.id_game === id_game &&
-          game.id_player === id_player &&
-          game.id_opponent === id_opponent,
-      )
-    )
-      this.removePrvGame(socket_player);
-    this.privateGame.push({
-      id_game,
-      id_player,
-      map,
-      mode,
-      id_opponent: id_opponent,
-      socket_player,
-    });
+    super(prisma);
   }
 
   async launch_game(player, opponent) {
@@ -202,75 +81,101 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  async pushToQueue(
+  async filterQueue(
     queue: {
       id_user: string;
       id_socket: string;
     }[],
     id_user: string,
-    id_socket: string,
   ) {
-    if (queue.find((waiting) => id_user === waiting.id_user) === undefined) {
-      queue.push({
-        id_user: id_user,
-        id_socket: id_socket,
-      });
-    }
+    const user = await this.prisma.user.findUnique({
+      where: { id_user: id_user },
+      include: { blocked_from: true, blocked_user: true },
+    });
+    if (!user) return [];
+    const filtresQueue = queue.map((q) => {
+      if (
+        !user.blocked_from.some((block) => block.id_user === q.id_user) &&
+        !user.blocked_user.some((block) => block.id_user === q.id_user) &&
+        q.id_user !== id_user
+      )
+        return q;
+    });
+    return await Promise.all(filtresQueue.filter((q) => q && q !== undefined));
   }
 
   async matching(info: infoPlayer, id_user: string, id_socket: string) {
     const mode_map = `${info.map}_${info.mode}`;
-    switch (mode_map) {
-      case 'CLASSIC_HARD':
-        this.pushToQueue(this.classicHard, id_user, id_socket);
-        if (this.classicHard.length > 1) {
-          const player = this.classicHard.shift();
-          const opponent = this.classicHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'ORANGE_HARD':
-        this.pushToQueue(this.orangeHard, id_user, id_socket);
-        if (this.orangeHard.length > 1) {
-          const player = this.orangeHard.shift();
-          const opponent = this.orangeHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'GREEN_HARD':
-        this.pushToQueue(this.greenHard, id_user, id_socket);
-        if (this.greenHard.length > 1) {
-          const player = this.greenHard.shift();
-          const opponent = this.greenHard.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'CLASSIC_EASY':
-        this.pushToQueue(this.classicEasy, id_user, id_socket);
-        if (this.classicEasy.length > 1) {
-          const player = this.classicEasy.shift();
-          const opponent = this.classicEasy.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'ORANGE_EASY':
-        this.pushToQueue(this.orangeEasy, id_user, id_socket);
-        if (this.orangeEasy.length > 1) {
-          const player = this.orangeEasy.shift();
-          const opponent = this.orangeEasy.shift();
-          this.launch_game(player, opponent);
-        }
-        break;
-      case 'GREEN_EASY':
-        this.pushToQueue(this.greenEasy, id_user, id_socket);
-        if (this.greenEasy.length > 1) {
-          const player = this.greenEasy.shift();
-          const opponent = this.greenEasy.shift();
-          this.launch_game(player, opponent);
-        }
-      default:
-        console.error('Invalid map or mode !');
-        break;
+    const player = this.users.find(
+      (user) => user.id_user === id_user && user.id_socket === user.id_socket,
+    );
+    let filtred;
+    if (player) {
+      switch (mode_map) {
+        case 'CLASSIC_HARD':
+          filtred = await this.filterQueue(this.classicHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.classicHard = this.classicHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.classicHard, id_user, id_socket);
+          break;
+        case 'ORANGE_HARD':
+          filtred = await this.filterQueue(this.orangeHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.orangeHard = this.orangeHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.orangeHard, id_user, id_socket);
+          break;
+        case 'GREEN_HARD':
+          filtred = await this.filterQueue(this.greenHard, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.greenHard = this.greenHard.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.greenHard, id_user, id_socket);
+          break;
+        case 'CLASSIC_EASY':
+          filtred = await this.filterQueue(this.classicEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.classicEasy = this.classicEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.classicEasy, id_user, id_socket);
+          break;
+        case 'ORANGE_EASY':
+          filtred = await this.filterQueue(this.orangeEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.orangeEasy = this.orangeEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.orangeEasy, id_user, id_socket);
+          break;
+        case 'GREEN_EASY':
+          filtred = await this.filterQueue(this.greenEasy, id_user);
+          if (filtred.length > 0) {
+            const opponent = filtred.shift();
+            this.greenEasy = this.greenEasy.filter(
+              (queue) => queue.id_user !== opponent.id_user,
+            );
+            this.launch_game(player, opponent);
+          } else this.pushToQueue(this.greenEasy, id_user, id_socket);
+          break;
+        default:
+          console.error(`Invalid map or mode : ${mode_map} !`);
+          break;
+      }
     }
   }
 
@@ -361,6 +266,97 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log(this.users);
     } catch (error) {
       console.log('Error in disconnect : ', error);
+    }
+  }
+
+  @SubscribeMessage('newMessage')
+  async newMessage(
+    @MessageBody() info: infoType,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    const receiver = this.users.find((user) => user.id_user === info.id_sender);
+    if (receiver !== undefined && sender !== undefined) {
+      const channel = await this.prisma.channel.findUnique({
+        where: {
+          id_channel: info.id_channel,
+        },
+        include: { users: true, bannedUsers: true },
+      });
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: info.id_sender,
+        },
+        include: {
+          blocked_user: true,
+          blocked_from: true,
+        },
+      });
+      if (my_user && channel) {
+        const room = await this.prisma.room_Chat.findUnique({
+          where: {
+            id_channel_id_user: {
+              id_channel: info.id_channel,
+              id_user: my_user.id_user,
+            },
+            member_status: 'NONE',
+          },
+        });
+        if (!room) return;
+        let users = channel.users.map((user) => {
+          if (
+            !my_user.blocked_from.some(
+              (blocked) => blocked.id_user === user.id_user,
+            ) &&
+            !my_user.blocked_user.some(
+              (blocked) => blocked.id_user === user.id_user,
+            )
+          )
+            return user;
+        });
+        const filtredUsers = await Promise.all(
+          users.filter((user) => user && user !== undefined),
+        );
+        const message = await this.prisma.message.create({
+          data: {
+            content: info.content,
+            id_sender: sender.id_user,
+            name_room: room.name,
+            id_channel: info.id_channel,
+          },
+        });
+        let us = filtredUsers.map((filtred) => {
+          if (
+            this.users.filter((user) => {
+              filtred.id_user === user.id_user;
+            }) !== undefined
+          )
+            return filtred;
+        });
+        const result = await Promise.all(us.filter((user) => user));
+        if (message) {
+          console.log('send message');
+          info.id_sender = sender.id_user;
+          info.created_at = message.created_at;
+          result.map((user) => {
+            if (user) {
+              const recv = this.users.find((u) => user.id_user === u.id_user);
+              let in_chat: boolean = false;
+              if (recv && recv !== undefined) in_chat = recv.inChat;
+              this.server.to(user.id_user).emit('receiveMessage', info);
+              if (user.id_user !== info.id_sender) {
+                this.server.to(user.id_user).emit('addNotif', {
+                  id_user: my_user.id_user,
+                  username: my_user.username,
+                  avatar: my_user.avatar,
+                  is_message: true,
+                  in_chat: in_chat,
+                });
+              }
+            }
+          });
+        }
+      }
     }
   }
 
@@ -704,6 +700,8 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             id_user: my_user.id_user,
             username: my_user.username,
             avatar: my_user.avatar,
+            is_message: false,
+            in_chat: false,
           });
         }
       }
@@ -715,11 +713,13 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('removeRequest')
   async removeRequest(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() id_receiver: string,
+    @MessageBody() info: { id_receiver: string; is_message: boolean },
   ) {
     try {
       const sender = this.users.find((user) => user.id_socket === socket.id);
-      const receiver = this.users.find((user) => user.id_user === id_receiver);
+      const receiver = this.users.find(
+        (user) => user.id_user === info.id_receiver,
+      );
       if (
         sender &&
         sender !== undefined &&
@@ -742,6 +742,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
             id_user: my_user.id_user,
             username: my_user.username,
             avatar: my_user.avatar,
+            is_message: info.is_message,
           });
         }
       }
@@ -750,7 +751,48 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  @SubscribeMessage('inChat')
+  async inChat(@ConnectedSocket() socket: Socket) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+
+      if (sender && sender !== undefined) {
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+        });
+        if (my_user) {
+          sender.inChat = true;
+        }
+      }
+    } catch (error) {
+      console.log('Error in inChat : ', error);
+    }
+  }
+
+  @SubscribeMessage('outChat')
+  async outChat(@ConnectedSocket() socket: Socket) {
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+
+      if (sender && sender !== undefined) {
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+        });
+        if (my_user) {
+          sender.inChat = false;
+        }
+      }
+    } catch (error) {
+      console.log('Error in outChat : ', error);
+    }
+  }
+
   // ---------------- adam start here ----------------------
+
 
   private ball: {
     x: number;
@@ -761,42 +803,30 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
     dx: number;
     dy: number;
   } = {
-    x: 60,
-    y: 60,
+    x: 300,
+    y: 300,
     speed: 0.9,
-    radius: 10,
+    radius: 14,
     color: '',
     dx: 5,
     dy: 0,
   };
+
   @SubscribeMessage('updateFrame')
   async updateFrame(
     @ConnectedSocket() socket: Socket,
     @MessageBody() dto: renderDto,
   ) {
-    try {
-      const theGame = this.prisma.match_History.findUnique({
-        where: {
-          id_match: dto.id_match,
-        },
-      });
-      if (!theGame) throw new NotFoundException('Game not found');
-      else {
-        // if ball touchs the wall
-        if (
-          this.ball.x + this.ball.radius >= dto.fieald.width ||
-          this.ball.x - this.ball.radius <= 0
-        ) {
-          this.ball.dx = -this.ball.dx;
-        }
-        this.ball.x += this.ball.dx;
-        dto.ball.x = this.ball.x;
-        this.server.to((await theGame).id_player).emit('render', dto);
-        this.server.to((await theGame).id_opponent).emit('render', dto);
-      }
-    } catch (error) {
-      throw new BadGatewayException(error);
-    }
+    if (
+      this.ball.x + this.ball.radius >= dto.fieald.width ||
+      this.ball.x - this.ball.radius <= 0
+  ) {
+    this.ball.dx = -this.ball.dx;
   }
+    this.ball.x += this.ball.dx;
+    dto.ball.x = this.ball.x;
+    this.server.to(socket.id).emit('render', dto);
+  }
+
   // ---------------- adam end here ----------------------
 }
