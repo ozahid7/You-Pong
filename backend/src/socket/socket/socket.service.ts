@@ -56,8 +56,8 @@ export class SocketService
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: game.id_match,
-          id_player: game.id_player,
-          id_opponent: game.id_opponent,
+          id_player: game.id_opponent,
+          id_opponent: game.id_player,
         });
         this.server.to(player.id_socket).emit('acceptedGame', {
           username: opponent_user.username,
