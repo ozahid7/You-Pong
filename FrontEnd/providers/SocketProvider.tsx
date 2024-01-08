@@ -32,14 +32,10 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   const query = useQueryClient();
   const [viewed, setViewed] = useState(true);
   const [viewedChat, setViewedChat] = useState(true);
+
   const router = useRouter();
   const style =
     "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
-  const pathname = usePathname();
-  const params = useParams();
-  const isChatRoute = pathname === `/chat/${params.user}`;
-
-  console.log("ischatup", isChatRoute);
 
   useEffect(() => {
     console.log("from socket provider");
@@ -61,8 +57,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         }
         //dir logique dyak hna
         else if (obj.is_message) {
-          console.log("ischat", isChatRoute);
-          if (!isChatRoute) {
+          if (1) {
             notify(obj.username, obj.avatar, false, 2000, message);
             setViewedChat(false);
             query.invalidateQueries({ queryKey: ["messages"] });
@@ -133,7 +128,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         });
         router.push(myRoutes.dashboard);
       });
-  }, [isChatRoute]);
+  }, []);
 
   return (
     <globalContext.Provider
