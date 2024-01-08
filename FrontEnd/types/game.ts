@@ -11,7 +11,10 @@ export interface inviteReturn {
 	info: infoGame;
 	avatar: string;
 	username: string;
+	id_match: string;
 	level: number;
+	id_opponent: string;
+	id_player: string;
 }
 
 export interface infoPlayer {
