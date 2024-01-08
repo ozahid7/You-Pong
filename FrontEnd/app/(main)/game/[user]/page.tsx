@@ -11,6 +11,8 @@ import { myRoutes } from "@/const";
 import { OtherUser } from "@/utils/game";
 import Loader from "@/components/tools/Loader";
 import GameProvider, { useGameContext } from "./GameProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
+import { inviteReturn } from "@/types/game";
 
 interface pageProps {
 	params: { user: string };
@@ -23,6 +25,8 @@ export default function game({ params }: pageProps) {
 	const [showCounter, setShowCounter] = useState(false);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showGameOption, setShowGameOption] = useState(true);
+	const [cloneData, setCloneData] = useState<inviteReturn>();
+	const { data } = useGlobalContext();
 
 	//game ref and sizes
 	const ref = useRef<HTMLDivElement>(null);
@@ -74,6 +78,10 @@ export default function game({ params }: pageProps) {
 	}, []);
 
 	useEffect(() => {
+		if (data !== undefined) setCloneData(data);
+	}, [data]);
+
+	useEffect(() => {
 		if (ref.current) {
 			const updateSize = () => {
 				setHeight(window.innerHeight);
@@ -82,13 +90,19 @@ export default function game({ params }: pageProps) {
 
 			// window.addEventListener("resize", updateSize);
 			updateSize();
-			const game = new Game(ref.current, map, globalSocket, mode);
+			const game = new Game(
+				ref.current,
+				map,
+				globalSocket,
+				mode,
+				cloneData
+			);
 
 			return () => {
 				// game.destroy();
 			};
 		}
-	}, [ref.current]);
+	}, [cloneData]);
 
 	const [game_id, SetGameId] = useState(
 		new Date() + user.data.uid + params.user

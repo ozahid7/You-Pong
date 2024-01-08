@@ -11,6 +11,8 @@ import {
 	myRender,
 } from "./gameUtils";
 import { Socket } from "socket.io-client";
+import { Info } from "./GameProvider";
+import { inviteReturn } from "@/types/game";
 
 export const {
 	Engine,
@@ -36,22 +38,28 @@ export class Game {
 	walls: Matter.Body[] = [];
 	mouse: Matter.Mouse;
 	mouseConstraint: Matter.mouseConstraint;
-	soket: Socket;
+	socket: Socket;
 	paddleSize: number;
+	gameData: inviteReturn;
 
 	constructor(
 		container: HTMLDivElement,
 		map: string,
 		socket: Socket,
-		mode: string
+		mode: string,
+		gameData: inviteReturn
 	) {
 		this.height = container.clientHeight;
 		this.width = container.clientWidth;
-		this.soket = socket;
+		this.socket = socket;
+		this.gameData = gameData;
+
+		console.log("match id = ", this.gameData);
 		let strokeColor: string;
 		let fillColor: string;
 		let background: string;
 
+		// console.log("hello", id_match);
 		this.paddleSize = mode === "easy" ? 4 : 6;
 		if (map === "orange") {
 			fillColor = "#EB6440";
@@ -156,17 +164,42 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
-		this.fpsEmit();
+		this.listenToRender();
+		this.emitToUpdateFrame();
 		this.setupMouseEvents();
 	}
 
-	fpsEmit() {
+	emitToUpdateFrame() {
 		setInterval(() => {
-			this.soket.emit("updateFrame", {
+			this.socket.emit("updateFrame", {
 				fieald: { height: 800, width: 600 },
-				id_match: "test",
+				ball: { x: 0, y: 0 },
 			});
 		}, 1000 / 60);
+	}
+
+	listenToRender() {
+		// if (this.socket.listeners("render").length === 0)
+		this.socket.on("render", (data: Info) => {
+			Matter.Body.setPosition(this.ball, {
+				x: data.ball.x,
+				y: data.ball.y,
+			});
+
+			//change opponent position
+
+			// Matter.Body.setPosition(this.topPaddle, {
+			// 	x: data.opponent.x,
+			// 	y: data.opponent.y,
+			// });
+
+			//change my position
+
+			// Matter.Body.setPosition(this.bottomPaddle, {
+			// 	x: data.player.x,
+			// 	y: data.player.y,
+			// });
+		});
 	}
 
 	setupMouseEvents() {
@@ -181,12 +214,7 @@ export class Game {
 					this.mouse.position.x < max &&
 					this.mouse.position.x > min
 				) {
-					// Move the paddle with the mouse
-					// Matter.Body.setPosition(this.bottomPaddle, {
-					// 	x: event.mouse.position.x,
-					// 	y: this.bottomPaddle.position.y,
-					// });
-					this.soket.emit("updateFrame", {
+					this.socket.emit("updateFrame", {
 						player: {
 							x: this.mouse.position.x,
 							y: this.mouse.position.y,

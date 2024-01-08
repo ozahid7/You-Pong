@@ -38,32 +38,30 @@ const PlayerLoader = (props: {
 	let editedLevel2;
 	let editedLevel1;
 
-	// useEffect(() => {
-	// 	if (otheruser.data && otheruser.data !== undefined) {
-	// 		setIsmatched(true);
-	// 		setTimeout(() => {
-	// 			props.showLoader(false);
-	// 			props.showCounter(true);
-	// 		}, 2000);
-	// 		setUserInfo(otheruser.data);
-	// 		props.setotheruser({
-	// 			avatar: otheruser.data.avatar,
-	// 			username: otheruser.data.username,
-	// 		});
-	// 		otheruser.setData(undefined);
-	// 	}
-	// }, [otheruser, otheruser.data]);
+	useEffect(() => {
+		if (otheruser.data && otheruser.data !== undefined) {
+			props.setToStart(true);
+			setIsmatched(true);
+			setTimeout(() => {
+				props.showLoader(false);
+				// props.showCounter(true);
+			}, 2000);
+			setUserInfo(otheruser.data);
+			props.setotheruser({
+				avatar: otheruser.data.avatar,
+				username: otheruser.data.username,
+			});
+			otheruser.setData(undefined);
+		}
+	}, [otheruser, otheruser.data]);
 
 	useEffect(() => {
-		props.setToStart(true);
-
 		props.socket.emit("inGame", {
 			id_sender: props.my_id,
 			map: props.map.toUpperCase(),
 			mode: props.mode.toUpperCase(),
 			is_public: props.path === "me",
 		});
-		props.showLoader(false);
 	}, []);
 
 	const onClose = () => {

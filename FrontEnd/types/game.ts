@@ -11,6 +11,7 @@ export interface inviteReturn {
 	info: infoGame;
 	avatar: string;
 	username: string;
+	id_match: string;
 	level: number;
 }
 
