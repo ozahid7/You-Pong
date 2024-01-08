@@ -31,8 +31,6 @@ export class Game {
 	render: Matter.Render;
 	engine: Matter.Engine;
 	topPaddle: Matter.Body;
-	paddle: Matter.Body;
-
 	bottomPaddle: Matter.Body;
 	ball: Matter.Body;
 	walls: Matter.Body[] = [];
@@ -53,7 +51,7 @@ export class Game {
 		let strokeColor: string;
 		let fillColor: string;
 		let background: string;
-		console.log("hello");
+
 		this.paddleSize = mode === "easy" ? 4 : 6;
 		if (map === "orange") {
 			fillColor = "#EB6440";
@@ -158,7 +156,17 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
+		this.fpsEmit();
 		this.setupMouseEvents();
+	}
+
+	fpsEmit() {
+		setInterval(() => {
+			this.soket.emit("updateFrame", {
+				fieald: { height: 800, width: 600 },
+				id_match: "test",
+			});
+		}, 1000 / 60);
 	}
 
 	setupMouseEvents() {
@@ -174,18 +182,18 @@ export class Game {
 					this.mouse.position.x > min
 				) {
 					// Move the paddle with the mouse
-					Matter.Body.setPosition(this.bottomPaddle, {
-						x: event.mouse.position.x,
-						y: this.bottomPaddle.position.y,
-					});
-					// this.soket.emit("updateFrame", {
-					// 	player: {
-					// 		x: this.mouse.position.x,
-					// 		y: this.mouse.position.y,
-					// 	},
-					// 	fieald: { height: 800, width: 600 },
-					// 	id_match: "test",
+					// Matter.Body.setPosition(this.bottomPaddle, {
+					// 	x: event.mouse.position.x,
+					// 	y: this.bottomPaddle.position.y,
 					// });
+					this.soket.emit("updateFrame", {
+						player: {
+							x: this.mouse.position.x,
+							y: this.mouse.position.y,
+						},
+						fieald: { height: 800, width: 600 },
+						id_match: "test",
+					});
 				}
 			}
 		);

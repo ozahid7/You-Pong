@@ -63,15 +63,6 @@ const GameProvider = ({ children }: { children: React.ReactNode }) => {
 	const [gameData, setGameData] = useState<Info>();
 	const [submit, setSubmit] = useState(false);
 
-	useEffect(() => {
-		if (gameSocket && gameSocket.listeners("render").length === 0) {
-			gameSocket.on("render", (obj: Info) => {
-				console.log("from render event", obj);
-				setGameData(obj);
-			});
-		}
-	}, [gameSocket]);
-
 	return (
 		<gameContext.Provider
 			value={{
