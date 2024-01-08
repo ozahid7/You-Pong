@@ -793,6 +793,7 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
+
   private ball: {
     x: number;
     y: number;
@@ -802,42 +803,30 @@ export class SocketService
     dx: number;
     dy: number;
   } = {
-    x: 60,
-    y: 60,
+    x: 300,
+    y: 300,
     speed: 0.9,
-    radius: 10,
+    radius: 14,
     color: '',
     dx: 5,
     dy: 0,
   };
+
   @SubscribeMessage('updateFrame')
   async updateFrame(
     @ConnectedSocket() socket: Socket,
     @MessageBody() dto: renderDto,
   ) {
-    try {
-      const theGame = this.prisma.match_History.findUnique({
-        where: {
-          id_match: dto.id_match,
-        },
-      });
-      if (!theGame) throw new NotFoundException('Game not found');
-      else {
-        // if ball touchs the wall
-        if (
-          this.ball.x + this.ball.radius >= dto.fieald.width ||
-          this.ball.x - this.ball.radius <= 0
-        ) {
-          this.ball.dx = -this.ball.dx;
-        }
-        this.ball.x += this.ball.dx;
-        dto.ball.x = this.ball.x;
-        this.server.to((await theGame).id_player).emit('render', dto);
-        this.server.to((await theGame).id_opponent).emit('render', dto);
-      }
-    } catch (error) {
-      throw new BadGatewayException(error);
-    }
+    if (
+      this.ball.x + this.ball.radius >= dto.fieald.width ||
+      this.ball.x - this.ball.radius <= 0
+  ) {
+    this.ball.dx = -this.ball.dx;
   }
+    this.ball.x += this.ball.dx;
+    dto.ball.x = this.ball.x;
+    this.server.to(socket.id).emit('render', dto);
+  }
+
   // ---------------- adam end here ----------------------
 }
