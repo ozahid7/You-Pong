@@ -41,6 +41,7 @@ export class Game {
 	socket: Socket;
 	paddleSize: number;
 	gameData: inviteReturn;
+	tmpX: number;
 
 	constructor(
 		container: HTMLDivElement,
@@ -54,12 +55,10 @@ export class Game {
 		this.socket = socket;
 		this.gameData = gameData;
 
-		console.log("match id = ", this.gameData);
 		let strokeColor: string;
 		let fillColor: string;
 		let background: string;
 
-		// console.log("hello", id_match);
 		this.paddleSize = mode === "easy" ? 4 : 6;
 		if (map === "orange") {
 			fillColor = "#EB6440";
@@ -172,34 +171,40 @@ export class Game {
 	emitToUpdateFrame() {
 		setInterval(() => {
 			this.socket.emit("updateFrame", {
+				player: {
+					x: this.tmpX,
+					y: this.bottomPaddle.position.y,
+				},
 				fieald: { height: 800, width: 600 },
 				ball: { x: 0, y: 0 },
+				id_opponent: this.gameData.id_opponent,
+				id_player: this.gameData.id_player,
 			});
 		}, 1000 / 60);
 	}
 
 	listenToRender() {
-		// if (this.socket.listeners("render").length === 0)
-		this.socket.on("render", (data: Info) => {
-			Matter.Body.setPosition(this.ball, {
-				x: data.ball.x,
-				y: data.ball.y,
+		if (this.socket.listeners("render").length === 0)
+			this.socket.on("render", (data: Info) => {
+				Matter.Body.setPosition(this.ball, {
+					x: data.ball.x,
+					y: data.ball.y,
+				});
+
+				//change opponent position
+
+				// Matter.Body.setPosition(this.topPaddle, {
+				// 	x: data.opponent.x,
+				// 	y: data.opponent.y,
+				// });
+
+				//change my position
+
+				// Matter.Body.setPosition(this.bottomPaddle, {
+				// 	x: data.player.x,
+				// 	y: data.player.y,
+				// });
 			});
-
-			//change opponent position
-
-			// Matter.Body.setPosition(this.topPaddle, {
-			// 	x: data.opponent.x,
-			// 	y: data.opponent.y,
-			// });
-
-			//change my position
-
-			// Matter.Body.setPosition(this.bottomPaddle, {
-			// 	x: data.player.x,
-			// 	y: data.player.y,
-			// });
-		});
 	}
 
 	setupMouseEvents() {
@@ -214,14 +219,7 @@ export class Game {
 					this.mouse.position.x < max &&
 					this.mouse.position.x > min
 				) {
-					this.socket.emit("updateFrame", {
-						player: {
-							x: this.mouse.position.x,
-							y: this.mouse.position.y,
-						},
-						fieald: { height: 800, width: 600 },
-						id_match: "test",
-					});
+					this.tmpX = this.mouse.position.x;
 				}
 			}
 		);

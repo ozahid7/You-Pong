@@ -52,6 +52,8 @@ export interface Info {
 	opponent: opponent;
 	fieald: fieald;
 	id_match: string;
+	id_opponent: string;
+	id_player: string;
 }
 
 export const gameContext = createContext<gameContextProps | undefined>(

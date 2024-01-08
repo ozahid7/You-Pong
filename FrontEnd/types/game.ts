@@ -13,6 +13,8 @@ export interface inviteReturn {
 	username: string;
 	id_match: string;
 	level: number;
+	id_opponent: string;
+	id_player: string;
 }
 
 export interface infoPlayer {
