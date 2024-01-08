@@ -6,10 +6,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SocketMethodes {
   constructor(protected prisma: PrismaService) {}
 
-  protected in_chat: boolean = false;
-
-  protected users: { id_user: string; id_socket: string; inGame: boolean }[] =
-    [];
+  protected users: {
+    id_user: string;
+    id_socket: string;
+    inGame: boolean;
+    inChat: boolean;
+  }[] = [];
 
   protected privateGame: {
     id_game: string;
@@ -46,7 +48,7 @@ export class SocketMethodes {
   }[] = [];
 
   async addUser(id_user: string, id_socket: string) {
-    this.users.push({ id_user, id_socket, inGame: false });
+    this.users.push({ id_user, id_socket, inGame: false, inChat: false });
   }
 
   async removeUser(id_socket: string) {
