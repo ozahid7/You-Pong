@@ -15,7 +15,7 @@ async function achievements() {
         id_achievement: '2',
         title: 'Level Up',
         description:
-        'Congratulations on surpassing the initial challenges and becoming a Level 3',
+          'Congratulations on surpassing the initial challenges and becoming a Level 4',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
       {
@@ -49,7 +49,7 @@ async function achievements() {
         id_achievement: '7',
         title: 'Level Up',
         description:
-          'Congratulations on surpassing the initial challenges and becoming a Level 8',
+          'Congratulations on surpassing the initial challenges and becoming a Level 10',
         avatar: 'http://localhost:4000/file/Badge.png',
       },
     ];

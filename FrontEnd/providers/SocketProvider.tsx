@@ -36,6 +36,12 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const style =
     "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
+  const pathname = usePathname();
+  const params = useParams();
+
+  pathname === `/chat/${params.user}`
+    ? globalSocket.emit("inChat")
+    : globalSocket.emit("outChat");
 
   useEffect(() => {
     console.log("from socket provider");
@@ -57,7 +63,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
         }
         //dir logique dyak hna
         else if (obj.is_message) {
-          if (1) {
+          if (!obj.in_chat) {
             notify(obj.username, obj.avatar, false, 2000, message);
             setViewedChat(false);
             query.invalidateQueries({ queryKey: ["messages"] });
