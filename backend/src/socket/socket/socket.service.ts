@@ -16,147 +16,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
+import { infoGame, infoPlayer, infoType, map, mode } from './socket.interfaces';
+import { SocketMethodes } from './socket.methodes';
 
-export enum map {
-  GREEN,
-  CLASSIC,
-  ORANGE,
-}
-export enum mode {
-  HARD,
-  EASY,
-}
-// export interface infoRequest {
-//   id_game: string;
-//   id_sender: string;
-//   id_receiver: string;
-//   socket_player: string;
-//   map: map;
-//   mode: mode;
-// }
-export interface infoType {
-  id_channel: string;
-  id_sender: string;
-  content: string;
-  created_at: Date;
-}
-export interface infoGame {
-  id_game: string;
-  id_sender: string;
-  id_receiver: string;
-  socket_player: string;
-  map: map;
-  mode: mode;
-}
-export interface infoPlayer {
-  id_sender: string;
-  is_public: boolean;
-  map: string;
-  mode: string;
-}
 @Injectable()
 @WebSocketGateway()
-export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
+export class SocketService
+  extends SocketMethodes
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
-    private prisma: PrismaService,
+    prisma: PrismaService,
     private gameService: GameService,
-  ) {}
-  private users: { id_user: string; id_socket: string; inGame: boolean }[] = [];
-
-  private privateGame: {
-    id_game: string;
-    id_player: string;
-    socket_player: string;
-    id_opponent: string;
-    map: map;
-    mode: mode;
-  }[] = [];
-
-  private classicHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private orangeHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private greenHard: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private classicEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private orangeEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-  private greenEasy: {
-    id_user: string;
-    id_socket: string;
-  }[] = [];
-
-  async addUser(id_user: string, id_socket: string) {
-    this.users.push({ id_user, id_socket, inGame: false });
-  }
-
-  async removeUser(id_socket: string) {
-    this.users = this.users.filter((user) => user.id_socket !== id_socket);
-  }
-
-  async removePrvGame(id_socket: string) {
-    this.privateGame = this.privateGame.filter(
-      (game) => game.socket_player !== id_socket,
-    );
-  }
-
-  async removePlayer(id_socket: string) {
-    this.classicEasy = this.classicEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.classicHard = this.classicHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.orangeEasy = this.orangeEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.orangeHard = this.orangeHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.greenEasy = this.greenEasy.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-    this.greenHard = this.greenHard.filter(
-      (game) => game.id_socket !== id_socket,
-    );
-  }
-
-  async addPrivateGame(
-    id_game: string,
-    id_player: string,
-    id_opponent: string,
-    socket_player: string,
-    map: map,
-    mode: mode,
   ) {
-    if (
-      this.privateGame.find(
-        (game) =>
-          game.id_game === id_game &&
-          game.id_player === id_player &&
-          game.id_opponent === id_opponent,
-      )
-    )
-      this.removePrvGame(socket_player);
-    this.privateGame.push({
-      id_game,
-      id_player,
-      map,
-      mode,
-      id_opponent: id_opponent,
-      socket_player,
-    });
+    super(prisma);
   }
 
   async launch_game(player, opponent) {
@@ -205,22 +78,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           id_match: '',
         });
       }
-    }
-  }
-
-  async pushToQueue(
-    queue: {
-      id_user: string;
-      id_socket: string;
-    }[],
-    id_user: string,
-    id_socket: string,
-  ) {
-    if (queue.find((waiting) => id_user === waiting.id_user) === undefined) {
-      queue.push({
-        id_user: id_user,
-        id_socket: id_socket,
-      });
     }
   }
 
@@ -411,7 +268,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       console.log('Error in disconnect : ', error);
     }
   }
-  
+
   @SubscribeMessage('newMessage')
   async newMessage(
     @MessageBody() info: infoType,
@@ -484,8 +341,7 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
           result.map((user) => {
             if (user) {
               this.server.to(user.id_user).emit('receiveMessage', info);
-              if (user.id_user !== info.id_sender){
-
+              if (user.id_user !== info.id_sender) {
                 this.server.to(user.id_user).emit('addNotif', {
                   id_user: my_user.id_user,
                   username: my_user.username,
@@ -499,8 +355,6 @@ export class SocketService implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
   }
-
-
 
   @SubscribeMessage('inGame')
   async inGame(

@@ -148,7 +148,7 @@ export class GameService {
 
       // Level up
       if (
-        user.level > 2 &&
+        user.level > 3 &&
         user.achievements.find((achiev) => achiev.id_achievement === '2') ===
           undefined
       ) {
@@ -227,7 +227,7 @@ export class GameService {
 
       // Level up
       if (
-        user.level >= 8 &&
+        user.level >= 10 &&
         user.achievements.find((achiev) => achiev.id_achievement === '7') ===
           undefined
       ) {
@@ -254,10 +254,10 @@ export class GameService {
       }
       let xp: number = user.victory - user.defeats;
       let your_rank = user.rank;
-      if (xp < 4) your_rank = 'BIOS';
-      else if (xp > 3 && xp < 6) your_rank = 'FREAX';
-      else if (xp > 5 && xp < 9) your_rank = 'COMMODORE';
-      else if (xp > 8) your_rank = 'PANDORA';
+      if (xp < 5) your_rank = 'BIOS';
+      else if (xp > 4 && xp < 10) your_rank = 'FREAX';
+      else if (xp > 9 && xp < 16) your_rank = 'COMMODORE';
+      else if (xp > 15) your_rank = 'PANDORA';
 
       if (your_rank !== user.rank) {
         const update = await this.prisma.user.update({
@@ -295,7 +295,7 @@ export class GameService {
           where: { id_user: player.id_user },
           data: {
             victory: player.victory + 1,
-            level: player.level + 0.6,
+            level: player.level + 0.4,
           },
         });
         const updateOpponent = await this.prisma.user.update({
@@ -319,7 +319,7 @@ export class GameService {
           where: { id_user: opponent.id_user },
           data: {
             victory: opponent.victory + 1,
-            level: opponent.level + 0.6,
+            level: opponent.level + 0.4,
           },
         });
         if (!updatePlayer || !updateOpponent)
