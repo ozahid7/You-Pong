@@ -56,12 +56,16 @@ export class SocketService
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: game.id_match,
+          id_player: game.id_player,
+          id_opponent: game.id_opponent,
         });
         this.server.to(player.id_socket).emit('acceptedGame', {
           username: opponent_user.username,
           avatar: opponent_user.avatar,
           level: opponent_user.level,
           id_match: game.id_match,
+          id_player: game.id_player,
+          id_opponent: game.id_opponent,
         });
         this.gameService.putLvlRank(game.id_match);
       } else {
@@ -70,12 +74,16 @@ export class SocketService
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: '',
+          id_player: '',
+          id_opponent: '',
         });
         this.server.to(opponent.id_socket).emit('canceledGame', {
           username: opponent_user.username,
           avatar: opponent_user.avatar,
           level: opponent_user.level,
           id_match: '',
+          id_player: '',
+          id_opponent: '',
         });
       }
     }
@@ -564,6 +572,8 @@ export class SocketService
                 avatar: my_user.avatar,
                 level: my_user.level,
                 id_match: game.id_match,
+                id_player: game.id_player,
+                id_opponent: game.id_opponent,
               });
               this.gameService.putLvlRank(game.id_match);
             }
