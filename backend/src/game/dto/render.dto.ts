@@ -29,4 +29,6 @@ export class renderDto {
         height: number
     };
     id_match: string;
+    id_player: string;
+    id_opponent: string;
 };
