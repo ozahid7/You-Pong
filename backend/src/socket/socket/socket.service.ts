@@ -56,8 +56,8 @@ export class SocketService
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: game.id_match,
-          id_player: game.id_opponent,
-          id_opponent: game.id_player,
+          id_player: game.id_player,
+          id_opponent: game.id_opponent,
         });
         this.server.to(player.id_socket).emit('acceptedGame', {
           username: opponent_user.username,
@@ -195,12 +195,12 @@ export class SocketService
       let id_user: string;
       if (socket && socket.handshake.query)
         id_user = socket.handshake.query.id_user.toString();
-      console.log('connected: ', socket.id);
+      // console.log('connected: ', socket.id);
       if (!this.users.find((user) => user.id_socket === socket.id)) {
         this.addUser(id_user, socket.id);
       }
       socket.join(id_user);
-      console.log(this.users);
+      // console.log(this.users);
       const sender = this.users.find((user) => user.id_socket === socket.id);
       if (sender && sender !== undefined) {
         const my_user = await this.prisma.user.findUnique({
@@ -215,7 +215,7 @@ export class SocketService
             data: { status: 'ONLINE' },
           });
           if (user) {
-            console.log('ONLINE ,');
+            // console.log('ONLINE ,');
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -223,7 +223,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in connect : ', error);
+      // console.log('Error in connect : ', error);
     }
   }
 
@@ -247,7 +247,7 @@ export class SocketService
               data: { status: 'OFFLINE' },
             });
             if (user) {
-              console.log('OFFLINE');
+              // console.log('OFFLINE');
               this.server.to(sender.id_socket).emit('status', {
                 id_user: my_user.id_user,
                 status: 'OFFLINE',
@@ -259,7 +259,7 @@ export class SocketService
               data: { status: 'ONLINE' },
             });
             if (user) {
-              console.log('ONLINE');
+              // console.log('ONLINE');
               this.server
                 .to(sender.id_socket)
                 .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -270,10 +270,10 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      console.log('disconnected: ', socket.id);
-      console.log(this.users);
+      // console.log('disconnected: ', socket.id);
+      // console.log(this.users);
     } catch (error) {
-      console.log('Error in disconnect : ', error);
+      // console.log('Error in disconnect : ', error);
     }
   }
 
@@ -343,7 +343,7 @@ export class SocketService
         });
         const result = await Promise.all(us.filter((user) => user));
         if (message) {
-          console.log('send message');
+          // console.log('send message');
           info.id_sender = sender.id_user;
           info.created_at = message.created_at;
           result.map((user) => {
@@ -396,7 +396,7 @@ export class SocketService
           });
 
           if (user) {
-            console.log('INGAME');
+            // console.log('INGAME');
             sender.inGame = true;
             this.server
               .to(sender.id_socket)
@@ -407,7 +407,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inGame : ', error);
+      // console.log('Error in inGame : ', error);
     }
   }
 
@@ -430,7 +430,7 @@ export class SocketService
               data: { status: 'ONLINE' },
             });
             if (user) {
-              console.log('ONLINE');
+              // console.log('ONLINE');
               this.removePlayer(sender.id_socket);
               sender.inGame = false;
               this.server
@@ -441,7 +441,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in online : ', error);
+      // console.log('Error in online : ', error);
     }
   }
 
@@ -465,7 +465,7 @@ export class SocketService
             data: { status: 'OFFLINE' },
           });
           if (user) {
-            console.log('OFFLINE');
+            // console.log('OFFLINE');
             sender.inGame = false;
             this.server
               .to(sender.id_socket)
@@ -476,10 +476,10 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      console.log('disconnected: ', socket.id);
-      console.log(this.users);
+      // console.log('disconnected: ', socket.id);
+      // console.log(this.users);
     } catch (error) {
-      console.log('Error in offline : ', error);
+      // console.log('Error in offline : ', error);
     }
   }
 
@@ -524,7 +524,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in invite : ', error);
+      // console.log('Error in invite : ', error);
       this.removePrvGame(info.socket_player);
     }
   }
@@ -588,7 +588,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in accept : ', error);
+      // console.log('Error in accept : ', error);
     }
   }
 
@@ -632,7 +632,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in refuse : ', error);
+      // console.log('Error in refuse : ', error);
     }
   }
 
@@ -676,7 +676,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in cancel : ', error);
+      // console.log('Error in cancel : ', error);
     }
   }
 
@@ -716,7 +716,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in add request : ', error);
+      // console.log('Error in add request : ', error);
     }
   }
 
@@ -757,7 +757,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in remove request : ', error);
+      // console.log('Error in remove request : ', error);
     }
   }
 
@@ -777,7 +777,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inChat : ', error);
+      // console.log('Error in inChat : ', error);
     }
   }
 
@@ -797,7 +797,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in outChat : ', error);
+      // console.log('Error in outChat : ', error);
     }
   }
 
@@ -813,30 +813,67 @@ export class SocketService
     dx: number;
     dy: number;
   } = {
-    x: 300,
-    y: 300,
-    speed: 0.9,
+    x: 100,
+    y: 100,
+    speed: 1.8,
     radius: 14,
     color: '',
     dx: 5,
-    dy: 0,
+    dy: -2,
+  };
+
+  private fieald: {
+    width: number;
+    height: number;
+  } = { width: 600, height: 800 };
+
+  async handleHit(dto: renderDto) {
+
+    if (this.ball.x + this.ball.radius >= this.fieald.width || this.ball.x - this.ball.radius <= 0)
+      this.ball.dx = -this.ball.dx;
+    if (this.ball.y - this.ball.radius <= 0 || this.ball.y + this.ball.radius >= this.fieald.height)
+      this.ball.dy = -this.ball.dy;
+
+    const half = dto.player.width;
+    if (this.ball.y + this.ball.radius >= 770 && this.ball.x >= dto.player.x - half && this.ball.x <= dto.player.x + half)
+      this.ball.dy = -this.ball.dy;
+    if (this.ball.y - this.ball.radius <= 30 && this.ball.x >= dto.opponent.x - half && this.ball.x <= dto.opponent.x + half)
+      this.ball.dy = -this.ball.dy;
   };
 
   @SubscribeMessage('updateFrame')
-  async updateFrame(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() dto: renderDto,
-  ) {
-    if (
-      this.ball.x + this.ball.radius >= dto.fieald.width ||
-      this.ball.x - this.ball.radius <= 0
-  ) {
-    this.ball.dx = -this.ball.dx;
-  }
-    this.ball.x += this.ball.dx;
-    dto.ball.x = this.ball.x;
-    this.server.to(socket.id).emit('render', dto);
-  }
+  async updateFrame(@ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
+    
+    const player = this.users.find((user) => user.id_user === dto.id_player && user.inGame === true);
+    const opponent = this.users.find((user) => user.id_user === dto.id_opponent && user.inGame === true);
+    
+    if (!player || !opponent)
+      return;
+    if (player.id_socket !== socket.id && opponent.id_socket !== socket.id)
+      return;
+    if (player.id_socket === socket.id) {
+      this.handleHit(dto);
+      this.ball.x += this.ball.dx;
+      this.ball.y += this.ball.dy;
 
+      dto.ball.x += this.ball.x;
+      dto.ball.y += this.ball.y;
+      this.server.to(player.id_socket).emit('renderBall', {ball: dto.ball});      
+      const fakeBall = {
+        x: this.fieald.width - dto.ball.x,
+        y: this.fieald.height - this.ball.y,
+      }
+      this.server.to(opponent.id_socket).emit('renderBall', {ball: fakeBall});
+      this.server.to(player.id_socket).emit('renderPaddle', {player: dto.player});
+      dto.opponent.x = this.fieald.width - dto.player.x;
+      this.server.to(opponent.id_socket).emit('renderOpponent', {opponent: dto.opponent});
+    }
+
+    if (opponent.id_socket === socket.id) {
+      this.server.to(opponent.id_socket).emit('renderPaddle', {player: dto.player});
+      dto.opponent.x = this.fieald.width - dto.player.x;
+      this.server.to(player.id_socket).emit('renderOpponent', {opponent: dto.opponent});
+    }
+  }
   // ---------------- adam end here ----------------------
 }
