@@ -41,7 +41,7 @@ export class Game {
 	socket: Socket;
 	paddleSize: number;
 	gameData: inviteReturn;
-	tmpX: number;
+	tmpX: number = 0;
 
 	constructor(
 		container: HTMLDivElement,
@@ -111,6 +111,7 @@ export class Game {
 			},
 			this.paddleSize
 		);
+		this.tmpX = this.bottomPaddle.position.x;
 		this.topPaddle = getTopPaddle(
 			this.width,
 			{
@@ -196,14 +197,14 @@ export class Game {
 	updateOpponentPosition(data: opponent) {
 		Matter.Body.setPosition(this.topPaddle, {
 			x: data.x,
-			y: data.y,
+			y: this.topPaddle.position.y,
 		});
 	}
 
 	updatePlayerPosition(data: player) {
 		Matter.Body.setPosition(this.bottomPaddle, {
 			x: data.x,
-			y: data.y,
+			y: this.bottomPaddle.position.y,
 		});
 	}
 
