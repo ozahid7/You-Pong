@@ -59,7 +59,7 @@ export class Game {
 		let fillColor: string;
 		let background: string;
 
-		this.paddleSize = mode === "easy" ? 4 : 6;
+		this.paddleSize = mode === "easy" ? 160 : 100;
 		if (map === "orange") {
 			fillColor = "#EB6440";
 			strokeColor = "#EB6440";
@@ -163,7 +163,6 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
-		this.listenToRender();
 		this.emitToUpdateFrame();
 		this.setupMouseEvents();
 	}
@@ -183,28 +182,25 @@ export class Game {
 		}, 1000 / 60);
 	}
 
-	listenToRender() {
-		if (this.socket.listeners("render").length === 0)
-			this.socket.on("render", (data: Info) => {
-				Matter.Body.setPosition(this.ball, {
-					x: data.ball.x,
-					y: data.ball.y,
-				});
+	updatePositions(data: Info) {
+		Matter.Body.setPosition(this.ball, {
+			x: data.ball.x,
+			y: data.ball.y,
+		});
 
-				//change opponent position
+		//change opponent position
 
-				// Matter.Body.setPosition(this.topPaddle, {
-				// 	x: data.opponent.x,
-				// 	y: data.opponent.y,
-				// });
+		// Matter.Body.setPosition(this.topPaddle, {
+		// 	x: data.opponent.x,
+		// 	y: data.opponent.y,
+		// });
 
-				//change my position
+		//change my position
 
-				// Matter.Body.setPosition(this.bottomPaddle, {
-				// 	x: data.player.x,
-				// 	y: data.player.y,
-				// });
-			});
+		// Matter.Body.setPosition(this.bottomPaddle, {
+		// 	x: data.player.x,
+		// 	y: data.player.y,
+		// });
 	}
 
 	setupMouseEvents() {
