@@ -858,21 +858,21 @@ export class SocketService
 
       dto.ball.x += this.ball.x;
       dto.ball.y += this.ball.y;
-      this.server.to(player.id_socket).emit('renderBall', {ball: dto.ball});      
+      this.server.to(player.id_socket).emit('renderBall', dto.ball);      
       const fakeBall = {
         x: this.fieald.width - dto.ball.x,
         y: this.fieald.height - this.ball.y,
       }
-      this.server.to(opponent.id_socket).emit('renderBall', {ball: fakeBall});
-      this.server.to(player.id_socket).emit('renderPaddle', {player: dto.player});
+      this.server.to(opponent.id_socket).emit('renderBall', fakeBall);
+      this.server.to(player.id_socket).emit('renderPaddle', dto.player);
       dto.opponent.x = this.fieald.width - dto.player.x;
-      this.server.to(opponent.id_socket).emit('renderOpponent', {opponent: dto.opponent});
+      this.server.to(opponent.id_socket).emit('renderOpponent', dto.opponent);
     }
 
     if (opponent.id_socket === socket.id) {
-      this.server.to(opponent.id_socket).emit('renderPaddle', {player: dto.player});
+      this.server.to(opponent.id_socket).emit('renderPaddle', dto.player);
       dto.opponent.x = this.fieald.width - dto.player.x;
-      this.server.to(player.id_socket).emit('renderOpponent', {opponent: dto.opponent});
+      this.server.to(player.id_socket).emit('renderOpponent', dto.opponent);
     }
   }
   // ---------------- adam end here ----------------------
