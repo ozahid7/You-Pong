@@ -11,7 +11,7 @@ import {
 	myRender,
 } from "./gameUtils";
 import { Socket } from "socket.io-client";
-import { Info } from "./GameProvider";
+import { Info, ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
 
 export const {
@@ -173,34 +173,38 @@ export class Game {
 				player: {
 					x: this.tmpX,
 					y: this.bottomPaddle.position.y,
+					width: this.paddleSize,
 				},
 				fieald: { height: 800, width: 600 },
 				ball: { x: 0, y: 0 },
+				opponent: {
+					x: this.topPaddle.x,
+				},
 				id_opponent: this.gameData.id_opponent,
 				id_player: this.gameData.id_player,
 			});
 		}, 1000 / 60);
 	}
 
-	updatePositions(data: Info) {
+	updateBallPosition(data: ball) {
 		Matter.Body.setPosition(this.ball, {
-			x: data.ball.x,
-			y: data.ball.y,
+			x: data.x,
+			y: data.y,
 		});
+	}
 
-		//change opponent position
+	updateOpponentPosition(data: opponent) {
+		Matter.Body.setPosition(this.topPaddle, {
+			x: data.x,
+			y: data.y,
+		});
+	}
 
-		// Matter.Body.setPosition(this.topPaddle, {
-		// 	x: data.opponent.x,
-		// 	y: data.opponent.y,
-		// });
-
-		//change my position
-
-		// Matter.Body.setPosition(this.bottomPaddle, {
-		// 	x: data.player.x,
-		// 	y: data.player.y,
-		// });
+	updatePlayerPosition(data: player) {
+		Matter.Body.setPosition(this.bottomPaddle, {
+			x: data.x,
+			y: data.y,
+		});
 	}
 
 	setupMouseEvents() {
