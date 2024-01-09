@@ -85,7 +85,7 @@ export const getTopPaddle = (
 	return Matter.Bodies.rectangle(
 		width / 2,
 		paddleThikness * 2,
-		width / paddleSize,
+		paddleSize,
 		paddleThikness,
 		wallOptions
 	);
@@ -100,7 +100,7 @@ export const getBottomPaddle = (
 	return Matter.Bodies.rectangle(
 		width / 2,
 		height - paddleThikness * 2,
-		width / paddleSize,
+		paddleSize,
 		paddleThikness,
 		wallOptions
 	);
