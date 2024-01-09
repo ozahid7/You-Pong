@@ -10,7 +10,13 @@ import { useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { OtherUser } from "@/utils/game";
 import Loader from "@/components/tools/Loader";
-import GameProvider, { Info, useGameContext } from "./GameProvider";
+import GameProvider, {
+	Info,
+	ball,
+	opponent,
+	player,
+	useGameContext,
+} from "./GameProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 
@@ -101,9 +107,17 @@ export default function game({ params }: pageProps) {
 
 	useEffect(() => {
 		if (game) {
-			if (globalSocket.listeners("render").length === 0)
-				globalSocket.on("render", (data: Info) => {
-					game.updatePositions(data);
+			if (globalSocket.listeners("renderBall").length === 0)
+				globalSocket.on("renderBall", (data: ball) => {
+					game.updateBallPosition(data);
+				});
+			if (globalSocket.listeners("renderPaddle").length === 0)
+				globalSocket.on("renderPaddle", (data: player) => {
+					game.updatePlayerPosition(data);
+				});
+			if (globalSocket.listeners("renderOpponent").length === 0)
+				globalSocket.on("renderOpponent", (data: opponent) => {
+					game.updateOpponentPosition(data);
 				});
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
