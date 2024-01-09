@@ -117,7 +117,6 @@ export default function game({ params }: pageProps) {
 				});
 			if (globalSocket.listeners("renderOpponent").length === 0)
 				globalSocket.on("renderOpponent", (data: opponent) => {
-					console.log("data");
 					game.updateOpponentPosition(data);
 				});
 			if (globalSocket.listeners("endGame").length === 0)

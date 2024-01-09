@@ -13,6 +13,7 @@ import {
 import { Socket } from "socket.io-client";
 import { Info, ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
+import { color } from "framer-motion";
 
 export const {
 	Engine,
@@ -177,7 +178,15 @@ export class Game {
 					width: this.paddleSize,
 				},
 				fieald: { height: 800, width: 600 },
-				ball: { x: 0, y: 0 },
+				ball: {
+					x: this.ball.position.x,
+					y: this.ball.position.y,
+					dx: 5,
+					dy: 5,
+					speed: 1,
+					radius: 14,
+					color: "",
+				},
 				opponent: {
 					x: this.topPaddle.x,
 				},
