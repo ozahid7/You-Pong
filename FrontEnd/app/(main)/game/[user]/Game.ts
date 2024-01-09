@@ -59,7 +59,7 @@ export class Game {
 		let fillColor: string;
 		let background: string;
 
-		this.paddleSize = mode === "easy" ? 4 : 6;
+		this.paddleSize = mode === "easy" ? 160 : 100;
 		if (map === "orange") {
 			fillColor = "#EB6440";
 			strokeColor = "#EB6440";
