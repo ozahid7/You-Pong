@@ -71,13 +71,13 @@ export class GameService {
         let is_blocked: boolean = false;
         if (user) {
           if (
-            user.blocked_from.find((block) => id_user === block.id_user) ===
-              undefined &&
-            user.blocked_user.find((block) => id_user === block.id_user) ===
-              undefined &&
-            user.blocked_from.find((block) => _id === block.id_user) ===
-              undefined &&
-            user.blocked_user.find((block) => _id === block.id_user) ===
+            user.blocked_from.find((block) => id_user === block.id_user) !==
+              undefined ||
+            user.blocked_user.find((block) => id_user === block.id_user) !==
+              undefined ||
+            user.blocked_from.find((block) => _id === block.id_user) !==
+              undefined ||
+            user.blocked_user.find((block) => _id === block.id_user) !==
               undefined
           ) {
             is_blocked = true;

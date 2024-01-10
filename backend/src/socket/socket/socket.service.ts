@@ -32,7 +32,7 @@ export class SocketService
     super(prisma);
   }
 
-  async launch_game(player, opponent) {
+  async launch_game(player, opponent, info: infoPlayer) {
     const player_user = await this.prisma.user.findUnique({
       where: {
         id_user: player.id_user,
@@ -51,6 +51,15 @@ export class SocketService
         },
       });
       if (game) {
+        this.addGame(
+          game.id_player,
+          player.id_socket,
+          game.id_opponent,
+          opponent.id_socket,
+          game.id_match,
+          info.map,
+          info.mode,
+        );
         this.server.to(opponent.id_socket).emit('acceptedGame', {
           username: player_user.username,
           avatar: player_user.avatar,
@@ -127,7 +136,7 @@ export class SocketService
             this.classicHard = this.classicHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.classicHard, id_user, id_socket);
           break;
         case 'ORANGE_HARD':
@@ -137,7 +146,7 @@ export class SocketService
             this.orangeHard = this.orangeHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.orangeHard, id_user, id_socket);
           break;
         case 'GREEN_HARD':
@@ -147,7 +156,7 @@ export class SocketService
             this.greenHard = this.greenHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.greenHard, id_user, id_socket);
           break;
         case 'CLASSIC_EASY':
@@ -157,7 +166,7 @@ export class SocketService
             this.classicEasy = this.classicEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.classicEasy, id_user, id_socket);
           break;
         case 'ORANGE_EASY':
@@ -167,7 +176,7 @@ export class SocketService
             this.orangeEasy = this.orangeEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.orangeEasy, id_user, id_socket);
           break;
         case 'GREEN_EASY':
@@ -177,7 +186,7 @@ export class SocketService
             this.greenEasy = this.greenEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.greenEasy, id_user, id_socket);
           break;
         default:
@@ -575,7 +584,16 @@ export class SocketService
                 id_player: game.id_player,
                 id_opponent: game.id_opponent,
               });
-              this.gameService.putLvlRank(game.id_match);
+              this.addGame(
+                game.id_player,
+                sender.id_socket,
+                game.id_opponent,
+                receiver.id_socket,
+                game.id_match,
+                info.map,
+                info.mode,
+              );
+              // this.gameService.putLvlRank(game.id_match);
             }
           } else {
             this.server.to(sender.id_user).emit('canceled', {
@@ -835,6 +853,7 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
+  // const game = this.game.find((game) => game.data.id_match === id_match);
 
   private ball: {
     x: number;
@@ -871,28 +890,44 @@ export class SocketService
     const half = dto.player.width;
     let counter = 0;
 
-    if (dto.ball.x + dto.ball.radius >= this.fieald.width || dto.ball.x - dto.ball.radius <= 0)
+    if (
+      dto.ball.x + dto.ball.radius >= this.fieald.width ||
+      dto.ball.x - dto.ball.radius <= 0
+    )
       dto.ball.dx = -dto.ball.dx;
-    if (dto.ball.y + dto.ball.radius >= 770 && dto.ball.x >= dto.player.x - half && dto.ball.x <= dto.player.x + half)
+    if (
+      dto.ball.y + dto.ball.radius >= 770 &&
+      dto.ball.x >= dto.player.x - half &&
+      dto.ball.x <= dto.player.x + half
+    )
       dto.ball.dy = -dto.ball.dy;
-    if (dto.ball.y - dto.ball.radius <= 30 && dto.ball.x >= dto.opponent.x - half && dto.ball.x <= dto.opponent.x + half)
+    if (
+      dto.ball.y - dto.ball.radius <= 30 &&
+      dto.ball.x >= dto.opponent.x - half &&
+      dto.ball.x <= dto.opponent.x + half
+    )
       dto.ball.dy = -dto.ball.dy;
-  };
+  }
 
   updateScore(a: any, b: any, dto: renderDto) {
-    this.server.to(a.id_socket).emit('updateScore', {player: dto.player, opponent: dto.opponent});
-    this.server.to(b.id_socket).emit('updateScore', {player: dto.opponent, opponent: dto.player});
+    this.server
+      .to(a.id_socket)
+      .emit('updateScore', { player: dto.player, opponent: dto.opponent });
+    this.server
+      .to(b.id_socket)
+      .emit('updateScore', { player: dto.opponent, opponent: dto.player });
   }
 
   checkGoal(player: any, opponent: any, dto: renderDto): boolean {
-    if (dto.ball.y - dto.ball.radius <= 0 || dto.ball.y + dto.ball.radius >= this.fieald.height)
-    {
+    if (
+      dto.ball.y - dto.ball.radius <= 0 ||
+      dto.ball.y + dto.ball.radius >= this.fieald.height
+    ) {
       if (dto.ball.y - dto.ball.radius <= 0) {
         dto.opponent.score++;
         this.updateScore(opponent, player, dto);
         this.scores.opoonent++;
-      }
-      else if (dto.ball.y + dto.ball.radius >= this.fieald.height) {
+      } else if (dto.ball.y + dto.ball.radius >= this.fieald.height) {
         dto.player.score++;
         this.updateScore(player, opponent, dto);
         this.scores.player++;
@@ -906,32 +941,35 @@ export class SocketService
   }
 
   checkEnd(dto: renderDto): boolean {
-    if (this.scores.player === 5 || this.scores.opoonent === 5)
-      return true;
-    if (dto.player.score === 5 || dto.opponent.score === 5)
-      return true;
-    return false
+    if (this.scores.player === 5 || this.scores.opoonent === 5) return true;
+    if (dto.player.score === 5 || dto.opponent.score === 5) return true;
+    return false;
   }
 
   @SubscribeMessage('updateFrame')
-  async updateFrame(@ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
-    
-    const player = this.users.find((user) => user.id_user === dto.id_player && user.inGame === true);
-    const opponent = this.users.find((user) => user.id_user === dto.id_opponent && user.inGame === true);
-    
-    if (!player || !opponent)
-      return;
+  async updateFrame(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: renderDto,
+  ) {
+    const player = this.users.find(
+      (user) => user.id_user === dto.id_player && user.inGame === true,
+    );
+    const opponent = this.users.find(
+      (user) => user.id_user === dto.id_opponent && user.inGame === true,
+    );
+
+    if (!player || !opponent) return;
     if (player.id_socket !== socket.id && opponent.id_socket !== socket.id)
       return;
-    if (this.checkEnd(dto) === true)
-      return ;
+    if (this.checkEnd(dto) === true) return;
     if (player.id_socket === socket.id) {
-      
-      if (this.checkGoal(player, opponent, dto) === false && this.checkEnd(dto) === false) {        
+      if (
+        this.checkGoal(player, opponent, dto) === false &&
+        this.checkEnd(dto) === false
+      ) {
         this.handleHit(dto);
         dto.ball.x += dto.ball.dx;
         dto.ball.y += dto.ball.dy;
-
       }
 
       if (this.checkEnd(dto) === true) {
@@ -947,16 +985,16 @@ export class SocketService
         //       opponent_score: dto.opponent.score,
         //     },
         //   });
-          this.gameService.putLvlRank(dto.id_match);
-        // } catch (error) { 
+        this.gameService.putLvlRank(dto.id_match);
+        // } catch (error) {
         // }
       }
 
-      this.server.to(player.id_socket).emit('renderBall', dto.ball);      
+      this.server.to(player.id_socket).emit('renderBall', dto.ball);
       const fakeBall = {
         x: this.fieald.width - dto.ball.x,
         y: this.fieald.height - dto.ball.y,
-      }
+      };
       this.server.to(opponent.id_socket).emit('renderBall', fakeBall);
       this.server.to(player.id_socket).emit('renderPaddle', dto.player);
       dto.opponent.x = this.fieald.width - dto.player.x;
