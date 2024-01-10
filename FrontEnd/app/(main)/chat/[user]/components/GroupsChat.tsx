@@ -1,12 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  LuMoreHorizontal,
-  LuSend,
-  LuSendHorizonal,
-  LuSmile,
-} from "react-icons/lu";
 import { ChatDialog, GroupDropdown } from ".";
 import { Channel, Member, Message, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
@@ -198,19 +192,21 @@ const GroupsChat = ({
     <div className="flex h-[93%] md:h-full w-full flex-col flex-grow flex-wrap gap-2 md:mt-0 mt-8 ">
       <div className="flex w-full h-[10%] justify-center items-end mt-2">
         <div className="flex flex-row h-[80%] w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid">
-          <div className="flex flex-row gap-4 items-center xl:mb-5">
-            <Avatar
-              isBordered
-              radius="none"
-              color="default"
-              className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[50px] md:h-[50px]"
-              src={channels?.avatar}
-            />
-            <div className="flex flex-col">
-              <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md:text-[26px]">
+          <div className="flex flex-row gap-3 items-center xl:mb-5">
+            <div className="flex">
+              <Image
+                width={60}
+                height={60}
+                className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[40px] md:h-[40px] lg:w-[45px] lg:h-[45px] xl:w-[55px] xl:h-[55px] border-white border-[2px]"
+                src={channels?.avatar}
+                alt="Channel's picture"
+              />
+            </div>
+            <div className="flex flex-col justify-evenly">
+              <div className="text-[#424242] font-archivo font-[800] xxs:text-[18px] xs:text-[20px] md:text-[20px] lg:text-[22px] xl:text-[25px] whitespace-nowrap overflow-hidden text-ellipsis md:max-w-[200px] lg:max-w-[300px] xl:max-w-[380px] sm:max-w-[300px] sm_:max-w-[200px] xs:max-w-[100px] xxs:max-w-[80px]">
                 {channels?.name}
               </div>
-              <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm:block xxs:hidden">
+              <div className="text-[#00993D] font-[700] text-[15px] md:text-[12px] lg:text-[12px] xl:text-[15px] mb-1 font-orbitron md:block hidden">
                 online: {printOnline()}{" "}
                 {printOnline() > 1 ? "members" : "member"}
               </div>

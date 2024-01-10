@@ -22,7 +22,7 @@ const MiniChat = ({ channels }: HomeProps) => {
         <p className="text-[#424242] font-archivo font-[800] md:text-[14px] text-[19px] whitespace-nowrap overflow-hidden text-ellipsis w-[90%] h-fit">
           {channels.name}
         </p>
-        <div className="text-[#686868] text-[14px] font-[500] w-[90%] h-fit whitespace-nowrap overflow-hidden text-ellipsis hidden lg:flex">
+        <div className="text-[#686868] text-[14px] font-[500] w-[90%] h-fit whitespace-nowrap overflow-hidden text-ellipsis hidden lg:block">
           {channels.description}
         </div>
       </div>
