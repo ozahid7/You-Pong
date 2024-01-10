@@ -188,7 +188,7 @@ export class Game {
 					color: "",
 				},
 				opponent: {
-					x: this.topPaddle.x,
+					x: this.topPaddle.position.x,
 				},
 				id_opponent: this.gameData.id_opponent,
 				id_player: this.gameData.id_player,

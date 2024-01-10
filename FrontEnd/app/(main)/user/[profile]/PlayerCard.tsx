@@ -49,6 +49,7 @@ const PlayerCard = (props: {
 	const Block = blockuser(props.uid, () => {}, props.username);
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
+	const Decline = declineuser(props.uid);
 	const direct = todirect(props.uid);
 	const otheruser = useOtherUser(props.username);
 
@@ -102,7 +103,7 @@ const PlayerCard = (props: {
 	const pendingIcon = (
 		<FaUserClock
 			onClick={() => {
-				Remove.mutateAsync().then(() => {
+				Decline.mutateAsync().then(() => {
 					otheruser.refetch();
 					setIcon(addIcon);
 				});

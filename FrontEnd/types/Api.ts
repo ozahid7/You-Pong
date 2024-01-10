@@ -127,6 +127,7 @@ export const friendsEndPoint = {
 	block: "friend/block",
 	accept: "friend/accept",
 	decline: "friend/refuse",
+	remove: "friend",
 	search: "friend/search",
 	unblock: "friend/unblock",
 	add: "friend",
