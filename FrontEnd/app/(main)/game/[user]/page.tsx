@@ -19,6 +19,7 @@ import GameProvider, {
 } from "./GameProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
+import Message from "./Message";
 
 interface pageProps {
 	params: { user: string };
@@ -31,7 +32,9 @@ export default function game({ params }: pageProps) {
 	const [showCounter, setShowCounter] = useState(false);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showGameOption, setShowGameOption] = useState(true);
+	const [showMessage, setShowMessage] = useState(false);
 	const [cloneData, setCloneData] = useState<inviteReturn>();
+	const [scores, setScores] = useState({ myScore: 0, opponentScore: 0 });
 	const { data } = useGlobalContext();
 	let game: Game = null;
 
@@ -97,7 +100,14 @@ export default function game({ params }: pageProps) {
 
 			// window.addEventListener("resize", updateSize);
 			updateSize();
-			game = new Game(ref.current, map, globalSocket, mode, cloneData);
+			game = new Game(
+				ref.current,
+				map,
+				globalSocket,
+				mode,
+				cloneData,
+				scores
+			);
 
 			return () => {
 				game.destroy();
@@ -122,6 +132,19 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
+					game.stopIntervall();
+				});
+			if (globalSocket.listeners("updateScore").length === 0)
+				globalSocket.on("updateScore", (data) => {
+					console.log(
+						"data = ",
+						data.player.score,
+						data.opponent.score
+					);
+					setScores({
+						myScore: data.player.score,
+						opponentScore: data.opponent.score,
+					});
 				});
 		}
 	}, [toStart]);
@@ -154,6 +177,11 @@ export default function game({ params }: pageProps) {
 				{/* </div> */}
 			</div>
 			<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
+			{/* <Message
+				isOpen={showMessage}
+				bgColor="bg-palette-green"
+				setIsOpen={setShowMessage}
+			/> */}
 			<GameSettings
 				isOpen={showGameOption}
 				setIsOpen={setShowGameOption}
