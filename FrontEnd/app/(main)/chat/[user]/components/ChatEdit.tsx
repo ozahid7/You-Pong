@@ -266,7 +266,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                       <div className="font-body text-[30px] max-w-[600px] font-[700] flex self-center whitespace-nowrap overflow-hidden text-wrap">
                         {channels.name}
                       </div>
-                      <div className="flex flex-row gap-2 justify-center w-full debug">
+                      <div className="flex flex-row gap-2 justify-center w-full ">
                         <div className="flex font-archivo text-[#686868]">
                           Members: {users.length}
                         </div>
