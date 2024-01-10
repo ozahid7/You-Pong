@@ -37,6 +37,6 @@ export interface infoGame {
 export interface infoPlayer {
   id_sender: string;
   is_public: boolean;
-  map: string;
-  mode: string;
+  map: map;
+  mode: mode;
 }
