@@ -174,6 +174,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         className=" w-full"
         backdrop="blur"
         placement="center"
+        scrollBehavior="outside"
         isDismissable={false}
       >
         <ModalContent className="">
@@ -214,10 +215,10 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                       }}
                     />
                     <div className="flex flex-col">
-                      <div className="font-body text-[30px] font-[700] flex self-center">
+                      <div className="font-body text-[30px] max-w-[600px] font-[700] flex self-center whitespace-nowrap overflow-hidden text-wrap">
                         {channels.name}
                       </div>
-                      <div className="flex flex-row gap-2 justify-center">
+                      <div className="flex flex-row gap-2 justify-center w-full debug">
                         <div className="flex font-archivo text-[#686868]">
                           Members: {users.length}
                         </div>
