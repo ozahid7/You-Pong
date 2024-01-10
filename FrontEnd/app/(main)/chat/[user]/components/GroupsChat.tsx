@@ -195,10 +195,10 @@ const GroupsChat = ({
           <div className="flex flex-row gap-3 items-center xl:mb-5">
             <div className="flex">
               <Image
+                src={channels?.avatar}
                 width={60}
                 height={60}
-                className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[40px] md:h-[40px] lg:w-[45px] lg:h-[45px] xl:w-[55px] xl:h-[55px] border-white border-[2px]"
-                src={channels?.avatar}
+                className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[40px] md:h-[40px] lg:w-[45px] lg:h-[45px] xl:w-[55px] xl:h-[55px] border-white border-[2px] rounded-md"
                 alt="Channel's picture"
               />
             </div>
@@ -222,7 +222,7 @@ const GroupsChat = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full h-[72%] md:h-[71%] flex-col justify-center items-center">
+      <div className="flex w-full h-[71%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
           main={MainUser}
           socket={socket}
