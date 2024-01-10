@@ -18,6 +18,7 @@ import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
 import { infoGame, infoPlayer, infoType, map, mode } from './socket.interfaces';
 import { SocketMethodes } from './socket.methodes';
+import { threadId } from 'worker_threads';
 
 @Injectable()
 @WebSocketGateway()
@@ -67,7 +68,7 @@ export class SocketService
           id_player: game.id_player,
           id_opponent: game.id_opponent,
         });
-        this.gameService.putLvlRank(game.id_match);
+        // this.gameService.putLvlRank(game.id_match);
       } else {
         this.server.to(player.id_socket).emit('canceledGame', {
           username: player_user.username,
@@ -706,29 +707,13 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          const friendship = await this.prisma.friendship.findFirst({
-            where: {
-              OR: [
-                {
-                  id_user: my_user.id_user,
-                  id_friend: otherUser.id_user,
-                },
-                {
-                  id_user: otherUser.id_user,
-                  id_friend: my_user.id_user,
-                },
-              ],
-            },
+          this.server.to(receiver.id_user).emit('addNotif', {
+            id_user: my_user.id_user,
+            username: my_user.username,
+            avatar: my_user.avatar,
+            is_message: false,
+            in_chat: false,
           });
-          if (!friendship) {
-            this.server.to(receiver.id_user).emit('addNotif', {
-              id_user: my_user.id_user,
-              username: my_user.username,
-              avatar: my_user.avatar,
-              is_message: false,
-              in_chat: false,
-            });
-          }
         }
       }
     } catch (error) {
@@ -764,28 +749,12 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          const friendship = await this.prisma.friendship.findFirst({
-            where: {
-              OR: [
-                {
-                  id_user: my_user.id_user,
-                  id_friend: otherUser.id_user,
-                },
-                {
-                  id_user: otherUser.id_user,
-                  id_friend: my_user.id_user,
-                },
-              ],
-            },
+          this.server.to(receiver.id_user).emit('removeNotif', {
+            id_user: my_user.id_user,
+            username: my_user.username,
+            avatar: my_user.avatar,
+            is_message: info.is_message,
           });
-          if (friendship) {
-            this.server.to(receiver.id_user).emit('removeNotif', {
-              id_user: my_user.id_user,
-              username: my_user.username,
-              avatar: my_user.avatar,
-              is_message: info.is_message,
-            });
-          }
         }
       }
     } catch (error) {
@@ -835,6 +804,7 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
+
   private ball: {
     x: number;
     y: number;
@@ -853,65 +823,109 @@ export class SocketService
     dy: -2,
   };
 
+  private scores: {
+    player: number;
+    opoonent: number;
+  } = {
+    player: 0,
+    opoonent: 0,
+  };
+
   private fieald: {
     width: number;
     height: number;
   } = { width: 600, height: 800 };
 
   async handleHit(dto: renderDto) {
-    if (
-      this.ball.x + this.ball.radius >= this.fieald.width ||
-      this.ball.x - this.ball.radius <= 0
-    )
-      this.ball.dx = -this.ball.dx;
-    if (
-      this.ball.y - this.ball.radius <= 0 ||
-      this.ball.y + this.ball.radius >= this.fieald.height
-    )
-      this.ball.dy = -this.ball.dy;
-
     const half = dto.player.width;
-    if (
-      this.ball.y + this.ball.radius >= 770 &&
-      this.ball.x >= dto.player.x - half &&
-      this.ball.x <= dto.player.x + half
-    )
-      this.ball.dy = -this.ball.dy;
-    if (
-      this.ball.y - this.ball.radius <= 30 &&
-      this.ball.x >= dto.opponent.x - half &&
-      this.ball.x <= dto.opponent.x + half
-    )
-      this.ball.dy = -this.ball.dy;
+    let counter = 0;
+
+    if (dto.ball.x + dto.ball.radius >= this.fieald.width || dto.ball.x - dto.ball.radius <= 0)
+      dto.ball.dx = -dto.ball.dx;
+    if (dto.ball.y + dto.ball.radius >= 770 && dto.ball.x >= dto.player.x - half && dto.ball.x <= dto.player.x + half)
+      dto.ball.dy = -dto.ball.dy;
+    if (dto.ball.y - dto.ball.radius <= 30 && dto.ball.x >= dto.opponent.x - half && dto.ball.x <= dto.opponent.x + half)
+      dto.ball.dy = -dto.ball.dy;
+  };
+
+  updateScore(a: any, b: any, dto: renderDto) {
+    this.server.to(a.id_socket).emit('updateScore', {player: dto.player, opponent: dto.opponent});
+    this.server.to(b.id_socket).emit('updateScore', {player: dto.opponent, opponent: dto.player});
+  }
+
+  checkGoal(player: any, opponent: any, dto: renderDto): boolean {
+    if (dto.ball.y - dto.ball.radius <= 0 || dto.ball.y + dto.ball.radius >= this.fieald.height)
+    {
+      if (dto.ball.y - dto.ball.radius <= 0) {
+        dto.opponent.score++;
+        this.updateScore(opponent, player, dto);
+        this.scores.opoonent++;
+      }
+      else if (dto.ball.y + dto.ball.radius >= this.fieald.height) {
+        dto.player.score++;
+        this.updateScore(player, opponent, dto);
+        this.scores.player++;
+      }
+      dto.ball.x = this.fieald.width / 2;
+      dto.ball.y = this.fieald.height / 2;
+      dto.ball.dy = -dto.ball.dy;
+      return true;
+    }
+    return false;
+  }
+
+  checkEnd(dto: renderDto): boolean {
+    if (this.scores.player === 5 || this.scores.opoonent === 5)
+      return true;
+    if (dto.player.score === 5 || dto.opponent.score === 5)
+      return true;
+    return false
   }
 
   @SubscribeMessage('updateFrame')
-  async updateFrame(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() dto: renderDto,
-  ) {
-    const player = this.users.find(
-      (user) => user.id_user === dto.id_player && user.inGame === true,
-    );
-    const opponent = this.users.find(
-      (user) => user.id_user === dto.id_opponent && user.inGame === true,
-    );
-
-    if (!player || !opponent) return;
+  async updateFrame(@ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
+    
+    const player = this.users.find((user) => user.id_user === dto.id_player && user.inGame === true);
+    const opponent = this.users.find((user) => user.id_user === dto.id_opponent && user.inGame === true);
+    
+    if (!player || !opponent)
+      return;
     if (player.id_socket !== socket.id && opponent.id_socket !== socket.id)
       return;
+    if (this.checkEnd(dto) === true)
+      return ;
     if (player.id_socket === socket.id) {
-      this.handleHit(dto);
-      this.ball.x += this.ball.dx;
-      this.ball.y += this.ball.dy;
+      
+      if (this.checkGoal(player, opponent, dto) === false && this.checkEnd(dto) === false) {        
+        this.handleHit(dto);
+        dto.ball.x += dto.ball.dx;
+        dto.ball.y += dto.ball.dy;
 
-      dto.ball.x += this.ball.x;
-      dto.ball.y += this.ball.y;
-      this.server.to(player.id_socket).emit('renderBall', dto.ball);
+      }
+
+      if (this.checkEnd(dto) === true) {
+        this.server.to(player.id_socket).emit('endGame', dto);
+        this.server.to(opponent.id_socket).emit('endGame', dto);
+        // try {
+        //   await this.prisma.match_History.update({
+        //     where: {
+        //       id_match: dto.id_match,
+        //     },
+        //     data: {
+        //       player_score: dto.player.score,
+        //       opponent_score: dto.opponent.score,
+        //     },
+        //   });
+        //   this.gameService.putLvlRank(dto.id_match);
+        // } catch (error) { 
+        // }
+      }
+
+      this.server.to(player.id_socket).emit('renderBall', dto.ball);      
       const fakeBall = {
         x: this.fieald.width - dto.ball.x,
-        y: this.fieald.height - this.ball.y,
-      };
+        y: this.fieald.height - dto.ball.y,
+      }
       this.server.to(opponent.id_socket).emit('renderBall', fakeBall);
       this.server.to(player.id_socket).emit('renderPaddle', dto.player);
       dto.opponent.x = this.fieald.width - dto.player.x;
@@ -924,5 +938,6 @@ export class SocketService
       this.server.to(player.id_socket).emit('renderOpponent', dto.opponent);
     }
   }
+
   // ---------------- adam end here ----------------------
 }
