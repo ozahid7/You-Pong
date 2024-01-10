@@ -39,6 +39,7 @@ export interface match {
 	win: boolean;
 	status: string;
 	uid: string;
+	is_blocked: boolean;
 }
 
 export type UserInfo = {

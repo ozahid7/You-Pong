@@ -2,6 +2,7 @@
 import { useMatchs } from "@/api/useMatchs";
 import { Banner, MyCard } from "@/components";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { defaultavatar } from "@/const";
 import React from "react";
 import { Tooltip } from "react-tooltip";
 
@@ -35,14 +36,23 @@ const HistoryCard = (props: { uid: string; me: string }) => {
 								{matchs.map((e, index) => (
 									<Banner
 										isGreen={e.win}
-										opponent={e.username}
-										avatar={e.avatar}
+										opponent={
+											e.is_blocked
+												? "Unknown"
+												: e.username
+										}
+										avatar={
+											e.is_blocked
+												? defaultavatar
+												: e.avatar
+										}
 										wins={e.player_score}
 										loses={e.opponent_score}
 										key={index}
 										me={props.me}
 										status={e.status}
 										uid={e.uid}
+										isBlocked={e.is_blocked}
 									/>
 								))}
 							</div>

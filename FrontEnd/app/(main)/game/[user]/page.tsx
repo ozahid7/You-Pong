@@ -34,6 +34,7 @@ export default function game({ params }: pageProps) {
 	const [showGameOption, setShowGameOption] = useState(true);
 	const [showMessage, setShowMessage] = useState(false);
 	const [cloneData, setCloneData] = useState<inviteReturn>();
+	const [scores, setScores] = useState({ myScore: 0, opponentScore: 0 });
 	const { data } = useGlobalContext();
 	let game: Game = null;
 
@@ -91,6 +92,10 @@ export default function game({ params }: pageProps) {
 	}, [data]);
 
 	useEffect(() => {
+		console.log("scores ", scores);
+	}, [scores]);
+
+	useEffect(() => {
 		if (ref.current) {
 			const updateSize = () => {
 				setHeight(window.innerHeight);
@@ -99,7 +104,14 @@ export default function game({ params }: pageProps) {
 
 			// window.addEventListener("resize", updateSize);
 			updateSize();
-			game = new Game(ref.current, map, globalSocket, mode, cloneData);
+			game = new Game(
+				ref.current,
+				map,
+				globalSocket,
+				mode,
+				cloneData,
+				scores
+			);
 
 			return () => {
 				game.destroy();
@@ -124,6 +136,7 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
+					game.stopIntervall();
 				});
 		}
 	}, [toStart]);
@@ -156,11 +169,11 @@ export default function game({ params }: pageProps) {
 				{/* </div> */}
 			</div>
 			<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
-			<Message
+			{/* <Message
 				isOpen={showMessage}
 				bgColor="bg-palette-green"
 				setIsOpen={setShowMessage}
-			/>
+			/> */}
 			<GameSettings
 				isOpen={showGameOption}
 				setIsOpen={setShowGameOption}

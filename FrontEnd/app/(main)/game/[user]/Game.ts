@@ -8,12 +8,15 @@ import {
 	getRightWall,
 	getTopPaddle,
 	getTopWall,
-	myRender,
 } from "./gameUtils";
 import { Socket } from "socket.io-client";
-import { Info, ball, opponent, player } from "./GameProvider";
+import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
-import { color } from "framer-motion";
+
+interface Scores {
+	myScore: number;
+	opponentScore: number;
+}
 
 export const {
 	Engine,
@@ -43,18 +46,22 @@ export class Game {
 	paddleSize: number;
 	gameData: inviteReturn;
 	tmpX: number = 0;
+	scores: Scores;
+	interval: any;
 
 	constructor(
 		container: HTMLDivElement,
 		map: string,
 		socket: Socket,
 		mode: string,
-		gameData: inviteReturn
+		gameData: inviteReturn,
+		scores: Scores
 	) {
 		this.height = container.clientHeight;
 		this.width = container.clientWidth;
 		this.socket = socket;
 		this.gameData = gameData;
+		this.scores = scores;
 
 		let strokeColor: string;
 		let fillColor: string;
@@ -112,6 +119,7 @@ export class Game {
 			},
 			this.paddleSize
 		);
+
 		this.tmpX = this.bottomPaddle.position.x;
 		this.topPaddle = getTopPaddle(
 			this.width,
@@ -138,6 +146,8 @@ export class Game {
 
 		//init ball
 		this.ball = getBall(this.width, this.height, wallOptions);
+		this.ball.velocity.x = 5;
+		this.ball.velocity.y = 5;
 
 		this.mouse = Matter.Mouse.create(this.render.canvas);
 		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
@@ -170,25 +180,27 @@ export class Game {
 	}
 
 	emitToUpdateFrame() {
-		setInterval(() => {
+		this.interval = setInterval(() => {
 			this.socket.emit("updateFrame", {
 				player: {
 					x: this.tmpX,
 					y: this.bottomPaddle.position.y,
+					score: this.scores.myScore,
 					width: this.paddleSize,
 				},
 				fieald: { height: 800, width: 600 },
 				ball: {
 					x: this.ball.position.x,
 					y: this.ball.position.y,
-					dx: 5,
-					dy: 5,
+					dx: this.ball.velocity.x,
+					dy: this.ball.velocity.y,
 					speed: 1,
 					radius: 14,
 					color: "",
 				},
 				opponent: {
 					x: this.topPaddle.position.x,
+					score: this.scores.opponentScore,
 				},
 				id_opponent: this.gameData.id_opponent,
 				id_player: this.gameData.id_player,
@@ -201,6 +213,8 @@ export class Game {
 			x: data.x,
 			y: data.y,
 		});
+		this.ball.velocity.x = data.dx;
+		this.ball.velocity.y = data.dy;
 	}
 
 	updateOpponentPosition(data: opponent) {
@@ -208,6 +222,7 @@ export class Game {
 			x: data.x,
 			y: this.topPaddle.position.y,
 		});
+		this.scores.opponentScore = data.score;
 	}
 
 	updatePlayerPosition(data: player) {
@@ -215,6 +230,7 @@ export class Game {
 			x: data.x,
 			y: this.bottomPaddle.position.y,
 		});
+		this.scores.myScore = data.score;
 	}
 
 	setupMouseEvents() {
@@ -233,6 +249,10 @@ export class Game {
 				}
 			}
 		);
+	}
+
+	stopIntervall() {
+		clearInterval(this.interval);
 	}
 
 	destroy() {
