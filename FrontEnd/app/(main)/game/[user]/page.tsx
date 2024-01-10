@@ -92,10 +92,6 @@ export default function game({ params }: pageProps) {
 	}, [data]);
 
 	useEffect(() => {
-		console.log("scores ", scores);
-	}, [scores]);
-
-	useEffect(() => {
 		if (ref.current) {
 			const updateSize = () => {
 				setHeight(window.innerHeight);
@@ -137,6 +133,18 @@ export default function game({ params }: pageProps) {
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
 					game.stopIntervall();
+				});
+			if (globalSocket.listeners("updateScore").length === 0)
+				globalSocket.on("updateScore", (data) => {
+					console.log(
+						"data = ",
+						data.player.score,
+						data.opponent.score
+					);
+					setScores({
+						myScore: data.player.score,
+						opponentScore: data.opponent.score,
+					});
 				});
 		}
 	}, [toStart]);
