@@ -19,6 +19,7 @@ import GameProvider, {
 } from "./GameProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
+import Message from "./Message";
 
 interface pageProps {
 	params: { user: string };
@@ -31,6 +32,7 @@ export default function game({ params }: pageProps) {
 	const [showCounter, setShowCounter] = useState(false);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showGameOption, setShowGameOption] = useState(true);
+	const [showMessage, setShowMessage] = useState(false);
 	const [cloneData, setCloneData] = useState<inviteReturn>();
 	const { data } = useGlobalContext();
 	let game: Game = null;
@@ -154,6 +156,11 @@ export default function game({ params }: pageProps) {
 				{/* </div> */}
 			</div>
 			<MyCountDown isOpen={showCounter} setIsOpen={setShowCounter} />
+			<Message
+				isOpen={showMessage}
+				bgColor="bg-palette-green"
+				setIsOpen={setShowMessage}
+			/>
 			<GameSettings
 				isOpen={showGameOption}
 				setIsOpen={setShowGameOption}
