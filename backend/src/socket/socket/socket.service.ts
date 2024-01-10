@@ -916,7 +916,7 @@ export class SocketService
         //       opponent_score: dto.opponent.score,
         //     },
         //   });
-        //   this.gameService.putLvlRank(dto.id_match);
+          this.gameService.putLvlRank(dto.id_match);
         // } catch (error) { 
         // }
       }
