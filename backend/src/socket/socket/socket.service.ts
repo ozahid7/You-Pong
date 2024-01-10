@@ -705,28 +705,30 @@ export class SocketService
             id_user: receiver.id_user,
           },
         });
-        const friendship = await this.prisma.friendship.findFirst({
-          where: {
-            OR: [
-              {
-                id_user: my_user.id_user,
-                id_friend: otherUser.id_user,
-              },
-              {
-                id_user: otherUser.id_user,
-                id_friend: my_user.id_user,
-              },
-            ],
-          },
-        });
-        if (my_user && otherUser && !friendship) {
-          this.server.to(receiver.id_user).emit('addNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: false,
-            in_chat: false,
+        if (my_user && otherUser) {
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+            },
           });
+          if (!friendship) {
+            this.server.to(receiver.id_user).emit('addNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: false,
+              in_chat: false,
+            });
+          }
         }
       }
     } catch (error) {
@@ -761,27 +763,29 @@ export class SocketService
             id_user: receiver.id_user,
           },
         });
-        const friendship = await this.prisma.friendship.findFirst({
-          where: {
-            OR: [
-              {
-                id_user: my_user.id_user,
-                id_friend: otherUser.id_user,
-              },
-              {
-                id_user: otherUser.id_user,
-                id_friend: my_user.id_user,
-              },
-            ],
-          },
-        });
-        if (my_user && otherUser && friendship) {
-          this.server.to(receiver.id_user).emit('removeNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: info.is_message,
+        if (my_user && otherUser) {
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+            },
           });
+          if (friendship) {
+            this.server.to(receiver.id_user).emit('removeNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: info.is_message,
+            });
+          }
         }
       }
     } catch (error) {
