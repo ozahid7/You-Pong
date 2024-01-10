@@ -20,6 +20,8 @@ interface globalContextProps {
 	setViewed: any;
 	viewedChat: boolean;
 	setViewedChat: any;
+	requests: number;
+	setRequests: any;
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
@@ -32,6 +34,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const query = useQueryClient();
 	const [viewed, setViewed] = useState(true);
 	const [viewedChat, setViewedChat] = useState(true);
+	let [requests, setRequests] = useState(0);
 
 	const router = useRouter();
 	const style =
@@ -55,7 +58,8 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
-					setViewed(false);
+					setRequests(requests++);
+					if (requests > 0) setViewed(false);
 					query.invalidateQueries({ queryKey: ["friends"] });
 				} else if (obj.is_message) {
 					if (!obj.in_chat) {
@@ -64,6 +68,14 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 						query.invalidateQueries({ queryKey: ["messages"] });
 					}
 				}
+			});
+
+		if (globalSocket.listeners("removeNotif").length === 0)
+			globalSocket.on("removeNotif", (obj) => {
+				console.log("from remove notif", obj);
+				setRequests(requests--);
+				if (requests === 0) setViewed(true);
+				console.log("requests  from remove  = ", requests);
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)
@@ -142,6 +154,8 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				setViewed,
 				viewedChat,
 				setViewedChat,
+				requests,
+				setRequests,
 			}}
 		>
 			{children}

@@ -106,6 +106,10 @@ const PlayerCard = (props: {
 				Decline.mutateAsync().then(() => {
 					otheruser.refetch();
 					setIcon(addIcon);
+					globalSocket.emit("removeRequest", {
+						id_receiver: otheruser.data.uid,
+						is_message: false,
+					});
 				});
 			}}
 			size={100}
