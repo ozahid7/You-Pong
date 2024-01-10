@@ -196,8 +196,8 @@ const Chats = ({ params }) => {
         <MyContainer>
           <Background>
             <div className="w-[95%] h-full">
-              <div className="flex flex-row w-full h-full items-center ">
-                <div className="flex h-[90%] w-[0%] debug md:w-[35%] flex-col justify-evenly gap-5 border-r-white border-r-[2px] border-solid pr-5 ">
+              <div className="flex flex-row w-full h-full items-center">
+                <div className="flex h-[90%] w-[-10%] md:w-[35%] flex-col justify-evenly gap-5 md:border-r-white md:border-r-[2px] md:border-solid md:pr-5 ">
                   <MenuBarMobile setter={setShowSidebar} />
                   <ChatSideBar
                     show={showSidebar}
@@ -210,7 +210,7 @@ const Chats = ({ params }) => {
                       main={MainUser}
                       onResultIdChange={handleResultId}
                     />
-                    <div className="flex h-full w-full flex-row justify-center items-center">
+                    <div className="flex h-full w-full flex-row justify-center items-center ">
                       <div className="flex h-full w-full flex-col gap-5 justify-center items-center ">
                         <div className="flex flex-row w-fit h-fit ">
                           <MyTabs
@@ -219,22 +219,18 @@ const Chats = ({ params }) => {
                               setValue(value);
                             }}
                             labels={[
-                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl:text-[140%] xl:text-[120%] lg:text-[110%] md:text-[75%] font-archivo self-center gap-1 items-center xxs:text-[78%] fold:text-[100%] xs:text-[110%]">
                                 <LuUser className="text-[white]" />
-                                <div className="xxs:hidden lg_:block">
-                                  DIRECT
-                                </div>
+                                <div>DIRECT</div>
                               </div>,
-                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl_:text-[140%] xl_:text-[120%] lg_:text-[110%] sm_:text-[250%] font-archivo self-center gap-1 items-center">
+                              <div className="flex w-fit h-fit text-[#686868] font-[600] 2xl:text-[140%] xl:text-[120%] lg:text-[110%] md:text-[75%] font-archivo self-center gap-1 items-center xxs:text-[78%] fold:text-[100%] xs:text-[110%]">
                                 <LuUsers className="text-[white]" />
-                                <div className="xxs:hidden lg_:block">
-                                  CHANNELS
-                                </div>
+                                <div>CHANNELS</div>
                               </div>,
                             ]}
                             indicator={{
                               className:
-                                "bg-white self-center lg_:w-[98%] sm_:w-[92%]",
+                                "bg-white self-center lg:w-[98%] sm:w-[92%]",
                             }}
                           ></MyTabs>
                         </div>
@@ -262,8 +258,7 @@ const Chats = ({ params }) => {
                                     : []
                                 }
                                 indicator={{
-                                  className:
-                                    "bg-palette-green self-center ml-[2.5%] lg_:w-[20%] lg_:h-[8%] ",
+                                  className: "bg-palette-green self-center ",
                                 }}
                                 key="direct"
                               />
@@ -288,8 +283,7 @@ const Chats = ({ params }) => {
                                     : []
                                 }
                                 indicator={{
-                                  className:
-                                    "bg-palette-green self-center 2xl:w-[52px] 2xl:ml-3 xl:w-[50px] xl:ml-2 lg:w-[48px] lg:ml-2 md:w-[44px] md:ml-1",
+                                  className: "bg-palette-green self-center ",
                                 }}
                                 key="groups"
                               />
@@ -310,7 +304,7 @@ const Chats = ({ params }) => {
                 {value ? (
                   <SwipeableTabs
                     value={valueGroups}
-                    className="h-full w-full  flex-1  overflow-x-hidden my_scroll_green"
+                    className="h-full w-full flex-1 overflow-x-hidden"
                     key="groups"
                   >
                     {channelsGroups &&
@@ -333,7 +327,7 @@ const Chats = ({ params }) => {
                 ) : (
                   <SwipeableTabs
                     value={valueDirect}
-                    className="h-full w-full  flex-1  overflow-x-hidden"
+                    className="h-full w-full flex-1 overflow-x-hidden"
                     key="direct"
                   >
                     {channelsDirect &&

@@ -58,12 +58,12 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
 
   return (
     <Combobox>
-      <div className="flex flex-col m-1 relative justify-center w-[96%] h-[9%] ">
-        <div className="search_input_chat h-full w-full p-[2px] min-h-[40px] flex justify-center items-center">
+      <div className="flex flex-col m-1 relative justify-center w-[96%] h-[9%] items-center mb-5 mt-5 md:mt-0">
+        <div className="search_input_chat h-full max-w-[325px] w-full p-[2px] min-h-[40px] flex justify-center items-center">
           <div className="center  outline-none w-[98%] h-[95%]  flex justify-center items-center overflow-hidden">
             <LuSearch
-              className="m-1 text-[#9C9C9C] xs:w-[25px] sm_:block xxs:hidden
-                  3xl_:w-8 3xl_:h-8 2xl_:w-7 2xl_:h-7 lg_:w-6 lg_:h-6 md_:w-5 md_:h-5"
+              className="m-1 text-[#9C9C9C] 
+                  3xl:w-8 3xl:h-8 2xl:w-7 2xl:h-7 lg:w-6 lg:h-6 md:w-5 md:h-5"
             />
             <Combobox.Input
               type="text"
@@ -73,7 +73,7 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
               }}
               value={Input}
               placeholder="Search"
-              className="flex center text-[#9C9C9C] sm:placeholder-opacity-100 xxs:placeholder-opacity-0 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-[98%] w-full "
+              className="flex center text-[#9C9C9C] sm:placeholder-opacity-100 font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-[98%] w-full "
             />
           </div>
         </div>
@@ -86,7 +86,7 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Combobox.Options className="bg-white max-h-[400px] overflow-y-auto my_scroll_green ml-10 min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[35%] md:translate-x-[-50%] top-2 absolute">
+          <Combobox.Options className="bg-white max-h-[400px] overflow-y-auto my_scroll_green ml-10 min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30  md:left-[35%] md:translate-x-[-50%] top-2 absolute">
             {FriendArr?.map((channel, index) => (
               <Combobox.Option
                 key={index}

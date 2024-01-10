@@ -11,7 +11,7 @@ const SwipeableTabs = ({ value, className, children }: Props) => {
         const traslateX = i === value ? 0 : i > value ? 100 : -100;
         return (
           <div
-            className="absolute h-full w-full overflow-x-hidden transition-[transform,opacity] duration-300 ease-in-out my_scroll_green "
+            className="absolute h-full w-full overflow-x-hidden transition-[transform,opacity] duration-300 ease-in-out scrollbar-hide md:my_scroll_green "
             key={i}
             style={{
               transform: ` translate(${traslateX}%) `,

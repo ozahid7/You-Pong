@@ -195,22 +195,22 @@ const GroupsChat = ({
   };
 
   return (
-    <div className="flex h-full w-full flex-col flex-grow flex-wrap gap-2 ">
+    <div className="flex h-[93%] md:h-full w-full flex-col flex-grow flex-wrap gap-2 md:mt-0 mt-8 ">
       <div className="flex w-full h-[10%] justify-center items-end mt-2">
         <div className="flex flex-row h-[80%] w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid">
-          <div className="flex flex-row gap-4 items-center xl_:mb-5">
+          <div className="flex flex-row gap-4 items-center xl:mb-5">
             <Avatar
               isBordered
               radius="none"
               color="default"
-              className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px]"
+              className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[50px] md:h-[50px]"
               src={channels?.avatar}
             />
             <div className="flex flex-col">
-              <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
+              <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md:text-[26px]">
                 {channels?.name}
               </div>
-              <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm_:block xs:hidden">
+              <div className="text-[#00993D] font-[700] text-[15px] font-orbitron sm:block xxs:hidden">
                 online: {printOnline()}{" "}
                 {printOnline() > 1 ? "members" : "member"}
               </div>
@@ -226,7 +226,7 @@ const GroupsChat = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full h-[71%] flex-col justify-center items-center">
+      <div className="flex w-full h-[72%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
           main={MainUser}
           socket={socket}
@@ -234,14 +234,14 @@ const GroupsChat = ({
           key={channels?.id_channel}
         />
       </div>
-      <div className="w-[95%] h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1">
-        <div className="flex w-full h-full gap-2 mt-1 items-end">
+      <div className="w-[95%] h-[13%] md:h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1">
+        <div className="flex w-full h-full gap-2 mt-1 items-center">
           <div className="search_input_chat w-full h-[60px] flex justify-center items-center min-w-[40px] max-w-[600px]">
             <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden ">
               <input
                 type="text"
                 placeholder={mutedMember.placeholder}
-                className="center text-[#9C9C9C] text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
+                className="center text-[#9C9C9C] md:placeholder:text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%] xxs:placeholder:text-[10px]"
                 onKeyDown={handleEnterPress}
                 ref={messageRef}
                 disabled={mutedMember.disabled}
