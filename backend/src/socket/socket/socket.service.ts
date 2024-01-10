@@ -706,13 +706,29 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          this.server.to(receiver.id_user).emit('addNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: false,
-            in_chat: false,
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+            },
           });
+          if (!friendship) {
+            this.server.to(receiver.id_user).emit('addNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: false,
+              in_chat: false,
+            });
+          }
         }
       }
     } catch (error) {
@@ -748,12 +764,28 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          this.server.to(receiver.id_user).emit('removeNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: info.is_message,
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+            },
           });
+          if (friendship) {
+            this.server.to(receiver.id_user).emit('removeNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: info.is_message,
+            });
+          }
         }
       }
     } catch (error) {
@@ -803,7 +835,6 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
-
   private ball: {
     x: number;
     y: number;
@@ -828,27 +859,45 @@ export class SocketService
   } = { width: 600, height: 800 };
 
   async handleHit(dto: renderDto) {
-
-    if (this.ball.x + this.ball.radius >= this.fieald.width || this.ball.x - this.ball.radius <= 0)
+    if (
+      this.ball.x + this.ball.radius >= this.fieald.width ||
+      this.ball.x - this.ball.radius <= 0
+    )
       this.ball.dx = -this.ball.dx;
-    if (this.ball.y - this.ball.radius <= 0 || this.ball.y + this.ball.radius >= this.fieald.height)
+    if (
+      this.ball.y - this.ball.radius <= 0 ||
+      this.ball.y + this.ball.radius >= this.fieald.height
+    )
       this.ball.dy = -this.ball.dy;
 
     const half = dto.player.width;
-    if (this.ball.y + this.ball.radius >= 770 && this.ball.x >= dto.player.x - half && this.ball.x <= dto.player.x + half)
+    if (
+      this.ball.y + this.ball.radius >= 770 &&
+      this.ball.x >= dto.player.x - half &&
+      this.ball.x <= dto.player.x + half
+    )
       this.ball.dy = -this.ball.dy;
-    if (this.ball.y - this.ball.radius <= 30 && this.ball.x >= dto.opponent.x - half && this.ball.x <= dto.opponent.x + half)
+    if (
+      this.ball.y - this.ball.radius <= 30 &&
+      this.ball.x >= dto.opponent.x - half &&
+      this.ball.x <= dto.opponent.x + half
+    )
       this.ball.dy = -this.ball.dy;
-  };
+  }
 
   @SubscribeMessage('updateFrame')
-  async updateFrame(@ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
-    
-    const player = this.users.find((user) => user.id_user === dto.id_player && user.inGame === true);
-    const opponent = this.users.find((user) => user.id_user === dto.id_opponent && user.inGame === true);
-    
-    if (!player || !opponent)
-      return;
+  async updateFrame(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: renderDto,
+  ) {
+    const player = this.users.find(
+      (user) => user.id_user === dto.id_player && user.inGame === true,
+    );
+    const opponent = this.users.find(
+      (user) => user.id_user === dto.id_opponent && user.inGame === true,
+    );
+
+    if (!player || !opponent) return;
     if (player.id_socket !== socket.id && opponent.id_socket !== socket.id)
       return;
     if (player.id_socket === socket.id) {
@@ -858,11 +907,11 @@ export class SocketService
 
       dto.ball.x += this.ball.x;
       dto.ball.y += this.ball.y;
-      this.server.to(player.id_socket).emit('renderBall', dto.ball);      
+      this.server.to(player.id_socket).emit('renderBall', dto.ball);
       const fakeBall = {
         x: this.fieald.width - dto.ball.x,
         y: this.fieald.height - this.ball.y,
-      }
+      };
       this.server.to(opponent.id_socket).emit('renderBall', fakeBall);
       this.server.to(player.id_socket).emit('renderPaddle', dto.player);
       dto.opponent.x = this.fieald.width - dto.player.x;
