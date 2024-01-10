@@ -36,6 +36,20 @@ interface HomePage {
   channelsRefetch: any;
 }
 
+type ModalSize =
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "full";
+
+type TabSize = "sm" | "md" | "lg";
+
 const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   var setDataObj: Channel = {
     type: channels.type,
@@ -154,6 +168,40 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
     return m;
   };
 
+  const [modalSize, setModalSize] = useState<ModalSize>("3xl");
+  const [tabSize, setTabSize] = useState<TabSize>("lg");
+
+  useEffect(() => {
+    // Function to update the modal size
+    const updateSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        // Tailwind's 'sm' breakpoint
+        setModalSize("sm");
+        setTabSize("sm");
+      } else if (width < 768) {
+        setModalSize("md");
+        setTabSize("md");
+      } else if (width < 1024) {
+        setModalSize("lg");
+        setTabSize("lg");
+      } else if (width < 1280) {
+        setModalSize("2xl");
+        setTabSize("lg");
+      } else {
+        setModalSize("4xl");
+        setTabSize("lg");
+      }
+    };
+
+    // Update modal size on mount and when window resizes
+    updateSize();
+    window.addEventListener("resize", updateSize);
+
+    // Cleanup listener
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   return (
     <Fragment>
       <div
@@ -170,7 +218,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        size="4xl"
+        size={modalSize}
         className=" w-full"
         backdrop="blur"
         placement="center"
@@ -235,7 +283,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
                         handleSelectionChange(newSelection.toString())
                       }
                       aria-label="Options"
-                      size="lg"
+                      size={tabSize}
                       radius="sm"
                       className=" w-full h-fit flex justify-center"
                     >
