@@ -909,7 +909,7 @@ export class SocketService
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
     game.ball.dy = -game.ball.dy + 1.2;
-    this.renderBall(game);
+    // this.renderBall(game);
   }
 
   checkGoal(player: boolean, game: any): boolean {
@@ -955,6 +955,7 @@ export class SocketService
     }
     if (this.checkEnd(game) === true) {
       this.centerBall(game);
+      this.renderBall(game);
       this.server.to(game.data.socket_player).emit('endGame', dto);
       this.server.to(game.data.socket_opponent).emit('endGame', dto);
       try {
@@ -972,8 +973,8 @@ export class SocketService
         await this.removeGame(game.data.id_match);
       } catch (error) {
         console.error('Error in endGame : ', error);
-      }
-    }
+      };
+    };
 }
   // ---------------- adam end here ----------------------
 }
