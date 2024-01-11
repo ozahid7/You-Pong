@@ -19,6 +19,9 @@ export class isLoggedGuard implements CanActivate {
     } catch(error) {
         return true
     }
+    // const response = context.switchToHttp().getResponse();
+    // response.clearCookie('access_token');
+    
     throw new ForbiddenException('You\'re already registred!');
   }
 }
