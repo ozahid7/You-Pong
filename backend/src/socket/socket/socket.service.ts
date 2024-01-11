@@ -855,158 +855,123 @@ export class SocketService
 
   // const game = this.game.find((game) => game.data.id_match === id_match);
 
-  private ball: {
-    x: number;
-    y: number;
-    speed: number;
-    radius: number;
-    color: string;
-    dx: number;
-    dy: number;
-  } = {
-    x: 100,
-    y: 100,
-    speed: 1.8,
-    radius: 14,
-    color: '',
-    dx: 5,
-    dy: -2,
-  };
-
-  private scores: {
-    player: number;
-    opoonent: number;
-  } = {
-    player: 0,
-    opoonent: 0,
-  };
-
   private fieald: {
     width: number;
     height: number;
   } = { width: 600, height: 800 };
 
-  async handleHit(dto: renderDto) {
-    const half = dto.player.width;
-    let counter = 0;
 
+  handleHits(game: any): boolean {
+    const half = game.player.width / 2;
     if (
-      dto.ball.x + dto.ball.radius >= this.fieald.width ||
-      dto.ball.x - dto.ball.radius <= 0
-    )
-      dto.ball.dx = -dto.ball.dx;
+      game.ball.x + game.ball.radius >= game.fieald.width ||
+      game.ball.x - game.ball.radius <= 0
+    ) return game.ball.dx = -game.ball.dx + 0.12, true;
     if (
-      dto.ball.y + dto.ball.radius >= 770 &&
-      dto.ball.x >= dto.player.x - half &&
-      dto.ball.x <= dto.player.x + half
-    )
-      dto.ball.dy = -dto.ball.dy;
+      game.ball.y + game.ball.radius >= game.player.y &&
+      game.ball.x >= game.player.x - half &&
+      game.ball.x <= game.player.x + half
+    ) return game.ball.dy = -game.ball.dy + 0.12, true;
     if (
-      dto.ball.y - dto.ball.radius <= 30 &&
-      dto.ball.x >= dto.opponent.x - half &&
-      dto.ball.x <= dto.opponent.x + half
-    )
-      dto.ball.dy = -dto.ball.dy;
+      game.ball.y - game.ball.radius <= game.opponent.y &&
+      game.ball.x >= game.opponent.x - half &&
+      game.ball.x <= game.opponent.x + half
+    ) return game.ball.dy = -game.ball.dy + 0.12, true;
+    return false;
+  };
+
+  renderBall(game: any) {
+    game.ball.x += (game.ball.dx);
+    game.ball.y += (game.ball.dy);
+    this.server.to(game.data.socket_player).emit('renderBall', game.ball);
+    const fakeBall = {
+      x: game.fieald.width -  game.ball.x,
+      y: game.fieald.height - game.ball.y,
+    };
+    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall);
   }
 
-  updateScore(a: any, b: any, dto: renderDto) {
-    this.server
-      .to(a.id_socket)
-      .emit('updateScore', { player: dto.player, opponent: dto.opponent });
-    this.server
-      .to(b.id_socket)
-      .emit('updateScore', { player: dto.opponent, opponent: dto.player });
+ 
+  updatePaddle(player: boolean, game: any, dto: renderDto) {
+    if (player) {
+      game.player.x = dto.paddleX;
+      this.server.to(game.data.socket_player).emit('renderPaddle', game.player);
+      this.server.to(game.data.socket_opponent).emit('renderOpponent', {x: game.fieald.width - game.player.x, y: game.opponent.y});
+    }
+    else
+    {
+      game.opponent.x = game.fieald.width - dto.paddleX;
+      this.server.to(game.data.socket_opponent).emit('renderPaddle', {x: dto.paddleX, y: game.opponent.y});
+      this.server.to(game.data.socket_player).emit('renderOpponent', {x: game.opponent.x, y: game.opponent.y});
+    }
+  };
+
+  centerBall(game: any) {
+    game.ball.x = game.fieald.width / 2;
+    game.ball.y = game.fieald.height / 2;
+    game.ball.dy = -game.ball.dy + 1.2;
+    this.server.to(game.data.id_opponent).emit('updateScore', game.scores);
+    this.server.to(game.data.id_player).emit('updateScore', game.scores);
   }
 
-  checkGoal(player: any, opponent: any, dto: renderDto): boolean {
+  checkGoal(game: any): boolean {
     if (
-      dto.ball.y - dto.ball.radius <= 0 ||
-      dto.ball.y + dto.ball.radius >= this.fieald.height
+      game.ball.y - game.ball.radius <= 0 ||
+      game.ball.y + game.ball.radius >= game.fieald.height
     ) {
-      if (dto.ball.y - dto.ball.radius <= 0) {
-        dto.opponent.score++;
-        this.updateScore(opponent, player, dto);
-        this.scores.opoonent++;
-      } else if (dto.ball.y + dto.ball.radius >= this.fieald.height) {
-        dto.player.score++;
-        this.updateScore(player, opponent, dto);
-        this.scores.player++;
+      if (game.ball.y - game.ball.radius <= 0) {
+        game.scores.opponent++;
+      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
+        game.scores.player++;
       }
-      dto.ball.x = this.fieald.width / 2;
-      dto.ball.y = this.fieald.height / 2;
-      dto.ball.dy = -dto.ball.dy;
+      this.centerBall(game);
       return true;
     }
     return false;
-  }
+  };
 
-  checkEnd(dto: renderDto): boolean {
-    if (this.scores.player === 5 || this.scores.opoonent === 5) return true;
-    if (dto.player.score === 5 || dto.opponent.score === 5) return true;
+  checkEnd(game: any): boolean {
+    if (game.scores.player === 5 || game.scores.opponent === 5)
+      return true;
     return false;
   }
 
+  private nub: number = 0;
   @SubscribeMessage('updateFrame')
-  async updateFrame(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() dto: renderDto,
-  ) {
-    const player = this.users.find(
-      (user) => user.id_user === dto.id_player && user.inGame === true,
-    );
-    const opponent = this.users.find(
-      (user) => user.id_user === dto.id_opponent && user.inGame === true,
-    );
-
-    if (!player || !opponent) return;
-    if (player.id_socket !== socket.id && opponent.id_socket !== socket.id)
-      return;
-    if (this.checkEnd(dto) === true) return;
-    if (player.id_socket === socket.id) {
-      if (
-        this.checkGoal(player, opponent, dto) === false &&
-        this.checkEnd(dto) === false
-      ) {
-        this.handleHit(dto);
-        dto.ball.x += dto.ball.dx;
-        dto.ball.y += dto.ball.dy;
-      }
-
-      if (this.checkEnd(dto) === true) {
-        this.server.to(player.id_socket).emit('endGame', dto);
-        this.server.to(opponent.id_socket).emit('endGame', dto);
-        // try {
-        //   await this.prisma.match_History.update({
-        //     where: {
-        //       id_match: dto.id_match,
-        //     },
-        //     data: {
-        //       player_score: dto.player.score,
-        //       opponent_score: dto.opponent.score,
-        //     },
-        //   });
-        this.gameService.putLvlRank(dto.id_match);
-        // } catch (error) {
-        // }
-      }
-
-      this.server.to(player.id_socket).emit('renderBall', dto.ball);
-      const fakeBall = {
-        x: this.fieald.width - dto.ball.x,
-        y: this.fieald.height - dto.ball.y,
-      };
-      this.server.to(opponent.id_socket).emit('renderBall', fakeBall);
-      this.server.to(player.id_socket).emit('renderPaddle', dto.player);
-      dto.opponent.x = this.fieald.width - dto.player.x;
-      this.server.to(opponent.id_socket).emit('renderOpponent', dto.opponent);
+  async updateFrame( @ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
+    const game = this.game.find((game) => game.data.id_match === dto.id_match);
+    if (!game) {    
+      return ;
     }
-
-    if (opponent.id_socket === socket.id) {
-      this.server.to(opponent.id_socket).emit('renderPaddle', dto.player);
-      dto.opponent.x = this.fieald.width - dto.player.x;
-      this.server.to(player.id_socket).emit('renderOpponent', dto.opponent);
+  
+    const player: boolean = socket.id === game.data.socket_player ? true : false
+    this.updatePaddle(player, game, dto);
+    if (this.checkEnd(game) === false) {
+      if (this.handleHits(game) === false)
+        this.checkGoal(game);
+      this.renderBall(game);
     }
-  }
-
+    if (this.checkEnd(game) === true) {
+      this.centerBall(game);
+      this.server.to(game.data.socket_player).emit('endGame', dto);
+      this.server.to(game.data.socket_opponent).emit('endGame', dto);
+      try {
+        const updated = await this.prisma.match_History.update({
+          where: {
+            id_match: game.data.id_match,
+          },
+          data: {
+            player_score: game.scores.player,
+            opponent_score: game.scores.opponent,
+          },
+        });
+        if (!updated) console.error('Failed to update match');
+        this.gameService.putLvlRank(game.data.id_match);
+        await this.removeGame(game.data.id_match);
+      } catch (error) {
+        console.error('Error in endGame : ', error);
+      }
+    }
+}
   // ---------------- adam end here ----------------------
 }
