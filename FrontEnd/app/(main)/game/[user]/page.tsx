@@ -3,7 +3,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import GameSettings from "./GameOptions";
 import PlayerLoader from "./PlayerLoader";
 import MyCountDown from "./CountDown";
-import { Game } from "./Game";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useRouter } from "next/navigation";
@@ -21,6 +20,7 @@ import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 import Message from "./Message";
 import { MyContainer, ScoreCard } from "@/components";
+import { Game } from "./Game";
 
 interface pageProps {
 	params: { user: string };

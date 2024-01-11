@@ -72,10 +72,10 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
-				console.log("from remove notif", obj);
+				console.log("requests  from remove  = ", requests);
 				setRequests(requests--);
 				if (requests === 0) setViewed(true);
-				console.log("requests  from remove  = ", requests);
+				query.invalidateQueries({ queryKey: ["friends"] });
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)
