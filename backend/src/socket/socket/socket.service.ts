@@ -890,7 +890,6 @@ export class SocketService
     };
     this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall);
   }
-
  
   updatePaddle(player: boolean, game: any, dto: renderDto) {
     if (player) {
@@ -910,11 +909,10 @@ export class SocketService
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
     game.ball.dy = -game.ball.dy + 1.2;
-    this.server.to(game.data.id_opponent).emit('updateScore', game.scores);
-    this.server.to(game.data.id_player).emit('updateScore', game.scores);
+    this.renderBall(game);
   }
 
-  checkGoal(game: any): boolean {
+  checkGoal(player: boolean, game: any): boolean {
     if (
       game.ball.y - game.ball.radius <= 0 ||
       game.ball.y + game.ball.radius >= game.fieald.height
@@ -925,6 +923,10 @@ export class SocketService
         game.scores.player++;
       }
       this.centerBall(game);
+      if (player)
+        this.server.to(game.data.id_opponent).emit('updateScore', {player: game.scores.player, opponent: game.scores.opponent});
+      else
+        this.server.to(game.data.id_player).emit('updateScore', {player: game.scores.opponent, opponent: game.scores.player});  
       return true;
     }
     return false;
@@ -948,7 +950,7 @@ export class SocketService
     this.updatePaddle(player, game, dto);
     if (this.checkEnd(game) === false) {
       if (this.handleHits(game) === false)
-        this.checkGoal(game);
+        this.checkGoal(player, game);
       this.renderBall(game);
     }
     if (this.checkEnd(game) === true) {
