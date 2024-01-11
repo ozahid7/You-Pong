@@ -1,3 +1,4 @@
+import { Scores } from "@/app/(main)/game/[user]/Game";
 import { defaultavatar } from "@/const";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import React, { ReactNode } from "react";
@@ -8,6 +9,7 @@ const ScoreCard = (props: {
 	avatar: string;
 	otheravatar: string;
 	otherusername: string;
+	scores: Scores;
 }) => {
 	return (
 		<div className="my_score max-w-[700px] score_card w-full h:w-[70%] p-1 bg-gray-500  h-full flex justify-center items-center">
@@ -29,13 +31,13 @@ const ScoreCard = (props: {
 					<div className="w-[40%] h-full flex justify-center items-center ">
 						<div className="w-[80%] h-[90%] flex flex-row justify-evenly items-center">
 							<span className="w-fit h-fit font-number text_stroke text-palette-orange text-3xl lg:text-4xl ">
-								1
+								{props.scores.player}
 							</span>
 							<span className="w-fit h-fit font-number text_stroke text-palette-orange text-3xl lg:text-4xl ">
 								:
 							</span>
 							<span className="w-fit h-fit font-number text_stroke text-palette-orange text-3xl lg:text-4xl ">
-								2
+								{props.scores.opponent}
 							</span>
 						</div>
 					</div>
