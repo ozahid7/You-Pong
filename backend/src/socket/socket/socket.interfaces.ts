@@ -47,15 +47,6 @@ export interface gameData {
   };
 }
 
-// export interface infoRequest {
-//   id_game: string;
-//   id_sender: string;
-//   id_receiver: string;
-//   socket_player: string;
-//   map: map;
-//   mode: mode;
-// }
-
 export interface infoType {
   id_channel: string;
   id_sender: string;

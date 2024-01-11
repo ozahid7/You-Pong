@@ -1,8 +1,4 @@
-import {
-  BadGatewayException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -16,14 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
-import {
-  gameData,
-  infoGame,
-  infoPlayer,
-  infoType,
-  map,
-  mode,
-} from './socket.interfaces';
+import { gameData, infoGame, infoPlayer, infoType } from './socket.interfaces';
 import { SocketMethodes } from './socket.methodes';
 
 @Injectable()
@@ -83,7 +72,6 @@ export class SocketService
           id_player: game.id_player,
           id_opponent: game.id_opponent,
         });
-        // this.gameService.putLvlRank(game.id_match);
       } else {
         this.server.to(player.id_socket).emit('canceledGame', {
           username: player_user.username,
@@ -211,12 +199,10 @@ export class SocketService
       let id_user: string;
       if (socket && socket.handshake.query)
         id_user = socket.handshake.query.id_user.toString();
-      // console.log('connected: ', socket.id);
       if (!this.users.find((user) => user.id_socket === socket.id)) {
         this.addUser(id_user, socket.id);
       }
       socket.join(id_user);
-      // console.log(this.users);
       const sender = this.users.find((user) => user.id_socket === socket.id);
       if (sender && sender !== undefined) {
         const my_user = await this.prisma.user.findUnique({
@@ -231,7 +217,6 @@ export class SocketService
             data: { status: 'ONLINE' },
           });
           if (user) {
-            // console.log('ONLINE ,');
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -239,7 +224,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in connect : ', error);
+      console.log('Error in connect : ', error);
     }
   }
 
@@ -274,8 +259,8 @@ export class SocketService
               }
               const _id =
                 game.data.socket_opponent === sender.id_socket
-                  ? game.data.socket_opponent
-                  : game.data.socket_player;
+                  ? game.data.socket_player
+                  : game.data.socket_opponent;
               this.server.to(_id).emit('updateScore', {
                 player: player_score,
                 opponent: opponent_score,
@@ -301,7 +286,6 @@ export class SocketService
               data: { status: 'OFFLINE' },
             });
             if (user) {
-              // console.log('OFFLINE');
               this.server.to(sender.id_socket).emit('status', {
                 id_user: my_user.id_user,
                 status: 'OFFLINE',
@@ -313,7 +297,6 @@ export class SocketService
               data: { status: 'ONLINE' },
             });
             if (user) {
-              // console.log('ONLINE');
               this.server
                 .to(sender.id_socket)
                 .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -324,10 +307,8 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      // console.log('disconnected: ', socket.id);
-      // console.log(this.users);
     } catch (error) {
-      // console.log('Error in disconnect : ', error);
+      console.log('Error in disconnect : ', error);
     }
   }
 
@@ -397,7 +378,6 @@ export class SocketService
         });
         const result = await Promise.all(us.filter((user) => user));
         if (message) {
-          // console.log('send message');
           info.id_sender = sender.id_user;
           info.created_at = message.created_at;
           result.map((user) => {
@@ -450,7 +430,6 @@ export class SocketService
           });
 
           if (user) {
-            // console.log('INGAME');
             sender.inGame = true;
             this.server
               .to(sender.id_socket)
@@ -461,7 +440,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in inGame : ', error);
+      console.log('Error in inGame : ', error);
     }
   }
 
@@ -496,8 +475,8 @@ export class SocketService
                 }
                 const _id =
                   game.data.socket_opponent === sender.id_socket
-                    ? game.data.socket_opponent
-                    : game.data.socket_player;
+                    ? game.data.socket_player
+                    : game.data.socket_opponent;
                 this.server.to(_id).emit('updateScore', {
                   player: player_score,
                   opponent: opponent_score,
@@ -522,7 +501,6 @@ export class SocketService
               data: { status: 'ONLINE' },
             });
             if (user) {
-              // console.log('ONLINE');
               this.removePlayer(sender.id_socket);
               sender.inGame = false;
               this.server
@@ -533,7 +511,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in online : ', error);
+      console.log('Error in online : ', error);
     }
   }
 
@@ -557,7 +535,6 @@ export class SocketService
             data: { status: 'OFFLINE' },
           });
           if (user) {
-            // console.log('OFFLINE');
             sender.inGame = false;
             this.server
               .to(sender.id_socket)
@@ -568,10 +545,8 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      // console.log('disconnected: ', socket.id);
-      // console.log(this.users);
     } catch (error) {
-      // console.log('Error in offline : ', error);
+      console.log('Error in offline : ', error);
     }
   }
 
@@ -616,7 +591,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in invite : ', error);
+      console.log('Error in invite : ', error);
       this.removePrvGame(info.socket_player);
     }
   }
@@ -676,7 +651,6 @@ export class SocketService
                 info.map,
                 info.mode,
               );
-              // this.gameService.putLvlRank(game.id_match);
             }
           } else {
             this.server.to(sender.id_user).emit('canceled', {
@@ -689,7 +663,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in accept : ', error);
+      console.log('Error in accept : ', error);
     }
   }
 
@@ -733,7 +707,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in refuse : ', error);
+      console.log('Error in refuse : ', error);
     }
   }
 
@@ -777,7 +751,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in cancel : ', error);
+      console.log('Error in cancel : ', error);
     }
   }
 
@@ -835,7 +809,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in add request : ', error);
+      console.log('Error in add request : ', error);
     }
   }
 
@@ -892,7 +866,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in remove request : ', error);
+      console.log('Error in remove request : ', error);
     }
   }
 
@@ -912,7 +886,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in inChat : ', error);
+      console.log('Error in inChat : ', error);
     }
   }
 
@@ -932,7 +906,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      // console.log('Error in outChat : ', error);
+      console.log('Error in outChat : ', error);
     }
   }
 
