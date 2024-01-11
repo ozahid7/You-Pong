@@ -112,8 +112,8 @@ export class SocketMethodes {
       y: 400,
       speed: speed,
       radius: radius,
-      dx: 0,
-      dy: 0,
+      dx: 2,
+      dy: 2,
     };
 
     const player: {
@@ -123,7 +123,7 @@ export class SocketMethodes {
     } = {
       x: 300,
       y: 770,
-      width: width,
+      width,
     };
 
     const opponent: {
