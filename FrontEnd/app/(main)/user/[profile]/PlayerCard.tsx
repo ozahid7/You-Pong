@@ -103,13 +103,13 @@ const PlayerCard = (props: {
 	const pendingIcon = (
 		<FaUserClock
 			onClick={() => {
+				globalSocket.emit("removeRequest", {
+					id_receiver: otheruser.data.uid,
+					is_message: false,
+				});
 				Decline.mutateAsync().then(() => {
 					otheruser.refetch();
 					setIcon(addIcon);
-					globalSocket.emit("removeRequest", {
-						id_receiver: otheruser.data.uid,
-						is_message: false,
-					});
 				});
 			}}
 			size={100}
@@ -177,6 +177,10 @@ const PlayerCard = (props: {
 						) : (
 							<HiBan
 								onClick={() => {
+									globalSocket.emit("removeRequest", {
+										id_receiver: otheruser.data.uid,
+										is_message: false,
+									});
 									Block.mutate();
 									router.push(myRoutes.dashboard);
 								}}
