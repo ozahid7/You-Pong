@@ -146,8 +146,6 @@ export class Game {
 
 		//init ball
 		this.ball = getBall(this.width, this.height, wallOptions);
-		this.ball.velocity.x = 5;
-		this.ball.velocity.y = 5;
 
 		this.mouse = Matter.Mouse.create(this.render.canvas);
 		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
@@ -182,28 +180,8 @@ export class Game {
 	emitToUpdateFrame() {
 		this.interval = setInterval(() => {
 			this.socket.emit("updateFrame", {
-				player: {
-					x: this.tmpX,
-					y: this.bottomPaddle.position.y,
-					score: this.scores.myScore,
-					width: this.paddleSize,
-				},
-				fieald: { height: 800, width: 600 },
-				ball: {
-					x: this.ball.position.x,
-					y: this.ball.position.y,
-					dx: this.ball.velocity.x,
-					dy: this.ball.velocity.y,
-					speed: 1,
-					radius: 14,
-					color: "",
-				},
-				opponent: {
-					x: this.topPaddle.position.x,
-					score: this.scores.opponentScore,
-				},
-				id_opponent: this.gameData.id_opponent,
-				id_player: this.gameData.id_player,
+				paddleX: this.tmpX,
+				id_match: this.gameData.id_match,
 			});
 		}, 1000 / 60);
 	}
@@ -213,8 +191,6 @@ export class Game {
 			x: data.x,
 			y: data.y,
 		});
-		this.ball.velocity.x = data.dx;
-		this.ball.velocity.y = data.dy;
 	}
 
 	updateOpponentPosition(data: opponent) {
@@ -256,6 +232,7 @@ export class Game {
 	}
 
 	destroy() {
+		World.clear(this.engine.world, false); // Use false to keep static bodies
 		Render.stop(this.render);
 		Engine.clear(this.engine);
 	}
