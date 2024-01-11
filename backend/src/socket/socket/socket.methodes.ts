@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { map, mode } from './socket.interfaces';
+import { gameData, map, mode } from './socket.interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -13,43 +13,7 @@ export class SocketMethodes {
     inChat: boolean;
   }[] = [];
 
-  protected game: {
-    player: {
-      x: number;
-      y: number;
-      width: number;
-    };
-    opponent: {
-      x: number;
-      y: number;
-      width: number;
-    };
-    data: {
-      id_match: string;
-      id_player: string;
-      socket_player: string;
-      socket_opponent: string;
-      id_opponent: string;
-      map: map;
-      mode: mode;
-    };
-    scores: {
-      player: number;
-      opponent: number;
-    };
-    ball: {
-      x: number;
-      y: number;
-      speed: number;
-      radius: number;
-      dx: number;
-      dy: number;
-    };
-    fieald: {
-      width: number;
-      height: number;
-    };
-  }[] = [];
+  protected game: gameData[] = [];
 
   protected privateGame: {
     id_game: string;

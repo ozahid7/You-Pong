@@ -16,7 +16,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
-import { infoGame, infoPlayer, infoType, map, mode } from './socket.interfaces';
+import {
+  gameData,
+  infoGame,
+  infoPlayer,
+  infoType,
+  map,
+  mode,
+} from './socket.interfaces';
 import { SocketMethodes } from './socket.methodes';
 
 @Injectable()
@@ -250,6 +257,44 @@ export class SocketService
           if (user.id_user === sender.id_user) duplicate++;
         });
         if (my_user && my_user !== undefined) {
+          if (sender.inGame) {
+            const game = this.game.find(
+              (game) =>
+                game.data.socket_opponent === sender.id_socket ||
+                game.data.socket_player === sender.id_socket,
+            );
+            if (game) {
+              let player_score: number = 5;
+              let opponent_score: number = 0;
+              const is_player: boolean =
+                game.data.socket_opponent === sender.id_socket ? false : true;
+              if (is_player) {
+                player_score = 0;
+                opponent_score = 5;
+              }
+              const _id =
+                game.data.socket_opponent === sender.id_socket
+                  ? game.data.socket_opponent
+                  : game.data.socket_player;
+              this.server.to(_id).emit('updateScore', {
+                player: player_score,
+                opponent: opponent_score,
+              });
+              this.server.to(_id).emit('gameOver');
+              const updated = await this.prisma.match_History.update({
+                where: {
+                  id_match: game.data.id_match,
+                },
+                data: {
+                  player_score: player_score,
+                  opponent_score: opponent_score,
+                },
+              });
+              if (!updated) console.error('Failed to update match');
+              this.gameService.putLvlRank(game.data.id_match);
+              await this.removeGame(game.data.id_match);
+            }
+          }
           if (duplicate === 1) {
             const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
@@ -434,6 +479,44 @@ export class SocketService
         if (my_user && my_user !== undefined) {
           if (!sender.inGame && my_user.status === 'INGAME') return;
           else {
+            if (sender.inGame) {
+              const game = this.game.find(
+                (game) =>
+                  game.data.socket_opponent === sender.id_socket ||
+                  game.data.socket_player === sender.id_socket,
+              );
+              if (game) {
+                let player_score: number = 5;
+                let opponent_score: number = 0;
+                const is_player: boolean =
+                  game.data.socket_opponent === sender.id_socket ? false : true;
+                if (is_player) {
+                  player_score = 0;
+                  opponent_score = 5;
+                }
+                const _id =
+                  game.data.socket_opponent === sender.id_socket
+                    ? game.data.socket_opponent
+                    : game.data.socket_player;
+                this.server.to(_id).emit('updateScore', {
+                  player: player_score,
+                  opponent: opponent_score,
+                });
+                this.server.to(_id).emit('gameOver');
+                const updated = await this.prisma.match_History.update({
+                  where: {
+                    id_match: game.data.id_match,
+                  },
+                  data: {
+                    player_score: player_score,
+                    opponent_score: opponent_score,
+                  },
+                });
+                if (!updated) console.error('Failed to update match');
+                this.gameService.putLvlRank(game.data.id_match);
+                await this.removeGame(game.data.id_match);
+              }
+            }
             const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
               data: { status: 'ONLINE' },
@@ -736,9 +819,11 @@ export class SocketService
                   id_friend: my_user.id_user,
                 },
               ],
+              state: 'PENDING',
             },
           });
-          if (!friendship) {
+
+          if (friendship) {
             this.server.to(receiver.id_user).emit('addNotif', {
               id_user: my_user.id_user,
               username: my_user.username,
@@ -853,104 +938,111 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
-  // const game = this.game.find((game) => game.data.id_match === id_match);
-
-  private fieald: {
-    width: number;
-    height: number;
-  } = { width: 600, height: 800 };
-
-
-  handleHits(game: any): boolean {
+  handleHits(game: gameData): boolean {
     const half = game.player.width / 2;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width ||
       game.ball.x - game.ball.radius <= 0
-    ) return game.ball.dx = -game.ball.dx + 0.12, true;
+    )
+      return (game.ball.dx = -game.ball.dx + 0.12), true;
     if (
       game.ball.y + game.ball.radius >= game.player.y &&
       game.ball.x >= game.player.x - half &&
       game.ball.x <= game.player.x + half
-    ) return game.ball.dy = -game.ball.dy + 0.12, true;
+    )
+      return (game.ball.dy = -game.ball.dy + 0.12), true;
     if (
       game.ball.y - game.ball.radius <= game.opponent.y &&
       game.ball.x >= game.opponent.x - half &&
       game.ball.x <= game.opponent.x + half
-    ) return game.ball.dy = -game.ball.dy + 0.12, true;
+    )
+      return (game.ball.dy = -game.ball.dy + 0.12), true;
     return false;
-  };
+  }
 
-  renderBall(game: any) {
-    game.ball.x += (game.ball.dx);
-    game.ball.y += (game.ball.dy);
+  renderBall(game: gameData) {
+    game.ball.x += game.ball.dx;
+    game.ball.y += game.ball.dy;
     this.server.to(game.data.socket_player).emit('renderBall', game.ball);
     const fakeBall = {
-      x: game.fieald.width -  game.ball.x,
+      x: game.fieald.width - game.ball.x,
       y: game.fieald.height - game.ball.y,
     };
     this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall);
   }
- 
-  updatePaddle(player: boolean, game: any, dto: renderDto) {
+
+  updatePaddle(player: boolean, game: gameData, dto: renderDto) {
     if (player) {
       game.player.x = dto.paddleX;
       this.server.to(game.data.socket_player).emit('renderPaddle', game.player);
-      this.server.to(game.data.socket_opponent).emit('renderOpponent', {x: game.fieald.width - game.player.x, y: game.opponent.y});
-    }
-    else
-    {
+      this.server.to(game.data.socket_opponent).emit('renderOpponent', {
+        x: game.fieald.width - game.player.x,
+        y: game.opponent.y,
+      });
+    } else {
       game.opponent.x = game.fieald.width - dto.paddleX;
-      this.server.to(game.data.socket_opponent).emit('renderPaddle', {x: dto.paddleX, y: game.opponent.y});
-      this.server.to(game.data.socket_player).emit('renderOpponent', {x: game.opponent.x, y: game.opponent.y});
+      this.server
+        .to(game.data.socket_opponent)
+        .emit('renderPaddle', { x: dto.paddleX, y: game.opponent.y });
+      this.server
+        .to(game.data.socket_player)
+        .emit('renderOpponent', { x: game.opponent.x, y: game.opponent.y });
     }
-  };
+  }
 
-  centerBall(game: any) {
+  centerBall(game: gameData) {
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
     game.ball.dy = -game.ball.dy + 1.2;
     // this.renderBall(game);
   }
 
-  checkGoal(player: boolean, game: any): boolean {
+  checkGoal(game: gameData): boolean {
     if (
       game.ball.y - game.ball.radius <= 0 ||
       game.ball.y + game.ball.radius >= game.fieald.height
     ) {
       if (game.ball.y - game.ball.radius <= 0) {
-        game.scores.opponent++;
-      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
         game.scores.player++;
+      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
+        game.scores.opponent++;
       }
       this.centerBall(game);
-      if (player)
-        this.server.to(game.data.id_opponent).emit('updateScore', {player: game.scores.player, opponent: game.scores.opponent});
-      else
-        this.server.to(game.data.id_player).emit('updateScore', {player: game.scores.opponent, opponent: game.scores.player});  
+
+      this.server.to(game.data.socket_player).emit('updateScore', {
+        player: game.scores.player,
+        opponent: game.scores.opponent,
+      });
+      this.server.to(game.data.socket_opponent).emit('updateScore', {
+        player: game.scores.opponent,
+        opponent: game.scores.player,
+      });
       return true;
     }
     return false;
-  };
+  }
 
-  checkEnd(game: any): boolean {
-    if (game.scores.player === 5 || game.scores.opponent === 5)
-      return true;
+  checkEnd(game: gameData): boolean {
+    if (game.scores.player === 5 || game.scores.opponent === 5) return true;
     return false;
   }
 
   private nub: number = 0;
   @SubscribeMessage('updateFrame')
-  async updateFrame( @ConnectedSocket() socket: Socket, @MessageBody() dto: renderDto) {
+  async updateFrame(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() dto: renderDto,
+  ) {
     const game = this.game.find((game) => game.data.id_match === dto.id_match);
-    if (!game) {    
-      return ;
+    if (!game) {
+      return;
     }
-  
-    const player: boolean = socket.id === game.data.socket_player ? true : false
+
+    const player: boolean =
+      socket.id === game.data.socket_player ? true : false;
     this.updatePaddle(player, game, dto);
     if (this.checkEnd(game) === false) {
-      if (this.handleHits(game) === false)
-        this.checkGoal(player, game);
+      if (this.handleHits(game) === false) this.checkGoal(game);
       this.renderBall(game);
     }
     if (this.checkEnd(game) === true) {
@@ -973,8 +1065,8 @@ export class SocketService
         await this.removeGame(game.data.id_match);
       } catch (error) {
         console.error('Error in endGame : ', error);
-      };
-    };
-}
+      }
+    }
+  }
   // ---------------- adam end here ----------------------
 }
