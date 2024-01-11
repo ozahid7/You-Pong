@@ -109,6 +109,7 @@ const ProfileSettings = ({
 					);
 				}
 				closeModal(false);
+				globalSocket.emit("online");
 				user.refetch().then(() => {
 					router.push(myRoutes.dashboard);
 				});
