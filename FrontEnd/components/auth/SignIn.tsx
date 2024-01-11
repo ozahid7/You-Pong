@@ -37,6 +37,9 @@ const SignIn = (props: {
 			router.replace(myRoutes.dashboard);
 		} catch (error) {
 			console.log("error = ", error);
+			setIsLoading(false);
+			setIsInvalidEmail(true);
+			setIsInvalidPass(true);
 		}
 	};
 

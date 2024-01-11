@@ -58,6 +58,7 @@ export class Game {
 	) {
 		this.height = container.clientHeight;
 		this.width = container.clientWidth;
+
 		this.socket = socket;
 		this.gameData = gameData;
 
@@ -171,7 +172,9 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
-		this.emitToUpdateFrame();
+		setTimeout(() => {
+			this.emitToUpdateFrame();
+		}, 3000);
 		this.setupMouseEvents();
 	}
 
@@ -206,8 +209,8 @@ export class Game {
 	}
 
 	setupMouseEvents() {
-		const max = this.width - this.width / this.paddleSize / 2;
-		const min = this.width / this.paddleSize / 2;
+		const max = this.width - this.paddleSize / 2;
+		const min = this.paddleSize / 2;
 
 		Matter.Events.on(
 			this.mouseConstraint,
@@ -228,8 +231,9 @@ export class Game {
 	}
 
 	destroy() {
-		World.clear(this.engine.world, false); // Use false to keep static bodies
+		World.clear(this.engine.world, true);
 		Render.stop(this.render);
 		Engine.clear(this.engine);
+		Events.off(this.engine, "mousemove");
 	}
 }
