@@ -264,13 +264,13 @@ export class SocketService
                 game.data.socket_player === sender.id_socket,
             );
             if (game) {
-              let player_score: number = 0;
-              let opponent_score: number = 5;
+              let player_score: number = 5;
+              let opponent_score: number = 0;
               const is_player: boolean =
                 game.data.socket_opponent === sender.id_socket ? false : true;
               if (is_player) {
-                player_score = 5;
-                opponent_score = 0;
+                player_score = 0;
+                opponent_score = 5;
               }
               const _id =
                 game.data.socket_opponent === sender.id_socket
@@ -486,13 +486,13 @@ export class SocketService
                   game.data.socket_player === sender.id_socket,
               );
               if (game) {
-                let player_score: number = 0;
-                let opponent_score: number = 5;
+                let player_score: number = 5;
+                let opponent_score: number = 0;
                 const is_player: boolean =
                   game.data.socket_opponent === sender.id_socket ? false : true;
                 if (is_player) {
-                  player_score = 5;
-                  opponent_score = 0;
+                  player_score = 0;
+                  opponent_score = 5;
                 }
                 const _id =
                   game.data.socket_opponent === sender.id_socket
@@ -997,36 +997,26 @@ export class SocketService
     // this.renderBall(game);
   }
 
-  checkGoal(player: boolean, game: gameData): boolean {
+  checkGoal(game: gameData): boolean {
     if (
       game.ball.y - game.ball.radius <= 0 ||
       game.ball.y + game.ball.radius >= game.fieald.height
     ) {
       if (game.ball.y - game.ball.radius <= 0) {
-        game.scores.opponent++;
-      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
         game.scores.player++;
+      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
+        game.scores.opponent++;
       }
       this.centerBall(game);
-      if (player) {
-        this.server.to(game.data.socket_player).emit('updateScore', {
-          player: game.scores.player,
-          opponent: game.scores.opponent,
-        });
-        this.server.to(game.data.socket_opponent).emit('updateScore', {
-          player: game.scores.opponent,
-          opponent: game.scores.player,
-        });
-      } else {
-        this.server.to(game.data.socket_player).emit('updateScore', {
-          player: game.scores.opponent,
-          opponent: game.scores.player,
-        });
-        this.server.to(game.data.socket_opponent).emit('updateScore', {
-          player: game.scores.player,
-          opponent: game.scores.opponent,
-        });
-      }
+
+      this.server.to(game.data.socket_player).emit('updateScore', {
+        player: game.scores.player,
+        opponent: game.scores.opponent,
+      });
+      this.server.to(game.data.socket_opponent).emit('updateScore', {
+        player: game.scores.opponent,
+        opponent: game.scores.player,
+      });
       return true;
     }
     return false;
@@ -1052,7 +1042,7 @@ export class SocketService
       socket.id === game.data.socket_player ? true : false;
     this.updatePaddle(player, game, dto);
     if (this.checkEnd(game) === false) {
-      if (this.handleHits(game) === false) this.checkGoal(player, game);
+      if (this.handleHits(game) === false) this.checkGoal(game);
       this.renderBall(game);
     }
     if (this.checkEnd(game) === true) {
