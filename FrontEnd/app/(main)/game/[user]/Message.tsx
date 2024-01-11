@@ -16,10 +16,11 @@ const Message = (props: {
 	if (props.bgColor.includes("grey")) message = "Game Over !!";
 
 	useEffect(() => {
-		setTimeout(() => {
+		const time = setTimeout(() => {
 			props.setIsOpen(false);
 			router.replace(myRoutes.dashboard);
 		}, 4000);
+		return () => clearTimeout(time);
 	}, []);
 
 	return (

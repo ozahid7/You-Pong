@@ -7,6 +7,7 @@ import { FaUserTimes } from "react-icons/fa";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { menuUserElements } from "@/const";
 import { acceptuser, blockuser, declineuser } from "@/api/friendShip";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const RequestBanner = (props: {
 	zindex?: number;
@@ -20,6 +21,7 @@ const RequestBanner = (props: {
 	const block = blockuser(props.uid, () => {}, props.userName);
 	const accept = acceptuser(props.uid);
 	const decline = declineuser(props.uid);
+	const { globalSocket } = useGlobalSocket();
 
 	if (decline.isPending || accept.isPending || block.isPending)
 		return <MiniLoader customClass="m-auto" />;
@@ -77,6 +79,10 @@ const RequestBanner = (props: {
 				<MyToggle
 					otherclass="h-[38px] hidden lg:flex min-w-[120px]"
 					handelCheck={() => {
+						globalSocket.emit("removeRequest", {
+							id_receiver: props.uid,
+							is_message: false,
+						});
 						block.mutate();
 					}}
 					string1="unblock"

@@ -6,6 +6,8 @@ import { LuMessageSquarePlus } from "react-icons/lu";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { menuUserElements } from "@/const";
 import { blockuser, todirect } from "@/api/friendShip";
+import { useGlobalContext } from "@/providers/SocketProvider";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const FriendBanner = (props: {
 	zindex?: number;
@@ -18,6 +20,7 @@ const FriendBanner = (props: {
 	const [enabled, setEnabled] = useState(false);
 	const block = blockuser(props.uid, () => {}, props.userName);
 	const direct = todirect(props.uid);
+	const { globalSocket } = useGlobalSocket();
 
 	if (block.isPending || direct.isPending)
 		return <MiniLoader customClass="m-auto" />;
@@ -63,6 +66,10 @@ const FriendBanner = (props: {
 					<MyToggle
 						otherclass="h-[38px] hidden sm:flex min-w-[120px]"
 						handelCheck={() => {
+							globalSocket.emit("removeRequest", {
+								id_receiver: props.uid,
+								is_message: false,
+							});
 							block.mutate();
 						}}
 						string1="unblock"
