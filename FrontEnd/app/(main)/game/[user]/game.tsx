@@ -11,7 +11,6 @@ import { myRoutes } from "@/const";
 import { OtherUser } from "@/utils/game";
 import Loader from "@/components/tools/Loader";
 import GameProvider, {
-	Info,
 	ball,
 	opponent,
 	player,
@@ -19,12 +18,8 @@ import GameProvider, {
 } from "./GameProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
-import Message from "./Message";
-import { MyContainer, ScoreCard } from "@/components";
-
-interface pageProps {
-	params: { user: string };
-}
+import { MyContainer } from "@/components";
+import { pageProps } from "./page";
 
 export default function game({ params }: pageProps) {
 	//game properties
@@ -35,7 +30,7 @@ export default function game({ params }: pageProps) {
 	const [showGameOption, setShowGameOption] = useState(true);
 	const [showMessage, setShowMessage] = useState(false);
 	const [cloneData, setCloneData] = useState<inviteReturn>();
-	const [scores, setScores] = useState({ player: 0, opponent: 0 });
+	const [scores, setScores] = useState({ myScore: 0, opponentScore: 0 });
 	const { data } = useGlobalContext();
 	let game: Game = null;
 
@@ -101,7 +96,14 @@ export default function game({ params }: pageProps) {
 
 			// window.addEventListener("resize", updateSize);
 			updateSize();
-			game = new Game(ref.current, map, globalSocket, mode, cloneData);
+			game = new Game(
+				ref.current,
+				map,
+				globalSocket,
+				mode,
+				cloneData,
+				scores
+			);
 
 			return () => {
 				game.destroy();
@@ -126,21 +128,15 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
-					setShowMessage(true);
 					game.stopIntervall();
-					game.destroy();
-				});
-			if (globalSocket.listeners("gameOver").length === 0)
-				globalSocket.on("gameOver", () => {
-					console.log("gameOver");
-					setShowMessage(true);
-					game.stopIntervall();
-					game.destroy();
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {
 					console.log("data = ", data);
-					setScores(data);
+					setScores({
+						myScore: data.player.score,
+						opponentScore: data.opponent.score,
+					});
 				});
 		}
 	}, [toStart]);
@@ -152,7 +148,7 @@ export default function game({ params }: pageProps) {
 	return (
 		<GameProvider>
 			<div className="flex w-full h-[90%] max-w-[1400px] justify-center ">
-				<div className="flex w-[88%] h-[90%]">
+				<div className="flex w-[88%] h-[100vh]">
 					<MyContainer>
 						<div className="flex flex-col items-center space-y-2 w-full h-full">
 							<div className="flex  justify-center w-full min-h-[60px] h-[7.5%]">
@@ -162,14 +158,13 @@ export default function game({ params }: pageProps) {
 										avatar={user.data.avatar}
 										otheravatar={otherUser.avatar}
 										otherusername={otherUser.username}
-										scores={scores}
 									/>
 								)}
 							</div>
 							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl ">
 								<div
 									ref={ref}
-									className="flex w-[600px]  h-[800px] rounded-md overflow-hidden"
+									className="flex   w-[600px] h-[800px] rounded-md overflow-hidden"
 								></div>
 							</div>
 						</div>
@@ -177,17 +172,11 @@ export default function game({ params }: pageProps) {
 							isOpen={showCounter}
 							setIsOpen={setShowCounter}
 						/>
-						{showMessage && (
-							<Message
-								isOpen={showMessage}
-								bgColor={
-									scores.player > scores.opponent
-										? "bg-palette-green"
-										: "bg-palette-orange"
-								}
-								setIsOpen={setShowMessage}
-							/>
-						)}
+						{/* <Message
+                isOpen={showMessage}
+                bgColor="bg-palette-green"
+                setIsOpen={setShowMessage}
+            /> */}
 						<GameSettings
 							isOpen={showGameOption}
 							setIsOpen={setShowGameOption}

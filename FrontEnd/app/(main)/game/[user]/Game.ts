@@ -13,9 +13,9 @@ import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
 
-interface Scores {
-	myScore: number;
-	opponentScore: number;
+export interface Scores {
+	player: number;
+	opponent: number;
 }
 
 export const {
@@ -54,14 +54,12 @@ export class Game {
 		map: string,
 		socket: Socket,
 		mode: string,
-		gameData: inviteReturn,
-		scores: Scores
+		gameData: inviteReturn
 	) {
 		this.height = container.clientHeight;
 		this.width = container.clientWidth;
 		this.socket = socket;
 		this.gameData = gameData;
-		this.scores = scores;
 
 		let strokeColor: string;
 		let fillColor: string;
@@ -198,7 +196,6 @@ export class Game {
 			x: data.x,
 			y: this.topPaddle.position.y,
 		});
-		this.scores.opponentScore = data.score;
 	}
 
 	updatePlayerPosition(data: player) {
@@ -206,7 +203,6 @@ export class Game {
 			x: data.x,
 			y: this.bottomPaddle.position.y,
 		});
-		this.scores.myScore = data.score;
 	}
 
 	setupMouseEvents() {
