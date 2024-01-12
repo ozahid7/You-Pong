@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Channel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import Image from "next/image";
+
 interface HomeProps {
   channels: Channel;
 }
@@ -14,16 +15,16 @@ const MiniChat = ({ channels }: HomeProps) => {
           width={44}
           height={44}
           className="flex lg:w-[40px] lg:h-[40px] md:w-[35px] md:h-[35px] xl:w-[45px] xl:h-[45px] border-[2px] border-white"
-          src={channels.avatar}
+          src={channels?.avatar}
           alt="Channel's picture"
         />
       </div>
       <div className="w-[70%] h-full overflow-hidden flex justify-evenly flex-col items-center ">
         <p className="text-[#424242] font-archivo font-[800] md:text-[14px] text-[19px] whitespace-nowrap overflow-hidden text-ellipsis w-[90%] h-fit">
-          {channels.name}
+          {channels?.name}
         </p>
         <div className="text-[#686868] text-[14px] font-[500] w-[90%] h-fit whitespace-nowrap overflow-hidden text-ellipsis hidden lg:block">
-          {channels.description}
+          {channels?.description}
         </div>
       </div>
     </div>

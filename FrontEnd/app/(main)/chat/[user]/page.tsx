@@ -35,6 +35,7 @@ import Loader from "@/components/tools/Loader";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import { usePathname, useRouter } from "next/navigation";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 var one: boolean = false;
 var connection: any = null;
@@ -111,6 +112,7 @@ const Chats = ({ params }) => {
   });
 
   if (MainLoading || directLoading || isLoading || groupsLoading) <Loader />;
+  if (!data || channelsGroups) <MiniLoader />;
 
   useEffect(() => {
     JoinChannels = {
