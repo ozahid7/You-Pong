@@ -22,7 +22,7 @@ const page = ({ params }: pageProps) => {
 	const querQlient = useQueryClient();
 	const toShow = !isMe ? data : user.data;
 	const { globalSocket } = useGlobalSocket();
-	querQlient.invalidateQueries({ queryKey: ["matchs", user.data.uid] });
+
 	const {
 		username,
 		avatar,

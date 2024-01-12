@@ -121,6 +121,7 @@ const SignIn = (props: {
 								isValid={isInvalidEmail}
 								inputclass=""
 								message="Email is invalid"
+								focus={true}
 							/>
 							<MyInput
 								text="Password"

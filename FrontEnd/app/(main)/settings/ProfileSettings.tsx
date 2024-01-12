@@ -229,6 +229,7 @@ const ProfileSettings = ({
 									message={message}
 									customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
 									text={username}
+									focus={true}
 								/>
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">

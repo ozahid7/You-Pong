@@ -125,6 +125,7 @@ const SignUp = (props: {
 							setInput={setEmail}
 							isValid={isInvalidEmail}
 							message="Email is invalid"
+							focus={true}
 						/>
 						<MyInput
 							text="Password"
