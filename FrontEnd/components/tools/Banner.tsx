@@ -15,6 +15,7 @@ interface BannerProps {
 	me: string;
 	status: string;
 	uid: string;
+	isBlocked: boolean;
 }
 
 const Banner = ({
@@ -27,6 +28,7 @@ const Banner = ({
 	me,
 	status,
 	uid,
+	isBlocked,
 }: BannerProps) => {
 	const start = isGreen ? "from-[#508286]" : "from-[#E97152]";
 	const router = useRouter();
@@ -44,7 +46,7 @@ const Banner = ({
 
 	return (
 		<div className={classname}>
-			{opponent != me && (
+			{opponent != me && !isBlocked && (
 				<BsController
 					size={100}
 					strokeWidth={0.5}

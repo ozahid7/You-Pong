@@ -35,6 +35,8 @@ const SignUp = (props: {
 			handleShowSignIn();
 		} catch (error) {
 			console.log("error = ", error);
+			setIsInvalidEmail(true);
+			setIsInvalidPass(true);
 		}
 	};
 

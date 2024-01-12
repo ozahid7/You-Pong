@@ -14,12 +14,14 @@ import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface globalContextProps {
-  data: inviteReturn;
-  setData: any;
-  viewed: boolean;
-  setViewed: any;
-  viewedChat: boolean;
-  setViewedChat: any;
+	data: inviteReturn;
+	setData: any;
+	viewed: boolean;
+	setViewed: any;
+	viewedChat: boolean;
+	setViewedChat: any;
+	requests: number;
+	setRequests: any;
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
@@ -27,11 +29,12 @@ export const globalContext = createContext<globalContextProps | undefined>(
 );
 
 function InviteProvider({ children }: { children: React.ReactNode }) {
-  const globalSocket = useGlobalSocket().globalSocket;
-  const [data, setData] = useState<inviteReturn>();
-  const query = useQueryClient();
-  const [viewed, setViewed] = useState(true);
-  const [viewedChat, setViewedChat] = useState(true);
+	const globalSocket = useGlobalSocket().globalSocket;
+	const [data, setData] = useState<inviteReturn>();
+	const query = useQueryClient();
+	const [viewed, setViewed] = useState(true);
+	const [viewedChat, setViewedChat] = useState(true);
+	let [requests, setRequests] = useState(0);
 
   const router = useRouter();
   const style =
@@ -53,30 +56,39 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
           ? "Sent you a message 💬"
           : "Sent you a friend request 👥";
 
-        if (!obj.is_message) {
-          notify(obj.username, obj.avatar, false, 5000, message);
-          setViewed(false);
-          query.invalidateQueries({ queryKey: ["friends"] });
-        } else if (obj.is_message) {
-          if (!obj.in_chat) {
-            notify(obj.username, obj.avatar, false, 2000, message);
-            setViewedChat(false);
-            query.invalidateQueries({ queryKey: ["messages"] });
-          }
-        }
-      });
+				if (!obj.is_message) {
+					notify(obj.username, obj.avatar, false, 5000, message);
+					setRequests(requests++);
+					if (requests > 0) setViewed(false);
+					query.invalidateQueries({ queryKey: ["friends"] });
+				} else if (obj.is_message) {
+					if (!obj.in_chat) {
+						notify(obj.username, obj.avatar, false, 2000, message);
+						setViewedChat(false);
+						query.invalidateQueries({ queryKey: ["messages"] });
+					}
+				}
+			});
 
-    if (globalSocket.listeners("invitation").length === 0)
-      globalSocket.on("invitation", (obj: inviteReturn) => {
-        console.log("from invitation", obj);
-        setData(obj);
-        notify(obj.username, obj.avatar, true, 10000, "", obj.info);
-      });
-    if (globalSocket.listeners("accepted").length === 0)
-      globalSocket.on("accepted", (obj: inviteReturn) => {
-        console.log("from accepted ......", obj);
-        setData(obj);
-      });
+		if (globalSocket.listeners("removeNotif").length === 0)
+			globalSocket.on("removeNotif", (obj) => {
+				console.log("requests  from remove  = ", requests);
+				setRequests(requests--);
+				if (requests === 0) setViewed(true);
+				query.invalidateQueries({ queryKey: ["friends"] });
+			});
+
+		if (globalSocket.listeners("invitation").length === 0)
+			globalSocket.on("invitation", (obj: inviteReturn) => {
+				console.log("from invitation", obj);
+				setData(obj);
+				notify(obj.username, obj.avatar, true, 10000, "", obj.info);
+			});
+		if (globalSocket.listeners("accepted").length === 0)
+			globalSocket.on("accepted", (obj: inviteReturn) => {
+				console.log("from accepted ......", obj);
+				setData(obj);
+			});
 
     if (globalSocket.listeners("refused").length === 0)
       globalSocket.on("refused", (obj: inviteReturn) => {
@@ -131,21 +143,23 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
       });
   }, []);
 
-  return (
-    <globalContext.Provider
-      value={{
-        data,
-        setData,
-        viewed,
-        setViewed,
-        viewedChat,
-        setViewedChat,
-      }}
-    >
-      {children}
-      <ToastContainer />
-    </globalContext.Provider>
-  );
+	return (
+		<globalContext.Provider
+			value={{
+				data,
+				setData,
+				viewed,
+				setViewed,
+				viewedChat,
+				setViewedChat,
+				requests,
+				setRequests,
+			}}
+		>
+			{children}
+			<ToastContainer />
+		</globalContext.Provider>
+	);
 }
 
 export const useGlobalContext = () => {

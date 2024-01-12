@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { infoPlayer, map, mode } from './socket.interfaces';
+import { gameData, map, mode } from './socket.interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -12,6 +12,8 @@ export class SocketMethodes {
     inGame: boolean;
     inChat: boolean;
   }[] = [];
+
+  protected game: gameData[] = [];
 
   protected privateGame: {
     id_game: string;
@@ -46,6 +48,98 @@ export class SocketMethodes {
     id_user: string;
     id_socket: string;
   }[] = [];
+
+  // add the game
+  async addGame(
+    id_player: string,
+    socket_player: string,
+    id_opponent: string,
+    socket_opponent: string,
+    id_match: string,
+    map: map,
+    mode: mode,
+  ) {
+    // mode === 0 (hard) ||  mode === 1(easy)
+    let speed = mode === 0 ? 2 : 1;
+    let width = mode === 0 ? 100 : 160;
+    let radius = mode === 0 ? 7 : 14;
+    let dx = mode === 0 ? 5 : 2;
+    let dy = mode === 0 ? 5 : 5;
+
+    const ball: {
+      x: number;
+      y: number;
+      speed: number;
+      radius: number;
+      dx: number;
+      dy: number;
+    } = {
+      x: 300,
+      y: 400,
+      speed: speed,
+      radius: radius,
+      dx: 2,
+      dy: 2,
+    };
+
+    const player: {
+      x: number;
+      y: number;
+      width: number;
+    } = {
+      x: 300,
+      y: 770,
+      width,
+    };
+
+    const opponent: {
+      x: number;
+      y: number;
+      width: number;
+    } = {
+      x: 300,
+      y: 30,
+      width: width,
+    };
+
+    const scores: {
+      player: number;
+      opponent: number;
+    } = {
+      player: 0,
+      opponent: 0,
+    };
+
+    const fieald: {
+      width: number;
+      height: number;
+    } = { width: 600, height: 800 };
+
+    const data: {
+      id_match: string;
+      id_player: string;
+      socket_player: string;
+      socket_opponent: string;
+      id_opponent: string;
+      map: map;
+      mode: mode;
+    } = {
+      id_match,
+      id_player,
+      socket_player,
+      socket_opponent,
+      id_opponent,
+      map,
+      mode,
+    };
+
+    this.game.push({ player, opponent, data, scores, ball, fieald });
+  }
+
+  // remove the game
+  async removeGame(id_match: string) {
+    this.game = this.game.filter((game) => game.data.id_match !== id_match);
+  }
 
   async addUser(id_user: string, id_socket: string) {
     this.users.push({ id_user, id_socket, inGame: false, inChat: false });

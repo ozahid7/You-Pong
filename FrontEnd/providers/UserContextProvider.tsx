@@ -93,7 +93,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			console.log("emit from provider");
 			globalSocket.emit("online");
 			me.refetch();
-			i++;
 		}
 	}, [globalSocket, path]);
 
@@ -117,11 +116,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		else setTfaVerified(true);
 	}, []);
 
-	// useLayoutEffect(() => {
-	// 	if (!loged && checked) {
-	// 		redirect(myRoutes.root);
-	// 	}
-	// }, [isLoged, checked]);
+	useLayoutEffect(() => {
+		if (!loged && checked) {
+			redirect(myRoutes.root);
+		}
+	}, [isLoged, checked]);
 
 	if (tfaStatus && !tfaVerified && !loged)
 		return (

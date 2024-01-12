@@ -9,14 +9,43 @@ export enum mode {
   EASY,
 }
 
-// export interface infoRequest {
-//   id_game: string;
-//   id_sender: string;
-//   id_receiver: string;
-//   socket_player: string;
-//   map: map;
-//   mode: mode;
-// }
+export interface gameData {
+  player: {
+    x: number;
+    y: number;
+    width: number;
+  };
+  opponent: {
+    x: number;
+    y: number;
+    width: number;
+  };
+  data: {
+    id_match: string;
+    id_player: string;
+    socket_player: string;
+    socket_opponent: string;
+    id_opponent: string;
+    map: map;
+    mode: mode;
+  };
+  scores: {
+    player: number;
+    opponent: number;
+  };
+  ball: {
+    x: number;
+    y: number;
+    speed: number;
+    radius: number;
+    dx: number;
+    dy: number;
+  };
+  fieald: {
+    width: number;
+    height: number;
+  };
+}
 
 export interface infoType {
   id_channel: string;
@@ -37,6 +66,6 @@ export interface infoGame {
 export interface infoPlayer {
   id_sender: string;
   is_public: boolean;
-  map: string;
-  mode: string;
+  map: map;
+  mode: mode;
 }

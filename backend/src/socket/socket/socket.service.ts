@@ -1,8 +1,4 @@
-import {
-  BadGatewayException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -16,7 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { GameService } from 'src/game/game.service';
 import { renderDto } from 'src/game/dto';
-import { infoGame, infoPlayer, infoType, map, mode } from './socket.interfaces';
+import { gameData, infoGame, infoPlayer, infoType } from './socket.interfaces';
 import { SocketMethodes } from './socket.methodes';
 
 @Injectable()
@@ -32,7 +28,7 @@ export class SocketService
     super(prisma);
   }
 
-  async launch_game(player, opponent) {
+  async launch_game(player, opponent, info: infoPlayer) {
     const player_user = await this.prisma.user.findUnique({
       where: {
         id_user: player.id_user,
@@ -51,13 +47,22 @@ export class SocketService
         },
       });
       if (game) {
+        this.addGame(
+          game.id_player,
+          player.id_socket,
+          game.id_opponent,
+          opponent.id_socket,
+          game.id_match,
+          info.map,
+          info.mode,
+        );
         this.server.to(opponent.id_socket).emit('acceptedGame', {
           username: player_user.username,
           avatar: player_user.avatar,
           level: player_user.level,
           id_match: game.id_match,
-          id_player: game.id_opponent,
-          id_opponent: game.id_player,
+          id_player: game.id_player,
+          id_opponent: game.id_opponent,
         });
         this.server.to(player.id_socket).emit('acceptedGame', {
           username: opponent_user.username,
@@ -67,7 +72,6 @@ export class SocketService
           id_player: game.id_player,
           id_opponent: game.id_opponent,
         });
-        this.gameService.putLvlRank(game.id_match);
       } else {
         this.server.to(player.id_socket).emit('canceledGame', {
           username: player_user.username,
@@ -127,7 +131,7 @@ export class SocketService
             this.classicHard = this.classicHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.classicHard, id_user, id_socket);
           break;
         case 'ORANGE_HARD':
@@ -137,7 +141,7 @@ export class SocketService
             this.orangeHard = this.orangeHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.orangeHard, id_user, id_socket);
           break;
         case 'GREEN_HARD':
@@ -147,7 +151,7 @@ export class SocketService
             this.greenHard = this.greenHard.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.greenHard, id_user, id_socket);
           break;
         case 'CLASSIC_EASY':
@@ -157,7 +161,7 @@ export class SocketService
             this.classicEasy = this.classicEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.classicEasy, id_user, id_socket);
           break;
         case 'ORANGE_EASY':
@@ -167,7 +171,7 @@ export class SocketService
             this.orangeEasy = this.orangeEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.orangeEasy, id_user, id_socket);
           break;
         case 'GREEN_EASY':
@@ -177,7 +181,7 @@ export class SocketService
             this.greenEasy = this.greenEasy.filter(
               (queue) => queue.id_user !== opponent.id_user,
             );
-            this.launch_game(player, opponent);
+            this.launch_game(player, opponent, info);
           } else this.pushToQueue(this.greenEasy, id_user, id_socket);
           break;
         default:
@@ -195,12 +199,10 @@ export class SocketService
       let id_user: string;
       if (socket && socket.handshake.query)
         id_user = socket.handshake.query.id_user.toString();
-      console.log('connected: ', socket.id);
       if (!this.users.find((user) => user.id_socket === socket.id)) {
         this.addUser(id_user, socket.id);
       }
       socket.join(id_user);
-      console.log(this.users);
       const sender = this.users.find((user) => user.id_socket === socket.id);
       if (sender && sender !== undefined) {
         const my_user = await this.prisma.user.findUnique({
@@ -215,7 +217,6 @@ export class SocketService
             data: { status: 'ONLINE' },
           });
           if (user) {
-            console.log('ONLINE ,');
             this.server
               .to(sender.id_socket)
               .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -241,13 +242,50 @@ export class SocketService
           if (user.id_user === sender.id_user) duplicate++;
         });
         if (my_user && my_user !== undefined) {
+          if (sender.inGame) {
+            const game = this.game.find(
+              (game) =>
+                game.data.socket_opponent === sender.id_socket ||
+                game.data.socket_player === sender.id_socket,
+            );
+            if (game) {
+              let player_score: number = 5;
+              let opponent_score: number = 0;
+              const is_player: boolean =
+                game.data.socket_opponent === sender.id_socket ? false : true;
+              if (is_player) {
+                player_score = 0;
+                opponent_score = 5;
+              }
+              const _id =
+                game.data.socket_opponent === sender.id_socket
+                  ? game.data.socket_player
+                  : game.data.socket_opponent;
+              this.server.to(_id).emit('updateScore', {
+                player: player_score,
+                opponent: opponent_score,
+              });
+              this.server.to(_id).emit('gameOver');
+              const updated = await this.prisma.match_History.update({
+                where: {
+                  id_match: game.data.id_match,
+                },
+                data: {
+                  player_score: player_score,
+                  opponent_score: opponent_score,
+                },
+              });
+              if (!updated) console.error('Failed to update match');
+              this.gameService.putLvlRank(game.data.id_match);
+              await this.removeGame(game.data.id_match);
+            }
+          }
           if (duplicate === 1) {
             const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
               data: { status: 'OFFLINE' },
             });
             if (user) {
-              console.log('OFFLINE');
               this.server.to(sender.id_socket).emit('status', {
                 id_user: my_user.id_user,
                 status: 'OFFLINE',
@@ -259,7 +297,6 @@ export class SocketService
               data: { status: 'ONLINE' },
             });
             if (user) {
-              console.log('ONLINE');
               this.server
                 .to(sender.id_socket)
                 .emit('status', { id_user: my_user.id_user, status: 'ONLINE' });
@@ -270,8 +307,6 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      console.log('disconnected: ', socket.id);
-      console.log(this.users);
     } catch (error) {
       console.log('Error in disconnect : ', error);
     }
@@ -343,7 +378,6 @@ export class SocketService
         });
         const result = await Promise.all(us.filter((user) => user));
         if (message) {
-          console.log('send message');
           info.id_sender = sender.id_user;
           info.created_at = message.created_at;
           result.map((user) => {
@@ -396,7 +430,6 @@ export class SocketService
           });
 
           if (user) {
-            console.log('INGAME');
             sender.inGame = true;
             this.server
               .to(sender.id_socket)
@@ -425,12 +458,49 @@ export class SocketService
         if (my_user && my_user !== undefined) {
           if (!sender.inGame && my_user.status === 'INGAME') return;
           else {
+            if (sender.inGame) {
+              const game = this.game.find(
+                (game) =>
+                  game.data.socket_opponent === sender.id_socket ||
+                  game.data.socket_player === sender.id_socket,
+              );
+              if (game) {
+                let player_score: number = 5;
+                let opponent_score: number = 0;
+                const is_player: boolean =
+                  game.data.socket_opponent === sender.id_socket ? false : true;
+                if (is_player) {
+                  player_score = 0;
+                  opponent_score = 5;
+                }
+                const _id =
+                  game.data.socket_opponent === sender.id_socket
+                    ? game.data.socket_player
+                    : game.data.socket_opponent;
+                this.server.to(_id).emit('updateScore', {
+                  player: player_score,
+                  opponent: opponent_score,
+                });
+                this.server.to(_id).emit('gameOver');
+                const updated = await this.prisma.match_History.update({
+                  where: {
+                    id_match: game.data.id_match,
+                  },
+                  data: {
+                    player_score: player_score,
+                    opponent_score: opponent_score,
+                  },
+                });
+                if (!updated) console.error('Failed to update match');
+                this.gameService.putLvlRank(game.data.id_match);
+                await this.removeGame(game.data.id_match);
+              }
+            }
             const user = await this.prisma.user.updateMany({
               where: { id_user: my_user.id_user },
               data: { status: 'ONLINE' },
             });
             if (user) {
-              console.log('ONLINE');
               this.removePlayer(sender.id_socket);
               sender.inGame = false;
               this.server
@@ -465,7 +535,6 @@ export class SocketService
             data: { status: 'OFFLINE' },
           });
           if (user) {
-            console.log('OFFLINE');
             sender.inGame = false;
             this.server
               .to(sender.id_socket)
@@ -476,8 +545,6 @@ export class SocketService
       this.removeUser(socket.id);
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
-      console.log('disconnected: ', socket.id);
-      console.log(this.users);
     } catch (error) {
       console.log('Error in offline : ', error);
     }
@@ -575,7 +642,15 @@ export class SocketService
                 id_player: game.id_player,
                 id_opponent: game.id_opponent,
               });
-              this.gameService.putLvlRank(game.id_match);
+              this.addGame(
+                game.id_player,
+                sender.id_socket,
+                game.id_opponent,
+                receiver.id_socket,
+                game.id_match,
+                info.map,
+                info.mode,
+              );
             }
           } else {
             this.server.to(sender.id_user).emit('canceled', {
@@ -706,13 +781,31 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          this.server.to(receiver.id_user).emit('addNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: false,
-            in_chat: false,
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+              state: 'PENDING',
+            },
           });
+
+          if (friendship) {
+            this.server.to(receiver.id_user).emit('addNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: false,
+              in_chat: false,
+            });
+          }
         }
       }
     } catch (error) {
@@ -748,12 +841,28 @@ export class SocketService
           },
         });
         if (my_user && otherUser) {
-          this.server.to(receiver.id_user).emit('removeNotif', {
-            id_user: my_user.id_user,
-            username: my_user.username,
-            avatar: my_user.avatar,
-            is_message: info.is_message,
+          const friendship = await this.prisma.friendship.findFirst({
+            where: {
+              OR: [
+                {
+                  id_user: my_user.id_user,
+                  id_friend: otherUser.id_user,
+                },
+                {
+                  id_user: otherUser.id_user,
+                  id_friend: my_user.id_user,
+                },
+              ],
+            },
           });
+          if (friendship) {
+            this.server.to(receiver.id_user).emit('removeNotif', {
+              id_user: my_user.id_user,
+              username: my_user.username,
+              avatar: my_user.avatar,
+              is_message: info.is_message,
+            });
+          }
         }
       }
     } catch (error) {
@@ -803,40 +912,142 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
+  hitTop(game: gameData, half: number) {
+    return game.ball.y - game.ball.radius <= game.opponent.y &&
+      game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
+      game.ball.x >= game.opponent.x - half &&
+      game.ball.x <= game.opponent.x + half &&
+      game.ball.dy < 0
+  }
 
-  private ball: {
-    x: number;
-    y: number;
-    speed: number;
-    radius: number;
-    color: string;
-    dx: number;
-    dy: number;
-  } = {
-    x: 300,
-    y: 300,
-    speed: 0.9,
-    radius: 14,
-    color: '',
-    dx: 5,
-    dy: 0,
-  };
+  hitBottom(game: gameData, half: number) {
+    return game.ball.y + game.ball.radius >= game.player.y &&
+      game.ball.y + game.ball.radius <= game.player.y + 3 &&
+      game.ball.x >= game.player.x - half &&
+      game.ball.x <= game.player.x + half &&
+      game.ball.dy > 0
+  }
 
+  handleHits(game: gameData): boolean {
+    const half = game.player.width / 2;
+    if (
+      game.ball.x + game.ball.radius >= game.fieald.width ||
+      game.ball.x - game.ball.radius <= 0
+    )
+      return (game.ball.dx = -game.ball.dx), true;
+    if (this.hitBottom(game, half))
+      return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitTop(game, half))
+      return (game.ball.dy = -game.ball.dy), true;
+    return false;
+  }
+
+  renderBall(game: gameData) {
+    game.ball.x += game.ball.dx;
+    game.ball.y += game.ball.dy;
+    this.server.to(game.data.socket_player).emit('renderBall', game.ball);
+    const fakeBall = {
+      x: game.fieald.width - game.ball.x,
+      y: game.fieald.height - game.ball.y,
+    };
+    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall);
+  }
+
+  updatePaddle(player: boolean, game: gameData, dto: renderDto) {
+    if (player) {
+      game.player.x = dto.paddleX;
+      this.server.to(game.data.socket_player).emit('renderPaddle', game.player);
+      this.server.to(game.data.socket_opponent).emit('renderOpponent', {
+        x: game.fieald.width - game.player.x,
+        y: game.opponent.y,
+      });
+    } else {
+      game.opponent.x = game.fieald.width - dto.paddleX;
+      this.server
+        .to(game.data.socket_opponent)
+        .emit('renderPaddle', { x: dto.paddleX, y: game.opponent.y });
+      this.server
+        .to(game.data.socket_player)
+        .emit('renderOpponent', { x: game.opponent.x, y: game.opponent.y });
+    }
+  }
+
+  centerBall(game: gameData) {
+    game.ball.x = game.fieald.width / 2;
+    game.ball.y = game.fieald.height / 2;
+    game.ball.dy = -game.ball.dy;
+  }
+
+  checkGoal(game: gameData): boolean {
+    if (
+      game.ball.y - game.ball.radius <= 0 ||
+      game.ball.y + game.ball.radius >= game.fieald.height
+    ) {
+      if (game.ball.y - game.ball.radius <= 0) {
+        game.scores.player++;
+      } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
+        game.scores.opponent++;
+      }
+      this.centerBall(game);
+
+      this.server.to(game.data.socket_player).emit('updateScore', {
+        player: game.scores.player,
+        opponent: game.scores.opponent,
+      });
+      this.server.to(game.data.socket_opponent).emit('updateScore', {
+        player: game.scores.opponent,
+        opponent: game.scores.player,
+      });
+      return true;
+    }
+    return false;
+  }
+
+  checkEnd(game: gameData): boolean {
+    if (game.scores.player === 5 || game.scores.opponent === 5) return true;
+    return false;
+  }
+
+  private nub: number = 0;
   @SubscribeMessage('updateFrame')
   async updateFrame(
     @ConnectedSocket() socket: Socket,
     @MessageBody() dto: renderDto,
   ) {
-    if (
-      this.ball.x + this.ball.radius >= dto.fieald.width ||
-      this.ball.x - this.ball.radius <= 0
-  ) {
-    this.ball.dx = -this.ball.dx;
-  }
-    this.ball.x += this.ball.dx;
-    dto.ball.x = this.ball.x;
-    this.server.to(socket.id).emit('render', dto);
-  }
+    const game = this.game.find((game) => game.data.id_match === dto.id_match);
+    if (!game) {
+      return;
+    }
 
+    const player: boolean =
+      socket.id === game.data.socket_player ? true : false;
+    this.updatePaddle(player, game, dto);
+    if (this.checkEnd(game) === false) {
+      if (this.handleHits(game) === false) this.checkGoal(game);
+      this.renderBall(game);
+    }
+    if (this.checkEnd(game) === true) {
+      this.centerBall(game);
+      this.renderBall(game);
+      this.server.to(game.data.socket_player).emit('endGame', dto);
+      this.server.to(game.data.socket_opponent).emit('endGame', dto);
+      try {
+        const updated = await this.prisma.match_History.update({
+          where: {
+            id_match: game.data.id_match,
+          },
+          data: {
+            player_score: game.scores.player,
+            opponent_score: game.scores.opponent,
+          },
+        });
+        if (!updated) console.error('Failed to update match');
+        this.gameService.putLvlRank(game.data.id_match);
+        await this.removeGame(game.data.id_match);
+      } catch (error) {
+        console.error('Error in endGame : ', error);
+      }
+    }
+  }
   // ---------------- adam end here ----------------------
 }

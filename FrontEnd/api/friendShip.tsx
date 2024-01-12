@@ -63,8 +63,8 @@ export const removeuser = (uid: string, username?: string) => {
 	const removeUser = async () => {
 		try {
 			const response = await useAxios(
-				"put",
-				friendsEndPoint.decline + "?id_friend=" + uid
+				"delete",
+				friendsEndPoint.remove + "?id_friend=" + uid
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;

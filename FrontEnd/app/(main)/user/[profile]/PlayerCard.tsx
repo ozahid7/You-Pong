@@ -49,11 +49,12 @@ const PlayerCard = (props: {
 	const Block = blockuser(props.uid, () => {}, props.username);
 	const Add = adduser(props.uid, props.username);
 	const Remove = removeuser(props.uid, props.username);
+	const Decline = declineuser(props.uid);
 	const direct = todirect(props.uid);
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
-		if (props.isMe)
+		if (props.isMe && !props.user.isFetching)
 			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
@@ -88,7 +89,13 @@ const PlayerCard = (props: {
 				}
 			});
 		}
-	}, [globalSocket.disconnected, globalSocket.connected, props.status]);
+	}, [
+		globalSocket.disconnected,
+		globalSocket.connected,
+		props.status,
+		props.user,
+		props.user.isFetched,
+	]);
 
 	let name = props.username.replace(/[^a-zA-Z]/g, "");
 
@@ -102,7 +109,11 @@ const PlayerCard = (props: {
 	const pendingIcon = (
 		<FaUserClock
 			onClick={() => {
-				Remove.mutateAsync().then(() => {
+				globalSocket.emit("removeRequest", {
+					id_receiver: otheruser.data.uid,
+					is_message: false,
+				});
+				Decline.mutateAsync().then(() => {
 					otheruser.refetch();
 					setIcon(addIcon);
 				});
@@ -172,6 +183,10 @@ const PlayerCard = (props: {
 						) : (
 							<HiBan
 								onClick={() => {
+									globalSocket.emit("removeRequest", {
+										id_receiver: otheruser.data.uid,
+										is_message: false,
+									});
 									Block.mutate();
 									router.push(myRoutes.dashboard);
 								}}

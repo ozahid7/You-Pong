@@ -44,7 +44,9 @@ const ProfileSettings = ({
 	);
 	const [invalidNewPass, setInvalidNewPass] = useState(false);
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
-	const [message, setMessage] = useState("Required");
+	const [message, setMessage] = useState(
+		"Required : Enter more than 8 characters"
+	);
 	const [loader, setLoder] = useState(false);
 	let photo = null;
 
@@ -77,6 +79,7 @@ const ProfileSettings = ({
 		)
 			isItEmpty();
 		else {
+			console.log("username = ", userName, "pass = ", currentPass);
 			try {
 				const res = await useAxios(
 					"patch",
@@ -85,6 +88,7 @@ const ProfileSettings = ({
 				);
 
 				console.log("update response = ", res);
+
 				if (
 					globalSocket === null &&
 					user.data &&
@@ -109,11 +113,14 @@ const ProfileSettings = ({
 					);
 				}
 				closeModal(false);
+				if (globalSocket) globalSocket.emit("online");
 				user.refetch().then(() => {
 					router.push(myRoutes.dashboard);
 				});
 			} catch (error) {
-				console.log("error = ", error);
+				console.log("error setting", error);
+				isItEmpty();
+				setInvalidCurrentPass(true);
 			}
 		}
 		setLoder(false);
@@ -130,7 +137,7 @@ const ProfileSettings = ({
 
 	const handelSubmit = (e: any) => {
 		e.preventDefault();
-		userName.length < 6 && userName.length > 0
+		userName.length < 8 && userName.length > 0
 			? setInvalidUser(true)
 			: setInvalidUser(false);
 		newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
@@ -154,6 +161,7 @@ const ProfileSettings = ({
 		setInvalidCurrentPass(false);
 		setInvalidNewPass(false);
 		setInvalidUser(false);
+		setInvalidCurrentPass(false);
 	};
 
 	return (
@@ -209,7 +217,7 @@ const ProfileSettings = ({
 						onFocus={setToDefault}
 						className="flex flex-grow  w-full items-center flex-col space-y-4 justify-evenly"
 					>
-						<div className="h-[70%] min-h-[300px]  flex flex-col items-center justify-around w-full">
+						<div className="h-[70%] min-h-[300px] flex flex-col items-center justify-around w-full">
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
 								<span className="font-body text-cardtitle font-semibold lg:text-lg">
 									User Name
@@ -232,7 +240,7 @@ const ProfileSettings = ({
 									isPassword={true}
 									type="password"
 									isValid={invalidCurrentPass}
-									message="Required input"
+									message="Required: Enter valid password"
 									customclass={`min-h-[40px] ${
 										isIntra ? "opacity-30" : "opacity-100"
 									} sm:min-h-[52px] min-w-full`}

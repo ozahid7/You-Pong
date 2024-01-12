@@ -8,11 +8,15 @@ import {
 	getRightWall,
 	getTopPaddle,
 	getTopWall,
-	myRender,
 } from "./gameUtils";
 import { Socket } from "socket.io-client";
-import { Info } from "./GameProvider";
+import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
+
+export interface Scores {
+	player: number;
+	opponent: number;
+}
 
 export const {
 	Engine,
@@ -41,7 +45,9 @@ export class Game {
 	socket: Socket;
 	paddleSize: number;
 	gameData: inviteReturn;
-	tmpX: number;
+	tmpX: number = 0;
+	scores: Scores;
+	interval: any;
 
 	constructor(
 		container: HTMLDivElement,
@@ -52,6 +58,7 @@ export class Game {
 	) {
 		this.height = container.clientHeight;
 		this.width = container.clientWidth;
+
 		this.socket = socket;
 		this.gameData = gameData;
 
@@ -59,7 +66,7 @@ export class Game {
 		let fillColor: string;
 		let background: string;
 
-		this.paddleSize = mode === "easy" ? 4 : 6;
+		this.paddleSize = mode === "easy" ? 160 : 100;
 		if (map === "orange") {
 			fillColor = "#EB6440";
 			strokeColor = "#EB6440";
@@ -111,6 +118,8 @@ export class Game {
 			},
 			this.paddleSize
 		);
+
+		this.tmpX = this.bottomPaddle.position.x;
 		this.topPaddle = getTopPaddle(
 			this.width,
 			{
@@ -163,53 +172,45 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
-		this.listenToRender();
-		this.emitToUpdateFrame();
+		setTimeout(() => {
+			this.emitToUpdateFrame();
+		}, 3000);
 		this.setupMouseEvents();
 	}
 
 	emitToUpdateFrame() {
-		setInterval(() => {
+		this.interval = setInterval(() => {
 			this.socket.emit("updateFrame", {
-				player: {
-					x: this.tmpX,
-					y: this.bottomPaddle.position.y,
-				},
-				fieald: { height: 800, width: 600 },
-				ball: { x: 0, y: 0 },
-				id_opponent: this.gameData.id_opponent,
-				id_player: this.gameData.id_player,
+				paddleX: this.tmpX,
+				id_match: this.gameData.id_match,
 			});
 		}, 1000 / 60);
 	}
 
-	listenToRender() {
-		if (this.socket.listeners("render").length === 0)
-			this.socket.on("render", (data: Info) => {
-				Matter.Body.setPosition(this.ball, {
-					x: data.ball.x,
-					y: data.ball.y,
-				});
+	updateBallPosition(data: ball) {
+		Matter.Body.setPosition(this.ball, {
+			x: data.x,
+			y: data.y,
+		});
+	}
 
-				//change opponent position
+	updateOpponentPosition(data: opponent) {
+		Matter.Body.setPosition(this.topPaddle, {
+			x: data.x,
+			y: this.topPaddle.position.y,
+		});
+	}
 
-				// Matter.Body.setPosition(this.topPaddle, {
-				// 	x: data.opponent.x,
-				// 	y: data.opponent.y,
-				// });
-
-				//change my position
-
-				// Matter.Body.setPosition(this.bottomPaddle, {
-				// 	x: data.player.x,
-				// 	y: data.player.y,
-				// });
-			});
+	updatePlayerPosition(data: player) {
+		Matter.Body.setPosition(this.bottomPaddle, {
+			x: data.x,
+			y: this.bottomPaddle.position.y,
+		});
 	}
 
 	setupMouseEvents() {
-		const max = this.width - this.width / this.paddleSize / 2;
-		const min = this.width / this.paddleSize / 2;
+		const max = this.width - this.paddleSize / 2;
+		const min = this.paddleSize / 2;
 
 		Matter.Events.on(
 			this.mouseConstraint,
@@ -225,8 +226,14 @@ export class Game {
 		);
 	}
 
+	stopIntervall() {
+		clearInterval(this.interval);
+	}
+
 	destroy() {
+		World.clear(this.engine.world, true);
 		Render.stop(this.render);
 		Engine.clear(this.engine);
+		Events.off(this.engine, "mousemove");
 	}
 }
