@@ -161,7 +161,7 @@ const Chats = ({ params }) => {
       const id = params.user;
       indexChannelsDirect.map(async (channel) => {
         const result = await getChannel(channel.id_channel);
-        const ret = result?.Object.users.find(
+        const ret = result?.Object?.users.find(
           (user: User) => user.id_user === id
         );
         if (ret) setValueDirect(channel.index);
