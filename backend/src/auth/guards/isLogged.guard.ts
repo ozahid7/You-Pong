@@ -16,11 +16,11 @@ export class isLoggedGuard implements CanActivate {
       const valid = jwt.verify(authCookie, process.env.JWT_SECRET);
       if (!valid) 
         return true;
-      // else {
-      //   const response = context.switchToHttp().getResponse();
-      //   response.clearCookie('access_token');
-      //   response.clearCookie('_intra_42_session_production');
-      // }
+      else {
+        const response = context.switchToHttp().getResponse();
+        response.clearCookie('access_token');
+        response.clearCookie('_intra_42_session_production');
+      }
     } catch(error) {
         return true
     }
