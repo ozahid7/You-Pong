@@ -912,25 +912,33 @@ export class SocketService
 
   // ---------------- adam start here ----------------------
 
+  hitTop(game: gameData, half: number) {
+    return game.ball.y - game.ball.radius <= game.opponent.y &&
+      game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
+      game.ball.x >= game.opponent.x - half &&
+      game.ball.x <= game.opponent.x + half &&
+      game.ball.dy < 0
+  }
+
+  hitBottom(game: gameData, half: number) {
+    return game.ball.y + game.ball.radius >= game.player.y &&
+      game.ball.y + game.ball.radius <= game.player.y + 3 &&
+      game.ball.x >= game.player.x - half &&
+      game.ball.x <= game.player.x + half &&
+      game.ball.dy > 0
+  }
+
   handleHits(game: gameData): boolean {
     const half = game.player.width / 2;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width ||
       game.ball.x - game.ball.radius <= 0
     )
-      return (game.ball.dx = -game.ball.dx + 0.12), true;
-    if (
-      game.ball.y + game.ball.radius >= game.player.y &&
-      game.ball.x >= game.player.x - half &&
-      game.ball.x <= game.player.x + half
-    )
-      return (game.ball.dy = -game.ball.dy + 0.12), true;
-    if (
-      game.ball.y - game.ball.radius <= game.opponent.y &&
-      game.ball.x >= game.opponent.x - half &&
-      game.ball.x <= game.opponent.x + half
-    )
-      return (game.ball.dy = -game.ball.dy + 0.12), true;
+      return (game.ball.dx = -game.ball.dx), true;
+    if (this.hitBottom(game, half))
+      return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitTop(game, half))
+      return (game.ball.dy = -game.ball.dy), true;
     return false;
   }
 
@@ -967,8 +975,7 @@ export class SocketService
   centerBall(game: gameData) {
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
-    game.ball.dy = -game.ball.dy + 1.2;
-    // this.renderBall(game);
+    game.ball.dy = -game.ball.dy;
   }
 
   checkGoal(game: gameData): boolean {
