@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { TfaController } from "./tfa.controller";
 import { TfaAuthService } from "src/auth/services";
+import { TfaUserService } from "src/user/services";
+import { UserModule } from "src/user/user.module";
 
 @Module({
-    imports: [TfaAuthService],
+    imports: [UserModule],
     controllers: [TfaController],
-    providers: [TfaAuthService],
+    providers: [TfaUserService],
 })
 export class TfaModule {}
