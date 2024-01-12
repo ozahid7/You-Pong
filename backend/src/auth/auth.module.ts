@@ -16,6 +16,7 @@ import {
 } from 'src/user/services';
 import { AuthController } from './auth.controller';
 import { AchievementService } from 'src/achievement/achievement.service';
+import { FtController } from './ft.controller';
 
 @Module({
   imports: [
@@ -40,6 +41,6 @@ import { AchievementService } from 'src/achievement/achievement.service';
     AchievementService,
   ],
   exports: [AuthService, localService, FtService, TfaAuthService],
-  controllers: [AuthController],
+  controllers: [AuthController, FtController],
 })
 export class AuthModule {}
