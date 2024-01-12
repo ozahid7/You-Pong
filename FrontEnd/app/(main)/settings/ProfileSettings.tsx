@@ -20,6 +20,7 @@ interface ProfileSettingsProps {
 	user: UseQueryResult<UserInfo, Error>;
 	globalSocket?: Socket;
 	setGlobalSocket?: any;
+	showIcon?: boolean;
 }
 
 const ProfileSettings = ({
@@ -29,6 +30,7 @@ const ProfileSettings = ({
 	user,
 	globalSocket,
 	setGlobalSocket,
+	showIcon,
 }: ProfileSettingsProps) => {
 	const { username, avatar, isIntra } = user.data;
 	const router = useRouter();
@@ -178,6 +180,7 @@ const ProfileSettings = ({
 				setToDefault();
 			}}
 			withCorner={false}
+			withClose={showIcon}
 			customClass="absolute h-[80%] w-[90%] sm:w-[66%] max-w-[700px]"
 		>
 			{!loader ? (

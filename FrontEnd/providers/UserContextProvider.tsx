@@ -148,6 +148,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				user={me}
 				globalSocket={globalSocket}
 				setGlobalSocket={setGlobalSocket}
+				showIcon={true}
 			/>
 		);
 	} else if (
