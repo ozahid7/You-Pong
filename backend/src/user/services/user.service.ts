@@ -144,6 +144,7 @@ export class UserService {
   async signout(@Res() res: Response) {
     try {
       res.clearCookie('access_token');
+      res.clearCookie('_intra_42_session_production');
       res.status(200).json({});
     } catch (error) {
       throw new ForbiddenException(error);
