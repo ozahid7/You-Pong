@@ -4,17 +4,30 @@ import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { searchUsers } from "@/types/Api";
 import Link from "next/link";
+import { UseQueryResult } from "@tanstack/react-query";
 
-const SearchBar = (props: { FriendsList: searchUsers }) => {
-	const [FriendArr, setFriendArr] = useState<searchUsers>(props.FriendsList);
+const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
+	const friendsList = props.search.data;
+	const [FriendArr, setFriendArr] = useState<searchUsers>(friendsList);
 	const [Input, setInput] = useState("");
 
 	useEffect(() => {
-		setFriendArr(
-			props.FriendsList?.filter((user) =>
-				user.username.toLowerCase().includes(Input.toLowerCase())
-			)
-		);
+		if (Input.length === 1 || Input.length === 5 || Input.length === 12)
+			props.search.refetch().then((response) => {
+				setFriendArr(
+					response.data?.filter((user) =>
+						user.username
+							.toLowerCase()
+							.includes(Input.toLowerCase())
+					)
+				);
+			});
+		else
+			setFriendArr(
+				friendsList.filter((user) =>
+					user.username.toLowerCase().includes(Input.toLowerCase())
+				)
+			);
 	}, [Input]);
 
 	return (

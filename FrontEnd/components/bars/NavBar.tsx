@@ -25,7 +25,7 @@ const NavBar = () => {
 	return (
 		<nav className="flex justify-end w-full items-center px-4 h:px-8 sm:px-14 py-6">
 			<div className="flex justify-end  s:w-full sm:w-[90%] max-w-[800px] space-x-4 md:w-[80%] h-full s:flex items-center">
-				{search.data && <SearchBar FriendsList={search.data} />}
+				{search.data && <SearchBar search={search} />}
 				<img
 					className="border-2 hidden aspect-1 cursor-pointer s:flex border-white rounded-sm object-cover"
 					src={avatar || defaultavatar}

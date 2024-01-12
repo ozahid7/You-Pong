@@ -49,7 +49,7 @@ const ProfileSettings = ({
 	const [message, setMessage] = useState(
 		"Required : Enter more than 8 characters"
 	);
-	const [loader, setLoder] = useState(false);
+	let loader = false;
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +65,7 @@ const ProfileSettings = ({
 	};
 
 	const UpdateInfos = async () => {
-		setLoder(true);
+		loader = true;
 		if (selectedFile !== avatar) photo = await setFile(file);
 		const toSend = {
 			newUsername: userName.replaceAll(" ", ""),
@@ -119,13 +119,14 @@ const ProfileSettings = ({
 				user.refetch().then(() => {
 					router.push(myRoutes.dashboard);
 				});
+				loader = false;
 			} catch (error) {
 				console.log("error setting", error);
 				isItEmpty();
 				setInvalidCurrentPass(true);
+				loader = false;
 			}
 		}
-		setLoder(false);
 	};
 
 	useEffect(() => {

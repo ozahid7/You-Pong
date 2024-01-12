@@ -114,7 +114,7 @@ const PlayerLoader = (props: {
 				<div className="w-full flex flex-col h:flex-row h-full">
 					<div className="flex-1 flex flex-col justify-center items-center w-full">
 						<img
-							className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
+							className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] aspect-1 flex border-white rounded-sm object-cover"
 							src={props.avatar || defaultavatar}
 							alt=""
 							width={500}
@@ -140,7 +140,7 @@ const PlayerLoader = (props: {
 						{isMatched ? (
 							<div className="flex-1 flex flex-col justify-center items-center w-full">
 								<img
-									className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-contain"
+									className="border-2 min-w-[40px] max-w-[80px] md:max-w-[120px] aspect-1 lg:max-w-[140px] xl:max-w-[180px] flex border-white rounded-sm object-cover"
 									src={userInfo.avatar || defaultavatar}
 									alt=""
 									width={500}
