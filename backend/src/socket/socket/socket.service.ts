@@ -633,6 +633,15 @@ export class SocketService
               },
             });
             if (game) {
+              this.server.to(sender.id_socket).emit('accepted', {
+                info,
+                username: otherUser.username,
+                avatar: otherUser.avatar,
+                level: otherUser.level,
+                id_match: game.id_match,
+                id_player: game.id_opponent,
+                id_opponent: game.id_player,
+              });
               this.server.to(receiver.id_socket).emit('accepted', {
                 info,
                 username: my_user.username,
@@ -655,9 +664,9 @@ export class SocketService
           } else {
             this.server.to(sender.id_user).emit('canceled', {
               info,
-              username: my_user.username,
-              avatar: my_user.avatar,
-              level: my_user.level,
+              username: otherUser.username,
+              avatar: otherUser.avatar,
+              level: otherUser.level,
             });
           }
         }
