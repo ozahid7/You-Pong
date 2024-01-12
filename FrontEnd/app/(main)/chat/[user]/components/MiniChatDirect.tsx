@@ -28,7 +28,7 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
   if (ChannelLoading) <Loader />;
 
   const user: User | null = data
-    ? data.users.find((user) => user.id_user !== main.uid) || null
+    ? data.users.find((user) => user.id_user !== main?.uid) || null
     : null;
 
   return (

@@ -66,7 +66,7 @@ const Chat = ({
     : null;
 
   const user: User | null = channel
-    ? channel.users.find((user) => user.id_user !== main.uid)
+    ? channel.users.find((user) => user.id_user !== main?.uid)
     : null;
 
   const handleButtonClick = () => {
