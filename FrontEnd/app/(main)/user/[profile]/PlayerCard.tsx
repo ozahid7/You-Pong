@@ -54,7 +54,7 @@ const PlayerCard = (props: {
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
-		if (props.isMe)
+		if (props.isMe && !props.user.isFetching)
 			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
@@ -89,7 +89,13 @@ const PlayerCard = (props: {
 				}
 			});
 		}
-	}, [globalSocket.disconnected, globalSocket.connected, props.status]);
+	}, [
+		globalSocket.disconnected,
+		globalSocket.connected,
+		props.status,
+		props.user,
+		props.user.isFetched,
+	]);
 
 	let name = props.username.replace(/[^a-zA-Z]/g, "");
 

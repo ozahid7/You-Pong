@@ -133,6 +133,7 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", () => {
 					console.log("gameOver");
+					setScores({ player: 5, opponent: 0 });
 					setShowMessage(true);
 					game.stopIntervall();
 					game.destroy();
@@ -143,6 +144,14 @@ export default function game({ params }: pageProps) {
 					setScores(data);
 				});
 		}
+		return () => {
+			globalSocket.off("gameOver");
+			globalSocket.off("renderBall");
+			globalSocket.off("renderPaddle");
+			globalSocket.off("renderOpponent");
+			globalSocket.off("endGame");
+			globalSocket.off("updateScore");
+		};
 	}, [toStart]);
 
 	const [game_id, SetGameId] = useState(

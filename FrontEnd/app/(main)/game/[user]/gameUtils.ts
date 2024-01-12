@@ -109,7 +109,3 @@ export const getBottomPaddle = (
 export const getBall = (width: number, height: number, wallOptions: object) => {
 	return Matter.Bodies.circle(width / 2, height / 2, 14, wallOptions);
 };
-
-const changePosition = (topWall, Body) => {
-	Body.setPosition(topWall, { x: 300, y: 300 });
-};
