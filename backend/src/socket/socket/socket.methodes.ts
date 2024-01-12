@@ -63,6 +63,8 @@ export class SocketMethodes {
     let speed = mode === 0 ? 2 : 1;
     let width = mode === 0 ? 100 : 160;
     let radius = mode === 0 ? 7 : 14;
+    let dx = mode === 0 ? 5 : 2;
+    let dy = mode === 0 ? 5 : 5;
 
     const ball: {
       x: number;
