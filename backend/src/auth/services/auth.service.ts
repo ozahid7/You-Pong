@@ -18,7 +18,7 @@ export class AuthService
 		try {
 			res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 			res.clearCookie(key);
-			res.cookie(key, token, {httpOnly: true, maxAge: 86400000, secure: true});
+			res.cookie(key, token, {httpOnly: true, maxAge: 86400000, secure: true, sameSite: 'strict'});
 		} catch (error) {
 			throw new ForbiddenException(error);
 		}
