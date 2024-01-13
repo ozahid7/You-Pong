@@ -122,7 +122,7 @@ export class Game {
       },
       this.remap(this.paddleSize, 0, 600, 0, this.width),
       this.remap(15, 0, 800, 0, this.height),
-      this.remap(50, 0, 800, 0, this.height)
+      this.remap(45, 0, 800, 0, this.height)
     );
 
     this.topPaddle = getTopPaddle(
@@ -137,7 +137,7 @@ export class Game {
       },
       this.remap(this.paddleSize, 0, 600, 0, this.width),
       this.remap(15, 0, 800, 0, this.height),
-      this.remap(50, 0, 800, 0, this.height)
+      this.remap(45, 0, 800, 0, this.height)
     );
 
     //init walls
@@ -258,31 +258,46 @@ export class Game {
   }
 
   updateOpponentPosition(data: opponent) {
-    if (data)
+    if (data) {
+      if (data.x === 0) data.x = this.width / 2;
+
       Matter.Body.setPosition(this.topPaddle, {
-        x: this.remap(data.x, 0, 600, 0, this.width), // **
+        x: this.remap(data.x, 0, 600, this.width / 2, this.width),
         y: this.topPaddle.position.y,
       });
+    }
   }
 
   updatePlayerPosition(data: player) {
-    if (data)
+    if (data) {
+      console.log(
+        "x:",
+        this.remap(data.x, 0, 600, 0, this.width),
+        "y:",
+        this.bottomPaddle.position.y,
+        "width:",
+        this.width,
+        "data:",
+        data
+      );
+      if (data.x === 0) data.x = this.width / 2;
       Matter.Body.setPosition(this.bottomPaddle, {
-        x: this.remap(data.x, 0, 600, 0, this.width), // **
+        x: this.remap(data.x, 0, 600, 0, this.width),
         y: this.bottomPaddle.position.y,
       });
+    }
   }
 
   setupMouseEvents() {
-    const max = this.width - this.paddleSize / 2;
-    const min = this.paddleSize / 2;
+    let min: number = this.remap(this.paddleSize / 2, 0, 600, 0, this.width);
+    let max: number = this.width - min;
 
     Matter.Events.on(
       this.mouseConstraint,
       "mousemove",
       (event: Matter.IMouseEvent) => {
-        if (this.mouse.position.x < max && this.mouse.position.x > min) {
-          this.tmpX = this.mouse.position.x;
+        if (this.mouse.position.x <= max && this.mouse.position.x >= min) {
+          this.tmpX = this.remap(this.mouse.position.x, 0, this.width, 0, 600);
         }
       }
     );
@@ -299,6 +314,4 @@ export class Game {
     Engine.clear(this.engine);
     Events.off(this.engine, "mousemove");
   }
-
-  
 }

@@ -93,8 +93,8 @@ export default function game({ params }: pageProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setWidht(window.innerWidth);
-      setHeight(window.innerHeight);
+      setWidht(ref.current?.clientWidth);
+      setHeight(ref.current?.clientHeight);
     };
 
     window.addEventListener("resize", handleResize);
