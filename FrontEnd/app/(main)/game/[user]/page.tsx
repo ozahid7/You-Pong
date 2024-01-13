@@ -93,21 +93,29 @@ export default function game({ params }: pageProps) {
 	}, [data]);
 
 	useEffect(() => {
-		if (ref.current) {
-			const updateSize = () => {
-				setHeight(window.innerHeight);
-				setWidht(window.innerWidth);
-			};
+		const updateSize = () => {
+			setHeight(window.innerHeight);
+			setWidht(window.innerWidth);
+		};
+		updateSize();
+		if (typeof window !== "undefined") {
+			window.addEventListener("resize", updateSize);
+		}
+		return () => {
+			if (typeof window !== "undefined")
+				window.removeEventListener("resize", updateSize);
+		};
+	}, []);
 
-			// window.addEventListener("resize", updateSize);
-			updateSize();
+	useEffect(() => {
+		if (ref.current && toStart) {
 			game = new Game(ref.current, map, globalSocket, mode, cloneData);
 
 			return () => {
 				game.destroy();
 			};
 		}
-	}, [cloneData]);
+	}, [height, width, cloneData]);
 
 	useEffect(() => {
 		if (game) {
@@ -126,9 +134,9 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
-					setShowMessage(true);
-					game.stopIntervall();
-					game.destroy();
+					// setShowMessage(true);
+					// game.stopIntervall();
+					// game.destroy();
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", () => {
@@ -140,7 +148,7 @@ export default function game({ params }: pageProps) {
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {
-					console.log("data = ", data);
+					// console.log("data = ", data);
 					setScores(data);
 				});
 		}
@@ -161,10 +169,10 @@ export default function game({ params }: pageProps) {
 	return (
 		<GameProvider>
 			<div className="flex w-full h-[90%] max-w-[1400px] justify-center ">
-				<div className="flex w-[88%] h-[90%]">
+				<div className="flex w-[88%] h-[92%]">
 					<MyContainer>
 						<div className="flex flex-col items-center space-y-2 w-full h-full">
-							<div className="flex  justify-center w-full min-h-[60px] h-[7.5%]">
+							<div className="flex  justify-center w-full min-h-[60px] h-[7%]">
 								{otherUser.avatar !== undefined && (
 									<ScoreCard
 										username={user.data.username}
@@ -175,10 +183,10 @@ export default function game({ params }: pageProps) {
 									/>
 								)}
 							</div>
-							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl ">
+							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[1000px] border-palette-white h-[93%] rounded-md shadow-xl items-center">
 								<div
 									ref={ref}
-									className="flex w-[600px]  h-[800px] rounded-md overflow-hidden"
+									className="w-[100%] h-[100%] flex justify-center items-center "
 								></div>
 							</div>
 						</div>
