@@ -18,7 +18,7 @@ const ScoreCard = (props: {
 					{" "}
 					<div className="flex items-center gap-2">
 						<img
-							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm object-contain"
+							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] aspect-1 flex border-white rounded-sm object-cover"
 							src={props.avatar || defaultavatar}
 							alt=""
 							width={90}
@@ -46,7 +46,7 @@ const ScoreCard = (props: {
 							<p>{props.otherusername.slice(0, 7)}</p>
 						</div>
 						<img
-							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm object-contain"
+							className="border-2 min-w-[30px] max-w-[50px] xl:max-w-[50px] flex border-white rounded-sm aspect-1 object-cover"
 							src={props.otheravatar || defaultavatar}
 							alt=""
 							width={90}

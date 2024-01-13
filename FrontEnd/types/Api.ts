@@ -85,7 +85,7 @@ export type UserToShow = {
 //EndPoints
 export const endPoints = {
 	signin: "auth/local/signin",
-	getTfaStatus: "auth/getTfaStatus",
+	getTfaStatus: "tfa/getTfaStatus",
 	signup: "auth/local/signup",
 	tfaSendCode: "auth/twoFactorAuth",
 	userTfaSendCode: "user/tfa/switch",

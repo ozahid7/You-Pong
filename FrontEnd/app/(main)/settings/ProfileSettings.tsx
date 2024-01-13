@@ -20,6 +20,7 @@ interface ProfileSettingsProps {
 	user: UseQueryResult<UserInfo, Error>;
 	globalSocket?: Socket;
 	setGlobalSocket?: any;
+	showIcon?: boolean;
 }
 
 const ProfileSettings = ({
@@ -29,6 +30,7 @@ const ProfileSettings = ({
 	user,
 	globalSocket,
 	setGlobalSocket,
+	showIcon,
 }: ProfileSettingsProps) => {
 	const { username, avatar, isIntra } = user.data;
 	const router = useRouter();
@@ -47,7 +49,7 @@ const ProfileSettings = ({
 	const [message, setMessage] = useState(
 		"Required : Enter more than 8 characters"
 	);
-	const [loader, setLoder] = useState(false);
+	let loader = false;
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +65,7 @@ const ProfileSettings = ({
 	};
 
 	const UpdateInfos = async () => {
-		setLoder(true);
+		loader = true;
 		if (selectedFile !== avatar) photo = await setFile(file);
 		const toSend = {
 			newUsername: userName.replaceAll(" ", ""),
@@ -117,13 +119,14 @@ const ProfileSettings = ({
 				user.refetch().then(() => {
 					router.push(myRoutes.dashboard);
 				});
+				loader = false;
 			} catch (error) {
 				console.log("error setting", error);
 				isItEmpty();
 				setInvalidCurrentPass(true);
+				loader = false;
 			}
 		}
-		setLoder(false);
 	};
 
 	useEffect(() => {
@@ -178,6 +181,7 @@ const ProfileSettings = ({
 				setToDefault();
 			}}
 			withCorner={false}
+			withClose={showIcon}
 			customClass="absolute h-[80%] w-[90%] sm:w-[66%] max-w-[700px]"
 		>
 			{!loader ? (
@@ -229,6 +233,7 @@ const ProfileSettings = ({
 									message={message}
 									customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
 									text={username}
+									focus={true}
 								/>
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">

@@ -12,6 +12,7 @@ import { notify } from "@/utils/game";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import useFriends from "@/api/useFriends";
 
 interface globalContextProps {
 	data: inviteReturn;
@@ -35,6 +36,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const [viewed, setViewed] = useState(true);
 	const [viewedChat, setViewedChat] = useState(true);
 	let [requests, setRequests] = useState(0);
+	const friends = useFriends();
 
 	const router = useRouter();
 	const style =
@@ -60,7 +62,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 					notify(obj.username, obj.avatar, false, 5000, message);
 					setRequests(requests++);
 					if (requests > 0) setViewed(false);
-					query.invalidateQueries({ queryKey: ["friends"] });
+					friends.refetch();
 				} else if (obj.is_message) {
 					if (!obj.in_chat) {
 						notify(obj.username, obj.avatar, false, 2000, message);
@@ -75,7 +77,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				console.log("requests  from remove  = ", requests);
 				setRequests(requests--);
 				if (requests === 0) setViewed(true);
-				query.invalidateQueries({ queryKey: ["friends"] });
+				friends.refetch();
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)

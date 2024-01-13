@@ -3,11 +3,16 @@ import { useMatchs } from "@/api/useMatchs";
 import { Banner, MyCard } from "@/components";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { defaultavatar } from "@/const";
-import React from "react";
+import React, { useEffect } from "react";
 import { Tooltip } from "react-tooltip";
 
 const HistoryCard = (props: { uid: string; me: string }) => {
-	const matchs = useMatchs(props.uid).data;
+	const matchsQuery = useMatchs(props.uid);
+	const matchs = matchsQuery.data;
+
+	useEffect(() => {
+		matchsQuery.refetch();
+	}, []);
 	return (
 		<div className="flex justify-center z-0 items-center   max-w-[720px] xl:max-h-none max-h-[500px] xl:max-w-[520px] min-w-[256px] w-[90%] xl:w-[92%] h-[94%] xl:h-[90%] ">
 			<MyCard type="nocorner" otherclass="max-h-full w-full flex ">
