@@ -54,7 +54,7 @@ const PlayerCard = (props: {
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
-		if (props.isMe && !props.user.isFetching)
+		if (props.isMe && props.user.isFetched)
 			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
@@ -95,6 +95,12 @@ const PlayerCard = (props: {
 		props.status,
 		props.user.isFetched,
 	]);
+	const [showStatus, setShowStatus] = useState(false);
+	useEffect(() => {
+		const time = setTimeout(() => {
+			setShowStatus(true);
+		}, 1000);
+	}, []);
 
 	let name = props.username.replace(/[^a-zA-Z]/g, "");
 
@@ -248,7 +254,7 @@ const PlayerCard = (props: {
 								>
 									{name}
 								</h2>
-								{textColor.length > 0 && props.user.data ? (
+								{textColor.length > 0 && showStatus ? (
 									<p
 										className={`absolute -top-1 left-0 text-[12px] ${textColor}`}
 									>
@@ -257,7 +263,7 @@ const PlayerCard = (props: {
 								) : (
 									<></>
 								)}
-								{props.user.data && (
+								{showStatus && (
 									<span className="relative  flex h-2 w-2  sm:h-3 sm:w-3">
 										<span
 											className={`animate-ping absolute inline-flex h-full w-full rounded-full ${color}  opacity-75`}
