@@ -93,7 +93,6 @@ const PlayerCard = (props: {
 		globalSocket.disconnected,
 		globalSocket.connected,
 		props.status,
-		props.user,
 		props.user.isFetched,
 	]);
 
