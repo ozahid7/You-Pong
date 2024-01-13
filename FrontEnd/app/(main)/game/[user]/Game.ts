@@ -89,7 +89,7 @@ export class Game {
         strokeStyle: strokeColor,
       },
     };
-	
+
     [this.width, this.height] = this.FixSizeRatio();
     this.ScaleUpdate();
 
@@ -215,23 +215,19 @@ export class Game {
     return ((value - x1) * (y2 - x2)) / (y1 - x1 + x2);
   }
 
-  FixSizeRatio(): number[] {
-    let width: number, height: number;
-    let aspect = 600 / 800;
+  FixSizeRatio(): [number, number] {
+    let width: number = 0;
+    let height: number = 0;
 
-    if (this.element.clientWidth < this.element.clientHeight) {
+    if (this.element.clientWidth > this.element.clientHeight) {
+      height = this.element.clientHeight;
+      width = height * (3 / 4);
+    } else {
       width = this.element.clientWidth;
-      height = (width * 1) / aspect;
+      height = width * (4 / 3);
       if (height > this.element.clientHeight) {
         height = this.element.clientHeight;
-        width = height * aspect;
-      }
-    } else {
-      height = this.element.clientHeight;
-      width = height * aspect;
-      if (width > this.element.clientWidth) {
-        width = this.element.clientWidth;
-        height = (width * 1) / aspect;
+        width = height * (3 / 4);
       }
     }
     return [width, height];
@@ -303,4 +299,6 @@ export class Game {
     Engine.clear(this.engine);
     Events.off(this.engine, "mousemove");
   }
+
+  
 }

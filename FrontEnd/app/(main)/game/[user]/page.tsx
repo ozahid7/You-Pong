@@ -92,26 +92,24 @@ export default function game({ params }: pageProps) {
   }, [data]);
 
   useEffect(() => {
-    const updateSize = () => {
-      setHeight(window.innerHeight);
+    const handleResize = () => {
       setWidht(window.innerWidth);
+      setHeight(window.innerHeight);
     };
-    updateSize();
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", updateSize);
-      return () => {
-        if (typeof window !== "undefined")
-          window.removeEventListener("resize", updateSize);
-      };
-    }
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    if (ref.current)
+    if (ref.current) {
       game = new Game(ref.current, map, globalSocket, mode, cloneData);
-    return () => {
-      game?.destroy();
-    };
+      return () => {
+        game?.destroy();
+      };
+    }
   }, [cloneData, width, height]);
 
   useEffect(() => {
@@ -183,7 +181,7 @@ export default function game({ params }: pageProps) {
               <div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[1000px] border-palette-white h-[100%] rounded-md shadow-xl items-center">
                 <div
                   ref={ref}
-                  className="w-[100%] h-[100%] flex justify-center items-center "
+                  className="w-[100%] h-[100%] flex justify-center items-center relative"
                 ></div>
               </div>
             </div>
