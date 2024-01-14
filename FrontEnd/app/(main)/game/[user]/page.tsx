@@ -21,7 +21,6 @@ import { inviteReturn } from "@/types/game";
 import Message from "./Message";
 import { MyContainer, ScoreCard } from "@/components";
 import { Game } from "./Game";
-import { Positions } from "@/types";
 
 interface pageProps {
   params: { user: string };
@@ -43,7 +42,6 @@ export default function game_({ params }: pageProps) {
 
   //game ref and sizes
   const ref = useRef<HTMLDivElement>(null);
-
   const [width, setWidht] = useState<number>();
   const [height, setHeight] = useState<number>();
 
@@ -107,21 +105,8 @@ export default function game_({ params }: pageProps) {
   }, []);
 
   useEffect(() => {
-    let position: Positions = null;
-
     if (ref.current) {
-      globalSocket.on("positions", (data: Positions) => {
-        position = data;
-      });
-      console.log("after", position);
-      game = new Game(
-        ref.current,
-        map,
-        globalSocket,
-        mode,
-        cloneData,
-        position
-      );
+      game = new Game(ref.current, map, globalSocket, mode, cloneData);
     }
     return () => {
       game?.destroy();
@@ -130,10 +115,6 @@ export default function game_({ params }: pageProps) {
 
   useEffect(() => {
     if (game) {
-      // First position
-      globalSocket.emit("gamePositions", cloneData?.id_match);
-
-      // Game position
       if (globalSocket.listeners("renderBall").length === 0)
         globalSocket.on("renderBall", (data: ball) => {
           game.updateBallPosition(data);
@@ -141,6 +122,7 @@ export default function game_({ params }: pageProps) {
       if (globalSocket.listeners("renderPaddle").length === 0)
         globalSocket.on("renderPaddle", (data: player) => {
           game.updatePlayerPosition(data);
+          console.log(data);
         });
       if (globalSocket.listeners("renderOpponent").length === 0)
         globalSocket.on("renderOpponent", (data: opponent) => {

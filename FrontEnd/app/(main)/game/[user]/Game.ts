@@ -12,7 +12,6 @@ import {
 import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
-import { Positions } from "@/types";
 
 export interface Scores {
   player: number;
@@ -59,8 +58,7 @@ export class Game {
     map: string,
     socket: Socket,
     mode: string,
-    gameData: inviteReturn,
-    Position: Positions
+    gameData: inviteReturn
   ) {
     this.element = container;
 
@@ -114,8 +112,8 @@ export class Game {
 
     //init players
     this.bottomPaddle = getBottomPaddle(
-      Position?.player.x,
-      Position?.player.y,
+      this.width,
+      this.height,
       {
         isStatic: true,
         render: {
@@ -132,7 +130,7 @@ export class Game {
     this.tmpX = temp;
 
     this.topPaddle = getTopPaddle(
-      Position?.opponent.x,
+      this.width,
       {
         isStatic: true,
         render: {
@@ -183,12 +181,7 @@ export class Game {
     );
 
     //init ball
-    this.ball = getBall(
-      Position?.ball.x,
-      Position?.ball.y,
-      this.scale,
-      wallOptions
-    );
+    this.ball = getBall(this.width, this.height, this.scale, wallOptions);
 
     // init mouse
     this.mouse = Matter.Mouse.create(this.render.canvas);
@@ -263,6 +256,7 @@ export class Game {
 
   updateBallPosition(data: ball) {
     if (data) {
+      console.log("ball data:", data);
       Matter.Body.setPosition(this.ball, {
         x: this.remap(data.x, 600, this.width),
         y: this.remap(data.y, 800, this.height),
