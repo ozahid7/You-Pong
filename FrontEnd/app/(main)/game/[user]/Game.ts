@@ -12,6 +12,7 @@ import {
 import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
+import { Positions } from "@/types";
 
 export interface Scores {
   player: number;
@@ -30,6 +31,8 @@ export const {
   Runner,
   MouseConstraint,
 } = Matter;
+
+let temp: number = 300;
 
 export class Game {
   height: number;
@@ -56,7 +59,8 @@ export class Game {
     map: string,
     socket: Socket,
     mode: string,
-    gameData: inviteReturn
+    gameData: inviteReturn,
+    Position: Positions
   ) {
     this.element = container;
 
@@ -110,8 +114,8 @@ export class Game {
 
     //init players
     this.bottomPaddle = getBottomPaddle(
-      this.width,
-      this.height,
+      Position?.player.x,
+      Position?.player.y,
       {
         isStatic: true,
         render: {
@@ -125,11 +129,10 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
-    this.tmpX = 300;
-    console.log(this.bottomPaddle.position.x);
+    this.tmpX = temp;
 
     this.topPaddle = getTopPaddle(
-      this.width,
+      Position?.opponent.x,
       {
         isStatic: true,
         render: {
@@ -180,13 +183,14 @@ export class Game {
     );
 
     //init ball
-    this.ball = getBall(this.width, this.height, this.scale, wallOptions);
+    this.ball = getBall(
+      Position?.ball.x,
+      Position?.ball.y,
+      this.scale,
+      wallOptions
+    );
 
-    this.mouse = Matter.Mouse.create(this.render.canvas);
-    this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
-      mouse: this.mouse,
-    });
-
+    // init mouse
     this.mouse = Matter.Mouse.create(this.render.canvas);
     this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
       mouse: this.mouse,
@@ -208,10 +212,10 @@ export class Game {
     Render.run(this.render);
 
     // Set up mouse events
-    setTimeout(() => {
-      this.emitToUpdateFrame();
-    }, 3000);
     this.setupMouseEvents();
+
+    // update game
+    this.emitToUpdateFrame();
   }
 
   remap(value: number, max1: number, max2: number): number {
@@ -224,7 +228,7 @@ export class Game {
 
     if (this.element.clientWidth < this.element.clientHeight) {
       width = this.element.clientWidth;
-      height = (width * 1) / Aspect;
+      height = width / Aspect;
       if (height > this.element.clientHeight) {
         height = this.element.clientHeight;
         width = height * Aspect;
@@ -234,7 +238,7 @@ export class Game {
       width = height * Aspect;
       if (width > this.element.clientWidth) {
         width = this.element.clientWidth;
-        height = (width * 1) / Aspect;
+        height = width / Aspect;
       }
     }
     return [width, height];
@@ -248,20 +252,22 @@ export class Game {
   }
 
   emitToUpdateFrame() {
+    this.interval ? this.stopIntervall() : "";
     this.interval = setInterval(() => {
       this.socket.emit("updateFrame", {
-        paddleX: this.tmpX,
+        paddleX: this.remap(this.tmpX, this.width, 600),
         id_match: this.gameData?.id_match,
       });
     }, 1000 / 60);
   }
 
   updateBallPosition(data: ball) {
-    if (data)
+    if (data) {
       Matter.Body.setPosition(this.ball, {
-        x: this.remap(data.x, 600, this.width), // **
-        y: this.remap(data.y, 800, this.height), // normalizing dial size, bash t9ad f responsive
+        x: this.remap(data.x, 600, this.width),
+        y: this.remap(data.y, 800, this.height),
       });
+    }
   }
 
   updateOpponentPosition(data: opponent) {
@@ -275,17 +281,7 @@ export class Game {
 
   updatePlayerPosition(data: player) {
     if (data) {
-      console.log(
-        "x:",
-        data.x,
-        "y:",
-        this.bottomPaddle.position.y,
-        "width:",
-        this.width,
-        "newX:",
-        this.remap(data.x, 600, this.width)
-      );
-
+      temp = this.remap(data.x, 600, this.width);
       Matter.Body.setPosition(this.bottomPaddle, {
         x: this.remap(data.x, 600, this.width),
         y: this.bottomPaddle.position.y,
@@ -306,7 +302,7 @@ export class Game {
             this.remap(this.paddleSize, 600, this.width) / 2 >=
             0
         ) {
-          this.tmpX = this.remap(this.mouse.position.x, this.width, 600);
+          this.tmpX = this.mouse.position.x;
         }
       }
     );

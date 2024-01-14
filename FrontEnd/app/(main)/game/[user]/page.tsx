@@ -21,12 +21,15 @@ import { inviteReturn } from "@/types/game";
 import Message from "./Message";
 import { MyContainer, ScoreCard } from "@/components";
 import { Game } from "./Game";
+import { Positions } from "@/types";
 
 interface pageProps {
   params: { user: string };
 }
 
-export default function game({ params }: pageProps) {
+let game: Game = null;
+
+export default function game_({ params }: pageProps) {
   //game properties
   const [map, setMap] = useState("classic");
   const [mode, setMode] = useState("easy");
@@ -37,10 +40,10 @@ export default function game({ params }: pageProps) {
   const [cloneData, setCloneData] = useState<inviteReturn>();
   const [scores, setScores] = useState({ player: 0, opponent: 0 });
   const { data } = useGlobalContext();
-  let game: Game = null;
 
   //game ref and sizes
   const ref = useRef<HTMLDivElement>(null);
+
   const [width, setWidht] = useState<number>();
   const [height, setHeight] = useState<number>();
 
@@ -104,16 +107,33 @@ export default function game({ params }: pageProps) {
   }, []);
 
   useEffect(() => {
+    let position: Positions = null;
+
     if (ref.current) {
-      game = new Game(ref.current, map, globalSocket, mode, cloneData);
-      return () => {
-        game?.destroy();
-      };
+      globalSocket.on("positions", (data: Positions) => {
+        position = data;
+      });
+      console.log("after", position);
+      game = new Game(
+        ref.current,
+        map,
+        globalSocket,
+        mode,
+        cloneData,
+        position
+      );
     }
+    return () => {
+      game?.destroy();
+    };
   }, [cloneData, width, height]);
 
   useEffect(() => {
     if (game) {
+      // First position
+      globalSocket.emit("gamePositions", cloneData?.id_match);
+
+      // Game position
       if (globalSocket.listeners("renderBall").length === 0)
         globalSocket.on("renderBall", (data: ball) => {
           game.updateBallPosition(data);
