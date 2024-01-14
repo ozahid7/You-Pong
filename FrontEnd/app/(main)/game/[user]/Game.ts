@@ -120,10 +120,13 @@ export class Game {
         },
         chamfer: { radius: [7, 7, 0, 0] },
       },
-      this.remap(this.paddleSize, 0, 600, 0, this.width),
-      this.remap(15, 0, 800, 0, this.height),
-      this.remap(45, 0, 800, 0, this.height)
+      this.remap(this.paddleSize, 600, this.width),
+      this.remap(15, 800, this.height),
+      this.remap(45, 800, this.height)
     );
+
+    this.tmpX = 300;
+    console.log(this.bottomPaddle.position.x);
 
     this.topPaddle = getTopPaddle(
       this.width,
@@ -135,9 +138,9 @@ export class Game {
         },
         chamfer: { radius: [0, 0, 7, 7] },
       },
-      this.remap(this.paddleSize, 0, 600, 0, this.width),
-      this.remap(15, 0, 800, 0, this.height),
-      this.remap(45, 0, 800, 0, this.height)
+      this.remap(this.paddleSize, 600, this.width),
+      this.remap(15, 800, this.height),
+      this.remap(45, 800, this.height)
     );
 
     //init walls
@@ -146,7 +149,7 @@ export class Game {
         this.width,
         Bodies,
         wallOptions,
-        this.remap(10, 0, 800, 0, this.height)
+        this.remap(10, 800, this.height)
       )
     );
     this.walls.push(
@@ -155,7 +158,7 @@ export class Game {
         this.width,
         Bodies,
         wallOptions,
-        this.remap(10, 0, 800, 0, this.height)
+        this.remap(10, 800, this.height)
       )
     );
     this.walls.push(
@@ -163,7 +166,7 @@ export class Game {
         this.height,
         Bodies,
         wallOptions,
-        this.remap(10, 0, 600, 0, this.width)
+        this.remap(10, 600, this.width)
       )
     );
     this.walls.push(
@@ -172,7 +175,7 @@ export class Game {
         this.width,
         Bodies,
         wallOptions,
-        this.remap(10, 0, 600, 0, this.width)
+        this.remap(10, 600, this.width)
       )
     );
 
@@ -211,23 +214,27 @@ export class Game {
     this.setupMouseEvents();
   }
 
-  remap(value: number, x1: number, y1: number, x2: number, y2: number): number {
-    return ((value - x1) * (y2 - x2)) / (y1 - x1 + x2);
+  remap(value: number, max1: number, max2: number): number {
+    return Math.round(max2 * (value / max1));
   }
 
   FixSizeRatio(): [number, number] {
-    let width: number = 0;
-    let height: number = 0;
+    let width: number, height: number;
+    let Aspect: number = 600 / 800;
 
-    if (this.element.clientWidth > this.element.clientHeight) {
-      height = this.element.clientHeight;
-      width = height * (3 / 4);
-    } else {
+    if (this.element.clientWidth < this.element.clientHeight) {
       width = this.element.clientWidth;
-      height = width * (4 / 3);
+      height = (width * 1) / Aspect;
       if (height > this.element.clientHeight) {
         height = this.element.clientHeight;
-        width = height * (3 / 4);
+        width = height * Aspect;
+      }
+    } else {
+      height = this.element.clientHeight;
+      width = height * Aspect;
+      if (width > this.element.clientWidth) {
+        width = this.element.clientWidth;
+        height = (width * 1) / Aspect;
       }
     }
     return [width, height];
@@ -252,17 +259,15 @@ export class Game {
   updateBallPosition(data: ball) {
     if (data)
       Matter.Body.setPosition(this.ball, {
-        x: this.remap(data.x, 0, 600, 0, this.width), // **
-        y: this.remap(data.y, 0, 800, 0, this.height), // normalizing dial size, bash t9ad f responsive
+        x: this.remap(data.x, 600, this.width), // **
+        y: this.remap(data.y, 800, this.height), // normalizing dial size, bash t9ad f responsive
       });
   }
 
   updateOpponentPosition(data: opponent) {
     if (data) {
-      if (data.x === 0) data.x = this.width / 2;
-
       Matter.Body.setPosition(this.topPaddle, {
-        x: this.remap(data.x, 0, 600, this.width / 2, this.width),
+        x: this.remap(data.x, 600, this.width),
         y: this.topPaddle.position.y,
       });
     }
@@ -272,32 +277,36 @@ export class Game {
     if (data) {
       console.log(
         "x:",
-        this.remap(data.x, 0, 600, 0, this.width),
+        data.x,
         "y:",
         this.bottomPaddle.position.y,
         "width:",
         this.width,
-        "data:",
-        data
+        "newX:",
+        this.remap(data.x, 600, this.width)
       );
-      if (data.x === 0) data.x = this.width / 2;
+
       Matter.Body.setPosition(this.bottomPaddle, {
-        x: this.remap(data.x, 0, 600, 0, this.width),
+        x: this.remap(data.x, 600, this.width),
         y: this.bottomPaddle.position.y,
       });
     }
   }
 
   setupMouseEvents() {
-    let min: number = this.remap(this.paddleSize / 2, 0, 600, 0, this.width);
-    let max: number = this.width - min;
-
     Matter.Events.on(
       this.mouseConstraint,
       "mousemove",
       (event: Matter.IMouseEvent) => {
-        if (this.mouse.position.x <= max && this.mouse.position.x >= min) {
-          this.tmpX = this.remap(this.mouse.position.x, 0, this.width, 0, 600);
+        if (
+          this.mouse.position.x +
+            this.remap(this.paddleSize, 600, this.width) / 2 <=
+            this.width &&
+          this.mouse.position.x -
+            this.remap(this.paddleSize, 600, this.width) / 2 >=
+            0
+        ) {
+          this.tmpX = this.remap(this.mouse.position.x, this.width, 600);
         }
       }
     );
