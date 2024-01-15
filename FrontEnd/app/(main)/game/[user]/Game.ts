@@ -12,6 +12,7 @@ import {
 import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
+import { Positions } from "@/types";
 
 export interface Scores {
   player: number;
@@ -31,7 +32,11 @@ export const {
   MouseConstraint,
 } = Matter;
 
-let temp: number = 0;
+let positions: Positions = {
+  ball: { x: 0, y: 0 },
+  opponent: { x: 0, y: 0 },
+  player: { x: 0, y: 0 },
+};
 
 export class Game {
   height: number;
@@ -179,7 +184,13 @@ export class Game {
     );
 
     //init ball
-    this.ball = getBall(this.width, this.height, this.scale, wallOptions);
+    let posX = 0;
+    let posY = 0;
+
+    positions.ball.x !== 0 ? (posX = positions.ball.x * 2) : (posX = this.width);
+    positions.ball.y !== 0 ? (posY = positions.ball.y * 2) : (posY = this.height);
+
+    this.ball = getBall(posX, posY, this.scale, wallOptions);
 
     // init mouse
     this.mouse = Matter.Mouse.create(this.render.canvas);
@@ -249,7 +260,8 @@ export class Game {
   emitToUpdateFrame() {
     this.interval = setInterval(() => {
       if (this.tmpX === 0) {
-        if (temp <= this.width && temp > 0) this.tmpX = temp;
+        if (positions.player.x <= this.width && positions.player.x > 0)
+          this.tmpX = positions.player.x;
         else this.tmpX = this.width / 2;
       }
       this.socket.emit("updateFrame", {
@@ -273,6 +285,8 @@ export class Game {
 
   updateBallPosition(data: ball) {
     if (data) {
+      positions.ball.x = data.x;
+      positions.ball.y = data.x;
       Matter.Body.setPosition(this.ball, {
         x: this.remap(data.x, 600, this.width),
         y: this.remap(data.y, 800, this.height),
@@ -282,6 +296,7 @@ export class Game {
 
   updateOpponentPosition(data: opponent) {
     if (data) {
+      positions.opponent.x = data.x;
       Matter.Body.setPosition(this.topPaddle, {
         x: this.remap(data.x, 600, this.width),
         y: this.topPaddle.position.y,
@@ -312,7 +327,7 @@ export class Game {
             0
         ) {
           this.tmpX = this.mouse.position.x;
-          temp = this.tmpX;
+          positions.player.x = this.tmpX;
         }
       }
     );
