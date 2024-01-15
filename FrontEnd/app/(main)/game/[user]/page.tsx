@@ -27,6 +27,7 @@ interface pageProps {
 }
 
 let game: Game = null;
+let interval = null;
 
 export default function game_({ params }: pageProps) {
   //game properties
@@ -107,14 +108,26 @@ export default function game_({ params }: pageProps) {
   useEffect(() => {
     if (ref.current) {
       game = new Game(ref.current, map, globalSocket, mode, cloneData);
-      return () => {
-        game?.destroy();
-      };
+      if (!interval) {
+        setTimeout(() => {
+          interval = game.emitToUpdateFrame();
+        }, 3000);
+      } else {
+        clearInterval(interval);
+        game.stopIntervall();
+        interval = game.emitToUpdateFrame();
+      }
     }
+    return () => {
+      game?.destroy();
+    };
   }, [cloneData, width, height]);
 
   useEffect(() => {
     if (game) {
+      // setTimeout(() => {
+      //   game.emitToUpdateFrame();
+      // }, 3000);
       if (globalSocket.listeners("renderBall").length === 0)
         globalSocket.on("renderBall", (data: ball) => {
           game.updateBallPosition(data);

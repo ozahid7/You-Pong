@@ -187,6 +187,11 @@ export class Game {
       mouse: this.mouse,
     });
 
+    this.mouse = Matter.Mouse.create(this.render.canvas);
+    this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
+      mouse: this.mouse,
+    });
+
     // Add all the bodies to the world
     World.add(this.engine.world, [
       ...this.walls,
@@ -204,11 +209,6 @@ export class Game {
 
     // Set up mouse events
     this.setupMouseEvents();
-
-    // update game
-    setTimeout(() => {
-      this.emitToUpdateFrame();
-    }, 3000);
   }
 
   remap(value: number, max1: number, max2: number): number {
@@ -251,11 +251,11 @@ export class Game {
         id_match: this.gameData?.id_match,
       });
     }, 1000 / 60);
+    return this.interval;
   }
 
   updateBallPosition(data: ball) {
     if (data) {
-      console.log("ball data:", data);
       Matter.Body.setPosition(this.ball, {
         x: this.remap(data.x, 600, this.width),
         y: this.remap(data.y, 800, this.height),
@@ -302,6 +302,10 @@ export class Game {
 
   stopIntervall() {
     clearInterval(this.interval);
+  }
+
+  RemoveMouse() {
+    Events.off(this.engine, "mousemove");
   }
 
   destroy() {

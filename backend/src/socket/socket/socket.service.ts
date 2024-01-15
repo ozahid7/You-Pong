@@ -913,19 +913,23 @@ export class SocketService
   // ---------------- adam start here ----------------------
 
   hitTop(game: gameData, half: number) {
-    return game.ball.y - game.ball.radius <= game.opponent.y &&
+    return (
+      game.ball.y - game.ball.radius <= game.opponent.y &&
       game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
       game.ball.x >= game.opponent.x - half &&
       game.ball.x <= game.opponent.x + half &&
       game.ball.dy < 0
+    );
   }
 
   hitBottom(game: gameData, half: number) {
-    return game.ball.y + game.ball.radius >= game.player.y &&
+    return (
+      game.ball.y + game.ball.radius >= game.player.y &&
       game.ball.y + game.ball.radius <= game.player.y + 3 &&
       game.ball.x >= game.player.x - half &&
       game.ball.x <= game.player.x + half &&
       game.ball.dy > 0
+    );
   }
 
   handleHits(game: gameData): boolean {
@@ -935,10 +939,8 @@ export class SocketService
       game.ball.x - game.ball.radius <= 0
     )
       return (game.ball.dx = -game.ball.dx), true;
-    if (this.hitBottom(game, half))
-      return (game.ball.dy = -game.ball.dy), true;
-    if (this.hitTop(game, half))
-      return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitBottom(game, half)) return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitTop(game, half)) return (game.ball.dy = -game.ball.dy), true;
     return false;
   }
 
@@ -1004,7 +1006,7 @@ export class SocketService
   }
 
   checkEnd(game: gameData): boolean {
-    if (game.scores.player === 5 || game.scores.opponent === 5) return true;
+    if (game.scores.player === 500 || game.scores.opponent === 500) return true;
     return false;
   }
 
@@ -1048,6 +1050,41 @@ export class SocketService
         console.error('Error in endGame : ', error);
       }
     }
+  }
+
+  @SubscribeMessage('gamePositions')
+  async gamePositions(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() id_match: string,
+  ) {
+    const game = this.game.find((game) => game.data.id_match === id_match);
+    if (!game) {
+      return;
+    }
+
+    const player: boolean =
+      socket.id === game.data.socket_player ? true : false;
+
+    let data = {
+      ball: {
+        x: game.ball.x,
+        y: game.ball.y,
+      },
+      player: { x: game.player.x, y: game.player.y },
+      opponent: { x: game.fieald.width - game.player.x, y: game.opponent.y },
+    };
+    const fakeBall = {
+      x: game.fieald.width - game.ball.x,
+      y: game.fieald.height - game.ball.y,
+    };
+    if (!player) {
+      data = {
+        ball: fakeBall,
+        player: { x: game.fieald.width - game.opponent.x, y: game.player.y },
+        opponent: { x: game.fieald.width - game.player.x, y: game.opponent.y },
+      };
+    }
+    this.server.to(socket.id).emit('positions', data);
   }
   // ---------------- adam end here ----------------------
 }
