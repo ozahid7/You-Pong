@@ -140,7 +140,6 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
-
     //init walls
     this.walls.push(
       getTopWall(
@@ -182,13 +181,15 @@ export class Game {
 
     // init mouse
     this.mouse = Matter.Mouse.create(this.render.canvas);
-    this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
-      mouse: this.mouse,
-    });
 
-    this.mouse = Matter.Mouse.create(this.render.canvas);
     this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
       mouse: this.mouse,
+      constraints: {
+        stiffness: 0,
+        render: {
+          visible: false,
+        },
+      },
     });
 
     // Add all the bodies to the world

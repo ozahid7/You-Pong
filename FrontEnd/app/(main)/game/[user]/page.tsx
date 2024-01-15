@@ -132,7 +132,6 @@ export default function game_({ params }: pageProps) {
       if (globalSocket.listeners("renderPaddle").length === 0)
         globalSocket.on("renderPaddle", (data: player) => {
           game.updatePlayerPosition(data);
-          console.log(data);
         });
       if (globalSocket.listeners("renderOpponent").length === 0)
         globalSocket.on("renderOpponent", (data: opponent) => {
