@@ -31,6 +31,8 @@ export const {
   MouseConstraint,
 } = Matter;
 
+let temp: number = 0;
+
 export class Game {
   height: number;
   width: number;
@@ -246,6 +248,7 @@ export class Game {
 
   emitToUpdateFrame() {
     this.interval = setInterval(() => {
+      this.tmpX === 0 ? (this.tmpX = temp) : "";
       this.socket.emit("updateFrame", {
         paddleX: this.remap(this.tmpX, this.width, 600),
         id_match: this.gameData?.id_match,
@@ -306,6 +309,7 @@ export class Game {
             0
         ) {
           this.tmpX = this.mouse.position.x;
+          temp = this.tmpX;
         }
       }
     );
