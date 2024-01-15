@@ -941,7 +941,7 @@ export class SocketService
     const half = game.player.width / 2;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width - 10||
-      game.ball.x - game.ball.radius <= 0
+      game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
     if (this.hitBottom(game, half))
