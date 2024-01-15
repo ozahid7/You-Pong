@@ -110,7 +110,7 @@ export default function game_({ params }: pageProps) {
       game = new Game(ref.current, map, globalSocket, mode, cloneData);
       if (!interval) {
         setTimeout(() => {
-          interval = game.emitToUpdateFrame();
+          interval = game.emitToUpdateFrame_First();
         }, 3000);
       } else {
         clearInterval(interval);

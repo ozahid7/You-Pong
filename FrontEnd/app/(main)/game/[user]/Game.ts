@@ -125,8 +125,6 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
-    this.tmpX = this.width / 2;
-
     this.topPaddle = getTopPaddle(
       this.width,
       {
@@ -245,6 +243,17 @@ export class Game {
   }
 
   emitToUpdateFrame() {
+    this.interval = setInterval(() => {
+      this.socket.emit("updateFrame", {
+        paddleX: this.remap(this.tmpX, this.width, 600),
+        id_match: this.gameData?.id_match,
+      });
+    }, 1000 / 60);
+    return this.interval;
+  }
+
+  emitToUpdateFrame_First() {
+    this.tmpX = this.width / 2;
     this.interval = setInterval(() => {
       this.socket.emit("updateFrame", {
         paddleX: this.remap(this.tmpX, this.width, 600),
