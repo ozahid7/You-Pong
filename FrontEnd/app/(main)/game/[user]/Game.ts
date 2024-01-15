@@ -140,6 +140,7 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
+
     //init walls
     this.walls.push(
       getTopWall(
@@ -313,15 +314,11 @@ export class Game {
     clearInterval(this.interval);
   }
 
-  RemoveMouse() {
-    Events.off(this.engine, "mousemove");
-  }
-
   destroy() {
-    this.render.canvas.remove();
-    World.clear(this.engine.world, true);
     Render.stop(this.render);
     Engine.clear(this.engine);
+    World.clear(this.engine.world, true);
     Events.off(this.engine, "mousemove");
+    this.render.canvas.remove();
   }
 }

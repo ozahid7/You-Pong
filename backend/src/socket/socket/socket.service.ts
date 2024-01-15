@@ -914,7 +914,7 @@ export class SocketService
 
   hitTop(game: gameData, half: number) {
     return (
-      game.ball.y - game.ball.radius <= game.opponent.y &&
+      game.ball.y - game.ball.radius <= game.opponent.y + 15 &&
       game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
       game.ball.x >= game.opponent.x - half &&
       game.ball.x <= game.opponent.x + half &&
@@ -924,7 +924,7 @@ export class SocketService
 
   hitBottom(game: gameData, half: number) {
     return (
-      game.ball.y + game.ball.radius >= game.player.y &&
+      game.ball.y + game.ball.radius >= game.player.y - 15 &&
       game.ball.y + game.ball.radius <= game.player.y + 3 &&
       game.ball.x >= game.player.x - half &&
       game.ball.x <= game.player.x + half &&

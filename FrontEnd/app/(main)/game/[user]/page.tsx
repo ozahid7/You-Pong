@@ -125,9 +125,6 @@ export default function game_({ params }: pageProps) {
 
   useEffect(() => {
     if (game) {
-      // setTimeout(() => {
-      //   game.emitToUpdateFrame();
-      // }, 3000);
       if (globalSocket.listeners("renderBall").length === 0)
         globalSocket.on("renderBall", (data: ball) => {
           game.updateBallPosition(data);
