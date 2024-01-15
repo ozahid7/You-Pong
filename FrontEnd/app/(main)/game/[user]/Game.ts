@@ -31,8 +31,6 @@ export const {
   MouseConstraint,
 } = Matter;
 
-let temp: number = 300;
-
 export class Game {
   height: number;
   width: number;
@@ -127,7 +125,7 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
-    this.tmpX = temp;
+    this.tmpX = this.width / 2;
 
     this.topPaddle = getTopPaddle(
       this.width,
@@ -208,7 +206,9 @@ export class Game {
     this.setupMouseEvents();
 
     // update game
-    this.emitToUpdateFrame();
+    setTimeout(() => {
+      this.emitToUpdateFrame();
+    }, 3000);
   }
 
   remap(value: number, max1: number, max2: number): number {
@@ -216,24 +216,24 @@ export class Game {
   }
 
   FixSizeRatio(): [number, number] {
-    let width: number, height: number;
-    let Aspect: number = 600 / 800;
+    let width: number = 0;
+    let height: number = 0;
 
-    if (this.element.clientWidth < this.element.clientHeight) {
+    const Ratio = 3 / 4; // Aspect ratio of 800x600 (Portrait)
+
+    if (this.element.clientWidth > this.element.clientHeight) {
+      height = this.element.clientHeight;
+      width = height * Ratio;
+    } else {
       width = this.element.clientWidth;
-      height = width / Aspect;
+      height = width / Ratio;
+
       if (height > this.element.clientHeight) {
         height = this.element.clientHeight;
-        width = height * Aspect;
-      }
-    } else {
-      height = this.element.clientHeight;
-      width = height * Aspect;
-      if (width > this.element.clientWidth) {
-        width = this.element.clientWidth;
-        height = width / Aspect;
+        width = height * Ratio;
       }
     }
+
     return [width, height];
   }
 
@@ -245,7 +245,6 @@ export class Game {
   }
 
   emitToUpdateFrame() {
-    this.interval ? this.stopIntervall() : "";
     this.interval = setInterval(() => {
       this.socket.emit("updateFrame", {
         paddleX: this.remap(this.tmpX, this.width, 600),
@@ -275,7 +274,6 @@ export class Game {
 
   updatePlayerPosition(data: player) {
     if (data) {
-      temp = this.remap(data.x, 600, this.width);
       Matter.Body.setPosition(this.bottomPaddle, {
         x: this.remap(data.x, 600, this.width),
         y: this.bottomPaddle.position.y,

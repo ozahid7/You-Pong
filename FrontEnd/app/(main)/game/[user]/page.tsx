@@ -107,10 +107,10 @@ export default function game_({ params }: pageProps) {
   useEffect(() => {
     if (ref.current) {
       game = new Game(ref.current, map, globalSocket, mode, cloneData);
+      return () => {
+        game?.destroy();
+      };
     }
-    return () => {
-      game?.destroy();
-    };
   }, [cloneData, width, height]);
 
   useEffect(() => {
