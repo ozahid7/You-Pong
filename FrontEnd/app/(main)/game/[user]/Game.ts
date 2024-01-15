@@ -248,7 +248,10 @@ export class Game {
 
   emitToUpdateFrame() {
     this.interval = setInterval(() => {
-      this.tmpX === 0 ? (this.tmpX = temp) : "";
+      if (this.tmpX === 0) {
+        if (temp <= this.width && temp > 0) this.tmpX = temp;
+        else this.tmpX = this.width / 2;
+      }
       this.socket.emit("updateFrame", {
         paddleX: this.remap(this.tmpX, this.width, 600),
         id_match: this.gameData?.id_match,
