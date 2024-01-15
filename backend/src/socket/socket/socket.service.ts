@@ -922,7 +922,7 @@ export class SocketService
   // ---------------- adam start here ----------------------
 
   hitTop(game: gameData, half: number) {
-    return game.ball.y - game.ball.radius <= game.opponent.y &&
+    return game.ball.y - game.ball.radius <= game.opponent.y + 15 &&
       game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
       game.ball.x >= game.opponent.x - half &&
       game.ball.x <= game.opponent.x + half &&
@@ -930,7 +930,7 @@ export class SocketService
   }
 
   hitBottom(game: gameData, half: number) {
-    return game.ball.y + game.ball.radius >= game.player.y &&
+    return game.ball.y + game.ball.radius >= game.player.y - 15 &&
       game.ball.y + game.ball.radius <= game.player.y + 3 &&
       game.ball.x >= game.player.x - half &&
       game.ball.x <= game.player.x + half &&
@@ -940,8 +940,8 @@ export class SocketService
   handleHits(game: gameData): boolean {
     const half = game.player.width / 2;
     if (
-      game.ball.x + game.ball.radius >= game.fieald.width ||
-      game.ball.x - game.ball.radius <= 0
+      game.ball.x + game.ball.radius >= game.fieald.width - 10||
+      game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
     if (this.hitBottom(game, half))
