@@ -20,6 +20,8 @@ import PasswordModal from "./PasswordModal";
 import SimpleJoinButton from "./SimpleJoinButton";
 import PrivateModal from "./PrivateModal";
 import ShowMessages from "./ShowMessages";
+import ChatSideBar from "./ChatSideBar";
+import MenuBarMobile from "./MenuBarMobile";
 
 export {
   Chat,
@@ -44,4 +46,6 @@ export {
   SimpleJoinButton,
   PrivateModal,
   ShowMessages,
+  ChatSideBar,
+  MenuBarMobile,
 };

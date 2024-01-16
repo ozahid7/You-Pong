@@ -20,6 +20,7 @@ interface Props {
   refetch: any;
   channels: QueryProp;
 }
+
 export default function JoinModal({ refetch, channels }) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -45,8 +46,7 @@ export default function JoinModal({ refetch, channels }) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={close}
-        size="3xl"
-        scrollBehavior="inside"
+        size="4xl"
         backdrop="blur"
         placement="center"
         isDismissable={false}
@@ -55,7 +55,7 @@ export default function JoinModal({ refetch, channels }) {
           {(close) => (
             <Background>
               <ModalHeader
-                className="flex justify-center text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[40px] font-[700] leading-normal not-italic"
+                className="flex justify-center text-[#424242] text-shadow-xl font-['Chakra_Petch'] text-[20px] sm_:text-[40px] font-[700] leading-normal not-italic"
                 style={{
                   textShadow: "0px 2px 2px rgba(0, 0, 0, 0.25)",
                 }}
@@ -65,7 +65,7 @@ export default function JoinModal({ refetch, channels }) {
               <ModalBody className="w-[95%] max-h-[600px] overflow-auto scrollbar-hide rounded-md">
                 <div className="flex justify-evenly items-center flex-col gap-3">
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
-                    <table className="table table-lg">
+                    <table className="table table-xs md:table-lg">
                       <thead>
                         <tr className="text-[20px] font-body shadow-sm">
                           <th></th>
@@ -91,29 +91,33 @@ export default function JoinModal({ refetch, channels }) {
                                         src={obj.avatar || groups}
                                         width={60}
                                         height={60}
-                                        className="border-[2px] border-palette-green p-[0.5]"
+                                        className="border-[2px] border-palette-green p-[0.5] hidden sm_:block md:w-[60px] md:h-[60px]"
                                         alt="image"
                                       />
                                     </div>
                                   </td>
-                                  <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
+                                  <td className="font-body font-[600] text-[10px] xs:text-[18px] max-w-[150px] text-[#424242] border-palette-green whitespace-nowrap overflow-hidden text-ellipsis">
                                     {obj.name}
                                   </td>
                                   <td className="font-body font-[500] text-[#424242]">
                                     <div className="font-body font-[500] text-[18px] text-[#424242] w-fit">
                                       {obj.type === "PUBLIC" ? (
                                         <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
-                                          <div className="text-[20px]">
+                                          <div className="xs:text-[20px] text-[14px]">
                                             <IoLockOpenOutline />
                                           </div>
-                                          {obj.type}
+                                          <div className="hidden xs:block">
+                                            {obj.type}
+                                          </div>
                                         </div>
                                       ) : (
                                         <div className="flex flex-row gap-1 w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                          <div className="text-[20px]">
+                                          <div className="xs:text-[20px] text-[14px]">
                                             <IoLockClosedOutline />
                                           </div>
-                                          {obj.type}
+                                          <div className="hidden xs:block">
+                                            {obj.type}
+                                          </div>
                                         </div>
                                       )}
                                     </div>

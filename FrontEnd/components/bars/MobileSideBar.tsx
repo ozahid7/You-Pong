@@ -43,7 +43,7 @@ const RenderMobileSidBarElement = (
 				} `}
 			>
 				{elm}
-				{!notif && index === 1 && (
+				{!notif && (index === 1 || index === 2) && (
 					<span className="h-[6px] w-[6px] rounded-full absolute top-1 right-1 bg-palette-orange " />
 				)}
 			</div>
@@ -52,13 +52,13 @@ const RenderMobileSidBarElement = (
 };
 
 const MobileSideBar = () => {
-	const { viewed } = useGlobalContext();
+	const { viewed, viewedChat } = useGlobalContext();
 	return (
 		<aside className=" w-full fixed bottom-0 flex sm:hidden items-end">
 			<div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
 				{RenderMobileSidBarElement(0, myRoutes.dashboard)}
 				{RenderMobileSidBarElement(1, myRoutes.friends, viewed)}
-				{RenderMobileSidBarElement(2, myRoutes.chat)}
+				{RenderMobileSidBarElement(2, myRoutes.chat, viewedChat)}
 				{RenderMobileSidBarElement(3, myRoutes.gameme)}
 				{RenderMobileSidBarElement(4, myRoutes.settings)}
 			</div>

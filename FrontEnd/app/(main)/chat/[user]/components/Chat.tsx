@@ -66,7 +66,7 @@ const Chat = ({
     : null;
 
   const user: User | null = channel
-    ? channel.users.find((user) => user.id_user !== main.uid)
+    ? channel.users.find((user) => user.id_user !== main?.uid)
     : null;
 
   const handleButtonClick = () => {
@@ -94,23 +94,25 @@ const Chat = ({
     : (text = "text-[#686868]");
 
   return (
-    <div className="flex h-full w-full flex-col flex-grow flex-wrap gap-2">
+    <div className="flex h-[93%] md:h-full w-full flex-col flex-grow flex-wrap gap-2 md:mt-0 mt-8 ">
       <div className="flex w-full h-[10%] justify-center items-end mt-2">
         <div className="flex flex-row h-[80%] w-[95%] items-center justify-between border-b-white border-b-[2px] border-solid">
           <div className="flex flex-row gap-4 items-center xl_:mb-5">
-            <Avatar
-              isBordered
-              radius="none"
-              color="default"
-              className="flex w-[60px] h-[60px] xs:w-[40px] xs:h-[40px] md_:w-[50px] md_:h-[50px]"
-              src={user?.avatar}
-            />
-            <div className="flex flex-col">
-              <div className="text-[#424242] font-archivo font-[800] text-[26px] xs:text-[20px] md_:text-[26px]">
+            <div className="flex">
+              <Avatar
+                isBordered={false}
+                className="flex w-[60px] h-[60px] xxs:w-[40px] xxs:h-[40px] md:w-[40px] md:h-[40px] lg:w-[45px] lg:h-[45px] xl:w-[55px] xl:h-[55px] border-white border-[2px] rounded-md"
+                radius="none"
+                src={user?.avatar}
+                alt="User's picture"
+              />
+            </div>
+            <div className="flex flex-col justify-evenly">
+              <div className="text-[#424242] font-archivo font-[800] xxs:text-[18px] xs:text-[20px] md:text-[20px] lg:text-[22px] xl:text-[25px] whitespace-nowrap overflow-hidden text-ellipsis md:max-w-[200px] lg:max-w-[300px] xl:max-w-[380px] sm:max-w-[300px] sm_:max-w-[200px] xs:max-w-[100px] xxs:max-w-[80px]">
                 {user?.username}
               </div>
               <div
-                className={`${text} font-[600] text-[13px] font-orbitron sm_:block xs:hidden`}
+                className={`${text} text-[#00993D] font-[700] text-[15px] md:text-[12px] lg:text-[12px] xl:text-[15px] mb-1 font-orbitron md:block hidden`}
               >
                 {user?.status}
               </div>
@@ -131,7 +133,7 @@ const Chat = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full h-[71%] flex-col justify-center items-center">
+      <div className="flex w-full h-[71%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
           channel={retChannel}
           main={main}
@@ -139,14 +141,14 @@ const Chat = ({
           key={user?.id_user} //just added this
         />
       </div>
-      <div className="w-[95%] h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1 ">
-        <div className="flex w-full h-full items-end mt-1 gap-2">
-          <div className="search_input_chat w-full h-[89%] flex justify-center items-center min-w-[40px] max-w-[600px]">
+      <div className="w-[95%] h-[13%] md:h-[10%] border-t-white border-t-[2px] border-solid flex justify-center self-center gap-1">
+        <div className="flex w-full h-full gap-2 mt-1 items-center">
+          <div className="search_input_chat w-full h-[60px] flex justify-center items-center min-w-[40px] max-w-[600px]">
             <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden ">
               <input
                 type="text"
                 placeholder="Type a message here ..."
-                className="center text-[#9C9C9C] text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%]"
+                className="center text-[#9C9C9C] md:placeholder:text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%] xxs:placeholder:text-[10px]"
                 onKeyDown={handleEnterPress}
                 ref={messageRef}
               />

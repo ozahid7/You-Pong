@@ -19,12 +19,10 @@ const GroupsInput = forwardRef<HTMLInputElement, GroupsInputProps>(
     {
       text,
       customclass,
-      inputclass,
       type,
       isPassword,
       setInput,
       isValid,
-      message,
     },
     ref
   ) => {
