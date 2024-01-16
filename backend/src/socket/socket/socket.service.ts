@@ -956,12 +956,16 @@ export class SocketService
   renderBall(game: gameData) {
     game.ball.x += game.ball.dx;
     game.ball.y += game.ball.dy;
-    this.server.to(game.data.socket_player).emit('renderBall', game.ball);
+    this.server
+      .to(game.data.socket_player)
+      .emit('renderBall', game.ball, game.player.x);
     const fakeBall = {
       x: game.fieald.width - game.ball.x,
       y: game.fieald.height - game.ball.y,
     };
-    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall);
+    this.server
+      .to(game.data.socket_opponent)
+      .emit('renderBall', fakeBall, game.fieald.width - game.opponent.x);
   }
 
   updatePaddle(player: boolean, game: gameData, dto: renderDto) {
@@ -1015,7 +1019,7 @@ export class SocketService
   }
 
   checkEnd(game: gameData): boolean {
-    if (game.scores.player === 500 || game.scores.opponent === 500) return true;
+    if (game.scores.player === 5 || game.scores.opponent === 5) return true;
     return false;
   }
 
@@ -1059,41 +1063,6 @@ export class SocketService
         console.error('Error in endGame : ', error);
       }
     }
-  }
-
-  @SubscribeMessage('gamePositions')
-  async gamePositions(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() id_match: string,
-  ) {
-    const game = this.game.find((game) => game.data.id_match === id_match);
-    if (!game) {
-      return;
-    }
-
-    const player: boolean =
-      socket.id === game.data.socket_player ? true : false;
-
-    let data = {
-      ball: {
-        x: game.ball.x,
-        y: game.ball.y,
-      },
-      player: { x: game.player.x, y: game.player.y },
-      opponent: { x: game.fieald.width - game.player.x, y: game.opponent.y },
-    };
-    const fakeBall = {
-      x: game.fieald.width - game.ball.x,
-      y: game.fieald.height - game.ball.y,
-    };
-    if (!player) {
-      data = {
-        ball: fakeBall,
-        player: { x: game.fieald.width - game.opponent.x, y: game.player.y },
-        opponent: { x: game.fieald.width - game.player.x, y: game.opponent.y },
-      };
-    }
-    this.server.to(socket.id).emit('positions', data);
   }
   // ---------------- adam end here ----------------------
 }
