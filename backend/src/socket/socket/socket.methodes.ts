@@ -87,7 +87,7 @@ export class SocketMethodes {
       y: number;
       width: number;
     } = {
-      x: 300,
+      x: -1,
       y: 770,
       width,
     };
@@ -97,7 +97,7 @@ export class SocketMethodes {
       y: number;
       width: number;
     } = {
-      x: 300,
+      x: -1,
       y: 30,
       width: width,
     };

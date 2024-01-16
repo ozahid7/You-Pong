@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  InternalServerErrorException,
   Post,
   Req,
   Res,
@@ -38,15 +39,4 @@ export class AuthController {
     const _id = req.user.sub;
     return await this.TfaAuthService.validateTfa(dto, _id, res);
   }
-
-  // @Post('/42')
-  // @UseGuards(AuthGuard('42'))
-  // ftAuth(@Req() req: Request) {}
-
-  // @Get('/42/callback')
-  // @UseGuards(AuthGuard('42'))
-  // async ftCall(@Res() res: Response, @Req() req: Request) {
-  //   this.ftAuth(req);
-  //   await this.ftService.ftSignIn(res, req, req['id_user']);
-  // }
 }

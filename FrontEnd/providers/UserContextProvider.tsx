@@ -98,12 +98,15 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const getTfa = async () => {
 		try {
-			const response = await useAxios<tfaSwitch>(
+			const response = await useAxios<{ message: string }>(
 				"get",
 				endPoints.getTfaStatus
 			);
-			if (response === false) setTfaVerified(true);
-			setTfaStatus(response);
+			console.log("tfa response = == ", response?.message);
+			if (response.message === "False") setTfaVerified(true);
+			response.message === "False"
+				? setTfaStatus(false)
+				: setTfaStatus(true);
 		} catch (error) {
 			setTfaVerified(true);
 			console.log("error : ", error);
@@ -148,6 +151,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				user={me}
 				globalSocket={globalSocket}
 				setGlobalSocket={setGlobalSocket}
+				showIcon={true}
 			/>
 		);
 	} else if (
