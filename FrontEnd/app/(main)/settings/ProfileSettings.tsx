@@ -137,7 +137,6 @@ const ProfileSettings = ({
 	}, [submit, invalidUser, invalidCurrentPass, invalidNewPass]);
 
 	const handelSubmit = (e: any) => {
-		console.log("handel submit");
 		e.preventDefault();
 		userName.length < 8 && userName.length > 0
 			? setInvalidUser(true)
@@ -150,7 +149,9 @@ const ProfileSettings = ({
 		currentPass.length < 8 && !isIntra
 			? setInvalidCurrentPass(true)
 			: setInvalidCurrentPass(false);
-		showIcon && userName.length === 0 ? setInvalidUser(true) : "";
+		user.data.createdAt === user.data.updatedAt && userName.length === 0
+			? setInvalidUser(true)
+			: "";
 		setSubmit(true);
 	};
 
@@ -159,8 +160,7 @@ const ProfileSettings = ({
 		setInvalidUser(true);
 	};
 
-	const setToDefault = (e) => {
-		console.log("e = ", e);
+	const setToDefault = () => {
 		setInvalidCurrentPass(false);
 		setInvalidNewPass(false);
 		setInvalidUser(false);
@@ -178,7 +178,7 @@ const ProfileSettings = ({
 				setCurrentPass("");
 				setConfirmPass("");
 				setSelectedFile(avatar);
-				// setToDefault();
+				setToDefault();
 			}}
 			withCorner={false}
 			withClose={showIcon}
@@ -237,7 +237,7 @@ const ProfileSettings = ({
 								/>
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
-								<span className="font-body sign@sign.frtext-cardtitle font-semibold lg:text-lg">
+								<span className="font-body text-cardtitle font-semibold lg:text-lg">
 									Current Passowrd
 								</span>
 								<MyInput
