@@ -132,8 +132,12 @@ export class Game {
       this.remap(45, 800, this.height)
     );
 
+    positions.opponent.x !== 0
+      ? (positions.opponent.x = this.remap(positions.opponent.x, 600, this.width) * 2)
+      : (positions.opponent.x = this.width);
+
     this.topPaddle = getTopPaddle(
-      this.width,
+      positions.opponent.x,
       {
         isStatic: true,
         render: {
@@ -310,6 +314,7 @@ export class Game {
   updateOpponentPosition(data: opponent) {
     if (data) {
       positions.opponent.x = data.x;
+      positions.opponent.y = data.y;
       Matter.Body.setPosition(this.topPaddle, {
         x: this.remap(data.x, 600, this.width),
         y: this.topPaddle.position.y,
