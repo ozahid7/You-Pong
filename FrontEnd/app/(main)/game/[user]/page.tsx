@@ -192,7 +192,7 @@ export default function game_({ params }: pageProps) {
               <div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[1000px] border-palette-white h-[100%] rounded-md shadow-xl items-center">
                 <div
                   ref={ref}
-                  className="w-[100%] h-[100%] flex justify-center items-center relative"
+                  className="w-[100%] h-[100%] flex justify-center items-center"
                 ></div>
               </div>
             </div>

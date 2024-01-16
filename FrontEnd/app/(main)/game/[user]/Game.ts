@@ -38,6 +38,8 @@ let positions: Positions = {
   player: { x: 0, y: 0 },
 };
 
+let temp: number = 0;
+
 export class Game {
   height: number;
   width: number;
@@ -133,7 +135,8 @@ export class Game {
     );
 
     positions.opponent.x !== 0
-      ? (positions.opponent.x = this.remap(positions.opponent.x, 600, this.width) * 2)
+      ? (positions.opponent.x =
+          this.remap(positions.opponent.x, 600, this.width) * 2)
       : (positions.opponent.x = this.width);
 
     this.topPaddle = getTopPaddle(
@@ -271,14 +274,11 @@ export class Game {
     this.interval = setInterval(() => {
       if (this.tmpX === 0) {
         if (
-          positions.player.x +
-            this.remap(this.paddleSize / 2, 600, this.width) <=
+          temp + this.remap(this.paddleSize / 2, 600, this.width) <=
             this.width &&
-          positions.player.x -
-            this.remap(this.paddleSize / 2, 600, this.width) >=
-            0
+          temp - this.remap(this.paddleSize / 2, 600, this.width) >= 0
         )
-          this.tmpX = positions.player.x;
+          this.tmpX = temp;
         else this.tmpX = this.width / 2;
       }
       this.socket.emit("updateFrame", {
@@ -324,6 +324,7 @@ export class Game {
 
   updatePlayerPosition(data: player) {
     if (data) {
+      console.log(data.x);
       Matter.Body.setPosition(this.bottomPaddle, {
         x: this.remap(data.x, 600, this.width),
         y: this.bottomPaddle.position.y,
@@ -345,7 +346,8 @@ export class Game {
             0
         ) {
           this.tmpX = this.mouse.position.x;
-          positions.player.x = this.tmpX;
+          temp = this.tmpX;
+          console.log(temp);
         }
       }
     );
@@ -360,6 +362,7 @@ export class Game {
     Engine.clear(this.engine);
     World.clear(this.engine.world, true);
     Events.off(this.engine, "mousemove");
+    Composite.clear(this.engine.world, true);
     this.render.canvas.remove();
   }
 }
