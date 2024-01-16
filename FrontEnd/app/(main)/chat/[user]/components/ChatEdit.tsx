@@ -58,6 +58,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
     avatar: channels.avatar,
     hash: channels.hash,
   };
+
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
@@ -65,9 +66,10 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
   const imgRef = useRef<HTMLInputElement>(null);
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [file, setFilee] = useState<any>(null);
+
   const [selected, setSelected] = useState<string>(channels.type);
   const [valid, setValid] = useState<boolean>(false);
+  const [file, setFilee] = useState<any>(null);
 
   let imageUrl: any;
   var result: any = undefined;
@@ -224,6 +226,10 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         placement="center"
         scrollBehavior="outside"
         isDismissable={false}
+        onKeyDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        onFocus={(e) => e.stopPropagation()}
+        onMouseOver={(e) => e.stopPropagation()}
       >
         <ModalContent className="">
           {(onClose) => (
