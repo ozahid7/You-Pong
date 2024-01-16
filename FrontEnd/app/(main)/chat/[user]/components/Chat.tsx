@@ -147,6 +147,7 @@ const Chat = ({
             <div className="center w-[99%] h-[90%] outline-none flex justify-center items-center overflow-hidden ">
               <input
                 type="text"
+                placeholder="Type a message here ..."
                 className="center text-[#9C9C9C] md:placeholder:text-[16px] font-body placeholder:font-[500] placeholder-[#9C9C9C] pl-5 outline-none h-full w-[90%] xxs:placeholder:text-[10px]"
                 onKeyDown={handleEnterPress}
                 ref={messageRef}
