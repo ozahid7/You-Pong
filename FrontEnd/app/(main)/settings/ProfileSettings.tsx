@@ -41,13 +41,11 @@ const ProfileSettings = ({
 	const [file, setfile] = useState<File>();
 	const [confirmPass, setConfirmPass] = useState("");
 	const [submit, setSubmit] = useState(false);
-	const [invalidUser, setInvalidUser] = useState(
-		user.data.createdAt === user.data.updatedAt
-	);
+	const [invalidUser, setInvalidUser] = useState(showIcon);
 	const [invalidNewPass, setInvalidNewPass] = useState(false);
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 	const [message, setMessage] = useState(
-		"Required : Enter more than 8 characters"
+		"Required : Enter more than 8 & no cpecial characters"
 	);
 	let loader = false;
 	let photo = null;
@@ -139,19 +137,20 @@ const ProfileSettings = ({
 	}, [submit, invalidUser, invalidCurrentPass, invalidNewPass]);
 
 	const handelSubmit = (e: any) => {
+		console.log("handel submit");
 		e.preventDefault();
 		userName.length < 8 && userName.length > 0
 			? setInvalidUser(true)
 			: setInvalidUser(false);
+		const regex = /^[a-zA-Z0-9_ ]+$/;
+		!regex.test(userName) ? setInvalidUser(true) : setInvalidUser(false);
 		newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
 			? setInvalidNewPass(true)
 			: setInvalidNewPass(false);
 		currentPass.length < 8 && !isIntra
 			? setInvalidCurrentPass(true)
 			: setInvalidCurrentPass(false);
-		user.data.createdAt === user.data.updatedAt && userName.length === 0
-			? setInvalidUser(true)
-			: "";
+		showIcon && userName.length === 0 ? setInvalidUser(true) : "";
 		setSubmit(true);
 	};
 
@@ -160,7 +159,8 @@ const ProfileSettings = ({
 		setInvalidUser(true);
 	};
 
-	const setToDefault = () => {
+	const setToDefault = (e) => {
+		console.log("e = ", e);
 		setInvalidCurrentPass(false);
 		setInvalidNewPass(false);
 		setInvalidUser(false);
@@ -178,7 +178,7 @@ const ProfileSettings = ({
 				setCurrentPass("");
 				setConfirmPass("");
 				setSelectedFile(avatar);
-				setToDefault();
+				// setToDefault();
 			}}
 			withCorner={false}
 			withClose={showIcon}
@@ -237,7 +237,7 @@ const ProfileSettings = ({
 								/>
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
-								<span className="font-body text-cardtitle font-semibold lg:text-lg">
+								<span className="font-body sign@sign.frtext-cardtitle font-semibold lg:text-lg">
 									Current Passowrd
 								</span>
 								<MyInput
