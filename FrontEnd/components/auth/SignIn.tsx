@@ -151,7 +151,7 @@ const SignIn = (props: {
 					</form>
 					<form
 						method="post"
-						action={`${baseURL}auth/42`}
+						action={`${baseURL}42`}
 						className="h:w-[90%] h-[30%] w-full flex flex-col justify-evenly  items-center px-2"
 					>
 						<div className="w-[80%] xl:w-full max-w-[320px]  sm:h-[60px]  flex justify-center items-center">
