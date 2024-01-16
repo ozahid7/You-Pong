@@ -74,7 +74,7 @@ export class SocketMethodes {
       dx: number;
       dy: number;
     } = {
-      x: 300,
+      x: -1,
       y: 400,
       speed: speed,
       radius: radius,
@@ -87,7 +87,7 @@ export class SocketMethodes {
       y: number;
       width: number;
     } = {
-      x: 300,
+      x: -1,
       y: 770,
       width,
     };
