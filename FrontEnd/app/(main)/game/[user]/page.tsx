@@ -154,7 +154,7 @@ export default function game_({ params }: pageProps) {
         });
       if (globalSocket.listeners("updateScore").length === 0)
         globalSocket.on("updateScore", (data) => {
-          console.log("data = ", data);
+          // console.log("data = ", data);
           setScores(data);
         });
     }

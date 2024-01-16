@@ -184,13 +184,19 @@ export class Game {
     );
 
     //init ball
-    let posX = 0;
-    let posY = 0;
+    positions.ball.x !== 0
+      ? (positions.ball.x = this.remap(positions.ball.x, 600, this.width) * 2)
+      : (positions.ball.x = this.width);
+    positions.ball.y !== 0
+      ? (positions.ball.y = this.remap(positions.ball.y, 800, this.height) * 2)
+      : (positions.ball.y = this.height);
 
-    positions.ball.x !== 0 ? (posX = positions.ball.x * 2) : (posX = this.width);
-    positions.ball.y !== 0 ? (posY = positions.ball.y * 2) : (posY = this.height);
-
-    this.ball = getBall(posX, posY, this.scale, wallOptions);
+    this.ball = getBall(
+      positions.ball.x,
+      positions.ball.y,
+      this.scale,
+      wallOptions
+    );
 
     // init mouse
     this.mouse = Matter.Mouse.create(this.render.canvas);
@@ -260,7 +266,14 @@ export class Game {
   emitToUpdateFrame() {
     this.interval = setInterval(() => {
       if (this.tmpX === 0) {
-        if (positions.player.x <= this.width && positions.player.x > 0)
+        if (
+          positions.player.x +
+            this.remap(this.paddleSize / 2, 600, this.width) <=
+            this.width &&
+          positions.player.x -
+            this.remap(this.paddleSize / 2, 600, this.width) >=
+            0
+        )
           this.tmpX = positions.player.x;
         else this.tmpX = this.width / 2;
       }
@@ -286,7 +299,7 @@ export class Game {
   updateBallPosition(data: ball) {
     if (data) {
       positions.ball.x = data.x;
-      positions.ball.y = data.x;
+      positions.ball.y = data.y;
       Matter.Body.setPosition(this.ball, {
         x: this.remap(data.x, 600, this.width),
         y: this.remap(data.y, 800, this.height),
