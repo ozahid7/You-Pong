@@ -959,7 +959,7 @@ export class SocketService
       x: game.fieald.width - game.ball.x,
       y: game.fieald.height - game.ball.y,
     };
-    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall, game.fieald.width - game.opponent.x);
+    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall, game.opponent.x);
   }
 
   updatePaddle(player: boolean, game: gameData, dto: renderDto) {
