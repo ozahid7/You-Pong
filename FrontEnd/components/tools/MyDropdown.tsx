@@ -36,11 +36,11 @@ const MyDropdown = (props: {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				query.removeQueries();
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				router.push("/");
+				query.removeQueries();
 			})
 			.catch((e) => {
 				console.log(".catch error", e);

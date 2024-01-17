@@ -53,11 +53,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					: setIsLoged(false);
 			}
 		}
-		if (!me.data && !me.isPending) {
-			setchecked(true);
-			localStorage.removeItem("isLoged");
-			redirect(myRoutes.root);
-		}
+
 		if (
 			globalSocket === null &&
 			me.data &&
@@ -80,6 +76,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				})
 			);
 		}
+		if (tfaVerified && me.isFetched) setchecked(true);
 		setToEmit(true);
 	}, [me]);
 
@@ -119,11 +116,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		else setTfaVerified(true);
 	}, []);
 
-	useLayoutEffect(() => {
-		if (!loged && checked) {
-			redirect(myRoutes.root);
-		}
-	}, [isLoged, checked]);
+	// useLayoutEffect(() => {
+	// 	if (!loged && checked) {
+	// 		redirect(myRoutes.root);
+	// 	}
+	// }, [isLoged, checked]);
 
 	if (tfaStatus && !tfaVerified && !loged)
 		return (

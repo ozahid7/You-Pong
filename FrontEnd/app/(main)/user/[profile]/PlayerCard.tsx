@@ -54,7 +54,7 @@ const PlayerCard = (props: {
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
-		if (props.isMe && props.user.isFetched)
+		if (props.isMe && props.user.isFetched && props.user.data)
 			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
