@@ -17,7 +17,7 @@ const SignUp = (props: {
 	let [isInvalidConfirmPass, setIsInvalidconfirmPass] = useState(false);
 	const [isSubmited, setIsSubmited] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const [message, setMessage] = useState("Email is invalid");
 	const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{1,4}$/;
 
 	const signUp = async () => {
@@ -36,7 +36,8 @@ const SignUp = (props: {
 		} catch (error) {
 			console.log("error = ", error);
 			setIsInvalidEmail(true);
-			setIsInvalidPass(true);
+			setIsLoading(false);
+			setMessage("Email is already in use !");
 		}
 	};
 
@@ -79,6 +80,7 @@ const SignUp = (props: {
 		setIsInvalidEmail(false);
 		setIsInvalidPass(false);
 		setIsInvalidconfirmPass(false);
+		setMessage("Email is invalid");
 	};
 
 	const handleShowSignIn = () => {
@@ -124,7 +126,7 @@ const SignUp = (props: {
 							isPassword={false}
 							setInput={setEmail}
 							isValid={isInvalidEmail}
-							message="Email is invalid"
+							message={message}
 							focus={true}
 						/>
 						<MyInput

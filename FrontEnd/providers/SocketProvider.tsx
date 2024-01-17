@@ -13,6 +13,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useFriends from "@/api/useFriends";
+import { useUser } from "@/api/getHero";
 
 interface globalContextProps {
 	data: inviteReturn;
@@ -37,6 +38,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const [viewedChat, setViewedChat] = useState(true);
 	let [requests, setRequests] = useState(0);
 	const friends = useFriends();
+	const user = useUser(true);
 
   const router = useRouter();
   const style =
@@ -78,6 +80,10 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				setRequests(requests--);
 				if (requests === 0) setViewed(true);
 				friends.refetch();
+			});
+		if (globalSocket.listeners("status").length === 0)
+			globalSocket.on("status", (obj) => {
+				user.refetch();
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)

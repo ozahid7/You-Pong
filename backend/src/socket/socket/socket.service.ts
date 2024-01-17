@@ -922,44 +922,50 @@ export class SocketService
   // ---------------- adam start here ----------------------
 
   hitTop(game: gameData, half: number) {
-    return game.ball.y - game.ball.radius <= game.opponent.y + 15 &&
+    return (
+      game.ball.y - game.ball.radius <= game.opponent.y + 15 &&
       game.ball.y - game.ball.radius >= game.opponent.y - 3 &&
       game.ball.x >= game.opponent.x - half &&
       game.ball.x <= game.opponent.x + half &&
       game.ball.dy < 0
+    );
   }
 
   hitBottom(game: gameData, half: number) {
-    return game.ball.y + game.ball.radius >= game.player.y - 15 &&
+    return (
+      game.ball.y + game.ball.radius >= game.player.y - 15 &&
       game.ball.y + game.ball.radius <= game.player.y + 3 &&
       game.ball.x >= game.player.x - half &&
       game.ball.x <= game.player.x + half &&
       game.ball.dy > 0
+    );
   }
 
   handleHits(game: gameData): boolean {
     const half = game.player.width / 2;
     if (
-      game.ball.x + game.ball.radius >= game.fieald.width - 10||
+      game.ball.x + game.ball.radius >= game.fieald.width - 10 ||
       game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
-    if (this.hitBottom(game, half))
-      return (game.ball.dy = -game.ball.dy), true;
-    if (this.hitTop(game, half))
-      return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitBottom(game, half)) return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitTop(game, half)) return (game.ball.dy = -game.ball.dy), true;
     return false;
   }
 
   renderBall(game: gameData) {
     game.ball.x += game.ball.dx;
     game.ball.y += game.ball.dy;
-    this.server.to(game.data.socket_player).emit('renderBall', game.ball, game.player.x);
+    this.server
+      .to(game.data.socket_player)
+      .emit('renderBall', game.ball, game.player.x);
     const fakeBall = {
       x: game.fieald.width - game.ball.x,
       y: game.fieald.height - game.ball.y,
     };
-    this.server.to(game.data.socket_opponent).emit('renderBall', fakeBall, game.opponent.x);
+    this.server
+      .to(game.data.socket_opponent)
+      .emit('renderBall', fakeBall, game.opponent.x);
   }
 
   updatePaddle(player: boolean, game: gameData, dto: renderDto) {

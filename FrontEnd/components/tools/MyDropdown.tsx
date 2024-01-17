@@ -33,14 +33,14 @@ const MyDropdown = (props: {
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
 
-		await new Promise((resolve) => setTimeout(resolve, 500));
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
-				query.removeQueries();
+				globalSocket.emit("offline");
 				router.push("/");
+				query.removeQueries();
 			})
 			.catch((e) => {
 				console.log(".catch error", e);

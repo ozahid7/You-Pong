@@ -20,7 +20,7 @@ import { BsController } from "react-icons/bs";
 
 import useOtherUser from "@/api/useOtherUser";
 import { UseQueryResult } from "@tanstack/react-query";
-import { UserInfo } from "@/types/Api";
+import { UserInfo, UserToShow } from "@/types/Api";
 import { notify } from "@/utils/game";
 import { useQueryClient } from "react-query";
 import { Tooltip } from "react-tooltip";
@@ -54,7 +54,7 @@ const PlayerCard = (props: {
 	const otheruser = useOtherUser(props.username);
 
 	useEffect(() => {
-		if (props.isMe && props.user.isFetched)
+		if (props.isMe && props.user.isFetched && props.user.data)
 			props.user.refetch().then((response) => {
 				const status = response.data.status;
 				if (status === "ONLINE") {
@@ -216,20 +216,22 @@ const PlayerCard = (props: {
 									strokeWidth={0.5}
 									className={`${directIconStyle} sm:bottom-[117px] bottom-24 text-palette-green`}
 									onClick={() => {
-										if (otheruser.data.status === "INGAME")
-											notify(
-												props.username,
-												props.avatar,
-												false,
-												2000,
-												"Player Already In Game 😞"
-											);
-										else
-											router.push(
-												myRoutes.game +
-													"/" +
-													otheruser.data.uid
-											);
+										otheruser.refetch().then((res) => {
+											if (res.data.status === "INGAME")
+												notify(
+													props.username,
+													props.avatar,
+													false,
+													2000,
+													"Player Already In Game 😞"
+												);
+											else
+												router.push(
+													myRoutes.game +
+														"/" +
+														otheruser.data.uid
+												);
+										});
 									}}
 								/>
 							</>

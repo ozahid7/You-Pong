@@ -41,13 +41,11 @@ const ProfileSettings = ({
 	const [file, setfile] = useState<File>();
 	const [confirmPass, setConfirmPass] = useState("");
 	const [submit, setSubmit] = useState(false);
-	const [invalidUser, setInvalidUser] = useState(
-		user.data.createdAt === user.data.updatedAt
-	);
+	const [invalidUser, setInvalidUser] = useState(showIcon);
 	const [invalidNewPass, setInvalidNewPass] = useState(false);
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 	const [message, setMessage] = useState(
-		"Required : Enter more than 8 characters"
+		"Required : Enter more than 8 & no special characters"
 	);
 	let loader = false;
 	let photo = null;
@@ -143,6 +141,8 @@ const ProfileSettings = ({
 		userName.length < 8 && userName.length > 0
 			? setInvalidUser(true)
 			: setInvalidUser(false);
+		const regex = /^[a-zA-Z0-9_ ]+$/;
+		!regex.test(userName) ? setInvalidUser(true) : setInvalidUser(false);
 		newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
 			? setInvalidNewPass(true)
 			: setInvalidNewPass(false);
@@ -163,7 +163,7 @@ const ProfileSettings = ({
 	const setToDefault = () => {
 		setInvalidCurrentPass(false);
 		setInvalidNewPass(false);
-		setInvalidUser(false);
+		if (!showIcon) setInvalidUser(false);
 		setInvalidCurrentPass(false);
 	};
 
@@ -233,7 +233,7 @@ const ProfileSettings = ({
 									message={message}
 									customclass="min-h-[40px] sm:min-h-[52px] min-w-full"
 									text={username}
-									focus={true}
+									focus={false}
 								/>
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
