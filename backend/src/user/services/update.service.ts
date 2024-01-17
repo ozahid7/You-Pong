@@ -3,6 +3,7 @@ import { FindUserService } from "./find.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from "../dto";
+import { take } from "rxjs";
 
 @Injectable()
 export class UpdateService {
@@ -21,9 +22,11 @@ export class UpdateService {
             }
         }
 
-        async updateUsername(id: string, username: string) {
+        async updateUsername(id: string, username: string, oldUsername: string) {
             try
             {
+                if (username == oldUsername)
+                    return {'SUCCSESS': 'Username updated'};
                 const taken = await this.prisma.user.findUnique({
                     where: {username}
                 });
@@ -88,7 +91,7 @@ export class UpdateService {
                 ret.newAvatar = await this.updateAvatar(id, dto.newAvatar);
             // udate username if given
             if (dto.newUsername)
-                ret.newUsername = await this.updateUsername(id, dto.newUsername);
+                ret.newUsername = await this.updateUsername(id, dto.newUsername, user.username);
             // update password if given
             if (dto.newPassword && (!user.hash || !(await bcrypt.compare(dto.newPassword, user.hash))))
                 ret.newPass = await this.updatePassword(id, dto);

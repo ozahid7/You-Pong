@@ -9,7 +9,7 @@ export class TfaStrategy extends PassportStrategy(Strategy, 'tfa'){
 
     constructor(private  user: UserService) {
         super({
-            secretOrKey: process.env.JWT_SECRET,
+            secretOrKey: process.env.TFA_JWT_SECRET,
             jwtFromRequest: (req: Request) => {
                 try {
                     const token = req.cookies['tfa'];
