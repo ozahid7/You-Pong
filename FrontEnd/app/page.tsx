@@ -15,7 +15,7 @@ function Home() {
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			Loged = localStorage.getItem("isLoged") === "true" ? true : false;
-			console.log("loged = ", Loged);
+			console.log("false");
 		}
 
 		if (Loged) {
