@@ -8,13 +8,16 @@ export class AuthService
 {
 	constructor(private jwt:JwtService,){}
 
-	async genToken(id: string) {
+	async genToken(id: string, key: string) {
 		const payload = { sub: id };
-		return  await this.jwt.signAsync(payload, { expiresIn: '24h', secret: process.env.JWT_SECRET });
+		if (key == 'access_token')
+			return  await this.jwt.signAsync(payload, { expiresIn: '24h', secret: process.env.JWT_SECRET });
+		else if (key == 'tfa')
+			return await this.jwt.signAsync(payload, { expiresIn: '24h', secret: process.env.TFA_JWT_SECRET });
 	}
 
 	async genCookie(@Res() res: Response, _id : string, key) {
-		const token = await this.genToken(_id);
+		const token = await this.genToken(_id, key);
 		try {
 			res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 			res.clearCookie(key);
