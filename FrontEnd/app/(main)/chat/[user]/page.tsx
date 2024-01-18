@@ -277,7 +277,11 @@ const Chats = ({ params }) => {
                                     ? channelsGroups.map((obj: any, i) => {
                                         return (
                                           <MiniChat
-                                            channels={obj}
+                                            channel={obj}
+                                            socket={connection}
+                                            main={MainUser}
+                                            Channels={indexChannels}
+                                            index={valueGroups}
                                             key={i}
                                           />
                                         );

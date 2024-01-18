@@ -42,7 +42,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
   const style =
     "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
   const pathname = usePathname();
-  const params = useParams();
 
   pathname.startsWith("/chat/")
     ? globalSocket.emit("inChat")
@@ -53,7 +52,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
     //notification
     if (globalSocket.listeners("addNotif").length === 0)
       globalSocket.on("addNotif", (obj) => {
-        console.log("from notif", obj);
         const message = obj.is_message
           ? "Sent you a message 💬"
           : "Sent you a friend request 👥";

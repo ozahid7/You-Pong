@@ -16,6 +16,7 @@ import {
   MdOutlineFaceRetouchingOff,
   MdOutlineFaceUnlock,
 } from "react-icons/md";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 interface EmojiProps {
   onEmojiSelect: any;
@@ -82,6 +83,12 @@ interface obj {
   data: Channel[];
 }
 
+interface Chat {
+  view: boolean;
+  id_channel: string;
+  id_sender: string;
+}
+
 const GroupsChat = ({
   channels,
   socket,
@@ -93,6 +100,7 @@ const GroupsChat = ({
   joinRefetch,
 }: obj) => {
   const messageRef = useRef<HTMLInputElement>(null);
+
   var mutedMember = {
     placeholder: "Type a message here ...",
     disabled: false,

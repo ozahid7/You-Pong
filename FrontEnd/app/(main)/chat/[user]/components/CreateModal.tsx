@@ -138,7 +138,7 @@ export default function CreateModal({ refetch }) {
         onClose={close}
         size="4xl"
         className=" w-full"
-        scrollBehavior="inside"
+        scrollBehavior="outside"
         backdrop="blur"
         placement="center"
         isDismissable={false}
