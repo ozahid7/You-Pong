@@ -1,23 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Channel, User, User_Hero } from "@/types";
+import { Channel, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel } from "../data/api";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 
 interface HomeProps {
-  channels: Channel;
+  channel: Channel;
   main: User_Hero;
+  Socket: any;
+  Channels: whichChannel[];
+  index: number;
 }
 
-const MiniChatDirect = ({ channels, main }: HomeProps) => {
+const MiniChatDirect = ({
+  channel,
+  main,
+  Socket,
+  Channels,
+  index,
+}: HomeProps) => {
+  const [orange, setOrange] = useState<boolean>(false);
+
+  useEffect(() => {
+    setOrange(false);
+  }, [index]);
+
+  useEffect(() => {
+    Socket?.on("addNotif", (obj) => {
+      if (obj.is_message) {
+        if (Channels.length === 0) return;
+        if (Channels[index]?.id_channel === obj.info.id_channel) {
+          setOrange(false);
+        } else if (channel.id_channel === obj.info.id_channel) {
+          setOrange(true);
+        }
+      }
+    });
+  }, [index]);
+
   const {
     data,
     error: ChannelError,
     isLoading: ChannelLoading,
   } = useQuery<Channel, Error>(
-    ["channel", channels?.id_channel],
-    () => fetchData_Channel(channels?.id_channel),
+    ["channel", channel?.id_channel],
+    () => fetchData_Channel(channel?.id_channel),
     {
       onError: (error: Error) => {
         console.error("Messages query error:", error);
@@ -47,6 +75,9 @@ const MiniChatDirect = ({ channels, main }: HomeProps) => {
           {user?.username}
         </p>
       </div>
+      {orange && (
+        <span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
+      )}
     </div>
   );
 };

@@ -13,13 +13,6 @@ interface HomeProps {
   index: number;
 }
 
-export interface infoType {
-  id_channel: string;
-  id_sender: string;
-  content: string;
-  created_at: Date;
-}
-
 const MiniChat = ({ channel, socket, main, Channels, index }: HomeProps) => {
   const [orange, setOrange] = useState<boolean>(false);
 
@@ -30,7 +23,6 @@ const MiniChat = ({ channel, socket, main, Channels, index }: HomeProps) => {
   useEffect(() => {
     socket?.on("addNotif", (obj) => {
       if (obj.is_message) {
-        console.log(index, obj.info.id_channel);
         if (Channels[index]?.id_channel === obj.info.id_channel) {
           setOrange(false);
         } else if (channel.id_channel === obj.info.id_channel) {

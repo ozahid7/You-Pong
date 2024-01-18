@@ -252,8 +252,11 @@ const Chats = ({ params }) => {
                                   channelsDirect
                                     ? channelsDirect.map((obj: Channel, i) => (
                                         <MiniChatDirect
-                                          channels={obj}
+                                          channel={obj}
                                           main={MainUser}
+                                          Socket={connection}
+                                          Channels={indexChannelsDirect}
+                                          index={valueDirect}
                                           key={i}
                                         />
                                       ))
