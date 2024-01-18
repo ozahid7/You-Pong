@@ -13,7 +13,7 @@ import { useUser } from "@/api/getHero";
 import Loader from "@/components/tools/Loader";
 
 const page = () => {
-	const user = useUser(true);
+	const user = useUser(true, "setting page");
 	const queryClient = useQueryClient();
 	const { tfaStatus } = user.data;
 	const [showTwoFactor, setTwoFactor] = useState(false);

@@ -26,7 +26,7 @@ const MyDropdown = (props: {
 	Refetch?: any;
 }) => {
 	const router = useRouter();
-	const user = useUser(true);
+	const user = useUser(true, "mydropdown ");
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();

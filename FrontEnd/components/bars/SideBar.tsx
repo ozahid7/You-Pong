@@ -69,9 +69,9 @@ const RenderSideBarElements = (
 
 const SideBar = () => {
 	const router = useRouter();
-	const user = useUser(true);
+	const user = useUser(true, "side bar");
 	const { username, avatar } = user.data;
-	const { globalSocket } = useGlobalSocket();
+	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();
 	const { viewed, setViewed, viewedChat } = useGlobalContext();
 
@@ -86,6 +86,7 @@ const SideBar = () => {
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				router.push("/");
+				setTfaVerified(false);
 				query.removeQueries();
 			})
 			.catch((e) => {

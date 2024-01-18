@@ -46,7 +46,7 @@ export default function game_({ params }: pageProps) {
 	const [width, setWidht] = useState<number>();
 	const [height, setHeight] = useState<number>();
 
-	const user = useUser(true);
+	const user = useUser(true, "game page");
 	const router = useRouter();
 
 	//infos in score card

@@ -16,7 +16,9 @@ import { Socket } from "socket.io-client";
 export interface myContextProps {
 	userData: UserInfo;
 	isLoged: boolean;
+	setTfaVerified: any;
 	globalSocket: Socket;
+	tfaVerified: boolean;
 }
 export const GlobalContext = createContext<myContextProps | undefined>(
 	undefined
@@ -40,7 +42,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const path = usePathname();
 	let i: number = 0;
 
-	const me = useUser(tfaVerified);
+	const me = useUser(tfaVerified, "provider user");
 
 	useEffect(() => {
 		if (me.data) {
@@ -76,9 +78,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				})
 			);
 		}
-		if (tfaVerified && me.isFetched) setchecked(true);
+		if (tfaVerified && me.isFetchedAfterMount) setchecked(true);
 		setToEmit(true);
-	}, [me]);
+	}, [me.data]);
 
 	useEffect(() => {
 		if (
@@ -116,11 +118,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		else setTfaVerified(true);
 	}, []);
 
-	// useLayoutEffect(() => {
-	// 	if (!loged && checked) {
-	// 		redirect(myRoutes.root);
-	// 	}
-	// }, [isLoged, checked]);
+	useLayoutEffect(() => {
+		if (!loged && checked) {
+			redirect(myRoutes.root);
+		}
+	}, [isLoged, checked]);
 
 	if (tfaStatus && !tfaVerified && !loged)
 		return (
@@ -160,7 +162,15 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		globalSocket
 	)
 		return (
-			<GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>
+			<GlobalContext.Provider
+				value={{
+					userData,
+					isLoged,
+					globalSocket,
+					setTfaVerified,
+					tfaVerified,
+				}}
+			>
 				{children}
 			</GlobalContext.Provider>
 		);
