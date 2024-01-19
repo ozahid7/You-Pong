@@ -302,7 +302,6 @@ export class GameService {
           where: { id_user: opponent.id_user },
           data: {
             defeats: opponent.defeats + 1,
-            level: opponent.level + 0.1,
           },
         });
         if (!updatePlayer || !updateOpponent)
@@ -312,7 +311,6 @@ export class GameService {
           where: { id_user: player.id_user },
           data: {
             defeats: player.defeats + 1,
-            level: player.level + 0.1,
           },
         });
         const updateOpponent = await this.prisma.user.update({
