@@ -43,7 +43,7 @@ function Home() {
 							onClick={() => {
 								setSingIn(true);
 							}}
-							className="text-white mt-1 sm:mt-2 hover:scale-110 sm:hidden  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
+							className="text-white mt-1 sm:mt-2 cursor-pointer sm:hidden hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform  text-2xl s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
 						>
 							Sign In
 							<hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
@@ -52,7 +52,7 @@ function Home() {
 							onClick={() => {
 								setSignUp(true);
 							}}
-							className="text-white sm:hidden hover:scale-110  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
+							className="text-white sm:hidden cursor-pointer hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform  text-2xl mt-1 sm:mt-2 s:text-3xl lg:text-4xl drop-shadow-lg block font-body font-bold"
 						>
 							Sign Up
 							<hr className="border-2 border-palette-orange rounded-sm mt-1 sm:mt-2" />
@@ -61,6 +61,7 @@ function Home() {
 							<CustomButton
 								text="Sign In"
 								color="signin_button"
+								otherclass="hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform  min-h-[50px]"
 								handleclick={() => setSingIn(true)}
 							/>
 						</div>
@@ -68,7 +69,7 @@ function Home() {
 							<CustomButton
 								text="Sign Up"
 								color="transparent"
-								otherclass=""
+								otherclass="min-h-[50px]"
 								handleclick={() => setSignUp(true)}
 							/>
 						</div>
@@ -89,11 +90,11 @@ function Home() {
 						<p className="max-w-[600px] text-palette-grey font-light pr-2">
 							{landing_page_description}
 						</p>
-						<div className="min-h-[76px]  flex justify-center md:justify-start  items-center w-full h-1 mt-6 xl:mt-10">
+						<div className="min-h-[66px]  lg:min-h-[76px] flex justify-center md:justify-start  items-center w-full h-1 mt-6 xl:mt-10">
 							<CustomButton
 								text="GET STARTED"
 								color="orange"
-								otherclass="w-[40%] lg:w-full"
+								otherclass="w-[40%] lg:w-full hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform "
 								handleclick={() => setSingIn(true)}
 							/>
 						</div>
