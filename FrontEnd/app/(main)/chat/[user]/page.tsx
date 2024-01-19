@@ -252,8 +252,11 @@ const Chats = ({ params }) => {
                                   channelsDirect
                                     ? channelsDirect.map((obj: Channel, i) => (
                                         <MiniChatDirect
-                                          channels={obj}
+                                          channel={obj}
                                           main={MainUser}
+                                          Socket={connection}
+                                          Channels={indexChannelsDirect}
+                                          index={valueDirect}
                                           key={i}
                                         />
                                       ))
@@ -268,6 +271,7 @@ const Chats = ({ params }) => {
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
+                                autoFocus={true}
                                 className="flex flex-col flex-grow w-fit h-fit"
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
@@ -277,7 +281,11 @@ const Chats = ({ params }) => {
                                     ? channelsGroups.map((obj: any, i) => {
                                         return (
                                           <MiniChat
-                                            channels={obj}
+                                            channel={obj}
+                                            socket={connection}
+                                            main={MainUser}
+                                            Channels={indexChannels}
+                                            index={valueGroups}
                                             key={i}
                                           />
                                         );
