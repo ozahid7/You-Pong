@@ -112,7 +112,7 @@ export default function game_({ params }: pageProps) {
 			if (!interval) {
 				setTimeout(() => {
 					interval = game.emitToUpdateFrame_First();
-				}, 8000);
+				}, 9000);
 			} else {
 				clearInterval(interval);
 				game.stopIntervall();
@@ -145,15 +145,19 @@ export default function game_({ params }: pageProps) {
 					setShowMessage(true);
 					game.stopIntervall();
 					game.destroy();
+					game.init();
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
-				globalSocket.on("gameOver", () => {
+				globalSocket.on("gameOver", (obj: any) => {
 					console.log("gameOver");
-					setScores({ player: 5, opponent: 0 });
-					setShowMessage(true);
 					interval = null;
 					game.stopIntervall();
 					game.destroy();
+					game.init();
+					if (!obj.is_me) {
+						setScores({ player: 5, opponent: 0 });
+						setShowMessage(true);
+					}
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {

@@ -265,7 +265,10 @@ export class SocketService
                 player: player_score,
                 opponent: opponent_score,
               });
-              this.server.to(_id).emit('gameOver');
+              if(_id === game.data.socket_player)
+                this.server.to(game.data.socket_player).emit('gameOver', {is_me: false});
+              else
+                this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: false});
               const updated = await this.prisma.match_History.update({
                 where: {
                   id_match: game.data.id_match,
@@ -276,8 +279,10 @@ export class SocketService
                 },
               });
               if (!updated) console.error('Failed to update match');
-              this.gameService.putLvlRank(game.data.id_match);
-              await this.removeGame(game.data.id_match);
+              else{
+                await this.removeGame(game.data.id_match);
+                this.gameService.putLvlRank(game.data.id_match);
+              }
             }
           }
           if (duplicate === 1) {
@@ -482,7 +487,16 @@ export class SocketService
                   player: player_score,
                   opponent: opponent_score,
                 });
-                this.server.to(_id).emit('gameOver');
+                if(_id === game.data.socket_player)
+                {
+                  this.server.to(game.data.socket_player).emit('gameOver', {is_me: false});
+                  this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: true});
+                }
+                else
+                {
+                  this.server.to(game.data.socket_player).emit('gameOver', {is_me: true});
+                  this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: false});
+                }
                 const updated = await this.prisma.match_History.update({
                   where: {
                     id_match: game.data.id_match,
@@ -493,8 +507,10 @@ export class SocketService
                   },
                 });
                 if (!updated) console.error('Failed to update match');
-                this.gameService.putLvlRank(game.data.id_match);
-                await this.removeGame(game.data.id_match);
+                else {
+                  await this.removeGame(game.data.id_match);
+                  this.gameService.putLvlRank(game.data.id_match);
+                }
               }
             }
             const user = await this.prisma.user.updateMany({
@@ -1020,7 +1036,7 @@ export class SocketService
   }
 
   checkEnd(game: gameData): boolean {
-    if (game.scores.player === 5 || game.scores.opponent === 5) return true;
+    if (game.scores.player === 7 || game.scores.opponent === 7) return true;
     return false;
   }
 
@@ -1058,8 +1074,10 @@ export class SocketService
           },
         });
         if (!updated) console.error('Failed to update match');
-        this.gameService.putLvlRank(game.data.id_match);
-        await this.removeGame(game.data.id_match);
+        else{
+          await this.removeGame(game.data.id_match);
+          this.gameService.putLvlRank(game.data.id_match);
+        }
       } catch (error) {
         console.error('Error in endGame : ', error);
       }
