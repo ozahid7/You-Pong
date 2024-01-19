@@ -7,29 +7,51 @@ import { usePathname } from "next/navigation";
 
 interface HomeProps {
   channel: Channel;
-  socket: any;
-  main: User_Hero;
   Channels: whichChannel[];
   index: number;
 }
 
-const MiniChat = ({ channel, socket, main, Channels, index }: HomeProps) => {
-  const [orange, setOrange] = useState<boolean>(false);
+interface Chat {
+  id_channel: string;
+  index: number;
+  bool: boolean;
+}
+
+let dot: boolean = false;
+
+const MiniChat = ({ channel, Channels, index }: HomeProps) => {
+  const { id, isMessage } = useGlobalContext();
+  const [chats, setChats] = useState<Chat[]>([]);
 
   useEffect(() => {
-    setOrange(false);
-  }, [index]);
+    const initialChats = Channels.map((channel) => ({
+      id_channel: channel.id_channel,
+      index: channel.index,
+      bool: false,
+    }));
+    setChats(initialChats);
+  }, [Channels]);
 
   useEffect(() => {
-    socket?.on("addNotif", (obj) => {
-      if (obj.is_message) {
-        if (Channels[index]?.id_channel === obj.info.id_channel) {
-          setOrange(false);
-        } else if (channel.id_channel === obj.info.id_channel) {
-          setOrange(true);
-        }
-      }
+    chats.map((chat: Chat) => {
+      if (
+        chat.id_channel === id &&
+        chat.id_channel !== Channels[index]?.id_channel
+      )
+        chat.bool = true;
     });
+    console.log(chats);
+  }, [isMessage]);
+
+  dot = chats.some(
+    (chat) => chat.id_channel === channel.id_channel && chat.bool
+  );
+
+  useEffect(() => {
+    if (chats[index] && Channels[index]?.id_channel === channel.id_channel) {
+      chats[index].bool = false;
+      dot = false;
+    }
   }, [index]);
 
   return (
@@ -51,7 +73,7 @@ const MiniChat = ({ channel, socket, main, Channels, index }: HomeProps) => {
           {channel?.description}
         </div>
       </div>
-      {orange && (
+      {dot && (
         <span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
       )}
     </div>
