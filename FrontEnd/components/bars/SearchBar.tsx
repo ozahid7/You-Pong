@@ -12,22 +12,13 @@ const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 	const [Input, setInput] = useState("");
 
 	useEffect(() => {
-		if (Input.length === 1 || Input.length === 5 || Input.length === 12)
-			props.search.refetch().then((response) => {
-				setFriendArr(
-					response.data?.filter((user) =>
-						user.username
-							.toLowerCase()
-							.includes(Input.toLowerCase())
-					)
-				);
-			});
-		else
+		props.search.refetch().then((response) => {
 			setFriendArr(
-				friendsList.filter((user) =>
+				response.data?.filter((user) =>
 					user.username.toLowerCase().includes(Input.toLowerCase())
 				)
 			);
+		});
 	}, [Input]);
 
 	return (
