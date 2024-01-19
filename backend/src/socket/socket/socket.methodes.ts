@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { gameData, map, mode } from './socket.interfaces';
+import { gameData} from './socket.interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -20,8 +20,8 @@ export class SocketMethodes {
     id_player: string;
     socket_player: string;
     id_opponent: string;
-    map: map;
-    mode: mode;
+    map: string;
+    mode: string;
   }[] = [];
 
   protected classicHard: {
@@ -56,15 +56,15 @@ export class SocketMethodes {
     id_opponent: string,
     socket_opponent: string,
     id_match: string,
-    map: map,
-    mode: mode,
+    map: string,
+    mode: string,
   ) {
-    // mode === 0 (hard) ||  mode === 1(easy)
-    let speed = mode === 0 ? 2 : 1;
-    let width = mode === 0 ? 100 : 160;
-    let radius = mode === 0 ? 7 : 14;
-    let dx = mode === 0 ? 5 : 2;
-    let dy = mode === 0 ? 5 : 5;
+
+    let speed = mode === 'HARD' ? 2 : 1;
+    let width = mode === 'HARD' ? 100 : 160;
+    let radius = mode === 'HARD' ? 7 : 14;
+    let dx = mode === 'HARD' ? 5 : 2;
+    let dy = mode === 'HARD' ? 5 : 5;
 
     const ball: {
       x: number;
@@ -121,8 +121,8 @@ export class SocketMethodes {
       socket_player: string;
       socket_opponent: string;
       id_opponent: string;
-      map: map;
-      mode: mode;
+      map: string;
+      mode: string;
     } = {
       id_match,
       id_player,
@@ -181,8 +181,8 @@ export class SocketMethodes {
     id_player: string,
     id_opponent: string,
     socket_player: string,
-    map: map,
-    mode: mode,
+    map: string,
+    mode: string,
   ) {
     if (
       this.privateGame.find(
