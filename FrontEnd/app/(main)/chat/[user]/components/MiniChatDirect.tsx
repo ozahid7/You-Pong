@@ -4,39 +4,61 @@ import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel } from "../data/api";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 interface HomeProps {
   channel: Channel;
   main: User_Hero;
-  Socket: any;
   Channels: whichChannel[];
   index: number;
 }
 
+interface Chat {
+  id_channel: string;
+  index: number;
+  bool: boolean;
+}
+
+let dot: boolean = false;
+
 const MiniChatDirect = ({
   channel,
   main,
-  Socket,
   Channels,
   index,
 }: HomeProps) => {
-  const [orange, setOrange] = useState<boolean>(false);
+  const { id, isMessage } = useGlobalContext();
+  const [chats, setChats] = useState<Chat[]>([]);
 
   useEffect(() => {
-    setOrange(false);
-  }, [index]);
+    const initialChats = Channels.map((channel) => ({
+      id_channel: channel.id_channel,
+      index: channel.index,
+      bool: false,
+    }));
+    setChats(initialChats);
+  }, [Channels]);
 
   useEffect(() => {
-    Socket?.on("addNotif", (obj) => {
-      if (obj.is_message) {
-        if (Channels.length === 0) return;
-        if (Channels[index]?.id_channel === obj.info.id_channel) {
-          setOrange(false);
-        } else if (channel.id_channel === obj.info.id_channel) {
-          setOrange(true);
-        }
-      }
+    chats.map((chat: Chat) => {
+      if (
+        chat.id_channel === id &&
+        chat.id_channel !== Channels[index]?.id_channel
+      )
+        chat.bool = true;
     });
+    console.log(chats);
+  }, [isMessage]);
+
+  dot = chats.some(
+    (chat) => chat.id_channel === channel.id_channel && chat.bool
+  );
+
+  useEffect(() => {
+    if (chats[index] && Channels[index]?.id_channel === channel.id_channel) {
+      chats[index].bool = false;
+      dot = false;
+    }
   }, [index]);
 
   const {
@@ -75,7 +97,7 @@ const MiniChatDirect = ({
           {user?.username}
         </p>
       </div>
-      {orange && (
+      {dot && (
         <span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
       )}
     </div>

@@ -27,6 +27,7 @@ import {
   fetchData_userChannels_Direct,
   getChannel,
   getChannels,
+  userChannels,
 } from "./data/api";
 import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
 import { io } from "socket.io-client";
@@ -56,13 +57,14 @@ const Chats = ({ params }) => {
 
   const { globalSocket } = useGlobalSocket();
   const { setViewedChat } = useGlobalContext();
+
   let setGlobal = globalSocket.io;
 
   useEffect(() => {
     setViewedChat(true);
   }, []);
 
-  const { data: MainUser, isLoading: MainLoading } = useQuery<User_Hero, Error>(
+  const { data: MainUser } = useQuery<User_Hero, Error>(
     ["MainUser"],
     fetchData_getMainUser,
     {
@@ -72,25 +74,16 @@ const Chats = ({ params }) => {
     }
   );
 
-  const {
-    data: channelsDirect,
-    refetch: directRefetch,
-    isLoading: directLoading,
-  } = useQuery<Channel[], Error>(
-    ["userChannels_Direct"],
-    fetchData_userChannels_Direct,
-    {
-      onError: (error: Error) => {
-        console.error("Channels query error:", error);
-      },
-    }
-  );
+  const { data: channelsDirect, refetch: directRefetch } = useQuery<
+    Channel[],
+    Error
+  >(["userChannels_Direct"], fetchData_userChannels_Direct, {
+    onError: (error: Error) => {
+      console.error("Channels query error:", error);
+    },
+  });
 
-  const {
-    data: channelsGroups,
-    refetch,
-    isLoading: groupsLoading,
-  } = useQuery<Channel[], Error>(
+  const { data: channelsGroups, refetch } = useQuery<Channel[], Error>(
     ["userChannels"],
     fetchData_userChannels_Channel,
     {
@@ -111,8 +104,9 @@ const Chats = ({ params }) => {
     },
   });
 
-  if (MainLoading || directLoading || isLoading || groupsLoading) <Loader />;
-  if (!data || channelsGroups) <MiniLoader />;
+  useEffect(() => {
+    if (!channelsDirect || !channelsDirect || !data || !MainUser) <Loader />;
+  }, [channelsDirect, channelsDirect, data, MainUser]);
 
   useEffect(() => {
     JoinChannels = {
@@ -132,6 +126,7 @@ const Chats = ({ params }) => {
     indexChannels = [];
     indexChannelsDirect = [];
     var last: number = 0;
+    var last_direct: number = 0;
 
     if (channelsGroups) {
       channelsGroups?.map((channel, key) => {
@@ -155,6 +150,7 @@ const Chats = ({ params }) => {
           name: channel.name,
           type: channel.type,
         };
+        last_direct = temp.index;
         indexChannelsDirect.push(temp);
       });
       //// handle direct message ///
@@ -168,6 +164,7 @@ const Chats = ({ params }) => {
         else if (ret === undefined) channel.index = 0;
       });
       /////////////////////////////
+      setValueDirect(last_direct);
       directRefetch();
     }
   }, [channelsDirect, channelsGroups]);
@@ -254,7 +251,6 @@ const Chats = ({ params }) => {
                                         <MiniChatDirect
                                           channel={obj}
                                           main={MainUser}
-                                          Socket={connection}
                                           Channels={indexChannelsDirect}
                                           index={valueDirect}
                                           key={i}
@@ -271,7 +267,6 @@ const Chats = ({ params }) => {
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
-                                autoFocus={true}
                                 className="flex flex-col flex-grow w-fit h-fit"
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
@@ -282,8 +277,6 @@ const Chats = ({ params }) => {
                                         return (
                                           <MiniChat
                                             channel={obj}
-                                            socket={connection}
-                                            main={MainUser}
                                             Channels={indexChannels}
                                             index={valueGroups}
                                             key={i}
