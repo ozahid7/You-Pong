@@ -60,12 +60,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 
 		setToEmit(true);
-		console.log("me = ", me);
 	}, [me, me.failureCount]);
 
 	useEffect(() => {
 		if (globalSocket === null && me.data && updated) {
-			console.log("updated");
 			setGlobalSocket(
 				io(socketurl + "?id_user=" + me.data.uid, {
 					transports: ["websocket"],
@@ -89,7 +87,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				"get",
 				endPoints.getTfaStatus
 			);
-			console.log("tfa response = == ", response?.message);
+			console.log("tfa response =", response?.message);
 			if (response.message === "False") setTfaVerified(true);
 			response.message === "False"
 				? setTfaStatus(false)

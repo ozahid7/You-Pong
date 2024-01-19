@@ -81,7 +81,6 @@ const ProfileSettings = ({
 		)
 			isItEmpty();
 		else {
-			console.log("username = ", userName, "pass = ", currentPass);
 			try {
 				const res = await useAxios<any>(
 					"patch",

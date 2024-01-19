@@ -402,5 +402,6 @@ export class Game {
 		Events.off(this.engine, "mousemove");
 		Composite.clear(this.engine.world, true);
 		this.render.canvas.remove();
+		clearInterval(this.interval);
 	}
 }

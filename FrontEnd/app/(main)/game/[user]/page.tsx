@@ -109,10 +109,10 @@ export default function game_({ params }: pageProps) {
 	useEffect(() => {
 		if (ref.current) {
 			game = new Game(ref.current, map, globalSocket, mode, cloneData);
-			if (!interval && !showCounter && !showPlayerLoader) {
+			if (!interval) {
 				setTimeout(() => {
 					interval = game.emitToUpdateFrame_First();
-				}, 3000);
+				}, 8000);
 			} else {
 				clearInterval(interval);
 				game.stopIntervall();
@@ -141,6 +141,7 @@ export default function game_({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
+					interval = null;
 					setShowMessage(true);
 					game.stopIntervall();
 					game.destroy();
@@ -150,6 +151,7 @@ export default function game_({ params }: pageProps) {
 					console.log("gameOver");
 					setScores({ player: 5, opponent: 0 });
 					setShowMessage(true);
+					interval = null;
 					game.stopIntervall();
 					game.destroy();
 				});
