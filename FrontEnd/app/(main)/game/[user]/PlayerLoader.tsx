@@ -56,7 +56,6 @@ const PlayerLoader = (props: {
 	}, [otheruser, otheruser.data]);
 
 	useEffect(() => {
-		console.log("map = ", props.map, "mode = ", props.mode);
 		props.socket.emit("inGame", {
 			id_sender: props.my_id,
 			map: props.map.toUpperCase(),
