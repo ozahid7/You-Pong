@@ -271,6 +271,7 @@ const Chats = ({ params }) => {
                             <div className="flex w-full h-full justify-start items-center flex-col gap-2 ">
                               <MyTabs
                                 value={valueGroups}
+                                autoFocus={true}
                                 className="flex flex-col flex-grow w-fit h-fit"
                                 onChange={(valueGroups) => {
                                   setValueGroups(valueGroups);
