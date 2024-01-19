@@ -393,6 +393,7 @@ export class SocketService
                   avatar: my_user.avatar,
                   is_message: true,
                   in_chat: in_chat,
+                  info: info,
                 });
               }
             }
