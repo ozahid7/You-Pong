@@ -78,8 +78,8 @@ export class SocketMethodes {
       y: 400,
       speed: speed,
       radius: radius,
-      dx: 2,
-      dy: 2,
+      dx,
+      dy,
     };
 
     const player: {
