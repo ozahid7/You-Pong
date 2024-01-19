@@ -27,7 +27,7 @@ export class SocketService
   ) {
     super(prisma);
   }
-
+  
   async launch_game(player, opponent, info: infoPlayer) {
     const player_user = await this.prisma.user.findUnique({
       where: {
@@ -1046,7 +1046,7 @@ export class SocketService
     @ConnectedSocket() socket: Socket,
     @MessageBody() dto: renderDto,
   ) {
-    const game = this.game.find((game) => game.data.id_match === dto.id_match);
+    let game = this.game.find((game) => game.data.id_match === dto.id_match);
     if (!game) {
       return;
     }
@@ -1058,28 +1058,30 @@ export class SocketService
       if (this.handleHits(game) === false) this.checkGoal(game);
       this.renderBall(game);
     }
+    
     if (this.checkEnd(game) === true) {
       this.centerBall(game);
       this.renderBall(game);
       this.server.to(game.data.socket_player).emit('endGame', dto);
       this.server.to(game.data.socket_opponent).emit('endGame', dto);
-      try {
-        const updated = await this.prisma.match_History.update({
-          where: {
-            id_match: game.data.id_match,
-          },
-          data: {
-            player_score: game.scores.player,
-            opponent_score: game.scores.opponent,
-          },
-        });
-        if (!updated) console.error('Failed to update match');
-        else{
-          await this.removeGame(game.data.id_match);
+      game = this.game.find((game) => game.data.id_match === dto.id_match);
+      if (game && game !== undefined){
+        await this.removeGame(game.data.id_match);
+        try {
+          const updated = await this.prisma.match_History.update({
+            where: {
+              id_match: game.data.id_match,
+            },
+            data: {
+              player_score: game.scores.player,
+              opponent_score: game.scores.opponent,
+            },
+          });
+          if (!updated) console.error('Failed to update match');
           this.gameService.putLvlRank(game.data.id_match);
+        } catch (error) {
+          console.error('Error in endGame : ', error);
         }
-      } catch (error) {
-        console.error('Error in endGame : ', error);
       }
     }
   }
