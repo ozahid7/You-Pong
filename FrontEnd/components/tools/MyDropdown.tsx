@@ -26,7 +26,7 @@ const MyDropdown = (props: {
 	Refetch?: any;
 }) => {
 	const router = useRouter();
-	const user = useUser(true, "mydropdown ");
+	const user = useUser(true, undefined);
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
@@ -52,7 +52,7 @@ const MyDropdown = (props: {
 			if (props.status === "INGAME")
 				notify(
 					props.user,
-					user.data.avatar,
+					undefined,
 					false,
 					2000,
 					"Player Already In Game"

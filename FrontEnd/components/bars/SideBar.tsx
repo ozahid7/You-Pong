@@ -69,7 +69,7 @@ const RenderSideBarElements = (
 
 const SideBar = () => {
 	const router = useRouter();
-	const user = useUser(true, "side bar");
+	const user = useUser(true, undefined);
 	const { username, avatar } = user.data;
 	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();

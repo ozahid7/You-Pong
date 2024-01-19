@@ -220,7 +220,7 @@ const PlayerCard = (props: {
 											if (res.data.status === "INGAME")
 												notify(
 													props.username,
-													props.avatar,
+													undefined,
 													false,
 													2000,
 													"Player Already In Game 😞"

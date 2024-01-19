@@ -38,7 +38,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const [viewedChat, setViewedChat] = useState(true);
 	let [requests, setRequests] = useState(0);
 	const friends = useFriends();
-	const user = useUser(true, "socket provider");
+	const user = useUser(true, undefined);
 
 	const router = useRouter();
 	const style =

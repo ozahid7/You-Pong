@@ -21,6 +21,7 @@ interface ProfileSettingsProps {
 	globalSocket?: Socket;
 	setGlobalSocket?: any;
 	showIcon?: boolean;
+	setUpdated?: any;
 }
 
 const ProfileSettings = ({
@@ -31,23 +32,24 @@ const ProfileSettings = ({
 	globalSocket,
 	setGlobalSocket,
 	showIcon,
+	setUpdated,
 }: ProfileSettingsProps) => {
 	const { username, avatar, isIntra } = user.data;
 	const router = useRouter();
-	const [userName, setUserName] = useState("");
+	const [userName, setUserName] = useState(username);
 	const [currentPass, setCurrentPass] = useState("");
 	const [newPass, setNewPass] = useState("");
 	const [selectedFile, setSelectedFile] = useState(avatar);
 	const [file, setfile] = useState<File>();
 	const [confirmPass, setConfirmPass] = useState("");
 	const [submit, setSubmit] = useState(false);
-	const [invalidUser, setInvalidUser] = useState(showIcon);
+	const [invalidUser, setInvalidUser] = useState(false);
 	const [invalidNewPass, setInvalidNewPass] = useState(false);
 	const [invalidCurrentPass, setInvalidCurrentPass] = useState(false);
 	const [message, setMessage] = useState(
-		"Required : Enter more than 8 & no special characters"
+		"Enter more than 8 characters & no (/@'*)"
 	);
-	let loader = false;
+	const [loader, setLoader] = useState(false);
 	let photo = null;
 
 	const handelFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +65,7 @@ const ProfileSettings = ({
 	};
 
 	const UpdateInfos = async () => {
-		loader = true;
+		setLoader(true);
 		if (selectedFile !== avatar) photo = await setFile(file);
 		const toSend = {
 			newUsername: userName.replaceAll(" ", ""),
@@ -81,55 +83,40 @@ const ProfileSettings = ({
 		else {
 			console.log("username = ", userName, "pass = ", currentPass);
 			try {
-				const res = await useAxios(
+				const res = await useAxios<any>(
 					"patch",
 					endPoints.updateInfo,
 					toSend
 				);
 
-				console.log("update response = ", res);
-
-				if (
-					globalSocket === null &&
-					user.data &&
-					user.data.createdAt === user.data.updatedAt
-				) {
-					setGlobalSocket(
-						io(socketurl + "?id_user=" + user.data.uid, {
-							transports: ["websocket"],
-							transportOptions: {
-								polling: {
-									extraHeaders: {
-										"Sec-WebSocket-Version": "13",
-										"Sec-WebSocket-Key":
-											"0Me1PSdr2zimQ28+k6ug8w==",
-										"Sec-WebSocket-Extensions":
-											"permessage-deflate; client_max_window_bits",
-									},
-								},
-							},
-							autoConnect: true,
-						})
-					);
+				if (res.newUsername.ERROR) {
+					setMessage("Username already in use");
+					setUserName(username);
+					setCurrentPass("");
+					setConfirmPass("");
+					setNewPass("");
+					setInvalidUser(true);
+					setLoader(false);
+				} else {
+					setUpdated(true);
+					user.refetch().then(() => {
+						router.push(myRoutes.dashboard);
+					});
+					setLoader(false);
 				}
-				closeModal(false);
-				if (globalSocket) globalSocket.emit("online");
-				user.refetch().then(() => {
-					router.push(myRoutes.dashboard);
-				});
-				loader = false;
 			} catch (error) {
 				console.log("error setting", error);
-				isItEmpty();
+				setCurrentPass("");
+				setConfirmPass("");
+				setNewPass("");
+				setUserName(username);
 				setInvalidCurrentPass(true);
-				loader = false;
+				setLoader(false);
 			}
 		}
 	};
 
 	useEffect(() => {
-		if (user.data.createdAt != user.data.updatedAt)
-			setMessage("Enter at least 8 characters");
 		if (submit && !invalidNewPass && !invalidUser && !invalidCurrentPass) {
 			UpdateInfos();
 		}
@@ -141,7 +128,7 @@ const ProfileSettings = ({
 		userName.length < 8 && userName.length > 0
 			? setInvalidUser(true)
 			: setInvalidUser(false);
-		const regex = /^[a-zA-Z0-9_ ]+$/;
+		const regex = /^[a-zA-Z0-9_ -]+$/;
 		!regex.test(userName) ? setInvalidUser(true) : setInvalidUser(false);
 		newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
 			? setInvalidNewPass(true)
@@ -149,9 +136,6 @@ const ProfileSettings = ({
 		currentPass.length < 8 && !isIntra
 			? setInvalidCurrentPass(true)
 			: setInvalidCurrentPass(false);
-		user.data.createdAt === user.data.updatedAt && userName.length === 0
-			? setInvalidUser(true)
-			: "";
 		setSubmit(true);
 	};
 
@@ -161,9 +145,10 @@ const ProfileSettings = ({
 	};
 
 	const setToDefault = () => {
+		setMessage("Enter more than 8 characters & no (/@'*)");
 		setInvalidCurrentPass(false);
 		setInvalidNewPass(false);
-		if (!showIcon) setInvalidUser(false);
+		setInvalidUser(false);
 		setInvalidCurrentPass(false);
 	};
 

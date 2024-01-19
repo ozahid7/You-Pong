@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { TwoFactor } from "@/components";
 import { redirect, usePathname } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { endPoints, tfaSwitch, UserInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
@@ -34,7 +34,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [checked, setchecked] = useState(false);
 
 	const [tfaVerified, setTfaVerified] = useState(false);
+	const query = useQueryClient();
 	const [isLoged, setIsLoged] = useState(false);
+	const [updated, setUpdated] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
 	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
@@ -42,7 +44,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const path = usePathname();
 	let i: number = 0;
 
-	const me = useUser(tfaVerified, "provider user");
+	const me = useUser(tfaVerified, setchecked);
 
 	useEffect(() => {
 		if (me.data) {
@@ -54,41 +56,27 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					? setIsLoged(true)
 					: setIsLoged(false);
 			}
+			if (me.data.createdAt !== me.data.updatedAt) setUpdated(true);
 		}
 
-		if (
-			globalSocket === null &&
-			me.data &&
-			me.data.createdAt !== me.data.updatedAt
-		) {
+		setToEmit(true);
+		console.log("me = ", me);
+	}, [me, me.failureCount]);
+
+	useEffect(() => {
+		if (globalSocket === null && me.data && updated) {
+			console.log("updated");
 			setGlobalSocket(
 				io(socketurl + "?id_user=" + me.data.uid, {
 					transports: ["websocket"],
-					transportOptions: {
-						polling: {
-							extraHeaders: {
-								"Sec-WebSocket-Version": "13",
-								"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-								"Sec-WebSocket-Extensions":
-									"permessage-deflate; client_max_window_bits",
-							},
-						},
-					},
 					autoConnect: true,
 				})
 			);
 		}
-		if (tfaVerified && me.isFetchedAfterMount) setchecked(true);
-		setToEmit(true);
-	}, [me.data]);
+	}, [updated]);
 
 	useEffect(() => {
-		if (
-			globalSocket &&
-			path.slice(0, 5) !== "/game" &&
-			toEmit &&
-			me.data.createdAt !== me.data.updatedAt
-		) {
+		if (globalSocket && path.slice(0, 5) !== "/game" && toEmit && updated) {
 			console.log("emit from provider");
 			globalSocket.emit("online");
 			me.refetch();
@@ -135,22 +123,17 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			/>
 		);
 	else if (me.isLoading) return <Loader />;
-	else if (
-		me.data &&
-		isLoged &&
-		loged &&
-		tfaVerified &&
-		me.data.createdAt === me.data.updatedAt
-	) {
+	else if (me.data && isLoged && loged && tfaVerified && !updated) {
 		return (
 			<ProfileSettings
-				isOpen={me.data.createdAt === me.data.updatedAt}
+				isOpen={true}
 				setIsOpen={() => {}}
 				closeModal={() => {}}
 				user={me}
 				globalSocket={globalSocket}
 				setGlobalSocket={setGlobalSocket}
 				showIcon={true}
+				setUpdated={setUpdated}
 			/>
 		);
 	} else if (
@@ -158,7 +141,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		isLoged &&
 		loged &&
 		tfaVerified &&
-		me.data.createdAt !== me.data.updatedAt &&
+		updated &&
 		globalSocket
 	)
 		return (
