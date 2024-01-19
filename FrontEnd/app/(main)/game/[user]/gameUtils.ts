@@ -1,4 +1,5 @@
 import Matter from "matter-js";
+import { Bodies } from "./Game";
 export const myRender = (
 	container: any,
 	engine: any,
@@ -94,7 +95,7 @@ export const getBottomPaddle = (
 	PaddleY: number
 ) => {
 	return Matter.Bodies.rectangle(
-		width / 2,
+		width,
 		height - PaddleY,
 		paddleSize,
 		Thiccness,
@@ -109,4 +110,33 @@ export const getBall = (
 	wallOptions: object
 ) => {
 	return Matter.Bodies.circle(width / 2, height / 2, scale * 15, wallOptions);
+};
+
+export const getDashedLine = (
+	x: number,
+	y: number,
+	width: number,
+	height: number,
+	lineSize: number,
+	color: string
+) => {
+	const lineParts = Math.floor(width / lineSize);
+	const bodies = [];
+
+	for (let i = 0; i < lineParts; i++) {
+		const isDash = i % 2 === 0;
+		const bodyWidth = isDash ? lineSize : lineSize;
+		const bodyX = x - width / 2 + i * lineSize + lineSize / 2;
+
+		const body = Bodies.rectangle(bodyX, y, bodyWidth, height, {
+			isStatic: true,
+			render: {
+				fillStyle: isDash ? color : "transparent",
+			},
+		});
+
+		bodies.push(body);
+	}
+
+	return bodies;
 };

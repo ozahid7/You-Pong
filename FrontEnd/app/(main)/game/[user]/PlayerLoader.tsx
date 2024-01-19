@@ -44,7 +44,7 @@ const PlayerLoader = (props: {
 			setIsmatched(true);
 			setTimeout(() => {
 				props.showLoader(false);
-				// props.showCounter(true);
+				props.showCounter(true);
 			}, 2000);
 			setUserInfo(otheruser.data);
 			props.setotheruser({

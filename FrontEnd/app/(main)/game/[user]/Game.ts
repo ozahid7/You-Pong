@@ -4,6 +4,7 @@ import {
 	getBall,
 	getBottomPaddle,
 	getBottomWall,
+	getDashedLine,
 	getLeftWall,
 	getRightWall,
 	getTopPaddle,
@@ -13,6 +14,7 @@ import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
 import { Positions } from "@/types";
+import { color } from "framer-motion";
 
 export interface Scores {
 	player: number;
@@ -47,12 +49,16 @@ export class Game {
 	engine: Matter.Engine;
 	topPaddle: Matter.Body;
 	bottomPaddle: Matter.Body;
+	leftObstacle: Matter.Body;
+	rightObstacle: Matter.Body;
 	ball: Matter.Body;
 	walls: Matter.Body[] = [];
+	dashedLine: Matter.Body;
 	mouse: Matter.Mouse;
 	mouseConstraint: Matter.mouseConstraint;
 	socket: Socket;
 	paddleSize: number;
+	obstacleSize: number;
 	gameData: inviteReturn;
 	tmpX: number = 0;
 	scores: Scores;
@@ -91,6 +97,8 @@ export class Game {
 			background = "black";
 		}
 
+		mode === "easy" ? (this.obstacleSize = 200) : (this.obstacleSize = 100);
+
 		const wallOptions = {
 			isStatic: true,
 			render: {
@@ -118,8 +126,24 @@ export class Game {
 		});
 
 		//init players
+		let posX: number = 0;
+
+		positions.player.x === 0
+			? (posX = this.width / 2)
+			: (posX = this.remap(
+					positions.player.x,
+					positions.player.y,
+					this.width
+			  ));
+		console.log(
+			"newPOS",
+			this.remap(positions.player.x, positions.player.y, this.width),
+			"newWIDTH",
+			this.width
+		);
+
 		this.bottomPaddle = getBottomPaddle(
-			this.width,
+			posX,
 			this.height,
 			{
 				isStatic: true,
@@ -190,6 +214,16 @@ export class Game {
 			)
 		);
 
+		// init dashed line
+		this.dashedLine = getDashedLine(
+			this.width / 2,
+			this.height / 2,
+			this.width,
+			this.remap(8, 800, this.height),
+			this.remap(24, 600, this.width),
+			fillColor
+		);
+
 		//init ball
 		positions.ball.x !== 0
 			? (positions.ball.x =
@@ -223,6 +257,7 @@ export class Game {
 		// Add all the bodies to the world
 		World.add(this.engine.world, [
 			...this.walls,
+			...this.dashedLine,
 			this.topPaddle,
 			this.bottomPaddle,
 			this.ball,
@@ -302,7 +337,7 @@ export class Game {
 		return this.interval;
 	}
 
-	updateBallPosition(data: ball) {
+	updateBallPosition(data: ball, playerX: number) {
 		if (data) {
 			positions.ball.x = data.x;
 			positions.ball.y = data.y;
@@ -326,7 +361,6 @@ export class Game {
 
 	updatePlayerPosition(data: player) {
 		if (data) {
-			console.log(data.x);
 			Matter.Body.setPosition(this.bottomPaddle, {
 				x: this.remap(data.x, 600, this.width),
 				y: this.bottomPaddle.position.y,
@@ -349,7 +383,9 @@ export class Game {
 				) {
 					this.tmpX = this.mouse.position.x;
 					temp = this.tmpX;
-					console.log(temp);
+					positions.player.x = this.mouse.position.x;
+					positions.player.y = this.width;
+					console.log("mouse", temp, "width", this.width);
 				}
 			}
 		);
@@ -366,5 +402,6 @@ export class Game {
 		Events.off(this.engine, "mousemove");
 		Composite.clear(this.engine.world, true);
 		this.render.canvas.remove();
+		clearInterval(this.interval);
 	}
 }

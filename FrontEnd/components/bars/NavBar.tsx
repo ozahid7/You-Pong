@@ -9,7 +9,7 @@ import { searchusers } from "@/api/friendShip";
 import { useUser } from "@/api/getHero";
 
 const NavBar = () => {
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const router = useRouter();
 	const { username, level, avatar } = user.data;
 	const isMorethan: boolean = username.length > 7 ? true : false;

@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { TwoFactor } from "@/components";
 import { redirect, usePathname } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
 import { endPoints, tfaSwitch, UserInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
@@ -16,7 +16,9 @@ import { Socket } from "socket.io-client";
 export interface myContextProps {
 	userData: UserInfo;
 	isLoged: boolean;
+	setTfaVerified: any;
 	globalSocket: Socket;
+	tfaVerified: boolean;
 }
 export const GlobalContext = createContext<myContextProps | undefined>(
 	undefined
@@ -32,7 +34,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [checked, setchecked] = useState(false);
 
 	const [tfaVerified, setTfaVerified] = useState(false);
+	const query = useQueryClient();
 	const [isLoged, setIsLoged] = useState(false);
+	const [updated, setUpdated] = useState(false);
 	const [userData, setUserData] = useState(undefined);
 	const [tfaStatus, setTfaStatus] = useState(false);
 	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
@@ -40,7 +44,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const path = usePathname();
 	let i: number = 0;
 
-	const me = useUser(tfaVerified);
+	const me = useUser(tfaVerified, setchecked);
 
 	useEffect(() => {
 		if (me.data) {
@@ -52,41 +56,25 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 					? setIsLoged(true)
 					: setIsLoged(false);
 			}
+			if (me.data.createdAt !== me.data.updatedAt) setUpdated(true);
 		}
 
-		if (
-			globalSocket === null &&
-			me.data &&
-			me.data.createdAt !== me.data.updatedAt
-		) {
+		setToEmit(true);
+	}, [me, me.failureCount]);
+
+	useEffect(() => {
+		if (globalSocket === null && me.data && updated) {
 			setGlobalSocket(
 				io(socketurl + "?id_user=" + me.data.uid, {
 					transports: ["websocket"],
-					transportOptions: {
-						polling: {
-							extraHeaders: {
-								"Sec-WebSocket-Version": "13",
-								"Sec-WebSocket-Key": "0Me1PSdr2zimQ28+k6ug8w==",
-								"Sec-WebSocket-Extensions":
-									"permessage-deflate; client_max_window_bits",
-							},
-						},
-					},
 					autoConnect: true,
 				})
 			);
 		}
-		if (tfaVerified && me.isFetched) setchecked(true);
-		setToEmit(true);
-	}, [me]);
+	}, [updated]);
 
 	useEffect(() => {
-		if (
-			globalSocket &&
-			path.slice(0, 5) !== "/game" &&
-			toEmit &&
-			me.data.createdAt !== me.data.updatedAt
-		) {
+		if (globalSocket && path.slice(0, 5) !== "/game" && toEmit && updated) {
 			console.log("emit from provider");
 			globalSocket.emit("online");
 			me.refetch();
@@ -99,7 +87,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				"get",
 				endPoints.getTfaStatus
 			);
-			console.log("tfa response = == ", response?.message);
+			console.log("tfa response =", response?.message);
 			if (response.message === "False") setTfaVerified(true);
 			response.message === "False"
 				? setTfaStatus(false)
@@ -116,11 +104,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		else setTfaVerified(true);
 	}, []);
 
-	// useLayoutEffect(() => {
-	// 	if (!loged && checked) {
-	// 		redirect(myRoutes.root);
-	// 	}
-	// }, [isLoged, checked]);
+	useLayoutEffect(() => {
+		if (!loged && checked) {
+			redirect(myRoutes.root);
+		}
+	}, [isLoged, checked]);
 
 	if (tfaStatus && !tfaVerified && !loged)
 		return (
@@ -133,22 +121,17 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 			/>
 		);
 	else if (me.isLoading) return <Loader />;
-	else if (
-		me.data &&
-		isLoged &&
-		loged &&
-		tfaVerified &&
-		me.data.createdAt === me.data.updatedAt
-	) {
+	else if (me.data && isLoged && loged && tfaVerified && !updated) {
 		return (
 			<ProfileSettings
-				isOpen={me.data.createdAt === me.data.updatedAt}
+				isOpen={true}
 				setIsOpen={() => {}}
 				closeModal={() => {}}
 				user={me}
 				globalSocket={globalSocket}
 				setGlobalSocket={setGlobalSocket}
 				showIcon={true}
+				setUpdated={setUpdated}
 			/>
 		);
 	} else if (
@@ -156,11 +139,19 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 		isLoged &&
 		loged &&
 		tfaVerified &&
-		me.data.createdAt !== me.data.updatedAt &&
+		updated &&
 		globalSocket
 	)
 		return (
-			<GlobalContext.Provider value={{ userData, isLoged, globalSocket }}>
+			<GlobalContext.Provider
+				value={{
+					userData,
+					isLoged,
+					globalSocket,
+					setTfaVerified,
+					tfaVerified,
+				}}
+			>
 				{children}
 			</GlobalContext.Provider>
 		);

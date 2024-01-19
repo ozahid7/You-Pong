@@ -46,7 +46,7 @@ export default function game_({ params }: pageProps) {
 	const [width, setWidht] = useState<number>();
 	const [height, setHeight] = useState<number>();
 
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const router = useRouter();
 
 	//infos in score card
@@ -112,7 +112,7 @@ export default function game_({ params }: pageProps) {
 			if (!interval) {
 				setTimeout(() => {
 					interval = game.emitToUpdateFrame_First();
-				}, 3000);
+				}, 8000);
 			} else {
 				clearInterval(interval);
 				game.stopIntervall();
@@ -127,8 +127,8 @@ export default function game_({ params }: pageProps) {
 	useEffect(() => {
 		if (game) {
 			if (globalSocket.listeners("renderBall").length === 0)
-				globalSocket.on("renderBall", (data: ball) => {
-					game.updateBallPosition(data);
+				globalSocket.on("renderBall", (data: ball, x: number) => {
+					game.updateBallPosition(data, x);
 				});
 			if (globalSocket.listeners("renderPaddle").length === 0)
 				globalSocket.on("renderPaddle", (data: player) => {
@@ -141,21 +141,22 @@ export default function game_({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
-					//   setShowMessage(true);
+					interval = null;
+					setShowMessage(true);
 					game.stopIntervall();
-					//   game.destroy();
+					game.destroy();
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", () => {
 					console.log("gameOver");
 					setScores({ player: 5, opponent: 0 });
 					setShowMessage(true);
+					interval = null;
 					game.stopIntervall();
 					game.destroy();
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {
-					// console.log("data = ", data);
 					setScores(data);
 				});
 		}

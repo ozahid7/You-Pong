@@ -1,9 +1,9 @@
 import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
+	ReactNode,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
 } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
@@ -27,38 +27,38 @@ interface globalContextProps {
 }
 
 export const globalContext = createContext<globalContextProps | undefined>(
-  undefined
+	undefined
 );
 
 function InviteProvider({ children }: { children: React.ReactNode }) {
-	const globalSocket = useGlobalSocket().globalSocket;
+	const { globalSocket, tfaVerified } = useGlobalSocket();
 	const [data, setData] = useState<inviteReturn>();
 	const query = useQueryClient();
 	const [viewed, setViewed] = useState(true);
 	const [viewedChat, setViewedChat] = useState(true);
 	let [requests, setRequests] = useState(0);
 	const friends = useFriends();
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 
-  const router = useRouter();
-  const style =
-    "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
-  const pathname = usePathname();
-  const params = useParams();
+	const router = useRouter();
+	const style =
+		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
+	const pathname = usePathname();
+	const params = useParams();
 
-  pathname.startsWith("/chat/")
-    ? globalSocket.emit("inChat")
-    : globalSocket.emit("outChat");
+	pathname.startsWith("/chat/")
+		? globalSocket.emit("inChat")
+		: globalSocket.emit("outChat");
 
-  useEffect(() => {
-    console.log("from socket provider");
-    //notification
-    if (globalSocket.listeners("addNotif").length === 0)
-      globalSocket.on("addNotif", (obj) => {
-        console.log("from notif", obj);
-        const message = obj.is_message
-          ? "Sent you a message 💬"
-          : "Sent you a friend request 👥";
+	useEffect(() => {
+		console.log("from socket provider");
+		//notification
+		if (globalSocket.listeners("addNotif").length === 0)
+			globalSocket.on("addNotif", (obj) => {
+				console.log("from notif", obj);
+				const message = obj.is_message
+					? "Sent you a message 💬"
+					: "Sent you a friend request 👥";
 
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
@@ -83,7 +83,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 			});
 		if (globalSocket.listeners("status").length === 0)
 			globalSocket.on("status", (obj) => {
-				user.refetch();
+				if (obj.status !== "OFFLINE") user.refetch();
 			});
 
 		if (globalSocket.listeners("invitation").length === 0)
@@ -98,58 +98,60 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				setData(obj);
 			});
 
-    if (globalSocket.listeners("refused").length === 0)
-      globalSocket.on("refused", (obj: inviteReturn) => {
-        console.log("refused obj = ", obj);
-        setData(undefined);
-        notify(
-          obj.username,
-          obj.avatar,
-          false,
-          3000,
-          obj.username.slice(0, 7) + " canceled the game 😔",
-          obj.info
-        );
-        router.push(myRoutes.dashboard);
-      });
+		if (globalSocket.listeners("refused").length === 0)
+			globalSocket.on("refused", (obj: inviteReturn) => {
+				console.log("refused obj = ", obj);
+				setData(undefined);
+				notify(
+					obj.username,
+					obj.avatar,
+					false,
+					3000,
+					obj.username.slice(0, 7) + " canceled the game 😔",
+					obj.info
+				);
+				router.push(myRoutes.dashboard);
+			});
 
-    if (globalSocket.listeners("canceled").length === 0)
-      globalSocket.on("canceled", (obj: inviteReturn) => {
-        console.log("from cancled = ", obj);
-        setData(undefined);
-        toast.update("toast_id", {
-          render: () => (
-            <div className={style}>
-              {obj.username.slice(0, 7)} has canceled the game 😔
-            </div>
-          ),
-          type: toast.TYPE.INFO,
-          autoClose: 5000,
-          toastId: "cancel_toast",
-        });
-      });
+		if (globalSocket.listeners("canceled").length === 0)
+			globalSocket.on("canceled", (obj: inviteReturn) => {
+				console.log("from cancled = ", obj);
+				setData(undefined);
+				toast.update("toast_id", {
+					render: () => (
+						<div className={style}>
+							{obj.username.slice(0, 7)} has canceled the game 😔
+						</div>
+					),
+					type: toast.TYPE.INFO,
+					autoClose: 5000,
+					toastId: "cancel_toast",
+				});
+			});
 
-    //Random game accepted
-    if (globalSocket.listeners("acceptedGame").length === 0)
-      globalSocket.on("acceptedGame", (obj: inviteReturn) => {
-        console.log("from acceptedGame ", obj);
-        setData(obj);
-      });
+		//Random game accepted
+		if (globalSocket.listeners("acceptedGame").length === 0)
+			globalSocket.on("acceptedGame", (obj: inviteReturn) => {
+				console.log("from acceptedGame ", obj);
+				setData(obj);
+			});
 
-    //Random game Cancled
-    if (globalSocket.listeners("canceledGame").length === 0)
-      globalSocket.on("canceledGame", (obj: inviteReturn) => {
-        console.log("canceledGame = ", obj);
-        setData(undefined);
-        toast.update("toast_id", {
-          render: () => <div className={style}>Something went Wrong 😔</div>,
-          type: toast.TYPE.INFO,
-          autoClose: 3000,
-          toastId: "canceledGame_toast",
-        });
-        router.push(myRoutes.dashboard);
-      });
-  }, []);
+		//Random game Cancled
+		if (globalSocket.listeners("canceledGame").length === 0)
+			globalSocket.on("canceledGame", (obj: inviteReturn) => {
+				console.log("canceledGame = ", obj);
+				setData(undefined);
+				toast.update("toast_id", {
+					render: () => (
+						<div className={style}>Something went Wrong 😔</div>
+					),
+					type: toast.TYPE.INFO,
+					autoClose: 3000,
+					toastId: "canceledGame_toast",
+				});
+				router.push(myRoutes.dashboard);
+			});
+	}, []);
 
 	return (
 		<globalContext.Provider
@@ -171,7 +173,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useGlobalContext = () => {
-  return useContext(globalContext);
+	return useContext(globalContext);
 };
 
 export default InviteProvider;

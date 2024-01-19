@@ -12,16 +12,18 @@ function Home() {
 	const [showSingIn, setSingIn] = useState(false);
 	let Loged: boolean = false;
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (typeof window !== "undefined") {
 			Loged = localStorage.getItem("isLoged") === "true" ? true : false;
-			console.log("false");
-		}
+			console.log(Loged);
 
-		if (Loged) {
-			redirect(myRoutes.dashboard);
+			if (Loged) {
+				redirect(myRoutes.dashboard);
+			}
+			setValid(true);
 		}
 	});
+
 	return (
 		<div className="h-full  w-full relative max-w-[1600px] xl:w-[90%]">
 			{/* top part */}

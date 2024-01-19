@@ -13,7 +13,7 @@ import { useUser } from "@/api/getHero";
 import Loader from "@/components/tools/Loader";
 
 const page = () => {
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const queryClient = useQueryClient();
 	const { tfaStatus } = user.data;
 	const [showTwoFactor, setTwoFactor] = useState(false);
@@ -132,6 +132,7 @@ const page = () => {
 					setIsOpen={setShowProfileSetting}
 					closeModal={() => {}}
 					user={user}
+					setUpdated={() => {}}
 				/>
 			</div>
 		);
