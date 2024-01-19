@@ -91,7 +91,9 @@ const Chat = ({
 
   user?.status === "ONLINE"
     ? (text = "text-[#00993D]")
-    : (text = "text-[#686868]");
+    : user?.status === "OFFLINE"
+    ? (text = "text-[#686868]")
+    : (text = "text-yellow-500");
 
   return (
     <div className="flex h-[93%] md:h-full w-full flex-col flex-grow flex-wrap gap-2 md:mt-0 mt-8 ">

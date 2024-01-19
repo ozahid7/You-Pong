@@ -42,6 +42,7 @@ const JoinDropDown = ({
     const kick = await KickMember(channel?.id_channel, user.user.id_user);
     if (kick?.message === "Channel Updated Succefully") {
       membersRefetch();
+      channelsRefetch();
       onClose();
     } else console.error(kick?.message);
   };
@@ -54,6 +55,7 @@ const JoinDropDown = ({
     if (Ban)
       if (Ban.message === "Channel Updated Succefully") {
         membersRefetch();
+        channelsRefetch();
       } else console.error(Ban.message);
   };
 
