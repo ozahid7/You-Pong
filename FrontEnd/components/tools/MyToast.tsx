@@ -72,7 +72,7 @@ const MyToast = (props: {
 				<>
 					<div className="flex items-center justify-around w-full h-full max-h-[80px]">
 						<div className="w-auto   max-w-[200px]">
-							<div className="w-[60%] dred aspect-1 mx-auto relative">
+							<div className="w-[60%] aspect-1 mx-auto relative">
 								<img
 									className=" h-[100%] drop-shadow-md w-[100%] border-b border-palette-orange absolute object-cover rounded-md"
 									src={props.avatar}

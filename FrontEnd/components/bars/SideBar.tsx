@@ -69,9 +69,9 @@ const RenderSideBarElements = (
 
 const SideBar = () => {
 	const router = useRouter();
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const { username, avatar } = user.data;
-	const { globalSocket } = useGlobalSocket();
+	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();
 	const { viewed, setViewed, viewedChat } = useGlobalContext();
 
@@ -82,11 +82,12 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				query.removeQueries();
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				router.push("/");
+				setTfaVerified(false);
+				query.removeQueries();
 			})
 			.catch((e) => {
 				console.log(".catch error", e);

@@ -4,6 +4,7 @@ import {
 	getBall,
 	getBottomPaddle,
 	getBottomWall,
+	getDashedLine,
 	getLeftWall,
 	getRightWall,
 	getTopPaddle,
@@ -12,6 +13,8 @@ import {
 import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
+import { Positions } from "@/types";
+import { color } from "framer-motion";
 
 export interface Scores {
 	player: number;
@@ -31,6 +34,14 @@ export const {
 	MouseConstraint,
 } = Matter;
 
+let positions: Positions = {
+	ball: { x: 0, y: 0 },
+	opponent: { x: 0, y: 0 },
+	player: { x: 0, y: 0 },
+};
+
+let temp: number = 0;
+
 export class Game {
 	height: number;
 	width: number;
@@ -38,16 +49,22 @@ export class Game {
 	engine: Matter.Engine;
 	topPaddle: Matter.Body;
 	bottomPaddle: Matter.Body;
+	leftObstacle: Matter.Body;
+	rightObstacle: Matter.Body;
 	ball: Matter.Body;
 	walls: Matter.Body[] = [];
+	dashedLine: Matter.Body;
 	mouse: Matter.Mouse;
 	mouseConstraint: Matter.mouseConstraint;
 	socket: Socket;
 	paddleSize: number;
+	obstacleSize: number;
 	gameData: inviteReturn;
 	tmpX: number = 0;
 	scores: Scores;
 	interval: any;
+	element: HTMLElement;
+	scale: number = 1;
 
 	constructor(
 		container: HTMLDivElement,
@@ -56,8 +73,7 @@ export class Game {
 		mode: string,
 		gameData: inviteReturn
 	) {
-		this.height = container.clientHeight;
-		this.width = container.clientWidth;
+		this.element = container;
 
 		this.socket = socket;
 		this.gameData = gameData;
@@ -81,6 +97,8 @@ export class Game {
 			background = "black";
 		}
 
+		mode === "easy" ? (this.obstacleSize = 200) : (this.obstacleSize = 100);
+
 		const wallOptions = {
 			isStatic: true,
 			render: {
@@ -89,11 +107,14 @@ export class Game {
 			},
 		};
 
-		this.engine = Engine.create();
+		[this.width, this.height] = this.FixSizeRatio();
+		this.ScaleUpdate();
+
+		this.engine = Engine.create({ gravity: { x: 0, y: 0 } });
 
 		// Create a render
 		this.render = Render.create({
-			element: container,
+			element: this.element,
 			engine: this.engine,
 			options: {
 				width: this.width,
@@ -105,8 +126,24 @@ export class Game {
 		});
 
 		//init players
+		let posX: number = 0;
+
+		positions.player.x === 0
+			? (posX = this.width / 2)
+			: (posX = this.remap(
+					positions.player.x,
+					positions.player.y,
+					this.width
+			  ));
+		console.log(
+			"newPOS",
+			this.remap(positions.player.x, positions.player.y, this.width),
+			"newWIDTH",
+			this.width
+		);
+
 		this.bottomPaddle = getBottomPaddle(
-			this.width,
+			posX,
 			this.height,
 			{
 				isStatic: true,
@@ -116,12 +153,18 @@ export class Game {
 				},
 				chamfer: { radius: [7, 7, 0, 0] },
 			},
-			this.paddleSize
+			this.remap(this.paddleSize, 600, this.width),
+			this.remap(15, 800, this.height),
+			this.remap(45, 800, this.height)
 		);
 
-		this.tmpX = this.bottomPaddle.position.x;
+		positions.opponent.x !== 0
+			? (positions.opponent.x =
+					this.remap(positions.opponent.x, 600, this.width) * 2)
+			: (positions.opponent.x = this.width);
+
 		this.topPaddle = getTopPaddle(
-			this.width,
+			positions.opponent.x,
 			{
 				isStatic: true,
 				render: {
@@ -130,35 +173,91 @@ export class Game {
 				},
 				chamfer: { radius: [0, 0, 7, 7] },
 			},
-			this.paddleSize
+			this.remap(this.paddleSize, 600, this.width),
+			this.remap(15, 800, this.height),
+			this.remap(45, 800, this.height)
 		);
 
 		//init walls
-		this.walls.push(getTopWall(this.width, Bodies, wallOptions));
 		this.walls.push(
-			getBottomWall(this.height, this.width, Bodies, wallOptions)
+			getTopWall(
+				this.width,
+				Bodies,
+				wallOptions,
+				this.remap(10, 800, this.height)
+			)
 		);
-		this.walls.push(getLeftWall(this.height, Bodies, wallOptions));
 		this.walls.push(
-			getRightWall(this.height, this.width, Bodies, wallOptions)
+			getBottomWall(
+				this.height,
+				this.width,
+				Bodies,
+				wallOptions,
+				this.remap(10, 800, this.height)
+			)
+		);
+		this.walls.push(
+			getLeftWall(
+				this.height,
+				Bodies,
+				wallOptions,
+				this.remap(10, 600, this.width)
+			)
+		);
+		this.walls.push(
+			getRightWall(
+				this.height,
+				this.width,
+				Bodies,
+				wallOptions,
+				this.remap(10, 600, this.width)
+			)
+		);
+
+		// init dashed line
+		this.dashedLine = getDashedLine(
+			this.width / 2,
+			this.height / 2,
+			this.width,
+			this.remap(8, 800, this.height),
+			this.remap(24, 600, this.width),
+			fillColor
 		);
 
 		//init ball
-		this.ball = getBall(this.width, this.height, wallOptions);
+		positions.ball.x !== 0
+			? (positions.ball.x =
+					this.remap(positions.ball.x, 600, this.width) * 2)
+			: (positions.ball.x = this.width);
+		positions.ball.y !== 0
+			? (positions.ball.y =
+					this.remap(positions.ball.y, 800, this.height) * 2)
+			: (positions.ball.y = this.height);
 
+		this.ball = getBall(
+			positions.ball.x,
+			positions.ball.y,
+			this.scale,
+			wallOptions
+		);
+
+		// init mouse
 		this.mouse = Matter.Mouse.create(this.render.canvas);
+
 		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
 			mouse: this.mouse,
-		});
-
-		this.mouse = Matter.Mouse.create(this.render.canvas);
-		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
-			mouse: this.mouse,
+			constraints: {
+				stiffness: 0,
+				render: {
+					visible: false,
+				},
+			},
 		});
 
 		// Add all the bodies to the world
 		World.add(this.engine.world, [
 			...this.walls,
+			...this.dashedLine,
 			this.topPaddle,
 			this.bottomPaddle,
 			this.ball,
@@ -172,55 +271,121 @@ export class Game {
 		Render.run(this.render);
 
 		// Set up mouse events
-		setTimeout(() => {
-			this.emitToUpdateFrame();
-		}, 3000);
 		this.setupMouseEvents();
+	}
+
+	remap(value: number, max1: number, max2: number): number {
+		return Math.round(max2 * (value / max1));
+	}
+
+	FixSizeRatio(): [number, number] {
+		let width: number = 0;
+		let height: number = 0;
+
+		const Ratio = 3 / 4; // Aspect ratio of 800x600 (Portrait)
+
+		if (this.element.clientWidth > this.element.clientHeight) {
+			height = this.element.clientHeight;
+			width = height * Ratio;
+		} else {
+			width = this.element.clientWidth;
+			height = width / Ratio;
+
+			if (height > this.element.clientHeight) {
+				height = this.element.clientHeight;
+				width = height * Ratio;
+			}
+		}
+
+		return [width, height];
+	}
+
+	ScaleUpdate() {
+		const ScaleWidth: number = this.width / 600;
+		const ScaleHeight: number = this.height / 800;
+
+		this.scale = ScaleWidth < ScaleHeight ? ScaleWidth : ScaleHeight;
 	}
 
 	emitToUpdateFrame() {
 		this.interval = setInterval(() => {
+			if (this.tmpX === 0) {
+				if (
+					temp + this.remap(this.paddleSize / 2, 600, this.width) <=
+						this.width &&
+					temp - this.remap(this.paddleSize / 2, 600, this.width) >= 0
+				)
+					this.tmpX = temp;
+				else this.tmpX = this.width / 2;
+			}
 			this.socket.emit("updateFrame", {
-				paddleX: this.tmpX,
-				id_match: this.gameData.id_match,
+				paddleX: this.remap(this.tmpX, this.width, 600),
+				id_match: this.gameData?.id_match,
 			});
 		}, 1000 / 60);
+		return this.interval;
 	}
 
-	updateBallPosition(data: ball) {
-		Matter.Body.setPosition(this.ball, {
-			x: data.x,
-			y: data.y,
-		});
+	emitToUpdateFrame_First() {
+		this.tmpX = this.width / 2;
+		this.interval = setInterval(() => {
+			this.socket.emit("updateFrame", {
+				paddleX: this.remap(this.tmpX, this.width, 600),
+				id_match: this.gameData?.id_match,
+			});
+		}, 1000 / 60);
+		return this.interval;
+	}
+
+	updateBallPosition(data: ball, playerX: number) {
+		if (data) {
+			positions.ball.x = data.x;
+			positions.ball.y = data.y;
+			Matter.Body.setPosition(this.ball, {
+				x: this.remap(data.x, 600, this.width),
+				y: this.remap(data.y, 800, this.height),
+			});
+		}
 	}
 
 	updateOpponentPosition(data: opponent) {
-		Matter.Body.setPosition(this.topPaddle, {
-			x: data.x,
-			y: this.topPaddle.position.y,
-		});
+		if (data) {
+			positions.opponent.x = data.x;
+			positions.opponent.y = data.y;
+			Matter.Body.setPosition(this.topPaddle, {
+				x: this.remap(data.x, 600, this.width),
+				y: this.topPaddle.position.y,
+			});
+		}
 	}
 
 	updatePlayerPosition(data: player) {
-		Matter.Body.setPosition(this.bottomPaddle, {
-			x: data.x,
-			y: this.bottomPaddle.position.y,
-		});
+		if (data) {
+			Matter.Body.setPosition(this.bottomPaddle, {
+				x: this.remap(data.x, 600, this.width),
+				y: this.bottomPaddle.position.y,
+			});
+		}
 	}
 
 	setupMouseEvents() {
-		const max = this.width - this.paddleSize / 2;
-		const min = this.paddleSize / 2;
-
 		Matter.Events.on(
 			this.mouseConstraint,
 			"mousemove",
 			(event: Matter.IMouseEvent) => {
 				if (
-					this.mouse.position.x < max &&
-					this.mouse.position.x > min
+					this.mouse.position.x +
+						this.remap(this.paddleSize, 600, this.width) / 2 <=
+						this.width &&
+					this.mouse.position.x -
+						this.remap(this.paddleSize, 600, this.width) / 2 >=
+						0
 				) {
 					this.tmpX = this.mouse.position.x;
+					temp = this.tmpX;
+					positions.player.x = this.mouse.position.x;
+					positions.player.y = this.width;
+					console.log("mouse", temp, "width", this.width);
 				}
 			}
 		);
@@ -231,9 +396,12 @@ export class Game {
 	}
 
 	destroy() {
-		World.clear(this.engine.world, true);
 		Render.stop(this.render);
 		Engine.clear(this.engine);
+		World.clear(this.engine.world, true);
 		Events.off(this.engine, "mousemove");
+		Composite.clear(this.engine.world, true);
+		this.render.canvas.remove();
+		clearInterval(this.interval);
 	}
 }

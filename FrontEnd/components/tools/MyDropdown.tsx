@@ -26,21 +26,21 @@ const MyDropdown = (props: {
 	Refetch?: any;
 }) => {
 	const router = useRouter();
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
 
-		await new Promise((resolve) => setTimeout(resolve, 500));
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
-				query.removeQueries();
+				globalSocket.emit("offline");
 				router.push("/");
+				query.removeQueries();
 			})
 			.catch((e) => {
 				console.log(".catch error", e);
@@ -52,7 +52,7 @@ const MyDropdown = (props: {
 			if (props.status === "INGAME")
 				notify(
 					props.user,
-					user.data.avatar,
+					undefined,
 					false,
 					2000,
 					"Player Already In Game"

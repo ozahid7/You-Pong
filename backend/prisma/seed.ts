@@ -1,7 +1,8 @@
+import { ApiGatewayTimeoutResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function achievements() {
+async function firstRun() {
   try {
     await prisma.$connect();
     const achievements = [
@@ -57,10 +58,14 @@ async function achievements() {
       data: achievements,
       skipDuplicates: true,
     });
+    const users = await prisma.user.updateMany({
+      data:{status: 'OFFLINE'}
+    })
   } catch (error) {
     throw new Error(`Failed to create Achievements : ${error}`);
   } finally {
     await prisma.$disconnect();
   }
 }
-achievements();
+
+firstRun();

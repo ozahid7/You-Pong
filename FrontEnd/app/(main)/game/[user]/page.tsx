@@ -26,7 +26,10 @@ interface pageProps {
 	params: { user: string };
 }
 
-export default function game({ params }: pageProps) {
+let game: Game = null;
+let interval = null;
+
+export default function game_({ params }: pageProps) {
 	//game properties
 	const [map, setMap] = useState("classic");
 	const [mode, setMode] = useState("easy");
@@ -37,14 +40,13 @@ export default function game({ params }: pageProps) {
 	const [cloneData, setCloneData] = useState<inviteReturn>();
 	const [scores, setScores] = useState({ player: 0, opponent: 0 });
 	const { data } = useGlobalContext();
-	let game: Game = null;
 
 	//game ref and sizes
 	const ref = useRef<HTMLDivElement>(null);
 	const [width, setWidht] = useState<number>();
 	const [height, setHeight] = useState<number>();
 
-	const user = useUser(true);
+	const user = useUser(true, undefined);
 	const router = useRouter();
 
 	//infos in score card
@@ -93,27 +95,40 @@ export default function game({ params }: pageProps) {
 	}, [data]);
 
 	useEffect(() => {
+		const handleResize = () => {
+			setWidht(ref.current?.clientWidth);
+			setHeight(ref.current?.clientHeight);
+		};
+
+		window.addEventListener("resize", handleResize);
+
+		// Cleanup
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	useEffect(() => {
 		if (ref.current) {
-			const updateSize = () => {
-				setHeight(window.innerHeight);
-				setWidht(window.innerWidth);
-			};
-
-			// window.addEventListener("resize", updateSize);
-			updateSize();
 			game = new Game(ref.current, map, globalSocket, mode, cloneData);
-
-			return () => {
-				game.destroy();
-			};
+			if (!interval) {
+				setTimeout(() => {
+					interval = game.emitToUpdateFrame_First();
+				}, 8000);
+			} else {
+				clearInterval(interval);
+				game.stopIntervall();
+				interval = game.emitToUpdateFrame();
+			}
 		}
-	}, [cloneData]);
+		return () => {
+			game?.destroy();
+		};
+	}, [cloneData, width, height]);
 
 	useEffect(() => {
 		if (game) {
 			if (globalSocket.listeners("renderBall").length === 0)
-				globalSocket.on("renderBall", (data: ball) => {
-					game.updateBallPosition(data);
+				globalSocket.on("renderBall", (data: ball, x: number) => {
+					game.updateBallPosition(data, x);
 				});
 			if (globalSocket.listeners("renderPaddle").length === 0)
 				globalSocket.on("renderPaddle", (data: player) => {
@@ -126,6 +141,7 @@ export default function game({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
+					interval = null;
 					setShowMessage(true);
 					game.stopIntervall();
 					game.destroy();
@@ -135,12 +151,12 @@ export default function game({ params }: pageProps) {
 					console.log("gameOver");
 					setScores({ player: 5, opponent: 0 });
 					setShowMessage(true);
+					interval = null;
 					game.stopIntervall();
 					game.destroy();
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {
-					console.log("data = ", data);
 					setScores(data);
 				});
 		}
@@ -175,10 +191,10 @@ export default function game({ params }: pageProps) {
 									/>
 								)}
 							</div>
-							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[900px] border-palette-white h-[90%] rounded-md shadow-xl ">
+							<div className="w-full p-8 bg-palette-grey flex justify-center border-[6px] max-w-[1000px] border-palette-white h-[100%] rounded-md shadow-xl items-center">
 								<div
 									ref={ref}
-									className="flex w-[600px]  h-[800px] rounded-md overflow-hidden"
+									className="w-[100%] h-[100%] flex justify-center items-center"
 								></div>
 							</div>
 						</div>
