@@ -40,23 +40,23 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const friends = useFriends();
 	const user = useUser(true, undefined);
 
-  const router = useRouter();
-  const style =
-    "text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
-  const pathname = usePathname();
+	const router = useRouter();
+	const style =
+		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
+	const pathname = usePathname();
 
 	pathname.startsWith("/chat/")
 		? globalSocket.emit("inChat")
 		: globalSocket.emit("outChat");
 
-  useEffect(() => {
-    console.log("from socket provider");
-    //notification
-    if (globalSocket.listeners("addNotif").length === 0)
-      globalSocket.on("addNotif", (obj) => {
-        const message = obj.is_message
-          ? "Sent you a message 💬"
-          : "Sent you a friend request 👥";
+	useEffect(() => {
+		console.log("from socket provider");
+		//notification
+		if (globalSocket.listeners("addNotif").length === 0)
+			globalSocket.on("addNotif", (obj) => {
+				const message = obj.is_message
+					? "Sent you a message 💬"
+					: "Sent you a friend request 👥";
 
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
@@ -75,7 +75,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
 				console.log("requests  from remove  = ", requests);
-				setRequests(requests--);
+				if (requests > 0) setRequests(requests--);
 				if (requests === 0) setViewed(true);
 				friends.refetch();
 			});
