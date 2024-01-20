@@ -300,6 +300,7 @@ const Chats = ({ params }) => {
                                 <JoinModal
                                   refetch={refetch}
                                   channels={JoinChannels}
+                                  socket={connection}
                                 />
                               </NextUIProvider>
                             </div>

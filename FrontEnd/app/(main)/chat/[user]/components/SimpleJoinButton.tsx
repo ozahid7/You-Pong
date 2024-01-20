@@ -5,20 +5,23 @@ import { joinChannel } from "../data/api";
 import { IoEnterOutline } from "react-icons/io5";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
+import { Socket } from "socket.io-client";
 
 interface Props {
   obj: Channel;
   close: any;
   refetch: any;
   joinRefetch: any;
+  socket: Socket;
 }
 
-const SimpleJoinButton = ({ obj, close, refetch, joinRefetch }: Props) => {
+const SimpleJoinButton = ({ obj, close, refetch, joinRefetch, socket }: Props) => {
   const join = async () => {
     const success = await joinChannel(obj.id_channel, null);
     if (success.message === "Channel Updated Succefully") {
       refetch();
       joinRefetch();
+      socket.emit("joinChannel", obj.id_channel);
       close();
     } else console.error(success.message);
   };

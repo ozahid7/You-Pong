@@ -14,10 +14,11 @@ import { v4 as uuidv4 } from "uuid";
 import ShowMessages from "./ShowMessages";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { Socket } from "socket.io-client";
 
 interface Props {
   main: User_Hero;
-  socket: any;
+  socket: Socket;
   channel: Channel;
 }
 
@@ -26,7 +27,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
 
-  const { data: Members } = useQuery<Member[], Error>(
+  const { data: Members, refetch } = useQuery<Member[], Error>(
     ["members", channel?.id_channel],
     () => fetchData_getMembers(channel?.id_channel),
     {
@@ -59,11 +60,16 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       shouldScrollToBottom = true;
     };
 
+    const handleJoinedChannel = (data: string) => {
+      refetch();
+    };
+
     socket?.on("receiveMessage", handleMessageReceive);
+    socket?.on("joinedChannel", handleJoinedChannel);
 
     return () => {
       socket?.off("receiveMessage", handleMessageReceive);
-      socket?.disconnect();
+      socket?.off("joinedChannel", handleJoinedChannel);
     };
   }, [socket]);
 
