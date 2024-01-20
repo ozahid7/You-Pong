@@ -25,9 +25,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
-  var one: boolean = false;
 
-  const { data: Members, error: membersError } = useQuery<Member[], Error>(
+  const { data: Members } = useQuery<Member[], Error>(
     ["members", channel?.id_channel],
     () => fetchData_getMembers(channel?.id_channel),
     {
@@ -37,11 +36,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   );
 
-  const {
-    data,
-    error,
-    refetch: MessagesRefetch,
-  } = useQuery<Message[], Error>(
+  const { data, refetch: MessagesRefetch } = useQuery<Message[], Error>(
     ["messages", channel?.id_channel],
     () => fetchData_Messages(channel?.id_channel),
     {
@@ -53,22 +48,23 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
 
   useEffect(() => {
     if (data) {
-      // Set the initial messages from the database //
       setMessages(data);
     }
   }, [data]);
 
   useEffect(() => {
-    if (!one) {
-      socket?.on("receiveMessage", (data: Message) => {
-        setMessages((prevMessages) => [...prevMessages, data]);
-        shouldScrollToBottom = true;
-      });
-      one = true;
-    }
+    const handleMessageReceive = (data: Message) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
-    return () => socket?.disconnect();
-  }, [one]);
+    socket?.on("receiveMessage", handleMessageReceive);
+
+    return () => {
+      socket?.off("receiveMessage", handleMessageReceive);
+      socket?.disconnect();
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
@@ -79,7 +75,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   }, [shouldScrollToBottom, messages]);
 
   if (!Members || !data) {
-		return <MiniLoader customClass="m-auto" />;
+    return <MiniLoader customClass="m-auto" />;
   }
 
   return (

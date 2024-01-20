@@ -18,9 +18,10 @@ interface Props {
   obj: Channel;
   close: any;
   refetch: any;
+  joinRefetch: any;
 }
 
-const PasswordModal = ({ obj, close, refetch }: Props) => {
+const PasswordModal = ({ obj, close, refetch, joinRefetch }: Props) => {
   const [valid, setValid] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const passRef = useRef<HTMLInputElement>(null);
@@ -38,6 +39,7 @@ const PasswordModal = ({ obj, close, refetch }: Props) => {
       );
       if (response.message !== "Password Incorrect") {
         refetch();
+        joinRefetch();
         Manualclose();
         close();
       } else {

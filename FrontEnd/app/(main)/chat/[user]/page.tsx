@@ -130,7 +130,6 @@ const Chats = ({ params }) => {
     indexChannels = [];
     indexChannelsDirect = [];
     var last: number = 0;
-    var last_direct: number = 0;
 
     if (channelsGroups) {
       channelsGroups?.map((channel, key) => {
@@ -154,7 +153,6 @@ const Chats = ({ params }) => {
           name: channel.name,
           type: channel.type,
         };
-        last_direct = temp.index;
         indexChannelsDirect.push(temp);
       });
       //// handle direct message ///
@@ -168,7 +166,6 @@ const Chats = ({ params }) => {
         else if (ret === undefined) channel.index = 0;
       });
       /////////////////////////////
-      setValueDirect(last_direct);
       directRefetch();
     }
   }, [channelsDirect, channelsGroups]);
