@@ -70,7 +70,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     return () => {
       socket?.off("receiveMessage", handleMessageReceive);
       socket?.off("joinedChannel", handleJoinedChannel);
-      socket?.disconnect();
     };
   }, [socket]);
 

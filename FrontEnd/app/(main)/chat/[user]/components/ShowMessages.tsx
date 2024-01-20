@@ -1,5 +1,5 @@
 import { Channel, Member, Message, User_Hero } from "@/types";
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import ChatBubbleMain, { formatPrismaDate } from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import { v4 as uuidv4 } from "uuid";
@@ -22,13 +22,11 @@ let today_ = true,
   another = true;
 
 const ShowMessages = ({ message, main, channel, Members }: props) => {
-
-  // useEffect(() => {
-  //   console.log("here");
-  //   today_ = true;
-  //   yesterday_ = true;
-  //   another = true;
-  // }, []);
+  useEffect(() => {
+    today_ = true;
+    yesterday_ = true;
+    another = true;
+  }, []);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -61,7 +59,7 @@ const ShowMessages = ({ message, main, channel, Members }: props) => {
   };
 
   return (
-    <Fragment>
+    <>
       <div className="flex w-full h-fit text-[#686868] font-nunito justify-center items-center">
         {formatDate(message.created_at)}
       </div>
@@ -84,7 +82,7 @@ const ShowMessages = ({ message, main, channel, Members }: props) => {
           />
         ) : null
       ) : null}
-    </Fragment>
+    </>
   );
 };
 
