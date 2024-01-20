@@ -92,7 +92,7 @@ const MiniChatDirect = ({
         />
       </div>
       <div className="w-[70%] h-full overflow-hidden flex justify-evenly flex-col items-center ">
-        <p className="text-[#424242] font-archivo font-[800] md:text-[14px] text-[19px] whitespace-nowrap overflow-hidden text-ellipsis w-[90%] h-fit">
+        <p className="text-[#424242] font-nunito font-[800] md:text-[14px] text-[19px] whitespace-nowrap overflow-hidden text-ellipsis w-[90%] h-fit">
           {user?.username}
         </p>
       </div>
