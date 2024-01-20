@@ -27,7 +27,6 @@ interface pageProps {
 }
 
 let game: Game = null;
-let interval = null;
 
 export default function game_({ params }: pageProps) {
 	//game properties
@@ -40,6 +39,7 @@ export default function game_({ params }: pageProps) {
 	const [cloneData, setCloneData] = useState<inviteReturn>();
 	const [scores, setScores] = useState({ player: 0, opponent: 0 });
 	const { data } = useGlobalContext();
+	let interval = null;
 
 	//game ref and sizes
 	const ref = useRef<HTMLDivElement>(null);
@@ -146,17 +146,26 @@ export default function game_({ params }: pageProps) {
 					game.stopIntervall();
 					game.destroy();
 					game.init();
+					setTimeout(() => {
+						// setShowMessage(false);
+						router.replace(myRoutes.dashboard);
+					}, 4000);
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", (obj: any) => {
-					console.log("gameOver");
+					console.log("gameOver", obj);
 					interval = null;
 					game.stopIntervall();
 					game.destroy();
 					game.init();
 					if (!obj.is_me) {
+						console.log("!is me");
 						setScores({ player: 5, opponent: 0 });
 						setShowMessage(true);
+						setTimeout(() => {
+							setShowMessage(false);
+							router.replace(myRoutes.dashboard);
+						}, 4000);
 					}
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
@@ -165,7 +174,6 @@ export default function game_({ params }: pageProps) {
 				});
 		}
 		return () => {
-			globalSocket.off("gameOver");
 			globalSocket.off("renderBall");
 			globalSocket.off("renderPaddle");
 			globalSocket.off("renderOpponent");

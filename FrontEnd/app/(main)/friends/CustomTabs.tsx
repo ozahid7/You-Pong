@@ -82,14 +82,14 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
 								selectedIndex === 0
 									? "border-b-2 border-white"
 									: ""
-							} font-semibold text-white rounded- hover:scale-110`}
+							} font-semibold text-white rounded- hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform`}
 						></Tab>
 						<Tab
 							className={`outline-none text-h sm:text-sm md:text-lg before:content-['Requests'] sm:before:content-['Friend_Request'] font-body xl:text-xl drop-shadow-lg  ${
 								selectedIndex === 1
 									? "border-b-2 border-white"
 									: ""
-							} font-semibold text-white rounded- hover:scale-110`}
+							} font-semibold text-white rounded- hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform`}
 						></Tab>
 
 						<Tab
@@ -97,7 +97,7 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
 								selectedIndex === 2
 									? "border-b-2 border-white"
 									: ""
-							} font-semibold text-white rounded- hover:scale-110`}
+							} font-semibold text-white rounded- hover:animate-scaleAnimation hover:scale-110 transition-transform duration-500 transform`}
 						></Tab>
 					</Tab.List>
 					<Tab.Panels className="mt-4  flex overflow-y-auto  my_scroll_green flex-grow w-[90%]">

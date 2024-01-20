@@ -1,14 +1,3 @@
-export enum map {
-  GREEN,
-  CLASSIC,
-  ORANGE,
-}
-
-export enum mode {
-  HARD,
-  EASY,
-}
-
 export interface gameData {
   player: {
     x: number;
@@ -26,8 +15,8 @@ export interface gameData {
     socket_player: string;
     socket_opponent: string;
     id_opponent: string;
-    map: map;
-    mode: mode;
+    map: string;
+    mode: string;
   };
   scores: {
     player: number;
@@ -59,13 +48,13 @@ export interface infoGame {
   id_sender: string;
   id_receiver: string;
   socket_player: string;
-  map: map;
-  mode: mode;
+  map: string;
+  mode: string;
 }
 
 export interface infoPlayer {
   id_sender: string;
   is_public: boolean;
-  map: map;
-  mode: mode;
+  map: string;
+  mode: string;
 }
