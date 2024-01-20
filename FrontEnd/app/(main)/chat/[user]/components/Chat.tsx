@@ -110,7 +110,7 @@ const Chat = ({
               />
             </div>
             <div className="flex flex-col justify-evenly">
-              <div className="text-[#424242] font-archivo font-[800] xxs:text-[18px] xs:text-[20px] md:text-[20px] lg:text-[22px] xl:text-[25px] whitespace-nowrap overflow-hidden text-ellipsis md:max-w-[200px] lg:max-w-[300px] xl:max-w-[380px] sm:max-w-[300px] sm_:max-w-[200px] xs:max-w-[100px] xxs:max-w-[80px]">
+              <div className="text-[#424242] font-nunito font-[800] xxs:text-[18px] xs:text-[20px] md:text-[20px] lg:text-[22px] xl:text-[25px] whitespace-nowrap overflow-hidden text-ellipsis md:max-w-[200px] lg:max-w-[300px] xl:max-w-[380px] sm:max-w-[300px] sm_:max-w-[200px] xs:max-w-[100px] xxs:max-w-[80px]">
                 {user?.username}
               </div>
               <div

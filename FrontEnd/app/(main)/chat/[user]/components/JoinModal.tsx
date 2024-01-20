@@ -15,30 +15,30 @@ import { Channel, QueryProp } from "@/types";
 import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import groups from "../../../../../public/groups.svg";
 import { PasswordModal, SimpleJoinButton } from ".";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 interface Props {
   refetch: any;
   channels: QueryProp;
 }
 
-export default function JoinModal({ refetch, channels }) {
+export default function JoinModal({ refetch, channels }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
     onClose();
   };
 
-  if (!channels?.data && channels?.isLoading)
-    return (
-      <div className="flex text-[100px] h-full items-center loading text-palette-orange loading-lg"></div>
-    );
+  if (!channels?.data && channels?.isLoading) {
+    return <MiniLoader />;
+  }
 
   return (
     <Fragment>
       <Link
         role="button"
         onPress={onOpen}
-        className="text-palette-clear font-archivo text-[20px] font-[700] hover:text-palette-orange underline"
+        className="text-palette-clear font-nunito xxs:text-[16px] md:text-[18px] lg:text-[20px] font-[700] hover:text-palette-orange underline"
       >
         Join
       </Link>
@@ -128,6 +128,7 @@ export default function JoinModal({ refetch, channels }) {
                                         obj={obj}
                                         close={onClose}
                                         refetch={refetch}
+                                        joinRefetch={channels.fetcher}
                                         key="protected"
                                       />
                                     ) : (

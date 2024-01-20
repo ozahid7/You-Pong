@@ -13,6 +13,7 @@ import Loader from "@/components/tools/Loader";
 import { v4 as uuidv4 } from "uuid";
 import ShowMessages from "./ShowMessages";
 import { useGlobalContext } from "@/providers/SocketProvider";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 interface Props {
   main: User_Hero;
@@ -24,13 +25,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
-  var one: boolean = false;
 
-  const {
-    data: Members,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<Member[], Error>(
+  const { data: Members } = useQuery<Member[], Error>(
     ["members", channel?.id_channel],
     () => fetchData_getMembers(channel?.id_channel),
     {
@@ -40,12 +36,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   );
 
-  const {
-    data,
-    error,
-    isLoading,
-    refetch: MessagesRefetch,
-  } = useQuery<Message[], Error>(
+  const { data, refetch: MessagesRefetch } = useQuery<Message[], Error>(
     ["messages", channel?.id_channel],
     () => fetchData_Messages(channel?.id_channel),
     {
@@ -55,23 +46,26 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     }
   );
 
-  if (membersLoading || isLoading) <Loader />;
-
   useEffect(() => {
     if (data) {
-      // Set the initial messages from the database //
       setMessages(data);
     }
   }, [data]);
 
   useEffect(() => {
-    if (!one) {
-      socket?.on("receiveMessage", (data: Message) => {
-        setMessages((prevMessages) => [...prevMessages, data]);
-      });
-      one = true;
-    }
-  }, [one]);
+    const handleMessageReceive = (data: Message) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+      // scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      shouldScrollToBottom = true;
+    };
+
+    socket?.on("receiveMessage", handleMessageReceive);
+
+    return () => {
+      socket?.off("receiveMessage", handleMessageReceive);
+      socket?.disconnect();
+    };
+  }, [socket]);
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
@@ -80,6 +74,10 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       shouldScrollToBottom = false;
     }
   }, [shouldScrollToBottom, messages]);
+
+  if (!Members || !data) {
+    return <MiniLoader customClass="m-auto" />;
+  }
 
   return (
     <Fragment>
