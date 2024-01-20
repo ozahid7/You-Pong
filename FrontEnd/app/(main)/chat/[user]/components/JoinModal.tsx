@@ -16,13 +16,15 @@ import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import groups from "../../../../../public/groups.svg";
 import { PasswordModal, SimpleJoinButton } from ".";
 import MiniLoader from "@/components/tools/MiniLoader";
+import { Socket } from "socket.io-client";
 
 interface Props {
   refetch: any;
   channels: QueryProp;
+  socket: Socket;
 }
 
-export default function JoinModal({ refetch, channels }: Props) {
+export default function JoinModal({ refetch, channels, socket }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const close = () => {
@@ -137,6 +139,7 @@ export default function JoinModal({ refetch, channels }: Props) {
                                         refetch={refetch}
                                         joinRefetch={channels.fetcher}
                                         close={onClose}
+                                        socket={socket}
                                         key="public"
                                       />
                                     )}

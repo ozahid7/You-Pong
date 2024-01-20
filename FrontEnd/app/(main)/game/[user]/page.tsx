@@ -23,7 +23,7 @@ import { MyContainer, ScoreCard } from "@/components";
 import { Game } from "./Game";
 
 interface pageProps {
-	params: { user: string };
+	params: { user: string; };
 }
 
 let game: Game = null;
@@ -119,6 +119,7 @@ export default function game_({ params }: pageProps) {
 				interval = game.emitToUpdateFrame();
 			}
 		}
+
 		return () => {
 			game?.destroy();
 		};
