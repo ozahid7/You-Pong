@@ -40,7 +40,6 @@ const MiniChat = ({ channel, Channels, index }: HomeProps) => {
       )
         chat.bool = true;
     });
-    console.log(chats);
   }, [isMessage]);
 
   dot = chats.some(

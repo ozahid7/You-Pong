@@ -13,6 +13,7 @@ import Loader from "@/components/tools/Loader";
 import { v4 as uuidv4 } from "uuid";
 import ShowMessages from "./ShowMessages";
 import { useGlobalContext } from "@/providers/SocketProvider";
+import MiniLoader from "@/components/tools/MiniLoader";
 
 interface Props {
   main: User_Hero;
@@ -26,11 +27,7 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   var shouldScrollToBottom: boolean = true;
   var one: boolean = false;
 
-  const {
-    data: Members,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<Member[], Error>(
+  const { data: Members, error: membersError } = useQuery<Member[], Error>(
     ["members", channel?.id_channel],
     () => fetchData_getMembers(channel?.id_channel),
     {
@@ -43,7 +40,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   const {
     data,
     error,
-    isLoading,
     refetch: MessagesRefetch,
   } = useQuery<Message[], Error>(
     ["messages", channel?.id_channel],
@@ -54,8 +50,6 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       },
     }
   );
-
-  if (membersLoading || isLoading) <Loader />;
 
   useEffect(() => {
     if (data) {
@@ -68,9 +62,12 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     if (!one) {
       socket?.on("receiveMessage", (data: Message) => {
         setMessages((prevMessages) => [...prevMessages, data]);
+        shouldScrollToBottom = true;
       });
       one = true;
     }
+
+    return () => socket?.disconnect();
   }, [one]);
 
   useEffect(() => {
@@ -80,6 +77,10 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       shouldScrollToBottom = false;
     }
   }, [shouldScrollToBottom, messages]);
+
+  if (!Members || !data) {
+		return <MiniLoader customClass="m-auto" />;
+  }
 
   return (
     <Fragment>

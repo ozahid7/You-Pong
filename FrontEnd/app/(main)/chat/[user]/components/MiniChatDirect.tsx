@@ -47,7 +47,6 @@ const MiniChatDirect = ({
       )
         chat.bool = true;
     });
-    console.log(chats);
   }, [isMessage]);
 
   dot = chats.some(

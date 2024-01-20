@@ -28,7 +28,12 @@ export var setDataObj: Channel = {
   avatar: null,
 };
 
-export default function CreateModal({ refetch }) {
+interface Props {
+  refetch: any;
+  joinrefetch: any;
+}
+
+export default function CreateModal({ refetch, joinrefetch }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [selected, setSelected] = useState<string>("PUBLIC");
@@ -99,7 +104,10 @@ export default function CreateModal({ refetch }) {
     // Send data
     object = await setData(setDataObj);
     // SEND DATA TO HAMID RIGHT HERE
-    if (object.Object !== null) refetch();
+    if (object.Object !== null) {
+      refetch();
+      joinrefetch();
+    }
     onClose();
     // CLOSE THE MODAL Function :)
 

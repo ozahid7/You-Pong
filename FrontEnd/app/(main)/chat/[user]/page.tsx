@@ -64,26 +64,34 @@ const Chats = ({ params }) => {
     setViewedChat(true);
   }, []);
 
-  const { data: MainUser } = useQuery<User_Hero, Error>(
-    ["MainUser"],
-    fetchData_getMainUser,
+  const { data: MainUser, isLoading: MainUserLoading } = useQuery<
+    User_Hero,
+    Error
+  >(["MainUser"], fetchData_getMainUser, {
+    onError: (error: Error) => {
+      console.error("Members query error:", error);
+    },
+  });
+
+  const {
+    data: channelsDirect,
+    refetch: directRefetch,
+    isLoading: DirectLoading,
+  } = useQuery<Channel[], Error>(
+    ["userChannels_Direct"],
+    fetchData_userChannels_Direct,
     {
       onError: (error: Error) => {
-        console.error("Members query error:", error);
+        console.error("Channels query error:", error);
       },
     }
   );
 
-  const { data: channelsDirect, refetch: directRefetch } = useQuery<
-    Channel[],
-    Error
-  >(["userChannels_Direct"], fetchData_userChannels_Direct, {
-    onError: (error: Error) => {
-      console.error("Channels query error:", error);
-    },
-  });
-
-  const { data: channelsGroups, refetch } = useQuery<Channel[], Error>(
+  const {
+    data: channelsGroups,
+    refetch,
+    isLoading: GroupsLoading,
+  } = useQuery<Channel[], Error>(
     ["userChannels"],
     fetchData_userChannels_Channel,
     {
@@ -103,10 +111,6 @@ const Chats = ({ params }) => {
       console.error("Members query error:", error);
     },
   });
-
-  useEffect(() => {
-    if (!channelsDirect || !channelsDirect || !data || !MainUser) <Loader />;
-  }, [channelsDirect, channelsDirect, data, MainUser]);
 
   useEffect(() => {
     JoinChannels = {
@@ -187,6 +191,10 @@ const Chats = ({ params }) => {
   if (MainUser?.uid && !one) {
     connection = setGlobal.socket("/");
     one = true;
+  }
+
+  if (GroupsLoading || DirectLoading || MainUserLoading || isLoading) {
+    return <Loader />;
   }
 
   return (
@@ -291,7 +299,7 @@ const Chats = ({ params }) => {
                                 key="groups"
                               />
                               <NextUIProvider className="flex w-[90%] lg:flex-row xs:flex-col justify-evenly items-center gap-2">
-                                <CreateModal refetch={refetch} />
+                                <CreateModal refetch={refetch} joinrefetch={joinRefetch} />
                                 <JoinModal
                                   refetch={refetch}
                                   channels={JoinChannels}
