@@ -55,7 +55,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   useEffect(() => {
     const handleMessageReceive = (data: Message) => {
       setMessages((prevMessages) => [...prevMessages, data]);
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      // scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      shouldScrollToBottom = true;
     };
 
     socket?.on("receiveMessage", handleMessageReceive);
