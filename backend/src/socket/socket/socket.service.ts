@@ -27,7 +27,7 @@ export class SocketService
   ) {
     super(prisma);
   }
-  
+
   async launch_game(player, opponent, info: infoPlayer) {
     const player_user = await this.prisma.user.findUnique({
       where: {
@@ -265,10 +265,14 @@ export class SocketService
                 player: player_score,
                 opponent: opponent_score,
               });
-              if(_id === game.data.socket_player)
-                this.server.to(game.data.socket_player).emit('gameOver', {is_me: false});
+              if (_id === game.data.socket_player)
+                this.server
+                  .to(game.data.socket_player)
+                  .emit('gameOver', { is_me: false });
               else
-                this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: false});
+                this.server
+                  .to(game.data.socket_opponent)
+                  .emit('gameOver', { is_me: false });
               const updated = await this.prisma.match_History.update({
                 where: {
                   id_match: game.data.id_match,
@@ -279,7 +283,7 @@ export class SocketService
                 },
               });
               if (!updated) console.error('Failed to update match');
-              else{
+              else {
                 await this.removeGame(game.data.id_match);
                 this.gameService.putLvlRank(game.data.id_match);
               }
@@ -408,6 +412,74 @@ export class SocketService
     }
   }
 
+  @SubscribeMessage('joinChannel')
+  async joinChannel(
+    @MessageBody() id_channel: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const sender = this.users.find((user) => user.id_socket === socket.id);
+    if (sender !== undefined) {
+      const channel = await this.prisma.channel.findUnique({
+        where: {
+          id_channel: id_channel,
+        },
+        include: { users: true, bannedUsers: true },
+      });
+      const my_user = await this.prisma.user.findUnique({
+        where: {
+          id_user: sender.id_user,
+        },
+        include: {
+          blocked_user: true,
+          blocked_from: true,
+        },
+      });
+      if (my_user && channel) {
+        const room = await this.prisma.room_Chat.findUnique({
+          where: {
+            id_channel_id_user: {
+              id_channel: id_channel,
+              id_user: my_user.id_user,
+            },
+            member_status: 'NONE',
+          },
+        });
+        if (!room) return;
+        let users = channel.users.map((user) => {
+          if (
+            !my_user.blocked_from.some(
+              (blocked) => blocked.id_user === user.id_user,
+            ) &&
+            !my_user.blocked_user.some(
+              (blocked) => blocked.id_user === user.id_user,
+            )
+          )
+            return user;
+        });
+        const filtredUsers = await Promise.all(
+          users.filter((user) => user && user !== undefined),
+        );
+        let us = filtredUsers.map((filtred) => {
+          if (
+            this.users.filter((user) => {
+              filtred.id_user === user.id_user;
+            }) !== undefined
+          )
+            return filtred;
+        });
+        const result = await Promise.all(us.filter((user) => user));
+        result.map((user) => {
+          if (user) {
+            const recv = this.users.find((u) => user.id_user === u.id_user);
+            let in_chat: boolean = false;
+            if (recv && recv !== undefined) in_chat = recv.inChat;
+            this.server.to(user.id_user).emit('joinedChannel', id_channel);
+          }
+        });
+      }
+    }
+  }
+
   @SubscribeMessage('inGame')
   async inGame(
     @ConnectedSocket() socket: Socket,
@@ -487,15 +559,20 @@ export class SocketService
                   player: player_score,
                   opponent: opponent_score,
                 });
-                if(_id === game.data.socket_player)
-                {
-                  this.server.to(game.data.socket_player).emit('gameOver', {is_me: false});
-                  this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: true});
-                }
-                else
-                {
-                  this.server.to(game.data.socket_player).emit('gameOver', {is_me: true});
-                  this.server.to(game.data.socket_opponent).emit('gameOver', {is_me: false});
+                if (_id === game.data.socket_player) {
+                  this.server
+                    .to(game.data.socket_player)
+                    .emit('gameOver', { is_me: false });
+                  this.server
+                    .to(game.data.socket_opponent)
+                    .emit('gameOver', { is_me: true });
+                } else {
+                  this.server
+                    .to(game.data.socket_player)
+                    .emit('gameOver', { is_me: true });
+                  this.server
+                    .to(game.data.socket_opponent)
+                    .emit('gameOver', { is_me: false });
                 }
                 const updated = await this.prisma.match_History.update({
                   where: {
@@ -1058,14 +1135,14 @@ export class SocketService
       if (this.handleHits(game) === false) this.checkGoal(game);
       this.renderBall(game);
     }
-    
+
     if (this.checkEnd(game) === true) {
       this.centerBall(game);
       this.renderBall(game);
       this.server.to(game.data.socket_player).emit('endGame', dto);
       this.server.to(game.data.socket_opponent).emit('endGame', dto);
       game = this.game.find((game) => game.data.id_match === dto.id_match);
-      if (game && game !== undefined){
+      if (game && game !== undefined) {
         await this.removeGame(game.data.id_match);
         try {
           const updated = await this.prisma.match_History.update({

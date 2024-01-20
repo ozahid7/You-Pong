@@ -194,8 +194,8 @@ export class GameService {
       if (matchs.length !== 0) someMatches = matchs.slice(0, 1);
       if (
         someMatches &&
-        someMatches.filter(
-          (match) => match.win === true && match.opponent_score === 0,
+        someMatches.some(
+          (match) => match.win === true && match.opponent_score === 0
         ) &&
         user.achievements.find((achiev) => achiev.id_achievement === '5') ===
           undefined
@@ -213,7 +213,7 @@ export class GameService {
       if (
         someMatches &&
         someMatches.length === 3 &&
-        someMatches.some((match) => match.win === false) !== undefined &&
+        someMatches.some((match) => match.win === false) === false &&
         user.achievements.find((achiev) => achiev.id_achievement === '6') ===
           undefined
       ) {
