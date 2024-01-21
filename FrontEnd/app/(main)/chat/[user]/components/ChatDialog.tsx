@@ -11,7 +11,7 @@ import { log } from "console";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { v4 as uuidv4 } from "uuid";
-import ShowMessages from "./ShowMessages";
+import ShowMessages, { formatDate } from "./ShowMessages";
 import { useGlobalContext } from "@/providers/SocketProvider";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { Socket } from "socket.io-client";
@@ -85,6 +85,8 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
     return <MiniLoader customClass="m-auto" />;
   }
 
+  let lastDate = null;
+
   return (
     <Fragment>
       <div
@@ -93,12 +95,15 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
       >
         {messages &&
           messages.map((message) => {
+            const shouldDisplayDate = formatDate(message.created_at) !== lastDate;
+            lastDate = shouldDisplayDate ? formatDate(message.created_at) : lastDate;
             return (
               <ShowMessages
                 message={message}
                 main={main}
                 channel={channel}
                 Members={Members}
+                shouldDisplayDate={shouldDisplayDate}
                 key={uuidv4()}
               />
             );

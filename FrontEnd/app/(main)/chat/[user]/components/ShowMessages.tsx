@@ -1,5 +1,5 @@
 import { Channel, Member, Message, User_Hero } from "@/types";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import ChatBubbleMain, { formatPrismaDate } from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import { v4 as uuidv4 } from "uuid";
@@ -9,60 +9,35 @@ interface props {
   main: User_Hero;
   channel: Channel;
   Members: Member[];
+  shouldDisplayDate: boolean;
 }
 
-// class tya {
-//   static today: boolean;
-//   static yesterday: boolean;
-//   static another: boolean;
-// }
 
-let today_ = true,
-  yesterday_ = true,
-  another = true;
+export const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
 
-const ShowMessages = ({ message, main, channel, Members }: props) => {
-  useEffect(() => {
-    today_ = true;
-    yesterday_ = true;
-    another = true;
-  }, []);
+  if (date.toDateString() === today.toDateString()) {
+    return "Today";
+  } else if (date.toDateString() === yesterday.toDateString()) {
+    return "Yesterday";
+  } else {
+    return date.toLocaleDateString(); // or any other format you prefer
+  }
+};
 
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const today = new Date();
-    const yesterday = new Date(
-      today.setDate(today.getDate() - 1)
-    ).toDateString();
-    if (date.toDateString() === new Date().toDateString()) {
-      if (today_) {
-        yesterday_ = true;
-        another = true;
-        today_ = false;
-      } else if (!today_) return;
-      return "Today";
-    } else if (date.toDateString() === yesterday) {
-      if (yesterday_) {
-        today_ = true;
-        another = true;
-        yesterday_ = false;
-      } else return;
-      return "Yesterday";
-    } else {
-      if (another) {
-        today_ = true;
-        yesterday_ = true;
-        another = false;
-      } else return;
-      return date.toLocaleDateString(); // or any other format you prefer
-    }
-  };
+const ShowMessages = ({ message, main, channel, Members, shouldDisplayDate }: props) => {
+  const displayDate = useMemo(() => formatDate(message.created_at), [message.created_at]);
 
   return (
     <>
-      <div className="flex w-full h-fit text-[#686868] font-nunito justify-center items-center">
-        {formatDate(message.created_at)}
-      </div>
+      {shouldDisplayDate &&
+        <div className="flex w-full h-fit text-[#686868] font-nunito justify-center items-center">
+          {displayDate}
+        </div>
+      }
       {message && message.id_channel === channel?.id_channel ? (
         message.id_sender === main?.uid ? (
           <ChatBubbleMain
