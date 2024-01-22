@@ -1035,54 +1035,65 @@ export class SocketService
     );
   }
 
-  handleHits(game: gameData): boolean {
+  bounceBottom(game: gameData, dxi: number, dyi: number, half: number) {
+    const oneFifth = game.player.width / 5;
+    const oneSixth = game.player.width / 6;
+
+    if (game.ball.x >= game.player.x - half &&
+      game.ball.x <= game.player.x - half + oneFifth) {
+      game.ball.dx = -dxi -2;
+      game.ball.dy = dyi + 2;
+    }
+    else if (game.ball.x <= game.player.x + half &&
+      game.ball.x >= game.player.x + half - oneFifth) {
+      game.ball.dx = dxi + 2;
+      game.ball.dy = dyi + 2;
+    }
+    else if (game.ball.x <= game.player.x + oneSixth && game.ball.x >= game.player.x - oneSixth)
+      game.ball.dx = 0;
+    else if (game.ball.x >= game.player.x)
+      game.ball.dx = dxi;
+    else if (game.ball.x <= game.player.x)
+      game.ball.dx = -dxi;
+    game.ball.dy *= -1
+  };
+
+  bounceTop(game: gameData, dxi: number, dyi: number, half: number) {
+    const oneFifth = game.player.width / 5;
+    const oneSixth = game.player.width / 6;
+
+    if (game.ball.x >= game.opponent.x - half &&
+      game.ball.x <= game.opponent.x - half + oneFifth) {
+        game.ball.dx = -dxi - 2;
+        game.ball.dy = -dyi - 2;
+    }
+    else if (game.ball.x <= game.opponent.x + half &&
+            game.ball.x >= game.opponent.x + half - oneFifth) {
+              game.ball.dx = dxi + 2
+              game.ball.dy = -dyi - 2
+            }
+    else if (game.ball.x <= game.opponent.x + oneSixth && game.ball.x >= game.opponent.x - oneSixth)
+      game.ball.dx = 0;
+    else if (game.ball.x <= game.opponent.x)
+      game.ball.dx = -dxi;
+    else if (game.ball.x >= game.opponent.x)
+      game.ball.dx = dxi;
+    game.ball.dy *= -1
+    }
+
+  handleHits(game: gameData, dxi: number, dyi: number): boolean {
     const half = game.player.width / 2;;
     const oneFifth = game.player.width / 5;
     const oneSixth = game.player.width / 6;
-    const dxi = game.data.mode === 'HARD' ? 5 : 2;
-    const dyi = game.data.mode === 'HARD' ? 5 : 5;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width - 10 ||
       game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
     if (this.hitBottom(game, half))
-    {
-      if (game.ball.x >= game.player.x - half &&
-          game.ball.x <= game.player.x - half + oneFifth) {
-        game.ball.dx = -dxi -2;
-        game.ball.dy = dyi + 2;
-      }
-      else if (game.ball.x <= game.player.x + half &&
-              game.ball.x >= game.player.x + half - oneFifth) {
-        game.ball.dx = dxi + 2;
-        game.ball.dy = dyi + 2;
-        }
-      else if (game.ball.x <= game.player.x + oneSixth && game.ball.x >= game.player.x - oneSixth)
-        game.ball.dx = 0;
-      else if (game.ball.x >= game.player.x)
-        game.ball.dx = dxi;
-      else if (game.ball.x <= game.player.x)
-        game.ball.dx = -dxi;
-      game.ball.dy *= -1
-      return true;
-    }
+      return this.bounceBottom(game, dxi, dyi, half), true;
     if (this.hitTop(game, half))
-    {
-      // if (game.ball.x >= game.opponent.x - half &&
-      //     game.ball.x <= game.opponent.x - half + oneFifth) {
-      //       game.ball.dx = dxi + 2;
-      //       game.ball.dy = dyi - 2;    
-      // }
-      if (game.ball.x <= game.opponent.x + oneSixth && game.ball.x >= game.opponent.x - oneSixth)
-        game.ball.dx = 0;
-      else if (game.ball.x <= game.opponent.x)
-        game.ball.dx = -dxi;
-      else if (game.ball.x >= game.opponent.x)
-        game.ball.dx = dxi;
-      game.ball.dy *= -1
-      return true;
-    }
+      return this.bounceTop(game, dxi, dyi, half), true;
     return false;
   }
 
@@ -1120,13 +1131,17 @@ export class SocketService
     }
   }
 
-  centerBall(game: gameData) {
+  centerBall(game: gameData, dxi: number, dyi: number) {
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
-    game.ball.dy = -game.ball.dy;
+    const signdy = game.ball.dy < 0 ? 1 : -1
+    const signdx = game.ball.dx < 0 ? 1 : -1
+
+    game.ball.dx = dxi * signdx;
+    game.ball.dy = dyi * signdy;
   }
 
-  checkGoal(game: gameData): boolean {
+  checkGoal(game: gameData, dxi: number, dyi: number): boolean {
     if (
       game.ball.y - game.ball.radius <= 0 ||
       game.ball.y + game.ball.radius >= game.fieald.height
@@ -1136,7 +1151,7 @@ export class SocketService
       } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
         game.scores.opponent++;
       }
-      this.centerBall(game);
+      this.centerBall(game, dxi, dyi);
 
       this.server.to(game.data.socket_player).emit('updateScore', {
         player: game.scores.player,
@@ -1166,16 +1181,18 @@ export class SocketService
     if (!game) {
       return;
     }
+    const dxi = game.data.mode === 'HARD' ? 5 : 2;
+    const dyi = game.data.mode === 'HARD' ? 5 : 5;
 
     const player: boolean =
       socket.id === game.data.socket_player ? true : false;
     this.updatePaddle(player, game, dto);
     if (this.checkEnd(game) === false) {
-      if (this.handleHits(game) === false) this.checkGoal(game);
+      if (this.handleHits(game, dxi, dyi) === false) this.checkGoal(game, dxi, dyi);
       this.renderBall(game);
     }
     if (this.checkEnd(game) === true) {
-      this.centerBall(game);
+      this.centerBall(game, dxi, dyi);
       this.renderBall(game);
       this.server.to(game.data.socket_player).emit('endGame', dto);
       this.server.to(game.data.socket_opponent).emit('endGame', dto);
