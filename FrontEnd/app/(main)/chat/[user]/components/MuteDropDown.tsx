@@ -91,13 +91,16 @@ export default function MuteDropDown({
       aria-label="Mute"
     >
       <PopoverTrigger>
-        <button
-          className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+        <div
+          role="button"
+          className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
           onClick={HandleUnmute}
         >
           <LuBellOff />
-          {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-        </button>
+          <div className="h-fit w-fit">
+            {user.member_status === "MUTED" ? "Unmute" : "Mute"}
+          </div>
+        </div>
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (

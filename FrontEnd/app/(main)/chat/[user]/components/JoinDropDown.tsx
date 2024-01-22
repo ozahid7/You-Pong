@@ -75,32 +75,27 @@ const JoinDropDown = ({
     <div className="flex flex-col justify-center relative">
       <Menu>
         <Menu.Button className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}>
-          <IconContext.Provider
-            value={{
-              color: "",
-              size: "25px",
-              className: " text-palette-green border-none",
-            }}
-          >
-            Action
-            <LuArrowDown />
-          </IconContext.Provider>
+          Action
+          <LuArrowDown />
         </Menu.Button>
         <Menu.Items
-          className="flex flex-col border-2 border-palette-green divide-y rounded-md h-auto outline-none w-auto drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+          className="flex flex-col border-2 border-palette-green divide-y rounded-md h-auto outline-none w-auto drop-shadow-lg bg-palette-white bottom-full right-0 absolute z-[1000]"
           unmount={false}
         >
           <Menu.Item
             key="SetAs"
             as="div"
           >
-            <button
-              className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[170px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
               onClick={HandleAdmin}
             >
               {user.user_role === "MEMBER" ? <LuStar /> : <LuUser />}
-              {user.user_role === "MEMBER" ? `Set as Admin` : `Set as Member`}
-            </button>
+              <div className="h-fit w-fit">
+                {user.user_role === "MEMBER" ? `Set as Admin` : `Set as Member`}
+              </div>
+            </div>
           </Menu.Item>
           <Menu.Item
             key="chat"
@@ -118,25 +113,32 @@ const JoinDropDown = ({
             key="leave"
             as="div"
           >
-            <button
-              className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+            <div
+              role="button"
+
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
               onClick={HandleKick}
             >
               <LuDoorOpen />
-              Kick
-            </button>
+              <div className="h-fit w-fit">
+                Kick
+              </div>
+            </div>
           </Menu.Item>
           <Menu.Item
             key="invite"
             as="div"
           >
-            <button
-              className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+            <div
+              role="button"
+              className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
               onClick={HandleBan}
             >
               <LuBan />
-              {user.member_status === "BANNED" ? "Unban" : "Ban"}
-            </button>
+              <div className="h-fit w-fit">
+                {user.member_status === "BANNED" ? "Unban" : "Ban"}
+              </div>
+            </div>
           </Menu.Item>
         </Menu.Items>
       </Menu>

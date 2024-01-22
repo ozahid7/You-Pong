@@ -63,7 +63,8 @@ const MembersEdit = ({
         onClose={onClose}
         size="3xl"
         backdrop="blur"
-        className="w-full"
+        className="w-screen"
+        radius="md"
         isDismissable={false}
       >
         <ModalContent className="">
@@ -131,15 +132,15 @@ const MembersEdit = ({
                             <td className="font-body font-[500] text-[18px] text-[#424242]">
                               {user.user_role == "OWNER" ? (
                                 <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                  OWNER
+                                  Owner
                                 </div>
                               ) : user.user_role == "MEMBER" ? (
                                 <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
-                                  MEMBER
+                                  Member
                                 </div>
                               ) : (
                                 <div className="flex flex-row w-fit p-2 text-palette-orange bg-palette-white font-[600] rounded-lg border-[2px] border-palette-white">
-                                  ADMIN
+                                  Admin
                                 </div>
                               )}
                             </td>

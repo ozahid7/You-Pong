@@ -143,6 +143,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
         className=" w-screen h-fit"
         backdrop="blur"
         placement="center"
+        radius="md"
       >
         <ModalContent>
           {(close) => (

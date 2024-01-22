@@ -202,6 +202,7 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         size={"4xl"}
         className=" w-screen"
         backdrop="blur"
+        radius="md"
         placement="center"
         onKeyDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
