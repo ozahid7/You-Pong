@@ -17,12 +17,10 @@ import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
-import { FindUserService, InfoUserService, UserService } from './services';
+import { InfoUserService, UserService } from './services';
 import { tfaDto } from 'src/auth/dto';
 import * as qrocode from 'qrcode';
-import { achievUserService } from './services/achievemennt.service';
-import { title } from 'process';
-import { UpdateUserDto, unlockAchDto } from './dto';
+import { UpdateUserDto } from './dto';
 import { friendDto } from 'src/friend/dto';
 import { UpdateService } from './services/update.service';
 
@@ -33,65 +31,9 @@ export class UserController {
     private TfaUserService: TfaUserService,
     private userService: UserService,
     private infosService: InfoUserService,
-    private achUserService: achievUserService,
-    private findService: FindUserService,
     private updateService: UpdateService,
   ) {}
 
-  //POST MANY
-  @Post('/many')
-  async postUsers(@Body() users: userDto[]) {
-    try {
-      const result = await this.userService.postUsers(users);
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to create user', 503);
-    }
-  }
-
-  //POST
-  @Post()
-  async postUser(@Body() user: userDto) {
-    try {
-      const result = await this.userService.postUser(user);
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to create user', 503);
-    }
-  }
-  //
-  //DELETE
-  @Delete(':id_user')
-  async deleteUser(@Param('id_user') id_user: string) {
-    try {
-      const result = await this.userService.deleteUser(id_user);
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to delete users', 209);
-    }
-  }
-
-  //DELETE MANY
-  @Delete()
-  async deleteUsers() {
-    try {
-      const result = await this.userService.deleteUsers();
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to delete users', 209);
-    }
-  }
-
-  //GET
-  @Get()
-  async getUsers() {
-    try {
-      const result = await this.userService.getUsers();
-      return result;
-    } catch (error) {
-      throw new HttpException('Failed to get users', 209);
-    }
-  }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('signout')
@@ -137,11 +79,6 @@ export class UserController {
       throw new HttpException('Failed to get channels of user', 209);
     }
   }
-  // @UseGuards(AuthGuard('jwt'))
-  // @Post('/achievement/unlock')
-  // async setOwned(@Req() req, @Body() dto: unlockAchDto){
-  // 	return this.achUserService.setOWned(req.user.sub, dto.title);
-  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/findUser')

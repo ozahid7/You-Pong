@@ -17,7 +17,7 @@ export class AchievementController {
     try {
       return await this.achService.getAchievements(id_user);
     } catch (error) {
-      throw new HttpException('Failed to get achievements', 455);
+      throw new HttpException('Failed to get achievements', 444);
     }
   }
 }
