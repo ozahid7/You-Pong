@@ -1,4 +1,3 @@
-import { IsNotEmpty, IsString, Validate } from 'class-validator';
 import { userDto } from '../../user/dto/user.create.dto';
 import { channelDto } from './channel.create.dto';
 import { messageDto } from './message.create.dto';
