@@ -1093,8 +1093,6 @@ export class SocketService
 
   handleHits(game: gameData, dxi: number, dyi: number): boolean {
     const half = game.player.width / 2;;
-    const oneFifth = game.player.width / 5;
-    const oneSixth = game.player.width / 6;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width - 10 ||
       game.ball.x - game.ball.radius <= 10
