@@ -59,7 +59,40 @@ const RenderSideBarElements = (
 				>
 					{name}
 				</span>
-				{!notif && (index === 1 || index === 2) && (
+				{!notif && index === 2 && (
+					<span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
+				)}
+			</div>
+		</div>
+	);
+};
+
+const renderFriends = (link: string, name: string, requests?: number) => {
+	const path = usePathname();
+	const router = useRouter();
+
+	const goTo = () => {
+		router.push(link);
+	};
+
+	return (
+		<div onClick={goTo}>
+			<div
+				className={`flex px-4 cursor-pointer relative items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
+					path === link
+						? "bg-palette-green text-palette-orange  rounded-md"
+						: "text-white rounded-md"
+				} `}
+			>
+				{<LuUsers size="64" />}
+				<span
+					className={` font-body w-full hidden 2xl:flex font-bold text-2xl ${
+						path === link ? "text-palette-orange" : "text-white"
+					} `}
+				>
+					{name}
+				</span>
+				{requests > 0 && (
 					<span className="h-3 w-3 rounded-full absolute top-1 right-1 bg-palette-orange " />
 				)}
 			</div>
@@ -73,7 +106,7 @@ const SideBar = () => {
 	const { username, avatar } = user.data;
 	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();
-	const { viewed, setViewed, viewedChat } = useGlobalContext();
+	const { requests, viewedChat } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -122,12 +155,7 @@ const SideBar = () => {
 				{/* middle part */}
 				<div className="h-auto flex flex-col space-y-5">
 					{RenderSideBarElements(0, myRoutes.dashboard, "Dashboard")}
-					{RenderSideBarElements(
-						1,
-						myRoutes.friends,
-						"Friends",
-						viewed
-					)}
+					{renderFriends(myRoutes.friends, "Friends", requests)}
 					{RenderSideBarElements(
 						2,
 						myRoutes.chat,

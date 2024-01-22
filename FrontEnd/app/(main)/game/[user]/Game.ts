@@ -158,7 +158,7 @@ export class Game {
 			: (positions.opponent.x = this.width);
 
 		this.topPaddle = getTopPaddle(
-			positions.opponent.x,
+			this.width,
 			{
 				isStatic: true,
 				render: {
@@ -370,10 +370,10 @@ export class Game {
 				if (
 					this.mouse.position.x +
 						this.remap(this.paddleSize, 600, this.width) / 2 <=
-						this.width &&
+						this.width - this.remap(8, 600, this.width) &&
 					this.mouse.position.x -
 						this.remap(this.paddleSize, 600, this.width) / 2 >=
-						0
+						this.remap(8, 600, this.width)
 				) {
 					this.tmpX = this.mouse.position.x;
 					temp = this.tmpX;
@@ -405,6 +405,5 @@ export class Game {
 		Events.off(this.engine, "mousemove");
 		Composite.clear(this.engine.world, true);
 		this.render.canvas.remove();
-		clearInterval(this.interval);
 	}
 }
