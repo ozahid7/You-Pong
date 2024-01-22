@@ -31,7 +31,7 @@ export class localService {
       email: dto.email,
       hash,
       username: 'You-Pong',
-      avatar: 'http://localhost:4000/file/avatar.jpeg',
+      avatar: `http://${process.env.HOST_IP}:4000/file/avatar.jpeg`,
     });
   }
 

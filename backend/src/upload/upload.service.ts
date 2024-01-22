@@ -18,12 +18,12 @@ export class UploadService {
         mkdirSync('./DefaultImages');
       }
       if (existsSync(path)) {
-        return `http://localhost:4000/file/${filename}`;
+        return `http://${process.env.HOST_IP}:4000/file/${filename}`;
       }
     }
     const fileStream = createWriteStream(path);
     if (file) fileStream.write(file.buffer);
     fileStream.end();
-    return `http://localhost:4000/file/${filename}`;
+    return `http://${process.env.HOST_IP}:4000/file/${filename}`;
   }
 }

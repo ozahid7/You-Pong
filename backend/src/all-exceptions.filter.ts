@@ -1,7 +1,5 @@
-
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, InternalServerErrorException } from '@nestjs/common';
-import { Request, Response } from 'express';
-import internal from 'stream';
+import { Response } from 'express';
 
 @Catch(InternalServerErrorException)
 export class AllExceptionFilter implements ExceptionFilter {
@@ -13,6 +11,6 @@ export class AllExceptionFilter implements ExceptionFilter {
       .clearCookie('_intra_42_session_production')
       .clearCookie('access_token')
       .status(201)
-      .redirect('http://localhost:3000/')
+      .redirect(`http://${process.env.HOST_IP}:3000/`)
     }
 }

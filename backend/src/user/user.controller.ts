@@ -2,18 +2,14 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Patch,
   Post,
   UseGuards,
   HttpException,
-  Delete,
   Res,
   Req,
   ForbiddenException,
-  ServiceUnavailableException,
 } from '@nestjs/common';
-import { userDto } from './dto/user.create.dto';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { TfaUserService } from './services/tfa.service';
@@ -24,7 +20,6 @@ import { UpdateUserDto } from './dto';
 import { friendDto } from 'src/friend/dto';
 import { UpdateService } from './services/update.service';
 
-// @UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(
@@ -86,16 +81,6 @@ export class UserController {
     const _id = req.user.sub;
     const val = await this.userService.findUser(dto.friend, _id);
     res.status(201).json(val);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('incMatchRes')
-  async incMatchRes(@Body() dto: friendDto, @Req() req) {
-    const _id = req.user.sub;
-    if (dto.friend == 'victory') return await this.infosService.incVictory(_id);
-    else if (dto.friend == 'defeat')
-      return await this.infosService.incDefeat(_id);
-    throw new ServiceUnavailableException('Unvalide match result');
   }
 
   @UseGuards(AuthGuard('jwt'))
