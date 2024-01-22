@@ -38,7 +38,7 @@ export default function GameSettings(props: {
 				}}
 				withCorner={true}
 				withClose={true}
-				customClass="absolute h-[40%] md:h-[60%] min-h-[600px] lg:h-[70%] w-[80%] max-w-[1100px]"
+				customClass="absolute h-[40%] md:h-[60%] min-h-[600px] max-h-[800px] lg:h-[70%] w-[80%] max-w-[1100px]"
 				conClass="bg-palette-grey border-4 rounded-md border-palette-white "
 			>
 				<MdCancelPresentation
