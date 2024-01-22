@@ -167,7 +167,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
                   <div className="flex p-3 border-b-white border-b-[2px] w-full justify-center items-center">
                     <label
                       htmlFor="files"
-                      className="btn font-body bg-palette-green text-white hover:bg-palette-orange"
+                      className="btn font-nunito bg-palette-green text-white hover:bg-palette-orange"
                     >
                       Choose a picture
                     </label>
@@ -196,7 +196,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
                       <Tab
                         key="PUBLIC"
                         title="PUBLIC"
-                        className="w-full font-body font-[600]"
+                        className="w-full font-nunito font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
@@ -218,7 +218,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
                       <Tab
                         key="PRIVATE"
                         title="PRIVATE"
-                        className="w-full font-body font-[600]"
+                        className="w-full font-nunito font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6">
@@ -240,7 +240,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
                       <Tab
                         key="PROTECTED"
                         title="PROTECTED"
-                        className="w-full font-body font-[600]"
+                        className="w-full font-nunito font-[600]"
                       >
                         <Card className="bg-[#D6E4E5] shadow-none">
                           <CardBody className="gap-6 ">
