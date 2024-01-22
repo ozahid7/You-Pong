@@ -26,17 +26,12 @@ import {
   fetchData_userChannels_Channel,
   fetchData_userChannels_Direct,
   getChannel,
-  getChannels,
-  userChannels,
 } from "./data/api";
 import { Channel, QueryProp, User, User_Hero, whichChannel } from "@/types";
-import { io } from "socket.io-client";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
-import { usePathname, useRouter } from "next/navigation";
-import MiniLoader from "@/components/tools/MiniLoader";
 
 var one: boolean = false;
 var connection: any = null;
@@ -253,14 +248,14 @@ const Chats = ({ params }) => {
                                 labels={
                                   channelsDirect
                                     ? channelsDirect.map((obj: Channel, i) => (
-                                        <MiniChatDirect
-                                          channel={obj}
-                                          main={MainUser}
-                                          Channels={indexChannelsDirect}
-                                          index={valueDirect}
-                                          key={i}
-                                        />
-                                      ))
+                                      <MiniChatDirect
+                                        channel={obj}
+                                        main={MainUser}
+                                        Channels={indexChannelsDirect}
+                                        index={valueDirect}
+                                        key={i}
+                                      />
+                                    ))
                                     : []
                                 }
                                 indicator={{
@@ -279,15 +274,15 @@ const Chats = ({ params }) => {
                                 labels={
                                   channelsGroups
                                     ? channelsGroups.map((obj: any, i) => {
-                                        return (
-                                          <MiniChat
-                                            channel={obj}
-                                            Channels={indexChannels}
-                                            index={valueGroups}
-                                            key={i}
-                                          />
-                                        );
-                                      })
+                                      return (
+                                        <MiniChat
+                                          channel={obj}
+                                          Channels={indexChannels}
+                                          index={valueGroups}
+                                          key={i}
+                                        />
+                                      );
+                                    })
                                     : []
                                 }
                                 indicator={{

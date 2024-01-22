@@ -46,7 +46,7 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
   const passRef = useRef<HTMLInputElement>(null);
   const passConfRef = useRef<HTMLInputElement>(null);
 
-  var object: { Object: any; message: string };
+  var object: { Object: any; message: string; };
 
   let imageUrl: any;
 
@@ -75,15 +75,12 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
       result = await setFile(imgRef.current.files[0]);
     } else result = await setFile(null);
     setDataObj.avatar = result;
-    /////////////////
 
     // Handle Name //
     if (nameRef?.current.value) setDataObj.name = nameRef?.current.value;
-    /////////////////
 
     // Handle Description //
     if (descRef?.current.value) setDataObj.description = descRef?.current.value;
-    ///////////////////////
 
     // Handle password //
     if (setDataObj.type == "PROTECTED") {
@@ -99,18 +96,16 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
         return;
       }
     }
-    ////////////////////
 
     // Send data
     object = await setData(setDataObj);
+
     // SEND DATA TO HAMID RIGHT HERE
     if (object.Object !== null) {
       refetch();
       joinrefetch();
     }
     onClose();
-    // CLOSE THE MODAL Function :)
-
     clean();
   };
 
@@ -145,13 +140,11 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
         onOpenChange={onOpenChange}
         onClose={close}
         size="4xl"
-        className=" w-full"
-        scrollBehavior="outside"
+        className=" w-screen h-fit"
         backdrop="blur"
         placement="center"
-        isDismissable={false}
       >
-        <ModalContent className="">
+        <ModalContent>
           {(close) => (
             <Background>
               <ModalHeader

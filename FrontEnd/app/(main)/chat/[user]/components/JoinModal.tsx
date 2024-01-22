@@ -27,6 +27,19 @@ interface Props {
 export default function JoinModal({ refetch, channels, socket }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const showFAQ = () => {
+    return (
+      <div tabIndex={0} className="collapse bg-base-200">
+        <div className="collapse-title text-xl font-medium">
+          Focus me to see content
+        </div>
+        <div className="collapse-content">
+          <p>tabindex="0" attribute is necessary to make the div focusable</p>
+        </div>
+      </div>
+    );
+  };
+
   const close = () => {
     onClose();
   };
@@ -51,7 +64,6 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
         size="4xl"
         backdrop="blur"
         placement="center"
-        isDismissable={false}
       >
         <ModalContent className="">
           {(close) => (
@@ -69,7 +81,7 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                     <table className="table table-xs md:table-lg">
                       <thead>
-                        <tr className="text-[20px] font-body shadow-sm">
+                        <tr className="text-[20px] font-nunito text-black shadow-sm">
                           <th></th>
                           <th>Name</th>
                           <th>Type</th>
@@ -146,16 +158,9 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                                   </td>
                                 </tr>
                               ))
-                          ) : (
-                            <tr>
-                              <td
-                                colSpan={100}
-                                className="text-center font-body text-[20px] font-[600]"
-                              >
-                                No channels available
-                              </td>
-                            </tr>
-                          )}
+                          ) :
+                            ""
+                          }
                         </>
                       </tbody>
                     </table>

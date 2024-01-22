@@ -28,7 +28,7 @@ const SimpleJoinButton = ({ obj, close, refetch, joinRefetch, socket }: Props) =
 
   return (
     <button
-      className={`flex btn btn-xs xs:btn-md lg:btn-lg font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
+      className={`flex btn btn-xs xs:btn-md font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
       onClick={join}
     >
       <div className="hidden md:block">

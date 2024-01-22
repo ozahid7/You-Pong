@@ -149,7 +149,7 @@ const PrivateModal = ({
                               <th>
                                 <div className={`avatar ${Infos.status}`}>
                                   <div
-                                    className={`w-[60px] ${Infos.selection} mask mask-squircle`}
+                                    className={`w-[60px] ${Infos.selection} `}
                                   >
                                     <Image
                                       src={user.avatar || groups}
