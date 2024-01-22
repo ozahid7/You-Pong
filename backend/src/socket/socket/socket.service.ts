@@ -1167,7 +1167,7 @@ export class SocketService
   }
 
   checkEnd(game: gameData): boolean {
-    // if (game.scores.player === 7 || game.scores.opponent === 7) return true;
+    if (game.scores.player === 7 || game.scores.opponent === 7) return true;
     return false;
   }
 
