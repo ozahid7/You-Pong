@@ -80,7 +80,7 @@ const MembersEdit = ({
               <ModalBody className="w-[90%]">
                 <table className="table table-lg">
                   <thead>
-                    <tr className="text-[20px] font-body shadow-sm">
+                    <tr className="text-[20px] font-nunito text-black shadow-sm">
                       <th></th>
                       <th>Name</th>
                       <th>Type</th>
@@ -102,7 +102,7 @@ const MembersEdit = ({
                         } else Infos.disabled = "";
                         user.user.id_user === MainUser?.uid
                           ? (Infos.selection =
-                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                            "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
                           : (Infos.selection = "");
                         user.user.status === "ONLINE"
                           ? (Infos.status = "online")

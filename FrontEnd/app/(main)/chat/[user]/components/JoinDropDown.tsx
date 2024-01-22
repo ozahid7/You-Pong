@@ -18,6 +18,8 @@ import {
   UnBanMember,
   getMembers,
 } from "../data/api";
+import { Menu } from "@headlessui/react";
+import { IconContext } from "react-icons";
 
 interface Props {
   disable: string;
@@ -70,32 +72,27 @@ const JoinDropDown = ({
   };
 
   return (
-    <Fragment>
-      <Dropdown
-        className="bg-palette-white self-center"
-        type="listbox"
-        onClose={onClose}
-        onOpenChange={onOpenChange}
-        isOpen={isOpen}
-      >
-        <DropdownTrigger className="w-fit">
-          <Button
-            size="lg"
-            className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md  font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}
-            onPress={onOpen}
+    <div className="flex flex-col justify-center relative">
+      <Menu>
+        <Menu.Button className={`flex btn ${disable} xs:btn-xs sm:btn-sm md:btn-md font-body font-[700] text-[#EFF5F5] rounded-md border-none hover:border-none bg-palette-green hover:text-palette-green`}>
+          <IconContext.Provider
+            value={{
+              color: "",
+              size: "25px",
+              className: " text-palette-green border-none",
+            }}
           >
             Action
             <LuArrowDown />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          className="w-full"
-          aria-label="DropDownMenu"
+          </IconContext.Provider>
+        </Menu.Button>
+        <Menu.Items
+          className="flex flex-col border-2 border-palette-green divide-y rounded-md h-auto outline-none w-auto drop-shadow-lg z-[1000] bg-palette-white top-full right-0 absolute"
+          unmount={false}
         >
-          <DropdownItem
-            className="hover:bg-palette-white border-none"
-            variant="bordered"
-            aria-label="SetAsAdmin"
+          <Menu.Item
+            key="SetAs"
+            as="div"
           >
             <button
               className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
@@ -104,12 +101,10 @@ const JoinDropDown = ({
               {user.user_role === "MEMBER" ? <LuStar /> : <LuUser />}
               {user.user_role === "MEMBER" ? `Set as Admin` : `Set as Member`}
             </button>
-          </DropdownItem>
-          <DropdownItem
-            className="hover:bg-palette-white border-none"
-            variant="bordered"
-            aria-label="Mute"
-            isReadOnly
+          </Menu.Item>
+          <Menu.Item
+            key="chat"
+            as="div"
           >
             <MuteDropDown
               user={user}
@@ -118,11 +113,10 @@ const JoinDropDown = ({
               membersRefetch={membersRefetch}
               channelsRefetch={mainChannelRefetch}
             ></MuteDropDown>
-          </DropdownItem>
-          <DropdownItem
-            className="hover:bg-palette-white border-none"
-            variant="bordered"
-            aria-label="Kick"
+          </Menu.Item>
+          <Menu.Item
+            key="leave"
+            as="div"
           >
             <button
               className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
@@ -131,11 +125,10 @@ const JoinDropDown = ({
               <LuDoorOpen />
               Kick
             </button>
-          </DropdownItem>
-          <DropdownItem
-            className="hover:bg-palette-white border-none"
-            variant="bordered"
-            aria-label="Ban"
+          </Menu.Item>
+          <Menu.Item
+            key="invite"
+            as="div"
           >
             <button
               className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
@@ -144,10 +137,10 @@ const JoinDropDown = ({
               <LuBan />
               {user.member_status === "BANNED" ? "Unban" : "Ban"}
             </button>
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </Fragment>
+          </Menu.Item>
+        </Menu.Items>
+      </Menu>
+    </div>
   );
 };
 
