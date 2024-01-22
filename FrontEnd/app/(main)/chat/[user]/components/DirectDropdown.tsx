@@ -44,7 +44,7 @@ const DirectDropdown = ({ user }: HomePage) => {
             <Link
               role="button"
               className="py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white"
-              href={`http://localhost:3000/user/${user?.username}`}
+              href={`http://${process.env.NEXT_PUBLIC_HOST_IP}:3000/user/${user?.username}`}
             >
               <LuUser />
               <p className="w-fit h-fit">Profile</p>

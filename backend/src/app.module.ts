@@ -5,7 +5,6 @@ import { UserModule } from './user/user.module';
 import { RoomModule } from './chat/room/room.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { MessageModule } from './chat/message/message.module';
-import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UploadModule } from './upload/upload.module';
 import { FileModule } from './file/file.module';

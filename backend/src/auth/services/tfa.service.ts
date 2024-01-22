@@ -16,7 +16,7 @@ export class TfaAuthService
 			return false;
 		const valid = await this.TfaUserService.checkTfaCode(dto.code, user);
 		if (valid == true) {
-			await res.clearCookie('tfa');
+			res.clearCookie('tfa');
 			await this.authService.genCookie(res, _id, 'access_token')
 		}
 		res.json({valid})

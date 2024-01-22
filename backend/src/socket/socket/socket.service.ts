@@ -224,7 +224,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in connect : ', error);
+      console.error('Error in connect : ', error);
     }
   }
 
@@ -317,7 +317,7 @@ export class SocketService
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
     } catch (error) {
-      console.log('Error in disconnect : ', error);
+      console.error('Error in disconnect : ', error);
     }
   }
 
@@ -326,89 +326,95 @@ export class SocketService
     @MessageBody() info: infoType,
     @ConnectedSocket() socket: Socket,
   ) {
-    const sender = this.users.find((user) => user.id_socket === socket.id);
-    const receiver = this.users.find((user) => user.id_user === info.id_sender);
-    if (receiver !== undefined && sender !== undefined) {
-      const channel = await this.prisma.channel.findUnique({
-        where: {
-          id_channel: info.id_channel,
-        },
-        include: { users: true, bannedUsers: true },
-      });
-      const my_user = await this.prisma.user.findUnique({
-        where: {
-          id_user: info.id_sender,
-        },
-        include: {
-          blocked_user: true,
-          blocked_from: true,
-        },
-      });
-      if (my_user && channel) {
-        const room = await this.prisma.room_Chat.findUnique({
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      const receiver = this.users.find(
+        (user) => user.id_user === info.id_sender,
+      );
+      if (receiver !== undefined && sender !== undefined) {
+        const channel = await this.prisma.channel.findUnique({
           where: {
-            id_channel_id_user: {
-              id_channel: info.id_channel,
-              id_user: my_user.id_user,
-            },
-            member_status: 'NONE',
-          },
-        });
-        if (!room) return;
-        let users = channel.users.map((user) => {
-          if (
-            !my_user.blocked_from.some(
-              (blocked) => blocked.id_user === user.id_user,
-            ) &&
-            !my_user.blocked_user.some(
-              (blocked) => blocked.id_user === user.id_user,
-            )
-          )
-            return user;
-        });
-        const filtredUsers = await Promise.all(
-          users.filter((user) => user && user !== undefined),
-        );
-        const message = await this.prisma.message.create({
-          data: {
-            content: info.content,
-            id_sender: sender.id_user,
-            name_room: room.name,
             id_channel: info.id_channel,
           },
+          include: { users: true, bannedUsers: true },
         });
-        let us = filtredUsers.map((filtred) => {
-          if (
-            this.users.filter((user) => {
-              filtred.id_user === user.id_user;
-            }) !== undefined
-          )
-            return filtred;
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: info.id_sender,
+          },
+          include: {
+            blocked_user: true,
+            blocked_from: true,
+          },
         });
-        const result = await Promise.all(us.filter((user) => user));
-        if (message) {
-          info.id_sender = sender.id_user;
-          info.created_at = message.created_at;
-          result.map((user) => {
-            if (user) {
-              const recv = this.users.find((u) => user.id_user === u.id_user);
-              let in_chat: boolean = false;
-              if (recv && recv !== undefined) in_chat = recv.inChat;
-              this.server.to(user.id_user).emit('receiveMessage', info);
-              if (user.id_user !== info.id_sender) {
-                this.server.to(user.id_user).emit('addNotif', {
-                  id_user: my_user.id_user,
-                  username: my_user.username,
-                  avatar: my_user.avatar,
-                  is_message: true,
-                  in_chat: in_chat,
-                  info: info,
-                });
-              }
-            }
+        if (my_user && channel) {
+          const room = await this.prisma.room_Chat.findUnique({
+            where: {
+              id_channel_id_user: {
+                id_channel: info.id_channel,
+                id_user: my_user.id_user,
+              },
+              member_status: 'NONE',
+            },
           });
+          if (!room) return;
+          let users = channel.users.map((user) => {
+            if (
+              !my_user.blocked_from.some(
+                (blocked) => blocked.id_user === user.id_user,
+              ) &&
+              !my_user.blocked_user.some(
+                (blocked) => blocked.id_user === user.id_user,
+              )
+            )
+              return user;
+          });
+          const filtredUsers = await Promise.all(
+            users.filter((user) => user && user !== undefined),
+          );
+          const message = await this.prisma.message.create({
+            data: {
+              content: info.content,
+              id_sender: sender.id_user,
+              name_room: room.name,
+              id_channel: info.id_channel,
+            },
+          });
+          let us = filtredUsers.map((filtred) => {
+            if (
+              this.users.filter((user) => {
+                filtred.id_user === user.id_user;
+              }) !== undefined
+            )
+              return filtred;
+          });
+          const result = await Promise.all(us.filter((user) => user));
+          if (message) {
+            info.id_sender = sender.id_user;
+            info.created_at = message.created_at;
+            result.map((user) => {
+              if (user) {
+                const recv = this.users.find((u) => user.id_user === u.id_user);
+                let in_chat: boolean = false;
+                if (recv && recv !== undefined) in_chat = recv.inChat;
+                this.server.to(user.id_user).emit('receiveMessage', info);
+                if (user.id_user !== info.id_sender) {
+                  this.server.to(user.id_user).emit('addNotif', {
+                    id_user: my_user.id_user,
+                    username: my_user.username,
+                    avatar: my_user.avatar,
+                    is_message: true,
+                    in_chat: in_chat,
+                    info: info,
+                  });
+                }
+              }
+            });
+          }
         }
       }
+    } catch (error) {
+      console.error('Error in newMessage : ', error);
     }
   }
 
@@ -417,66 +423,70 @@ export class SocketService
     @MessageBody() id_channel: string,
     @ConnectedSocket() socket: Socket,
   ) {
-    const sender = this.users.find((user) => user.id_socket === socket.id);
-    if (sender !== undefined) {
-      const channel = await this.prisma.channel.findUnique({
-        where: {
-          id_channel: id_channel,
-        },
-        include: { users: true, bannedUsers: true },
-      });
-      const my_user = await this.prisma.user.findUnique({
-        where: {
-          id_user: sender.id_user,
-        },
-        include: {
-          blocked_user: true,
-          blocked_from: true,
-        },
-      });
-      if (my_user && channel) {
-        const room = await this.prisma.room_Chat.findUnique({
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      if (sender !== undefined) {
+        const channel = await this.prisma.channel.findUnique({
           where: {
-            id_channel_id_user: {
-              id_channel: id_channel,
-              id_user: my_user.id_user,
-            },
-            member_status: 'NONE',
+            id_channel: id_channel,
+          },
+          include: { users: true, bannedUsers: true },
+        });
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+          include: {
+            blocked_user: true,
+            blocked_from: true,
           },
         });
-        if (!room) return;
-        let users = channel.users.map((user) => {
-          if (
-            !my_user.blocked_from.some(
-              (blocked) => blocked.id_user === user.id_user,
-            ) &&
-            !my_user.blocked_user.some(
-              (blocked) => blocked.id_user === user.id_user,
+        if (my_user && channel) {
+          const room = await this.prisma.room_Chat.findUnique({
+            where: {
+              id_channel_id_user: {
+                id_channel: id_channel,
+                id_user: my_user.id_user,
+              },
+              member_status: 'NONE',
+            },
+          });
+          if (!room) return;
+          let users = channel.users.map((user) => {
+            if (
+              !my_user.blocked_from.some(
+                (blocked) => blocked.id_user === user.id_user,
+              ) &&
+              !my_user.blocked_user.some(
+                (blocked) => blocked.id_user === user.id_user,
+              )
             )
-          )
-            return user;
-        });
-        const filtredUsers = await Promise.all(
-          users.filter((user) => user && user !== undefined),
-        );
-        let us = filtredUsers.map((filtred) => {
-          if (
-            this.users.filter((user) => {
-              filtred.id_user === user.id_user;
-            }) !== undefined
-          )
-            return filtred;
-        });
-        const result = await Promise.all(us.filter((user) => user));
-        result.map((user) => {
-          if (user) {
-            const recv = this.users.find((u) => user.id_user === u.id_user);
-            let in_chat: boolean = false;
-            if (recv && recv !== undefined) in_chat = recv.inChat;
-            this.server.to(user.id_user).emit('joinedChannel', id_channel);
-          }
-        });
+              return user;
+          });
+          const filtredUsers = await Promise.all(
+            users.filter((user) => user && user !== undefined),
+          );
+          let us = filtredUsers.map((filtred) => {
+            if (
+              this.users.filter((user) => {
+                filtred.id_user === user.id_user;
+              }) !== undefined
+            )
+              return filtred;
+          });
+          const result = await Promise.all(us.filter((user) => user));
+          result.map((user) => {
+            if (user) {
+              const recv = this.users.find((u) => user.id_user === u.id_user);
+              let in_chat: boolean = false;
+              if (recv && recv !== undefined) in_chat = recv.inChat;
+              this.server.to(user.id_user).emit('joinedChannel', id_channel);
+            }
+          });
+        }
       }
+    } catch (error) {
+      console.error('Error in joinChannel : ', error);
     }
   }
 
@@ -518,7 +528,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inGame : ', error);
+      console.error('Error in inGame : ', error);
     }
   }
 
@@ -605,7 +615,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in online : ', error);
+      console.error('Error in online : ', error);
     }
   }
 
@@ -640,7 +650,7 @@ export class SocketService
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
     } catch (error) {
-      console.log('Error in offline : ', error);
+      console.error('Error in offline : ', error);
     }
   }
 
@@ -685,7 +695,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in invite : ', error);
+      console.error('Error in invite : ', error);
       this.removePrvGame(info.socket_player);
     }
   }
@@ -766,7 +776,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in accept : ', error);
+      console.error('Error in accept : ', error);
     }
   }
 
@@ -810,7 +820,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in refuse : ', error);
+      console.error('Error in refuse : ', error);
     }
   }
 
@@ -854,7 +864,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in cancel : ', error);
+      console.error('Error in cancel : ', error);
     }
   }
 
@@ -912,7 +922,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in add request : ', error);
+      console.error('Error in add request : ', error);
     }
   }
 
@@ -969,7 +979,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in remove request : ', error);
+      console.error('Error in remove request : ', error);
     }
   }
 
@@ -989,7 +999,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inChat : ', error);
+      console.error('Error in inChat : ', error);
     }
   }
 
@@ -1009,7 +1019,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in outChat : ', error);
+      console.error('Error in outChat : ', error);
     }
   }
 

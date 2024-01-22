@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Validate } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { roomDto } from './room.create.dto';
 import { userDto } from 'src/user/dto/user.create.dto';
 

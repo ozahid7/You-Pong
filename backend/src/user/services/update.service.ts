@@ -3,7 +3,6 @@ import { FindUserService } from "./find.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from "../dto";
-import { take } from "rxjs";
 
 @Injectable()
 export class UpdateService {
