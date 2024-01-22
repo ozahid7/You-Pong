@@ -25,6 +25,7 @@ import ChatHeading from "./tools/Heading";
 import Map from "./buttons/Map";
 import Mode from "./tools/Mode";
 import ScoreCard from "./tools/ScoreCard";
+import HowToPlay from "./tools/HowToPlay";
 
 export {
   NavBar,
@@ -54,4 +55,5 @@ export {
   ChatHeading,
   ScoreCard,
   Mode,
+  HowToPlay
 };

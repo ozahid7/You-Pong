@@ -112,7 +112,7 @@ const SideBar = () => {
 					<h2 className="text-white text-left font-bold text-2xl">
 						YOU PONG
 					</h2>
-					<p className="text-gray-300 font-light text-left  text-xl">
+					<p className="text-gray-300 font-light text-left text-xl">
 						Transcendnece
 					</p>
 				</div>
