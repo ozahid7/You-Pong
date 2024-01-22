@@ -1,10 +1,8 @@
-import { IsUnique } from '@youba/nestjs-dbvalidator';
 import {
   IsNotEmpty,
   IsNumber,
   IsString,
   IsEmail,
-  Validate,
   IsOptional,
 } from 'class-validator';
 import { roomDto } from '../../chat/dto/room.create.dto';
@@ -13,11 +11,9 @@ import { channelDto } from 'src/chat/dto/channel.create.dto';
 export class userDto {
   @IsString()
   @IsNotEmpty()
-  @Validate(IsUnique, [{ table: 'user', column: 'id_user' }])
   id_user: string;
   @IsNotEmpty()
   @IsString()
-  @Validate(IsUnique, [{ table: 'user', column: 'username' }])
   username: string;
   @IsNotEmpty()
   @IsString()
@@ -33,7 +29,6 @@ export class userDto {
   hash: string;
   @IsNotEmpty()
   @IsEmail()
-  @Validate(IsUnique, [{ table: 'user', column: 'email' }])
   email: string;
   @IsNotEmpty()
   @IsString()
