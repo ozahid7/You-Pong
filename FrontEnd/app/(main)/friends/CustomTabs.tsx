@@ -9,6 +9,8 @@ import MiniLoader from "@/components/tools/MiniLoader";
 import { FriendArr, user } from "@/types/Api";
 import { defaultavatar } from "@/const";
 import { UseQueryResult } from "@tanstack/react-query";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
 const CustomTabs = (props: {
 	input: string;
@@ -16,6 +18,7 @@ const CustomTabs = (props: {
 	friends: UseQueryResult<FriendArr, Error>;
 }) => {
 	const { accepted, blocked, pending } = props.friends.data;
+	const { setRequests, requests } = useGlobalContext();
 
 	const [ListArr, setListArr] = useState(accepted);
 	const [selectedIndex, setSelectedIndex] = useState(0);
@@ -32,15 +35,16 @@ const CustomTabs = (props: {
 	}, [InvalidData]);
 
 	useEffect(() => {
-		setBlockArr(blocked);
-		setRequestArr(pending);
-		setListArr(accepted);
-	}, [blocked, accepted, pending]);
+		props.friends.refetch().then((res) => {
+			setBlockArr(res.data.blocked);
+			setRequestArr(res.data.pending);
+			setListArr(res.data.accepted);
+		});
+	}, [blocked, accepted, pending, requests]);
 
 	useEffect(() => {
-		if (selectedIndex === 1) console.log("friends is refetchecd");
-		else console.log("friends --------");
-	}, [props.friends]);
+		if (selectedIndex === 1) setRequests(0);
+	}, [requests]);
 
 	useEffect(() => {
 		setListArr(

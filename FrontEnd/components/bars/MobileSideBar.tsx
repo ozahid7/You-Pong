@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { IoGameControllerOutline } from "react-icons/io5";
 
 import {
@@ -43,7 +43,33 @@ const RenderMobileSidBarElement = (
 				} `}
 			>
 				{elm}
-				{!notif && (index === 1 || index === 2) && (
+				{!notif && index === 2 && (
+					<span className="h-[6px] w-[6px] rounded-full absolute top-1 right-1 bg-palette-orange " />
+				)}
+			</div>
+		</Link>
+	);
+};
+
+export const renderFriends = (
+	link: string,
+	name: string,
+	requests?: number
+) => {
+	const path = usePathname();
+
+	return (
+		<Link href={link}>
+			<div
+				className={`flex px-4 cursor-pointer relative items-center hover:bg-greenborder hover:rounded-md 2xl:space-x-7 h-auto w-full ${
+					path === link
+						? "bg-palette-green text-palette-orange  rounded-md"
+						: "text-white rounded-md"
+				} `}
+			>
+				{<LuUsers size="40" />}
+
+				{requests > 0 && (
 					<span className="h-[6px] w-[6px] rounded-full absolute top-1 right-1 bg-palette-orange " />
 				)}
 			</div>
@@ -52,12 +78,16 @@ const RenderMobileSidBarElement = (
 };
 
 const MobileSideBar = () => {
-	const { viewed, viewedChat } = useGlobalContext();
+	const { viewed, viewedChat, requests } = useGlobalContext();
+
+	useEffect(() => {
+		console.log("requests = ", requests);
+	}, [requests]);
 	return (
 		<aside className=" w-full fixed bottom-0 flex sm:hidden items-end">
 			<div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">
 				{RenderMobileSidBarElement(0, myRoutes.dashboard)}
-				{RenderMobileSidBarElement(1, myRoutes.friends, viewed)}
+				{renderFriends(myRoutes.friends, "Friends", requests)}
 				{RenderMobileSidBarElement(2, myRoutes.chat, viewedChat)}
 				{RenderMobileSidBarElement(3, myRoutes.gameme)}
 				{RenderMobileSidBarElement(4, myRoutes.settings)}

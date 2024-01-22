@@ -18,8 +18,9 @@ import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/providers/SocketProvider";
+import useFriends from "@/api/useFriends";
 
-const RenderSideBarElements = (
+export const RenderSideBarElements = (
 	index: number,
 	link: string,
 	name: string,
@@ -67,10 +68,13 @@ const RenderSideBarElements = (
 	);
 };
 
-const renderFriends = (link: string, name: string, requests?: number) => {
+export const renderFriends = (
+	link: string,
+	name: string,
+	requests?: number
+) => {
 	const path = usePathname();
 	const router = useRouter();
-
 	const goTo = () => {
 		router.push(link);
 	};
@@ -104,9 +108,10 @@ const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true, undefined);
 	const { username, avatar } = user.data;
+	const friends = useFriends();
 	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();
-	const { requests, viewedChat, setRequests } = useGlobalContext();
+	const { requests, viewedChat, setRequests, viewed } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -126,10 +131,6 @@ const SideBar = () => {
 				console.log(".catch error", e);
 			});
 	};
-
-	useEffect(() => {
-		console.log("requests from side bar", requests);
-	}, [requests]);
 
 	return (
 		<aside

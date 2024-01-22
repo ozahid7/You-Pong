@@ -64,9 +64,9 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
-					setRequests(requests++);
+					setRequests(++requests);
 					console.log("requests from add ", requests);
-					friends.refetch();
+					// friends.refetch();
 				} else if (obj.is_message) {
 					SetIsMessage((prevCount) => prevCount + 1);
 					setID(obj.info.id_channel);
@@ -81,7 +81,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
 				console.log("requests  from remove  = ", requests);
-				if (requests > 0) setRequests(requests--);
+				if (requests > 0) setRequests(--requests);
 				if (requests === 0) setViewed(true);
 				friends.refetch();
 			});
