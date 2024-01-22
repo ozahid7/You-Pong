@@ -39,12 +39,6 @@ enum channel_type {
 	DIRECT
 }
 
-//MATCH_STATUS (win, lose)
-// enum match_status {
-// 	WIN
-// 	LOSE
-// }
-
 //MEMBER_STATUS (muted, banned)
 enum member_status {
 	MUTED
@@ -107,7 +101,6 @@ model User {
 	matchs_player Match_History[] @relation("matchs_player")
 	matchs_opponent Match_History[] @relation("matchs_opponent")
 	achievements Achievement[]
-	@@map("user")
 }
 
 //CHANNEL MODEL

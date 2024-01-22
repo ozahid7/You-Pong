@@ -11,7 +11,7 @@ export class FileController {
       const result = await this.fileService.getFile(filename, res);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to get a file', 450);
+      throw new HttpException('Failed to get a file', 444);
     }
   }
 }

@@ -81,16 +81,5 @@ export class RoomService {
     });
     return result;
   }
-  //PUT JOIN
-  // async putRoom_join(name: string) {
-  //   const result = await this.prisma.room_Chat.update({
-  //     where: {
-  //       name: name,
-  //     },
-  //     data: {
-  //       lefted: false,
-  //     },
-  //   });
-  //   return result;
-  // }
+
 }

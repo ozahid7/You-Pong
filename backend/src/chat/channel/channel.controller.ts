@@ -97,7 +97,7 @@ export class ChannelController {
       );
       return result;
     } catch (error) {
-      throw new HttpException('Failed to create a direct channel', 443);
+      throw new HttpException('Failed to create a direct channel', 444);
     }
   }
 
@@ -113,7 +113,7 @@ export class ChannelController {
       );
       return result;
     } catch (error) {
-      throw new HttpException('Failed to delete a direct channel', 443);
+      throw new HttpException('Failed to delete a direct channel', 444);
     }
   }
 

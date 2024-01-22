@@ -31,7 +31,7 @@ export class RoomController {
       );
       return result;
     } catch (error) {
-      throw new HttpException('Failed to create a room', 405);
+      throw new HttpException('Failed to create a room', 444);
     }
   }
 
@@ -42,7 +42,7 @@ export class RoomController {
       const result = await this.roomService.deleteRooms();
       return result;
     } catch (error) {
-      throw new HttpException('Failed to delete rooms', 405);
+      throw new HttpException('Failed to delete rooms', 444);
     }
   }
 
@@ -53,7 +53,7 @@ export class RoomController {
       const result = await this.roomService.deleteRoom(name);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to delete a room', 405);
+      throw new HttpException('Failed to delete a room', 444);
     }
   }
 
@@ -64,7 +64,7 @@ export class RoomController {
       const result = await this.roomService.getRooms();
       return result;
     } catch (error) {
-      throw new HttpException('Failed to get rooms', 405);
+      throw new HttpException('Failed to get rooms', 444);
     }
   }
 
@@ -75,7 +75,7 @@ export class RoomController {
       const result = await this.roomService.getRoom(name);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to get a room', 405);
+      throw new HttpException('Failed to get a room', 444);
     }
   }
 
@@ -86,7 +86,7 @@ export class RoomController {
       const result = await this.roomService.putRoom(name);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to update a room', 406);
+      throw new HttpException('Failed to update a room', 444);
     }
   }
 }

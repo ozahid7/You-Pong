@@ -19,7 +19,7 @@ export class UploadController {
       const result = await this.uploadService.uploadFile(file);
       return result;
     } catch (error) {
-      throw new HttpException('Failed to upload a file', 555);
+      throw new HttpException('Failed to upload a file', 444);
     }
   }
 }

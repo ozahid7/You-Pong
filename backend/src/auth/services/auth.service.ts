@@ -19,9 +19,9 @@ export class AuthService
 	async genCookie(@Res() res: Response, _id : string, key) {
 		const token = await this.genToken(_id, key);
 		try {
-			res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+			res.setHeader("Access-Control-Allow-Origin", `http://${process.env.HOST_IP}:3000`);
 			res.clearCookie(key);
-			res.cookie(key, token, {httpOnly: true, maxAge: 86400000, secure: true, sameSite: 'strict'});
+			res.cookie(key, token, {httpOnly: true, maxAge: 86400000, secure: false, sameSite: 'strict'});
 		} catch (error) {
 			throw new ForbiddenException(error);
 		}

@@ -1,13 +1,9 @@
 import {
   Injectable,
   NotFoundException,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import { FindUserService } from './find.service';
-import { use } from 'passport';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Achievement } from '@prisma/client';
-import { AchievementService } from 'src/achievement/achievement.service';
 
 @Injectable()
 export class InfoUserService {
@@ -23,7 +19,7 @@ export class InfoUserService {
     for (const achievemennt of ach) {
       let val = await this.prisma.achievement.findUnique({
         where: {
-          id_achievement: await achievemennt.id_achievement,
+          id_achievement: achievemennt.id_achievement,
         },
       });
       objArray.push({
@@ -48,10 +44,8 @@ export class InfoUserService {
           wins: user.victory,
           status: user.status,
           tfaStatus: user.tfaIsEnable,
-          // achievements: await this.creatAchObj(),
           avatar: user.avatar,
           channels: user.channels,
-          // matchs: user.matchs,
           achievements: user.achievements,
           isIntra: user.hash === null ? true : false,
           createdAt: user.created_at,
@@ -60,40 +54,6 @@ export class InfoUserService {
       };
     } catch (error) {
       throw new NotFoundException('user not found');
-    }
-  }
-
-  async incDefeat(_id: string) {
-    try {
-      await this.prisma.user.update({
-        where: {
-          id_user: _id,
-        },
-        data: {
-          defeats: {
-            increment: 1,
-          },
-        },
-      });
-    } catch (error) {
-      throw new ServiceUnavailableException("could't validate the defeat!");
-    }
-  }
-
-  async incVictory(_id: string) {
-    try {
-      await this.prisma.user.update({
-        where: {
-          id_user: _id,
-        },
-        data: {
-          victory: {
-            increment: 1,
-          },
-        },
-      });
-    } catch (error) {
-      throw new ServiceUnavailableException("could't validate the victory!");
     }
   }
 }

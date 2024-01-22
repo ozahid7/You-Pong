@@ -224,7 +224,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in connect : ', error);
+      console.error('Error in connect : ', error);
     }
   }
 
@@ -317,7 +317,7 @@ export class SocketService
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
     } catch (error) {
-      console.log('Error in disconnect : ', error);
+      console.error('Error in disconnect : ', error);
     }
   }
 
@@ -326,89 +326,95 @@ export class SocketService
     @MessageBody() info: infoType,
     @ConnectedSocket() socket: Socket,
   ) {
-    const sender = this.users.find((user) => user.id_socket === socket.id);
-    const receiver = this.users.find((user) => user.id_user === info.id_sender);
-    if (receiver !== undefined && sender !== undefined) {
-      const channel = await this.prisma.channel.findUnique({
-        where: {
-          id_channel: info.id_channel,
-        },
-        include: { users: true, bannedUsers: true },
-      });
-      const my_user = await this.prisma.user.findUnique({
-        where: {
-          id_user: info.id_sender,
-        },
-        include: {
-          blocked_user: true,
-          blocked_from: true,
-        },
-      });
-      if (my_user && channel) {
-        const room = await this.prisma.room_Chat.findUnique({
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      const receiver = this.users.find(
+        (user) => user.id_user === info.id_sender,
+      );
+      if (receiver !== undefined && sender !== undefined) {
+        const channel = await this.prisma.channel.findUnique({
           where: {
-            id_channel_id_user: {
-              id_channel: info.id_channel,
-              id_user: my_user.id_user,
-            },
-            member_status: 'NONE',
-          },
-        });
-        if (!room) return;
-        let users = channel.users.map((user) => {
-          if (
-            !my_user.blocked_from.some(
-              (blocked) => blocked.id_user === user.id_user,
-            ) &&
-            !my_user.blocked_user.some(
-              (blocked) => blocked.id_user === user.id_user,
-            )
-          )
-            return user;
-        });
-        const filtredUsers = await Promise.all(
-          users.filter((user) => user && user !== undefined),
-        );
-        const message = await this.prisma.message.create({
-          data: {
-            content: info.content,
-            id_sender: sender.id_user,
-            name_room: room.name,
             id_channel: info.id_channel,
           },
+          include: { users: true, bannedUsers: true },
         });
-        let us = filtredUsers.map((filtred) => {
-          if (
-            this.users.filter((user) => {
-              filtred.id_user === user.id_user;
-            }) !== undefined
-          )
-            return filtred;
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: info.id_sender,
+          },
+          include: {
+            blocked_user: true,
+            blocked_from: true,
+          },
         });
-        const result = await Promise.all(us.filter((user) => user));
-        if (message) {
-          info.id_sender = sender.id_user;
-          info.created_at = message.created_at;
-          result.map((user) => {
-            if (user) {
-              const recv = this.users.find((u) => user.id_user === u.id_user);
-              let in_chat: boolean = false;
-              if (recv && recv !== undefined) in_chat = recv.inChat;
-              this.server.to(user.id_user).emit('receiveMessage', info);
-              if (user.id_user !== info.id_sender) {
-                this.server.to(user.id_user).emit('addNotif', {
-                  id_user: my_user.id_user,
-                  username: my_user.username,
-                  avatar: my_user.avatar,
-                  is_message: true,
-                  in_chat: in_chat,
-                  info: info,
-                });
-              }
-            }
+        if (my_user && channel) {
+          const room = await this.prisma.room_Chat.findUnique({
+            where: {
+              id_channel_id_user: {
+                id_channel: info.id_channel,
+                id_user: my_user.id_user,
+              },
+              member_status: 'NONE',
+            },
           });
+          if (!room) return;
+          let users = channel.users.map((user) => {
+            if (
+              !my_user.blocked_from.some(
+                (blocked) => blocked.id_user === user.id_user,
+              ) &&
+              !my_user.blocked_user.some(
+                (blocked) => blocked.id_user === user.id_user,
+              )
+            )
+              return user;
+          });
+          const filtredUsers = await Promise.all(
+            users.filter((user) => user && user !== undefined),
+          );
+          const message = await this.prisma.message.create({
+            data: {
+              content: info.content,
+              id_sender: sender.id_user,
+              name_room: room.name,
+              id_channel: info.id_channel,
+            },
+          });
+          let us = filtredUsers.map((filtred) => {
+            if (
+              this.users.filter((user) => {
+                filtred.id_user === user.id_user;
+              }) !== undefined
+            )
+              return filtred;
+          });
+          const result = await Promise.all(us.filter((user) => user));
+          if (message) {
+            info.id_sender = sender.id_user;
+            info.created_at = message.created_at;
+            result.map((user) => {
+              if (user) {
+                const recv = this.users.find((u) => user.id_user === u.id_user);
+                let in_chat: boolean = false;
+                if (recv && recv !== undefined) in_chat = recv.inChat;
+                this.server.to(user.id_user).emit('receiveMessage', info);
+                if (user.id_user !== info.id_sender) {
+                  this.server.to(user.id_user).emit('addNotif', {
+                    id_user: my_user.id_user,
+                    username: my_user.username,
+                    avatar: my_user.avatar,
+                    is_message: true,
+                    in_chat: in_chat,
+                    info: info,
+                  });
+                }
+              }
+            });
+          }
         }
       }
+    } catch (error) {
+      console.error('Error in newMessage : ', error);
     }
   }
 
@@ -417,66 +423,70 @@ export class SocketService
     @MessageBody() id_channel: string,
     @ConnectedSocket() socket: Socket,
   ) {
-    const sender = this.users.find((user) => user.id_socket === socket.id);
-    if (sender !== undefined) {
-      const channel = await this.prisma.channel.findUnique({
-        where: {
-          id_channel: id_channel,
-        },
-        include: { users: true, bannedUsers: true },
-      });
-      const my_user = await this.prisma.user.findUnique({
-        where: {
-          id_user: sender.id_user,
-        },
-        include: {
-          blocked_user: true,
-          blocked_from: true,
-        },
-      });
-      if (my_user && channel) {
-        const room = await this.prisma.room_Chat.findUnique({
+    try {
+      const sender = this.users.find((user) => user.id_socket === socket.id);
+      if (sender !== undefined) {
+        const channel = await this.prisma.channel.findUnique({
           where: {
-            id_channel_id_user: {
-              id_channel: id_channel,
-              id_user: my_user.id_user,
-            },
-            member_status: 'NONE',
+            id_channel: id_channel,
+          },
+          include: { users: true, bannedUsers: true },
+        });
+        const my_user = await this.prisma.user.findUnique({
+          where: {
+            id_user: sender.id_user,
+          },
+          include: {
+            blocked_user: true,
+            blocked_from: true,
           },
         });
-        if (!room) return;
-        let users = channel.users.map((user) => {
-          if (
-            !my_user.blocked_from.some(
-              (blocked) => blocked.id_user === user.id_user,
-            ) &&
-            !my_user.blocked_user.some(
-              (blocked) => blocked.id_user === user.id_user,
+        if (my_user && channel) {
+          const room = await this.prisma.room_Chat.findUnique({
+            where: {
+              id_channel_id_user: {
+                id_channel: id_channel,
+                id_user: my_user.id_user,
+              },
+              member_status: 'NONE',
+            },
+          });
+          if (!room) return;
+          let users = channel.users.map((user) => {
+            if (
+              !my_user.blocked_from.some(
+                (blocked) => blocked.id_user === user.id_user,
+              ) &&
+              !my_user.blocked_user.some(
+                (blocked) => blocked.id_user === user.id_user,
+              )
             )
-          )
-            return user;
-        });
-        const filtredUsers = await Promise.all(
-          users.filter((user) => user && user !== undefined),
-        );
-        let us = filtredUsers.map((filtred) => {
-          if (
-            this.users.filter((user) => {
-              filtred.id_user === user.id_user;
-            }) !== undefined
-          )
-            return filtred;
-        });
-        const result = await Promise.all(us.filter((user) => user));
-        result.map((user) => {
-          if (user) {
-            const recv = this.users.find((u) => user.id_user === u.id_user);
-            let in_chat: boolean = false;
-            if (recv && recv !== undefined) in_chat = recv.inChat;
-            this.server.to(user.id_user).emit('joinedChannel', id_channel);
-          }
-        });
+              return user;
+          });
+          const filtredUsers = await Promise.all(
+            users.filter((user) => user && user !== undefined),
+          );
+          let us = filtredUsers.map((filtred) => {
+            if (
+              this.users.filter((user) => {
+                filtred.id_user === user.id_user;
+              }) !== undefined
+            )
+              return filtred;
+          });
+          const result = await Promise.all(us.filter((user) => user));
+          result.map((user) => {
+            if (user) {
+              const recv = this.users.find((u) => user.id_user === u.id_user);
+              let in_chat: boolean = false;
+              if (recv && recv !== undefined) in_chat = recv.inChat;
+              this.server.to(user.id_user).emit('joinedChannel', id_channel);
+            }
+          });
+        }
       }
+    } catch (error) {
+      console.error('Error in joinChannel : ', error);
     }
   }
 
@@ -518,7 +528,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inGame : ', error);
+      console.error('Error in inGame : ', error);
     }
   }
 
@@ -605,7 +615,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in online : ', error);
+      console.error('Error in online : ', error);
     }
   }
 
@@ -640,7 +650,7 @@ export class SocketService
       this.removePlayer(socket.id);
       this.removePrvGame(socket.id);
     } catch (error) {
-      console.log('Error in offline : ', error);
+      console.error('Error in offline : ', error);
     }
   }
 
@@ -685,7 +695,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in invite : ', error);
+      console.error('Error in invite : ', error);
       this.removePrvGame(info.socket_player);
     }
   }
@@ -766,7 +776,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in accept : ', error);
+      console.error('Error in accept : ', error);
     }
   }
 
@@ -810,7 +820,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in refuse : ', error);
+      console.error('Error in refuse : ', error);
     }
   }
 
@@ -854,7 +864,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in cancel : ', error);
+      console.error('Error in cancel : ', error);
     }
   }
 
@@ -912,7 +922,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in add request : ', error);
+      console.error('Error in add request : ', error);
     }
   }
 
@@ -969,7 +979,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in remove request : ', error);
+      console.error('Error in remove request : ', error);
     }
   }
 
@@ -989,7 +999,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in inChat : ', error);
+      console.error('Error in inChat : ', error);
     }
   }
 
@@ -1009,7 +1019,7 @@ export class SocketService
         }
       }
     } catch (error) {
-      console.log('Error in outChat : ', error);
+      console.error('Error in outChat : ', error);
     }
   }
 
@@ -1035,15 +1045,63 @@ export class SocketService
     );
   }
 
-  handleHits(game: gameData): boolean {
-    const half = game.player.width / 2;
+  bounceBottom(game: gameData, dxi: number, dyi: number, half: number) {
+    const oneFifth = game.player.width / 5;
+    const oneSixth = game.player.width / 6;
+
+    if (game.ball.x >= game.player.x - half &&
+      game.ball.x <= game.player.x - half + oneFifth) {
+      game.ball.dx = -dxi -2;
+      game.ball.dy = dyi + 2;
+    }
+    else if (game.ball.x <= game.player.x + half &&
+      game.ball.x >= game.player.x + half - oneFifth) {
+      game.ball.dx = dxi + 2;
+      game.ball.dy = dyi + 2;
+    }
+    else if (game.ball.x <= game.player.x + oneSixth && game.ball.x >= game.player.x - oneSixth)
+      game.ball.dx = 0;
+    else if (game.ball.x >= game.player.x)
+      game.ball.dx = dxi;
+    else if (game.ball.x <= game.player.x)
+      game.ball.dx = -dxi;
+    game.ball.dy *= -1
+  };
+
+  bounceTop(game: gameData, dxi: number, dyi: number, half: number) {
+    const oneFifth = game.player.width / 5;
+    const oneSixth = game.player.width / 6;
+
+    if (game.ball.x >= game.opponent.x - half &&
+      game.ball.x <= game.opponent.x - half + oneFifth) {
+        game.ball.dx = -dxi - 2;
+        game.ball.dy = -dyi - 2;
+    }
+    else if (game.ball.x <= game.opponent.x + half &&
+            game.ball.x >= game.opponent.x + half - oneFifth) {
+              game.ball.dx = dxi + 2
+              game.ball.dy = -dyi - 2
+            }
+    else if (game.ball.x <= game.opponent.x + oneSixth && game.ball.x >= game.opponent.x - oneSixth)
+      game.ball.dx = 0;
+    else if (game.ball.x <= game.opponent.x)
+      game.ball.dx = -dxi;
+    else if (game.ball.x >= game.opponent.x)
+      game.ball.dx = dxi;
+    game.ball.dy *= -1
+    }
+
+  handleHits(game: gameData, dxi: number, dyi: number): boolean {
+    const half = game.player.width / 2;;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width - 10 ||
       game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
-    if (this.hitBottom(game, half)) return (game.ball.dy = -game.ball.dy), true;
-    if (this.hitTop(game, half)) return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitBottom(game, half))
+      return this.bounceBottom(game, dxi, dyi, half), true;
+    if (this.hitTop(game, half))
+      return this.bounceTop(game, dxi, dyi, half), true;
     return false;
   }
 
@@ -1081,13 +1139,17 @@ export class SocketService
     }
   }
 
-  centerBall(game: gameData) {
+  centerBall(game: gameData, dxi: number, dyi: number) {
     game.ball.x = game.fieald.width / 2;
     game.ball.y = game.fieald.height / 2;
-    game.ball.dy = -game.ball.dy;
+    const signdy = game.ball.dy < 0 ? 1 : -1
+    const signdx = game.ball.dx < 0 ? 1 : -1
+
+    game.ball.dx = dxi * signdx;
+    game.ball.dy = dyi * signdy;
   }
 
-  checkGoal(game: gameData): boolean {
+  checkGoal(game: gameData, dxi: number, dyi: number): boolean {
     if (
       game.ball.y - game.ball.radius <= 0 ||
       game.ball.y + game.ball.radius >= game.fieald.height
@@ -1097,7 +1159,7 @@ export class SocketService
       } else if (game.ball.y + game.ball.radius >= game.fieald.height) {
         game.scores.opponent++;
       }
-      this.centerBall(game);
+      this.centerBall(game, dxi, dyi);
 
       this.server.to(game.data.socket_player).emit('updateScore', {
         player: game.scores.player,
@@ -1127,17 +1189,18 @@ export class SocketService
     if (!game) {
       return;
     }
+    const dxi = game.data.mode === 'HARD' ? 5 : 2;
+    const dyi = game.data.mode === 'HARD' ? 5 : 5;
 
     const player: boolean =
       socket.id === game.data.socket_player ? true : false;
     this.updatePaddle(player, game, dto);
     if (this.checkEnd(game) === false) {
-      if (this.handleHits(game) === false) this.checkGoal(game);
+      if (this.handleHits(game, dxi, dyi) === false) this.checkGoal(game, dxi, dyi);
       this.renderBall(game);
     }
-
     if (this.checkEnd(game) === true) {
-      this.centerBall(game);
+      this.centerBall(game, dxi, dyi);
       this.renderBall(game);
       this.server.to(game.data.socket_player).emit('endGame', dto);
       this.server.to(game.data.socket_opponent).emit('endGame', dto);
