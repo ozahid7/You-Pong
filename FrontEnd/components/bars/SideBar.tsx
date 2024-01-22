@@ -106,7 +106,7 @@ const SideBar = () => {
 	const { username, avatar } = user.data;
 	const { globalSocket, setTfaVerified } = useGlobalSocket();
 	const query = useQueryClient();
-	const { requests, viewedChat } = useGlobalContext();
+	const { requests, viewedChat, setRequests } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -126,6 +126,10 @@ const SideBar = () => {
 				console.log(".catch error", e);
 			});
 	};
+
+	useEffect(() => {
+		console.log("requests from side bar", requests);
+	}, [requests]);
 
 	return (
 		<aside

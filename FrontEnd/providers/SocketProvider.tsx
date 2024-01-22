@@ -65,7 +65,7 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
 					setRequests(requests++);
-					if (requests > 0) setViewed(false);
+					console.log("requests from add ", requests);
 					friends.refetch();
 				} else if (obj.is_message) {
 					SetIsMessage((prevCount) => prevCount + 1);

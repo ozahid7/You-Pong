@@ -6,10 +6,15 @@ import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { user } from "@/types/Api";
+import { FriendArr, user } from "@/types/Api";
 import { defaultavatar } from "@/const";
+import { UseQueryResult } from "@tanstack/react-query";
 
-const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
+const CustomTabs = (props: {
+	input: string;
+	setInput: any;
+	friends: UseQueryResult<FriendArr, Error>;
+}) => {
 	const { accepted, blocked, pending } = props.friends.data;
 
 	const [ListArr, setListArr] = useState(accepted);
@@ -31,6 +36,11 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
 		setRequestArr(pending);
 		setListArr(accepted);
 	}, [blocked, accepted, pending]);
+
+	useEffect(() => {
+		if (selectedIndex === 1) console.log("friends is refetchecd");
+		else console.log("friends --------");
+	}, [props.friends]);
 
 	useEffect(() => {
 		setListArr(
