@@ -1036,14 +1036,53 @@ export class SocketService
   }
 
   handleHits(game: gameData): boolean {
-    const half = game.player.width / 2;
+    const half = game.player.width / 2;;
+    const oneFifth = game.player.width / 5;
+    const oneSixth = game.player.width / 6;
+    const dxi = game.data.mode === 'HARD' ? 5 : 2;
+    const dyi = game.data.mode === 'HARD' ? 5 : 5;
     if (
       game.ball.x + game.ball.radius >= game.fieald.width - 10 ||
       game.ball.x - game.ball.radius <= 10
     )
       return (game.ball.dx = -game.ball.dx), true;
-    if (this.hitBottom(game, half)) return (game.ball.dy = -game.ball.dy), true;
-    if (this.hitTop(game, half)) return (game.ball.dy = -game.ball.dy), true;
+    if (this.hitBottom(game, half))
+    {
+      if (game.ball.x >= game.player.x - half &&
+          game.ball.x <= game.player.x - half + oneFifth) {
+        game.ball.dx = -dxi -2;
+        game.ball.dy = dyi + 2;
+      }
+      else if (game.ball.x <= game.player.x + half &&
+              game.ball.x >= game.player.x + half - oneFifth) {
+        game.ball.dx = dxi + 2;
+        game.ball.dy = dyi + 2;
+        }
+      else if (game.ball.x <= game.player.x + oneSixth && game.ball.x >= game.player.x - oneSixth)
+        game.ball.dx = 0;
+      else if (game.ball.x >= game.player.x)
+        game.ball.dx = dxi;
+      else if (game.ball.x <= game.player.x)
+        game.ball.dx = -dxi;
+      game.ball.dy *= -1
+      return true;
+    }
+    if (this.hitTop(game, half))
+    {
+      // if (game.ball.x >= game.opponent.x - half &&
+      //     game.ball.x <= game.opponent.x - half + oneFifth) {
+      //       game.ball.dx = dxi + 2;
+      //       game.ball.dy = dyi - 2;    
+      // }
+      if (game.ball.x <= game.opponent.x + oneSixth && game.ball.x >= game.opponent.x - oneSixth)
+        game.ball.dx = 0;
+      else if (game.ball.x <= game.opponent.x)
+        game.ball.dx = -dxi;
+      else if (game.ball.x >= game.opponent.x)
+        game.ball.dx = dxi;
+      game.ball.dy *= -1
+      return true;
+    }
     return false;
   }
 
@@ -1113,7 +1152,7 @@ export class SocketService
   }
 
   checkEnd(game: gameData): boolean {
-    if (game.scores.player === 7 || game.scores.opponent === 7) return true;
+    // if (game.scores.player === 7 || game.scores.opponent === 7) return true;
     return false;
   }
 
@@ -1135,7 +1174,6 @@ export class SocketService
       if (this.handleHits(game) === false) this.checkGoal(game);
       this.renderBall(game);
     }
-
     if (this.checkEnd(game) === true) {
       this.centerBall(game);
       this.renderBall(game);
