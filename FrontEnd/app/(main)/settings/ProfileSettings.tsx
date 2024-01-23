@@ -105,6 +105,7 @@ const ProfileSettings = ({
 				}
 			} catch (error) {
 				console.log("error setting", error);
+				// setMessage("Something went wrong!!");
 				setCurrentPass("");
 				setConfirmPass("");
 				setNewPass("");

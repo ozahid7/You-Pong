@@ -73,6 +73,7 @@ export class SocketMethodes {
       radius: number;
       dx: number;
       dy: number;
+      pause: number
     } = {
       x: 300,
       y: 400,
@@ -80,6 +81,7 @@ export class SocketMethodes {
       radius: radius,
       dx: 2,
       dy: 5,
+      pause: -1
     };
 
     const player: {

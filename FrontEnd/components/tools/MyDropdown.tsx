@@ -11,6 +11,7 @@ import { blockuser } from "@/api/friendShip";
 import { useUser } from "@/api/getHero";
 import { notify } from "@/utils/game";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
+import useOtherUser from "@/api/useOtherUser";
 
 const MyDropdown = (props: {
 	icon: any;
@@ -27,6 +28,7 @@ const MyDropdown = (props: {
 }) => {
 	const router = useRouter();
 	const user = useUser(true, undefined);
+	const otheruser = useOtherUser(props.user);
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
@@ -49,15 +51,17 @@ const MyDropdown = (props: {
 	const handelClick = (e: string) => {
 		if (e === "/user/") router.push(e + props.user);
 		else if (e === "/game") {
-			if (props.status === "INGAME")
-				notify(
-					props.user,
-					undefined,
-					false,
-					2000,
-					"Player Already In Game"
-				);
-			else router.push(myRoutes.game + "/" + props.uid);
+			otheruser.refetch().then((res) => {
+				if (res.data.status === "INGAME")
+					notify(
+						props.user,
+						undefined,
+						false,
+						2000,
+						"Player Already In Game"
+					);
+				else router.push(myRoutes.game + "/" + props.uid);
+			});
 		} else if (e === "block") {
 			block.mutate();
 		} else if (e === "/settings") {

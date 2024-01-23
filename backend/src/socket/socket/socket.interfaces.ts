@@ -29,6 +29,7 @@ export interface gameData {
     radius: number;
     dx: number;
     dy: number;
+    pause:number;
   };
   fieald: {
     width: number;

@@ -20,9 +20,11 @@ interface Props {
   main: User_Hero;
   socket: Socket;
   channel: Channel;
+  channels: Channel[];
+  refetchDirect: any;
 }
 
-const ChatDialog = ({ main, socket, channel }: Props) => {
+const ChatDialog = ({ main, socket, channel, channels, refetchDirect }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   var shouldScrollToBottom: boolean = true;
@@ -56,7 +58,9 @@ const ChatDialog = ({ main, socket, channel }: Props) => {
   useEffect(() => {
     const handleMessageReceive = (data: Message) => {
       setMessages((prevMessages) => [...prevMessages, data]);
-      // scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      const result = channels.find((channel) => channel.id_channel === data.id_channel);
+      if (result === undefined)
+        refetchDirect();
       shouldScrollToBottom = true;
     };
 
