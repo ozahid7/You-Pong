@@ -166,7 +166,7 @@ const ProfileSettings = ({
 			}}
 			withCorner={false}
 			withClose={showIcon}
-			customClass="absolute h-[80%] w-[90%] sm:w-[66%] max-w-[700px]"
+			customClass="absolute h-[80%] max-h-[840px] w-[90%] sm:w-[66%] max-w-[700px]"
 		>
 			{!loader ? (
 				<form
@@ -222,7 +222,7 @@ const ProfileSettings = ({
 							</div>
 							<div className="w-full h:w-[90%] md:w-[80%] space-y-1  h-1 min-h-[86px] flex flex-col justify-end">
 								<span className="font-body text-cardtitle font-semibold lg:text-lg">
-									Current Passowrd
+									Current Password
 								</span>
 								<MyInput
 									setInput={setCurrentPass}

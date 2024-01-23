@@ -23,15 +23,15 @@ import { MyContainer, ScoreCard } from "@/components";
 import { Game } from "./Game";
 
 interface pageProps {
-	params: { user: string; };
+	params: { user: string };
 }
 
 let game: Game = null;
 
 export default function game_({ params }: pageProps) {
 	//game properties
-	const [map, setMap] = useState("classic");
-	const [mode, setMode] = useState("easy");
+	const [map, setMap] = useState("CLASSIC");
+	const [mode, setMode] = useState("EASY");
 	const [showCounter, setShowCounter] = useState(false);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showGameOption, setShowGameOption] = useState(true);
@@ -71,11 +71,10 @@ export default function game_({ params }: pageProps) {
 			setShowGameOption(false);
 			const mode = params.user.slice(0, 4);
 			const map = params.user.slice(4);
-			if (mode !== "easy" && mode !== "hard")
+			if (mode !== "EASY" && mode !== "HARD")
 				router.push(myRoutes.dashboard);
-			if (map !== "classic" && map !== "orange" && map !== "green")
+			if (map !== "CLASSIC" && map !== "ORANGE" && map !== "GREEN")
 				router.push(myRoutes.dashboard);
-
 			setMode(mode);
 			setMap(map);
 			setShowPlayerLoder(true);
@@ -99,9 +98,7 @@ export default function game_({ params }: pageProps) {
 			setWidht(ref.current?.clientWidth);
 			setHeight(ref.current?.clientHeight);
 		};
-
 		window.addEventListener("resize", handleResize);
-
 		// Cleanup
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
@@ -112,14 +109,14 @@ export default function game_({ params }: pageProps) {
 			if (!interval) {
 				setTimeout(() => {
 					interval = game.emitToUpdateFrame_First();
-				}, 9000);
+				}, 8000);
 			} else {
+				console.log("hello from else");
 				clearInterval(interval);
 				game.stopIntervall();
 				interval = game.emitToUpdateFrame();
 			}
 		}
-
 		return () => {
 			game?.destroy();
 		};
@@ -142,32 +139,34 @@ export default function game_({ params }: pageProps) {
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
-					interval = null;
 					setShowMessage(true);
-					game.stopIntervall();
-					game.destroy();
-					game.init();
+					setShowMessage(true);
 					setTimeout(() => {
-						// setShowMessage(false);
+						setShowMessage(false);
 						router.replace(myRoutes.dashboard);
 					}, 4000);
+					game.stopIntervall();
+					game.init();
+					interval = null;
+					game.destroy();
+					return;
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
-				globalSocket.on("gameOver", (obj: any) => {
-					console.log("gameOver", obj);
-					interval = null;
-					game.stopIntervall();
-					game.destroy();
-					game.init();
+				globalSocket.on("gameOver", (obj) => {
+					console.log("gameOver");
 					if (!obj.is_me) {
-						console.log("!is me");
-						setScores({ player: 5, opponent: 0 });
+						setScores({ player: 7, opponent: 0 });
 						setShowMessage(true);
 						setTimeout(() => {
 							setShowMessage(false);
 							router.replace(myRoutes.dashboard);
 						}, 4000);
 					}
+					game.stopIntervall();
+					game.init();
+					interval = null;
+					game.destroy();
+					return;
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {

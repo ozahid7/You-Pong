@@ -82,12 +82,12 @@ export class Game {
 		let fillColor: string;
 		let background: string;
 
-		this.paddleSize = mode === "easy" ? 160 : 100;
-		if (map === "orange") {
+		this.paddleSize = mode === "EASY" ? 160 : 100;
+		if (map === "ORANGE") {
 			fillColor = "#EB6440";
 			strokeColor = "#EB6440";
 			background = "white";
-		} else if (map === "green") {
+		} else if (map === "GREEN") {
 			fillColor = "#497174";
 			strokeColor = "#497174";
 			background = "white";
@@ -158,7 +158,7 @@ export class Game {
 			: (positions.opponent.x = this.width);
 
 		this.topPaddle = getTopPaddle(
-			positions.opponent.x,
+			this.width,
 			{
 				isStatic: true,
 				render: {
@@ -370,10 +370,10 @@ export class Game {
 				if (
 					this.mouse.position.x +
 						this.remap(this.paddleSize, 600, this.width) / 2 <=
-						this.width &&
+						this.width - this.remap(8, 600, this.width) &&
 					this.mouse.position.x -
 						this.remap(this.paddleSize, 600, this.width) / 2 >=
-						0
+						this.remap(8, 600, this.width)
 				) {
 					this.tmpX = this.mouse.position.x;
 					temp = this.tmpX;
@@ -405,6 +405,5 @@ export class Game {
 		Events.off(this.engine, "mousemove");
 		Composite.clear(this.engine.world, true);
 		this.render.canvas.remove();
-		clearInterval(this.interval);
 	}
 }

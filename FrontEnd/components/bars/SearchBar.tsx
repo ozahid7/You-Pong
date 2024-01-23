@@ -1,24 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { searchUsers } from "@/types/Api";
 import Link from "next/link";
 import { UseQueryResult } from "@tanstack/react-query";
+import { input } from "@nextui-org/theme";
 
 const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
-	const friendsList = props.search.data;
-	const [FriendArr, setFriendArr] = useState<searchUsers>(friendsList);
+	const [FriendArr, setFriendArr] = useState<searchUsers>(null);
 	const [Input, setInput] = useState("");
 
-	useEffect(() => {
-		props.search.refetch().then((response) => {
-			setFriendArr(
-				response.data?.filter((user) =>
-					user.username.toLowerCase().includes(Input.toLowerCase())
-				)
-			);
-		});
+	useLayoutEffect(() => {
+		if (Input.length === 0) {
+			setFriendArr(null);
+		} else
+			props.search.refetch().then((response) => {
+				setFriendArr(
+					response.data.filter((user) =>
+						user.username
+							.toLowerCase()
+							.includes(Input.toLowerCase())
+					)
+				);
+			});
 	}, [Input]);
 
 	return (
@@ -39,52 +44,55 @@ const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 						/>
 					</div>
 				</div>
-
-				<Transition
-					className={"w-full z-10 relative"}
-					enter="transition duration-100 ease-out"
-					enterFrom="transform scale-95 opacity-0"
-					enterTo="transform scale-100 opacity-100"
-					leave="transition duration-75 ease-out"
-					leaveFrom="transform scale-100 opacity-100"
-					leaveTo="transform scale-95 opacity-0"
-				>
-					<Combobox.Options
-						onMouseUp={() => {
-							setInput("");
-						}}
-						hidden={Input === ""}
-						className="bg-white max-h-[400px] overflow-y-auto my_scroll_green  min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute"
+				{FriendArr && (
+					<Transition
+						className={"w-full z-10 relative"}
+						enter="transition duration-100 ease-out"
+						enterFrom="transform scale-95 opacity-0"
+						enterTo="transform scale-100 opacity-100"
+						leave="transition duration-75 ease-out"
+						leaveFrom="transform scale-100 opacity-100"
+						leaveTo="transform scale-95 opacity-0"
 					>
-						{FriendArr?.map((person, index) => (
-							<Combobox.Option
-								className=""
-								key={index}
-								value={person}
-								onClick={() => {
+						<Combobox.Options
+							onMouseUp={() => {
+								setTimeout(() => {
 									setInput("");
-								}}
-							>
-								<Link
-									href={"/user/" + person.username}
-									className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]"
+								}, 200);
+							}}
+							hidden={Input === ""}
+							className="bg-white max-h-[400px] overflow-y-auto my_scroll_green  min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute"
+						>
+							{FriendArr?.map((person, index) => (
+								<Combobox.Option
+									className=""
+									key={index}
+									value={person}
+									onClick={() => {
+										setInput("");
+									}}
 								>
-									<img
-										src={person.avatar}
-										alt="logo"
-										className="h-8 aspect-1  object-cover border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
-									/>
-									<span className="font-body text-palette-green text-lg font-bold">
-										{person.username.length > 11
-											? person.username.slice(0, 8) +
-											  "..."
-											: person.username}
-									</span>
-								</Link>
-							</Combobox.Option>
-						))}
-					</Combobox.Options>
-				</Transition>
+									<Link
+										href={"/user/" + person.username}
+										className="w-full px-4 flex items-center border-b  cursor-pointer rounded-md hover:bg-palette-white space-x-4 md:min-h-[80px] min-h-[70px]"
+									>
+										<img
+											src={person.avatar}
+											alt="logo"
+											className="h-8 aspect-1  object-cover border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
+										/>
+										<span className="font-body text-palette-green text-lg font-bold">
+											{person.username.length > 13
+												? person.username.slice(0, 12) +
+												  "."
+												: person.username}
+										</span>
+									</Link>
+								</Combobox.Option>
+							))}
+						</Combobox.Options>
+					</Transition>
+				)}
 			</div>
 		</Combobox>
 	);
