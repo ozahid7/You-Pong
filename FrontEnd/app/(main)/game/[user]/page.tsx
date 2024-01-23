@@ -27,7 +27,6 @@ interface pageProps {
 }
 
 let game: Game = null;
-let interval = null;
 
 export default function game_({ params }: pageProps) {
 	//game properties
@@ -40,6 +39,7 @@ export default function game_({ params }: pageProps) {
 	const [cloneData, setCloneData] = useState<inviteReturn>();
 	const [scores, setScores] = useState({ player: 0, opponent: 0 });
 	const { data } = useGlobalContext();
+	let interval = null;
 
 	//game ref and sizes
 	const ref = useRef<HTMLDivElement>(null);
