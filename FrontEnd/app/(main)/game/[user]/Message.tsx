@@ -15,6 +15,14 @@ const Message = (props: {
 	if (props.bgColor.includes("orange")) message = "You Lose 😔";
 	if (props.bgColor.includes("grey")) message = "Game Over !!";
 
+	useEffect(() => {
+		const time = setTimeout(() => {
+			props.setIsOpen(false);
+			router.replace(myRoutes.dashboard);
+		}, 4000);
+		return () => clearTimeout(time);
+	}, []);
+
 	return (
 		<MyDialog
 			isOpen={props.isOpen}

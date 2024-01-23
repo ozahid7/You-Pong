@@ -11,10 +11,10 @@ import { useGlobalContext } from "@/providers/SocketProvider";
 const page = () => {
 	const [Input, setInput] = useState("");
 	const friends = useFriends();
-	const { setViewed } = useGlobalContext();
+	const { setRequests } = useGlobalContext();
 
 	useEffect(() => {
-		setViewed(true);
+		setRequests(0);
 	}, []);
 
 	if (friends.isLoading) return <Loader />;
