@@ -56,7 +56,9 @@ const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 					>
 						<Combobox.Options
 							onMouseUp={() => {
-								setInput("");
+								setTimeout(() => {
+									setInput("");
+								}, 200);
 							}}
 							hidden={Input === ""}
 							className="bg-white max-h-[400px] overflow-y-auto my_scroll_green  min-w-[200px] shadow-lg rounded-md sm:min-w-[300px] z-30 md:left-[50%] md:translate-x-[-50%] top-2 absolute"
