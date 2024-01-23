@@ -91,20 +91,23 @@ export default function MuteDropDown({
       aria-label="Mute"
     >
       <PopoverTrigger>
-        <button
-          className="flex flex-row gap-2 items-center btn bg-palette-orange text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full"
+        <div
+          role="button"
+          className="py-2 z-10 px-4 min-w-[140px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
           onClick={HandleUnmute}
         >
           <LuBellOff />
-          {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-        </button>
+          <p>
+            {user.member_status === "MUTED" ? "Unmute" : "Mute"}
+          </p>
+        </div>
       </PopoverTrigger>
       <PopoverContent>
         {user.member_status !== "MUTED" ? (
           <ul className="menu bg-base-200 w-40 rounded-box gap-1 ">
             <li onClick={Handle_1Minute}>
               <button
-                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
                 ref={muteRef1}
               >
                 <LuTimer />1 Minute
@@ -112,7 +115,7 @@ export default function MuteDropDown({
             </li>
             <li onClick={Handle_5Minutes}>
               <button
-                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
                 ref={muteRef5}
               >
                 <LuTimer />5 Minutes
@@ -120,7 +123,7 @@ export default function MuteDropDown({
             </li>
             <li onClick={Handle_15Minutes}>
               <button
-                className="flex flex-row gap-2 items-center btn-sm bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
                 ref={muteRef15}
               >
                 <LuTimer />
