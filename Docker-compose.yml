@@ -6,8 +6,7 @@ services:
     env_file:
       - .env
     expose:
-      - ${POSTGRES_PORT}
-      - 5555
+      - ${DB_PORT}
     ports:
       - ${DB_PORT}:${DB_PORT}
     volumes:
@@ -24,8 +23,6 @@ services:
       - .env
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
-    expose:
-      - 5555
     networks:
       backDb:
         ipv4_address: ${NEST_SUBNET}

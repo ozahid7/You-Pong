@@ -2,7 +2,6 @@ import {
   ForbiddenException,
   Injectable,
   Res,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Response } from 'express';
@@ -105,7 +104,7 @@ export class UserService {
     )
       user_relation = relation.ACCEPTED;
 
-    if (!user) throw new ServiceUnavailableException('Username not Found!');
+    if (!user) throw new ForbiddenException('Username not Found!');
 
     await user.blocked_from.forEach((element) => {
       if (element.id_user === id_user) {
