@@ -101,6 +101,7 @@ model User {
 	matchs_player Match_History[] @relation("matchs_player")
 	matchs_opponent Match_History[] @relation("matchs_opponent")
 	achievements Achievement[]
+	@@map("user")
 }
 
 //CHANNEL MODEL

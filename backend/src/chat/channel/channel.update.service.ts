@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChannelService } from './channel.service';
 import { channelDto } from '../dto/channel.create.dto';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class ChannelUpdateService {
@@ -175,8 +176,13 @@ export class ChannelUpdateService {
       updated.description = channel.description;
     if (channel.avatar !== undefined && chan_name.avatar !== channel.avatar)
       updated.avatar = channel.avatar;
-    if (channel.hash !== undefined && chan_name.hash !== channel.hash)
-      updated.hash = channel.hash;
+    if (channel.hash !== undefined){
+      const cmp = await bcrypt.compare(chan_name.hash, channel.hash);
+      if (!cmp){
+        const salt = await bcrypt.genSalt();
+        updated.hash = await bcrypt.hash(channel.hash, salt);
+      }
+    }
     if (channel.type !== undefined && chan_name.type !== channel.type) {
       if (
         channel.type === 'PROTECTED' &&
