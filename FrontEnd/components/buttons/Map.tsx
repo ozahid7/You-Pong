@@ -12,24 +12,24 @@ const arrayMap: Props[] = [
 		elements: "#EB6440",
 		border: "#EB6440",
 		background: "white",
-		name: "orange",
+		name: "ORANGE",
 	},
 	{
 		elements: "white",
 		border: "white",
 		background: "black",
-		name: "classic",
+		name: "CLASSIC",
 	},
 	{
 		elements: "#497174",
 		border: "#D6E4E5",
 		background: "#EFF5F5",
-		name: "green",
+		name: "GREEN",
 	},
 ];
 
 function Map(props: { handelClick: any }) {
-	const [selected, setSelected] = useState("classic");
+	const [selected, setSelected] = useState("CLASSIC");
 	return (
 		<>
 			{(arrayMap as Props[]).map((items: Props, index: number) => (

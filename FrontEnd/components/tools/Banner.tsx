@@ -1,3 +1,4 @@
+import useOtherUser from "@/api/useOtherUser";
 import { defaultavatar, myRoutes } from "@/const";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ const Banner = ({
 }: BannerProps) => {
 	const start = isGreen ? "from-[#508286]" : "from-[#E97152]";
 	const router = useRouter();
+	const otheruser = useOtherUser(opponent);
 	const end = isGreen ? "to-[#9DBBBD]" : "to-[#F3947B]";
 	const customClass = `w-[6%] sm:w-[3%] max-w-[20px] min-w-[14px] max-h-[100px] sm:min-h-full   ${
 		isGreen ? "bg-palette-green" : "bg-palette-orange"
@@ -52,15 +54,17 @@ const Banner = ({
 					strokeWidth={0.5}
 					className={`${directIconStyle} text-palette-green top-2 right-2`}
 					onClick={() => {
-						if (status === "INGAME")
-							notify(
-								opponent,
-								avatar,
-								false,
-								2000,
-								"Player Already In Game"
-							);
-						else router.push(myRoutes.game + "/" + uid);
+						otheruser.refetch().then((res) => {
+							if (res.data.status === "INGAME")
+								notify(
+									opponent,
+									avatar,
+									false,
+									2000,
+									"Player Already In Game"
+								);
+							else router.push(myRoutes.game + "/" + uid);
+						});
 					}}
 				/>
 			)}

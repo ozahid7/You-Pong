@@ -82,12 +82,12 @@ export class Game {
 		let fillColor: string;
 		let background: string;
 
-		this.paddleSize = mode === "easy" ? 160 : 100;
-		if (map === "orange") {
+		this.paddleSize = mode === "EASY" ? 160 : 100;
+		if (map === "ORANGE") {
 			fillColor = "#EB6440";
 			strokeColor = "#EB6440";
 			background = "white";
-		} else if (map === "green") {
+		} else if (map === "GREEN") {
 			fillColor = "#497174";
 			strokeColor = "#497174";
 			background = "white";
@@ -238,10 +238,9 @@ export class Game {
 		// init mouse
 		this.mouse = Matter.Mouse.create(this.render.canvas);
 
-		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
+		this.mouseConstraint = MouseConstraint.create(this.engine, {
 			mouse: this.mouse,
-			constraints: {
-				stiffness: 0,
+			constraint: {
 				render: {
 					visible: false,
 				},
