@@ -1,8 +1,8 @@
 "use client";
-import { MyContainer, TwoFactor } from "@/components";
+import { HowToPlay, MyContainer, TwoFactor } from "@/components";
 import MyToggle from "@/components/tools/MyToggle";
 import React, { useEffect, useState } from "react";
-import { LuSettings } from "react-icons/lu";
+import { LuGamepad, LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
@@ -18,6 +18,7 @@ const page = () => {
 	const { tfaStatus } = user.data;
 	const [showTwoFactor, setTwoFactor] = useState(false);
 	const [showProfileSetting, setShowProfileSetting] = useState(false);
+	const [showHowToPlay, setshowHowToPlay] = useState(false);
 	const [enabled, setEnabled] = useState(tfaStatus);
 	const [submit, setSubmit] = useState(false);
 	const [path, setPath] = useState("/mobile.svg");
@@ -80,7 +81,7 @@ const page = () => {
 								</span>
 							</div>
 							<div className="h-[60%] flex justify-center w-full">
-								<div className="w-[80%] h-[70%] pt-2 flex flex-col  bg-palette-grey drop-shadow-md items-center space-y-4 ">
+								<div className="w-[80%] h-[80%] pt-2 flex flex-col  bg-palette-grey drop-shadow-md items-center space-y-4 ">
 									<div
 										onClick={() => {
 											setShowProfileSetting(true);
@@ -113,6 +114,20 @@ const page = () => {
 											/>
 										)}
 									</div>
+									<div
+										onClick={() => {
+											setshowHowToPlay(true);
+										}}
+										className="w-[94%] cursor-pointer flex items-center h-[30%] drop-shadow-lg justify-between px-4 bg-palette-white rounded-sm"
+									>
+										<span className="text-md sm:text-xl md:text-2xl xl:text-3xl font-body drop-shadow-sm font-semibold text-cardtitle ">
+											How To Play ?
+										</span>
+										<LuGamepad
+											size="40"
+											className="h-[30%] w-[30%] text-cardtitle h:h-auto h:w-auto"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -130,10 +145,11 @@ const page = () => {
 				<ProfileSettings
 					isOpen={showProfileSetting}
 					setIsOpen={setShowProfileSetting}
-					closeModal={() => {}}
+					closeModal={() => { }}
 					user={user}
-					setUpdated={() => {}}
+					setUpdated={() => { }}
 				/>
+				<HowToPlay isOpen={showHowToPlay} setIsOpen={setshowHowToPlay} closeModal={() => { }} />
 			</div>
 		);
 };

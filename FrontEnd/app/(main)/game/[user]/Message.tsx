@@ -11,8 +11,8 @@ const Message = (props: {
 	let message: string;
 	const router = useRouter();
 
-	if (props.bgColor.includes("green")) message = "You Win 🤩";
-	if (props.bgColor.includes("orange")) message = "You Lose 😔";
+	if (props.bgColor.includes("green")) message = "You Won 🤩";
+	if (props.bgColor.includes("orange")) message = "You Lost 😔";
 	if (props.bgColor.includes("grey")) message = "Game Over !!";
 
 	useEffect(() => {

@@ -210,7 +210,7 @@ const TwoFactor = ({
                 <div className="w-full flex justify-evenly items-end ">
                     <hr className="w-[10%] border border-palette-grey rounded-sm" />
                     <h2 className="text-gray-400 mt-4 font-body text-sm h:text-md sm:text-xl lg:text-2xl font-bold ">
-                        Two Factor Autentication
+                        Two Factor Authenticator
                     </h2>
                     <hr className="w-[10%] border border-palette-grey rounded-sm" />
                 </div>
