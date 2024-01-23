@@ -63,8 +63,8 @@ export class SocketMethodes {
     let speed = mode === 'HARD' ? 2 : 1;
     let width = mode === 'HARD' ? 100 : 160;
     let radius = mode === 'HARD' ? 7 : 14;
-    let dx = mode === 'HARD' ? 5 : 2;
-    let dy = mode === 'HARD' ? 5 : 5;
+    // let dx = mode === 'HARD' ? 5 : 2;
+    // let dy = mode === 'HARD' ? 5 : 5;
 
     const ball: {
       x: number;
@@ -73,13 +73,15 @@ export class SocketMethodes {
       radius: number;
       dx: number;
       dy: number;
+      pause: number
     } = {
       x: 300,
       y: 400,
       speed: speed,
       radius: radius,
-      dx,
-      dy,
+      dx: 2,
+      dy: 5,
+      pause: -1
     };
 
     const player: {
