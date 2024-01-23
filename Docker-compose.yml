@@ -39,6 +39,9 @@ services:
       - ${FRONT_PORT}:${FRONT_PORT}
     depends_on:
       - backend
+    networks:
+      - backDb:
+        ipv4_adress: ${REACT_SUBNET}
 
 networks:
   backDb:
