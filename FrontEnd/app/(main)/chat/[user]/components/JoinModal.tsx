@@ -51,7 +51,6 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
         size="4xl"
         backdrop="blur"
         placement="center"
-        isDismissable={false}
       >
         <ModalContent className="">
           {(close) => (
@@ -69,7 +68,7 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                   <div className=" flex items-center flex-col justify-evenly w-full h-full gap-2">
                     <table className="table table-xs md:table-lg">
                       <thead>
-                        <tr className="text-[20px] font-body shadow-sm">
+                        <tr className="text-[20px] font-nunito text-black shadow-sm">
                           <th></th>
                           <th>Name</th>
                           <th>Type</th>
@@ -88,7 +87,7 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                               .map((obj: any, i) => (
                                 <tr key={i}>
                                   <td>
-                                    <div className="w-[60px] avatar ">
+                                    <div className="w-[60px] avatar md:block xxs:hidden">
                                       <Image
                                         src={obj.avatar || groups}
                                         width={60}
@@ -146,16 +145,7 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                                   </td>
                                 </tr>
                               ))
-                          ) : (
-                            <tr>
-                              <td
-                                colSpan={100}
-                                className="text-center font-body text-[20px] font-[600]"
-                              >
-                                No channels available
-                              </td>
-                            </tr>
-                          )}
+                          ) : ""}
                         </>
                       </tbody>
                     </table>

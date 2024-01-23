@@ -104,7 +104,6 @@ const PrivateModal = ({
         size="3xl"
         backdrop="blur"
         className="w-full"
-        isDismissable={false}
       >
         <ModalContent className="">
           {(onClose) => (
@@ -118,7 +117,7 @@ const PrivateModal = ({
                 Users
               </ModalHeader>
               <ModalBody className="w-[90%]">
-                <table className="table table-lg ">
+                <table className="table table-sm md:table-lg ">
                   <thead>
                     <tr className="text-[20px] font-body shadow-sm">
                       <th></th>
@@ -147,9 +146,9 @@ const PrivateModal = ({
                           return (
                             <tr key={user.username}>
                               <th>
-                                <div className={`avatar ${Infos.status}`}>
+                                <div className={`avatar md:block xxs:hidden`}>
                                   <div
-                                    className={`w-[60px] ${Infos.selection} mask mask-squircle`}
+                                    className={`w-[60px] ${Infos.selection}`}
                                   >
                                     <Image
                                       src={user.avatar || groups}
