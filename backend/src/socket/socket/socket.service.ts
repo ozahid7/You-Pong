@@ -1140,11 +1140,14 @@ export class SocketService
   }
 
   centerBall(game: gameData, dxi: number, dyi: number) {
-    game.ball.x = game.fieald.width / 2;
-    game.ball.y = game.fieald.height / 2;
     const signdy = game.ball.dy < 0 ? 1 : -1
     const signdx = game.ball.dx < 0 ? 1 : -1
+    
+    game.ball.pause = 30;
 
+    game.ball.y = game.fieald.height / 2;
+    game.ball.x = game.fieald.width / 2;
+    
     game.ball.dx = dxi * signdx;
     game.ball.dy = dyi * signdy;
   }
@@ -1189,12 +1192,14 @@ export class SocketService
     if (!game) {
       return;
     }
-    const dxi = game.data.mode === 'HARD' ? 5 : 2;
-    const dyi = game.data.mode === 'HARD' ? 5 : 5;
+    const dxi = 2;
+    const dyi = 5;
 
     const player: boolean =
       socket.id === game.data.socket_player ? true : false;
     this.updatePaddle(player, game, dto);
+    if (game.ball.pause > -1)
+      return game.ball.pause--;
     if (this.checkEnd(game) === false) {
       if (this.handleHits(game, dxi, dyi) === false) this.checkGoal(game, dxi, dyi);
       this.renderBall(game);
