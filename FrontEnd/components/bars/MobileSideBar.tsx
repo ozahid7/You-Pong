@@ -80,9 +80,6 @@ export const renderFriends = (
 const MobileSideBar = () => {
 	const { viewed, viewedChat, requests } = useGlobalContext();
 
-	useEffect(() => {
-		console.log("requests = ", requests);
-	}, [requests]);
 	return (
 		<aside className=" w-full fixed bottom-0 flex sm:hidden items-end">
 			<div className=" s:px-6 w-full py-2 bg-greenborder border-t-2  border-palette-grey flex items-center px-2 rounded-t-3xl  justify-between">

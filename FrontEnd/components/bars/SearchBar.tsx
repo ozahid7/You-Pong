@@ -1,49 +1,50 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { searchUsers } from "@/types/Api";
 import Link from "next/link";
 import { UseQueryResult } from "@tanstack/react-query";
+import { input } from "@nextui-org/theme";
 
 const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
-	const friendsList = props.search.data;
-	const [FriendArr, setFriendArr] = useState<searchUsers>(friendsList);
+	const [FriendArr, setFriendArr] = useState<searchUsers>(null);
 	const [Input, setInput] = useState("");
-	const [validator, setValidator] = useState(false);
 
-	useEffect(() => {
-		props.search.refetch().then((response) => {
-			setFriendArr(
-				response.data?.filter((user) =>
-					user.username.toLowerCase().includes(Input.toLowerCase())
-				)
-			);
-			setTimeout(() => {
-				setValidator(true);
-			}, 1000);
-		});
+	useLayoutEffect(() => {
+		if (Input.length === 0) {
+			setFriendArr(null);
+		} else
+			props.search.refetch().then((response) => {
+				setFriendArr(
+					response.data.filter((user) =>
+						user.username
+							.toLowerCase()
+							.includes(Input.toLowerCase())
+					)
+				);
+			});
 	}, [Input]);
-	if (validator)
-		return (
-			<Combobox>
-				<div className="flex flex-col h-full  relative justify-center w-full max-w-[220px] sm:max-h-[60px] ">
-					<div className="search_input w-full p-[2px] min-h-[40px] flex justify-center items-center">
-						<div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
-							<LuSearch className="h-7 w-7 text-white" />
-							<Combobox.Input
-								type="text"
-								autoComplete="off"
-								onChange={(e: any) => {
-									setInput(e.target.value);
-								}}
-								value={Input}
-								placeholder="Search"
-								className="center text-white font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
-							/>
-						</div>
-					</div>
 
+	return (
+		<Combobox>
+			<div className="flex flex-col h-full  relative justify-center w-full max-w-[220px] sm:max-h-[60px] ">
+				<div className="search_input w-full p-[2px] min-h-[40px] flex justify-center items-center">
+					<div className="center pl-3 outline-none w-full h-full  flex justify-center items-center overflow-hidden">
+						<LuSearch className="h-7 w-7 text-white" />
+						<Combobox.Input
+							type="text"
+							autoComplete="off"
+							onChange={(e: any) => {
+								setInput(e.target.value);
+							}}
+							value={Input}
+							placeholder="Search"
+							className="center text-white font-body placeholder:font-bold fold:placeholder:text-lg placeholder-palette-grey pl-5 outline-none h-full w-[84%]"
+						/>
+					</div>
+				</div>
+				{FriendArr && (
 					<Transition
 						className={"w-full z-10 relative"}
 						enter="transition duration-100 ease-out"
@@ -79,9 +80,9 @@ const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 											className="h-8 aspect-1  object-cover border-b-2 max-w-[220px] max-h-[220px] border-palette-orange  rounded-md sm:h-12 md:h-14"
 										/>
 										<span className="font-body text-palette-green text-lg font-bold">
-											{person.username.length > 11
-												? person.username.slice(0, 8) +
-												  "..."
+											{person.username.length > 13
+												? person.username.slice(0, 12) +
+												  "."
 												: person.username}
 										</span>
 									</Link>
@@ -89,9 +90,10 @@ const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 							))}
 						</Combobox.Options>
 					</Transition>
-				</div>
-			</Combobox>
-		);
+				)}
+			</div>
+		</Combobox>
+	);
 };
 
 export default SearchBar;
