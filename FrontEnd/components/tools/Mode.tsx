@@ -9,17 +9,17 @@ interface Props {
 
 const modeArr: Props[] = [
 	{
-		text: "easy",
+		text: "EASY",
 		handelClick: Function,
 	},
 	{
-		text: "hard",
+		text: "HARD",
 		handelClick: Function,
 	},
 ];
 
 export function Mode({ text, handelClick }: Props) {
-	const [selectedMode, setSelectedMode] = useState("easy");
+	const [selectedMode, setSelectedMode] = useState("EASY");
 
 	return (
 		<>

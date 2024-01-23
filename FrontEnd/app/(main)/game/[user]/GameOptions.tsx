@@ -98,8 +98,8 @@ export default function GameSettings(props: {
 														props.opponent_uid,
 													socket_player:
 														props.socket.id,
-													map: props.map,
-													mode: props.mode,
+													map: props.map.toUpperCase(),
+													mode: props.mode.toUpperCase(),
 												},
 												props.socket
 											);

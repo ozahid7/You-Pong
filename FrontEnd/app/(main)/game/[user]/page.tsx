@@ -31,8 +31,8 @@ let interval = null;
 
 export default function game_({ params }: pageProps) {
 	//game properties
-	const [map, setMap] = useState("classic");
-	const [mode, setMode] = useState("easy");
+	const [map, setMap] = useState("CLASSIC");
+	const [mode, setMode] = useState("EASY");
 	const [showCounter, setShowCounter] = useState(false);
 	const [showPlayerLoader, setShowPlayerLoder] = useState(false);
 	const [showGameOption, setShowGameOption] = useState(true);
@@ -71,11 +71,10 @@ export default function game_({ params }: pageProps) {
 			setShowGameOption(false);
 			const mode = params.user.slice(0, 4);
 			const map = params.user.slice(4);
-			if (mode !== "easy" && mode !== "hard")
+			if (mode !== "EASY" && mode !== "HARD")
 				router.push(myRoutes.dashboard);
-			if (map !== "classic" && map !== "orange" && map !== "green")
+			if (map !== "CLASSIC" && map !== "ORANGE" && map !== "GREEN")
 				router.push(myRoutes.dashboard);
-
 			setMode(mode);
 			setMap(map);
 			setShowPlayerLoder(true);
@@ -99,9 +98,7 @@ export default function game_({ params }: pageProps) {
 			setWidht(ref.current?.clientWidth);
 			setHeight(ref.current?.clientHeight);
 		};
-
 		window.addEventListener("resize", handleResize);
-
 		// Cleanup
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
@@ -143,10 +140,16 @@ export default function game_({ params }: pageProps) {
 				globalSocket.on("endGame", () => {
 					console.log("endgame");
 					setShowMessage(true);
+					setShowMessage(true);
+					setTimeout(() => {
+						setShowMessage(false);
+						router.replace(myRoutes.dashboard);
+					}, 4000);
 					game.stopIntervall();
 					game.init();
 					interval = null;
 					game.destroy();
+					return;
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", (obj) => {
@@ -154,11 +157,16 @@ export default function game_({ params }: pageProps) {
 					if (!obj.is_me) {
 						setScores({ player: 7, opponent: 0 });
 						setShowMessage(true);
+						setTimeout(() => {
+							setShowMessage(false);
+							router.replace(myRoutes.dashboard);
+						}, 4000);
 					}
 					game.stopIntervall();
 					game.init();
 					interval = null;
 					game.destroy();
+					return;
 				});
 			if (globalSocket.listeners("updateScore").length === 0)
 				globalSocket.on("updateScore", (data) => {
