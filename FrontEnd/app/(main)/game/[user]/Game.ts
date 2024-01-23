@@ -238,10 +238,9 @@ export class Game {
 		// init mouse
 		this.mouse = Matter.Mouse.create(this.render.canvas);
 
-		this.mouseConstraint = Matter.MouseConstraint.create(this.engine, {
+		this.mouseConstraint = MouseConstraint.create(this.engine, {
 			mouse: this.mouse,
-			constraints: {
-				stiffness: 0,
+			constraint: {
 				render: {
 					visible: false,
 				},
