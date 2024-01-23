@@ -75,6 +75,8 @@ export class UpdateService {
 
             // find user
             const user = await this.finduser.finduserById(id);
+            if (user === undefined || user === null)
+                throw new BadRequestException('User not found'); 
             // validate password if exists
             if (user.hash)
             {
@@ -83,8 +85,8 @@ export class UpdateService {
                     throw new BadRequestException('Uncorrect password');
             }          
             // check signup
-            if (!user.username && !dto.newUsername) // za3ma username
-                throw new BadRequestException('Set a username ndin dyemak');         
+            if (!user.username && !dto.newUsername)
+                throw new BadRequestException('Set username');         
             // update avatar
             if (dto.newAvatar)
                 ret.newAvatar = await this.updateAvatar(id, dto.newAvatar);

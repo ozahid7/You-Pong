@@ -44,7 +44,7 @@ export class UserService {
           avatar: obj.avatar,
         },
       });
-      return true;
+      return newUser;
     } catch (error) {
       if (error.code === 'P2002') {
         throw new ForbiddenException('Email Already in use');
