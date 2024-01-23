@@ -146,7 +146,7 @@ const PrivateModal = ({
                           return (
                             <tr key={user.username}>
                               <th>
-                                <div className={`avatar ${Infos.status} md:block xxs:hidden`}>
+                                <div className={`avatar md:block xxs:hidden`}>
                                   <div
                                     className={`w-[60px] ${Infos.selection}`}
                                   >

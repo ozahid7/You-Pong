@@ -87,7 +87,7 @@ export default function JoinModal({ refetch, channels, socket }: Props) {
                               .map((obj: any, i) => (
                                 <tr key={i}>
                                   <td>
-                                    <div className="w-[60px] avatar ">
+                                    <div className="w-[60px] avatar md:block xxs:hidden">
                                       <Image
                                         src={obj.avatar || groups}
                                         width={60}
