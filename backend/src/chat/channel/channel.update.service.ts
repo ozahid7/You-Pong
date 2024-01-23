@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChannelService } from './channel.service';
 import { channelDto } from '../dto/channel.create.dto';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChannelUpdateService {
@@ -167,23 +167,33 @@ export class ChannelUpdateService {
       hash: chan_name.hash,
       type: chan_name.type,
     };
-    if (channel.name !== undefined && chan_name.name !== channel.name)
+    if (
+      channel.name !== undefined &&
+      chan_name.name !== channel.name &&
+      channel.name
+    )
       updated.name = channel.name;
     if (
       channel.description !== undefined &&
-      chan_name.description !== channel.description
+      chan_name.description !== channel.description &&
+      channel.description
     )
       updated.description = channel.description;
-    if (channel.avatar !== undefined && chan_name.avatar !== channel.avatar)
+    if (
+      channel.avatar !== undefined &&
+      chan_name.avatar !== channel.avatar &&
+      channel.avatar
+    )
       updated.avatar = channel.avatar;
-    if (channel.hash !== undefined){
-      const cmp = await bcrypt.compare(chan_name.hash, channel.hash);
-      if (!cmp){
-        const salt = await bcrypt.genSalt();
-        updated.hash = await bcrypt.hash(channel.hash, salt);
-      }
+    if (channel.hash !== undefined && channel.hash) {
+      const salt = await bcrypt.genSalt();
+      updated.hash = await bcrypt.hash(channel.hash, salt);
     }
-    if (channel.type !== undefined && chan_name.type !== channel.type) {
+    if (
+      channel.type !== undefined &&
+      chan_name.type !== channel.type &&
+      channel.type
+    ) {
       if (
         channel.type === 'PROTECTED' &&
         (!channel.hash || channel.hash === undefined)

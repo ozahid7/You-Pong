@@ -271,8 +271,11 @@ export class ChannelService {
         message: 'No such User !',
         Object: null,
       };
-    const salt = await bycrypt.genSalt();
-    const hashed = await bycrypt.hash(channel.hash, salt);
+      let hashed : string = null;
+      if (channel.type === 'PROTECTED'){
+        const salt = await bycrypt.genSalt();
+        hashed = await bycrypt.hash(channel.hash, salt);
+      }
     const result = await this.prisma.channel.create({
       data: {
         name: channel.name,
