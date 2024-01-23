@@ -80,6 +80,8 @@ export class UserService {
       },
     });
 
+    if (!user) throw new ForbiddenException('Username not Found!');
+
     let user_relation: relation = relation.NONE;
     if (
       id_user &&
@@ -104,14 +106,13 @@ export class UserService {
     )
       user_relation = relation.ACCEPTED;
 
-    if (!user) throw new ForbiddenException('Username not Found!');
 
-    await user.blocked_from.forEach((element) => {
+    user.blocked_from.forEach((element) => {
       if (element.id_user === id_user) {
         throw new ForbiddenException('Username not Found!');
       }
     });
-    await user.blocked_user.forEach((element) => {
+    user.blocked_user.forEach((element) => {
       if (element.id_user === id_user) {
         throw new ForbiddenException('Username not Found!');
       }
