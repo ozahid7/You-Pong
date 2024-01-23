@@ -149,10 +149,12 @@ export default function game_({ params }: pageProps) {
 					game.destroy();
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
-				globalSocket.on("gameOver", () => {
+				globalSocket.on("gameOver", (obj) => {
 					console.log("gameOver");
-					setScores({ player: 7, opponent: 0 });
-					setShowMessage(true);
+					if (!obj.is_me) {
+						setScores({ player: 7, opponent: 0 });
+						setShowMessage(true);
+					}
 					game.stopIntervall();
 					game.init();
 					interval = null;
