@@ -32,7 +32,7 @@ services:
 
   frontend:
     container_name: ${FRONTEND_SERVICE}
-    build: ./Frontend/
+    build: ./FrontEnd/
     env_file:
       - .env
     ports:
@@ -40,8 +40,8 @@ services:
     depends_on:
       - backend
     networks:
-      - backDb:
-        ipv4_adress: ${REACT_SUBNET}
+      backDb:
+        ipv4_address: ${REACT_SUBNET}
 
 networks:
   backDb:
