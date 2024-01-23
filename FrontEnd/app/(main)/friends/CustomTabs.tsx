@@ -6,11 +6,19 @@ import { MyToolTip } from "@/components";
 import BlockedBanner from "./BlockedBanner";
 import RequestBanner from "./RequestBanner";
 import MiniLoader from "@/components/tools/MiniLoader";
-import { user } from "@/types/Api";
+import { FriendArr, user } from "@/types/Api";
 import { defaultavatar } from "@/const";
+import { UseQueryResult } from "@tanstack/react-query";
+import { useGlobalSocket } from "@/providers/UserContextProvider";
+import { useGlobalContext } from "@/providers/SocketProvider";
 
-const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
+const CustomTabs = (props: {
+	input: string;
+	setInput: any;
+	friends: UseQueryResult<FriendArr, Error>;
+}) => {
 	const { accepted, blocked, pending } = props.friends.data;
+	const { setRequests, requests } = useGlobalContext();
 
 	const [ListArr, setListArr] = useState(accepted);
 	const [selectedIndex, setSelectedIndex] = useState(0);
@@ -27,10 +35,16 @@ const CustomTabs = (props: { input: string; setInput: any; friends: any }) => {
 	}, [InvalidData]);
 
 	useEffect(() => {
-		setBlockArr(blocked);
-		setRequestArr(pending);
-		setListArr(accepted);
-	}, [blocked, accepted, pending]);
+		props.friends.refetch().then((res) => {
+			setBlockArr(res.data.blocked);
+			setRequestArr(res.data.pending);
+			setListArr(res.data.accepted);
+		});
+	}, [blocked, accepted, pending, requests]);
+
+	useEffect(() => {
+		if (selectedIndex === 1) setRequests(0);
+	}, [requests]);
 
 	useEffect(() => {
 		setListArr(

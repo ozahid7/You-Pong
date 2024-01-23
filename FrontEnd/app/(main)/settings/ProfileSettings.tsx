@@ -166,7 +166,7 @@ const ProfileSettings = ({
 			}}
 			withCorner={false}
 			withClose={showIcon}
-			customClass="absolute h-[80%] w-[90%] sm:w-[66%] max-w-[700px]"
+			customClass="absolute h-[80%] max-h-[840px] w-[90%] sm:w-[66%] max-w-[700px]"
 		>
 			{!loader ? (
 				<form
