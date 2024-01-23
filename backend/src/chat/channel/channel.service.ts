@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { channelDto } from '../dto/channel.create.dto';
+import * as bycrypt from 'bcrypt';
 
 @Injectable()
 export class ChannelService {
@@ -270,12 +271,14 @@ export class ChannelService {
         message: 'No such User !',
         Object: null,
       };
+    const salt = await bycrypt.genSalt();
+    const hashed = await bycrypt.hash(channel.hash, salt);
     const result = await this.prisma.channel.create({
       data: {
         name: channel.name,
         description: channel.description,
         avatar: channel.avatar,
-        hash: channel.hash,
+        hash: hashed,
         type: channel.type,
         users: {
           connect: { id_user: id_user },
