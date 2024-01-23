@@ -36,18 +36,6 @@ interface HomePage {
   channelsRefetch: any;
 }
 
-type ModalSize =
-  | "xs"
-  | "sm"
-  | "md"
-  | "lg"
-  | "xl"
-  | "2xl"
-  | "3xl"
-  | "4xl"
-  | "5xl"
-  | "full";
-
 type TabSize = "sm" | "md" | "lg";
 
 const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
@@ -170,7 +158,6 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
     return m;
   };
 
-  const [modalSize, setModalSize] = useState<ModalSize>("3xl");
   const [tabSize, setTabSize] = useState<TabSize>("lg");
 
   useEffect(() => {
@@ -179,19 +166,12 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
       const width = window.innerWidth;
       if (width < 640) {
         // Tailwind's 'sm' breakpoint
-        setModalSize("sm");
         setTabSize("sm");
       } else if (width < 768) {
-        setModalSize("md");
         setTabSize("md");
       } else if (width < 1024) {
-        setModalSize("lg");
-        setTabSize("lg");
-      } else if (width < 1280) {
-        setModalSize("2xl");
         setTabSize("lg");
       } else {
-        setModalSize("4xl");
         setTabSize("lg");
       }
     };
@@ -209,9 +189,8 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
       <div
         role="button"
         onClick={!disabled ? onOpen : undefined}
-        className={` ${
-          disabled ? "line-through" : ""
-        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
+        className={` ${disabled ? "line-through" : ""
+          } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuSettings />
         <div className="w-fit h-fit">Edit</div>
@@ -220,12 +199,10 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        size={modalSize}
+        size={"4xl"}
         className=" w-full"
         backdrop="blur"
         placement="center"
-        scrollBehavior="outside"
-        isDismissable={false}
         onKeyDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
         onFocus={(e) => e.stopPropagation()}

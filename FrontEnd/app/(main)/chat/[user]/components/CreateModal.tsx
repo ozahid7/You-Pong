@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, Fragment } from "react";
+import { useState, useRef, Fragment, useEffect } from "react";
 import { Background, Submit } from "@/components";
 import { Channel } from "@/types";
 import {
@@ -32,6 +32,8 @@ interface Props {
   refetch: any;
   joinrefetch: any;
 }
+
+type TabSize = "sm" | "md" | "lg";
 
 export default function CreateModal({ refetch, joinrefetch }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -131,6 +133,32 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
     clean();
   };
 
+  const [tabSize, setTabSize] = useState<TabSize>("lg");
+
+  useEffect(() => {
+    // Function to update the modal size
+    const updateSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        // Tailwind's 'sm' breakpoint
+        setTabSize("sm");
+      } else if (width < 768) {
+        setTabSize("md");
+      } else if (width < 1024) {
+        setTabSize("lg");
+      } else {
+        setTabSize("lg");
+      }
+    };
+
+    // Update modal size on mount and when window resizes
+    updateSize();
+    window.addEventListener("resize", updateSize);
+
+    // Cleanup listener
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   return (
     <Fragment>
       <Link
@@ -194,8 +222,8 @@ export default function CreateModal({ refetch, joinrefetch }: Props) {
                         handleSelectionChange(newSelection.toString())
                       }
                       aria-label="Options"
-                      size="lg"
-                      radius="sm"
+                      size={tabSize}
+                      radius="md"
                       className=" w-full h-fit flex justify-center "
                     >
                       <Tab

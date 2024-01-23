@@ -18,12 +18,12 @@ interface Props {
 const SimpleJoinButton = ({ obj, close, refetch, joinRefetch, socket }: Props) => {
   const join = async () => {
     const success = await joinChannel(obj.id_channel, null);
-    if (success.message === "Channel Updated Succefully") {
+    if (success?.message === "Channel Updated Succefully") {
       refetch();
       joinRefetch();
       socket.emit("joinChannel", obj.id_channel);
       close();
-    } else console.error(success.message);
+    } else console.error(success?.message);
   };
 
   return (
