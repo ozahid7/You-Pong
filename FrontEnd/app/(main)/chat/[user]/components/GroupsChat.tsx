@@ -34,9 +34,8 @@ export const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
       <Menu.Button className="flex self-center text-[20px] text-palette-green">
         {({ active }) => (
           <div
-            className={`${
-              active ? "text-palette-orange" : "text-palette-green"
-            } text-[30px] hover:text-palette-orange`}
+            className={`${active ? "text-palette-orange" : "text-palette-green"
+              } text-[30px] hover:text-palette-orange`}
           >
             {disable ? <MdOutlineFaceRetouchingOff /> : <MdOutlineFaceUnlock />}
           </div>
@@ -54,11 +53,10 @@ export const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
               {({ active }) => (
                 <div
                   role="button"
-                  className={` ${
-                    active
+                  className={` ${active
                       ? "bg-palette-orange text-white"
                       : "text-palette-green"
-                  } rounded-md`}
+                    } rounded-md`}
                   onClick={() => onEmojiSelect(emoji)}
                 >
                   {emoji}
@@ -147,8 +145,8 @@ const GroupsChat = ({
 
   const retChannel: Channel | null = data
     ? data.find(
-        (channel) => channel.id_channel === indexChannels[index]?.id_channel
-      )
+      (channel) => channel.id_channel === indexChannels[index]?.id_channel
+    )
     : null;
 
   const retMember: Member | null = Members
@@ -232,6 +230,8 @@ const GroupsChat = ({
       </div>
       <div className="flex w-full h-[71%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
+          channels={data}
+          refetchDirect={channelsRefetch}
           main={MainUser}
           socket={socket}
           channel={retChannel}
