@@ -58,7 +58,7 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
 
   return (
     <Combobox>
-      <div className="flex flex-col m-1 relative justify-center w-[96%] h-[9%] items-center mb-5 mt-5 md:mt-0">
+      <div className="flex flex-col m-1 relative justify-center w-[96%] max-h-[150px] items-center mb-5 mt-5 md:mt-0">
         <div className="search_input_chat h-full max-w-[325px] w-full p-[2px] min-h-[40px] flex justify-center items-center">
           <div className="center  outline-none w-[98%] h-[95%]  flex justify-center items-center overflow-hidden">
             <LuSearch

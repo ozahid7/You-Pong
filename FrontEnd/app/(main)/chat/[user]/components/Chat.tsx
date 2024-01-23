@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
-import { ChatDialog, DirectDropdown } from ".";
+import { ChatDialog } from ".";
 import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
 import { fetchData_Channel, getChannel, getMembers } from "../data/api";
@@ -61,8 +61,8 @@ const Chat = ({
 
   const retChannel: Channel | null = data
     ? data.find(
-        (channel) => channel.id_channel === indexChannels[index]?.id_channel
-      )
+      (channel) => channel.id_channel === indexChannels[index]?.id_channel
+    )
     : null;
 
   const user: User | null = channel
@@ -92,8 +92,8 @@ const Chat = ({
   user?.status === "ONLINE"
     ? (text = "text-[#00993D]")
     : user?.status === "OFFLINE"
-    ? (text = "text-[#686868]")
-    : (text = "text-yellow-500");
+      ? (text = "text-[#686868]")
+      : (text = "text-yellow-500");
 
   return (
     <div className="flex h-[93%] md:h-full w-full flex-col flex-grow flex-wrap gap-2 md:mt-0 mt-8 ">
@@ -120,7 +120,7 @@ const Chat = ({
               </div>
             </div>
           </div>
-          <div>
+          <div className="cursor-pointer">
             <MyDropdown
               icon={FiChevronDown}
               placement="right-0"
@@ -137,9 +137,11 @@ const Chat = ({
       </div>
       <div className="flex w-full h-[71%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
+          channels={data}
           channel={retChannel}
           main={main}
           socket={socket}
+          refetchDirect={directRefetch}
           key={user?.id_user} //just added this
         />
       </div>
