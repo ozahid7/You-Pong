@@ -77,7 +77,7 @@ const MembersEdit = ({
                 Members
               </ModalHeader>
               <ModalBody className="w-[90%]">
-                <table className="table table-lg">
+                <table className="table table-sm md:table-lg">
                   <thead>
                     <tr className="text-[20px] font-nunito text-black shadow-sm">
                       <th></th>
@@ -111,8 +111,8 @@ const MembersEdit = ({
                           : "";
                         return (
                           <tr key={user.user.username}>
-                            <th>
-                              <div className={`avatar ${Infos.status}`}>
+                            <th className="">
+                              <div className={`avatar ${Infos.status} md:block xxs:hidden`}>
                                 <div className={`w-[60px] ${Infos.selection}`}>
                                   <Image
                                     src={user.user.avatar || groups}
