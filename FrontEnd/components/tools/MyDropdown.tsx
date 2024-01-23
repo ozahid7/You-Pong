@@ -72,8 +72,6 @@ const MyDropdown = (props: {
 		} else if (e === "/user/profile") router.push(myRoutes.dashboard);
 	};
 
-	console.log("user = ", props.user);
-
 	return (
 		<div className="flex flex-col justify-center relative">
 			<Menu>
