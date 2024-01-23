@@ -64,7 +64,6 @@ const MembersEdit = ({
         size="3xl"
         backdrop="blur"
         className="w-full"
-        isDismissable={false}
       >
         <ModalContent className="">
           {(onClose) => (
@@ -80,7 +79,7 @@ const MembersEdit = ({
               <ModalBody className="w-[90%]">
                 <table className="table table-lg">
                   <thead>
-                    <tr className="text-[20px] font-body shadow-sm">
+                    <tr className="text-[20px] font-nunito text-black shadow-sm">
                       <th></th>
                       <th>Name</th>
                       <th>Type</th>
@@ -131,15 +130,15 @@ const MembersEdit = ({
                             <td className="font-body font-[500] text-[18px] text-[#424242]">
                               {user.user_role == "OWNER" ? (
                                 <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
-                                  OWNER
+                                  Owner
                                 </div>
                               ) : user.user_role == "MEMBER" ? (
                                 <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-green font-[600] rounded-lg border-[2px] border-palette-white">
-                                  MEMBER
+                                  Member
                                 </div>
                               ) : (
                                 <div className="flex flex-row w-fit p-2 text-palette-orange bg-palette-white font-[600] rounded-lg border-[2px] border-palette-white">
-                                  ADMIN
+                                  Admin
                                 </div>
                               )}
                             </td>
