@@ -16,7 +16,8 @@ COPY tsconfig.json /frontEnd/tsconfig.json
 COPY types/ /frontEnd/types
 COPY utils/ /frontEnd/utils
 
-RUN npm install -g npm@10.3.0 \
+RUN npm install dotenv\
+    npm install -g npm@10.3.0 \
     && npm i \
     && npm run build
 

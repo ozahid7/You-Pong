@@ -232,6 +232,8 @@ const GroupsChat = ({
       </div>
       <div className="flex w-full h-[71%] md:h-[71%] flex-col justify-center items-center">
         <ChatDialog
+        channels={data}
+        refetchDirect={channelsRefetch}
           main={MainUser}
           socket={socket}
           channel={retChannel}
