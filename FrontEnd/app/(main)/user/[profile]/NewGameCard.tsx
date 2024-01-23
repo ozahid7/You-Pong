@@ -10,7 +10,7 @@ const NewGameCard = () => {
 			<MyCard otherclass="">
 				<div className="w-full relative px-2 h:px-4 sm:px-6  justify-between flex items-end h-full">
 					<h3 className=" whitespace-nowrap text-cardtitle absolute text-[12px] top-2 left-2 h:left-6 sm:left-8 md:top-4 md:left-8 h:text-lg md:text-xl font-bold font-audio drop-shadow-sm">
-						Ready For New Chalenge ?
+						Ready For A New Challenge ?
 					</h3>
 					<div className=" h-[80%] w-full flex justify-center items-center">
 						<CustomButton

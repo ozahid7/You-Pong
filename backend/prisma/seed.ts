@@ -21,7 +21,7 @@ async function firstRun() {
       },
       {
         id_achievement: '3',
-        title: 'FirstServe',
+        title: 'First Serve',
         description:
           'Experience the wonder and excitement of gaming for the first time',
         avatar: `http://${process.env.HOST_IP}:4000/file/Badge.png`,
@@ -35,7 +35,7 @@ async function firstRun() {
       },
       {
         id_achievement: '5',
-        title: 'Cleansheet',
+        title: 'Clean Sheet',
         description:
           'Congratulations on maintaining a cleansheet in your last game!',
         avatar: `http://${process.env.HOST_IP}:4000/file/Badge.png`,
