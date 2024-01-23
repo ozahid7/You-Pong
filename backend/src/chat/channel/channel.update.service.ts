@@ -257,7 +257,7 @@ export class ChannelUpdateService {
         Object: null,
       };
     if (channel.type === 'PROTECTED') {
-      if (channel.hash !== password)
+      if (!(await bcrypt.compare(password, channel.hash)))
         return {
           message: 'Password Incorrect',
           Object: null,
