@@ -51,11 +51,6 @@ const MiniBanner = (props: {
 			setAvatar("/pandora.png");
 		}
 	}, []);
-
-	const tmp = props.isLevel
-		? parseFloat(props.value).toFixed(1)
-		: props.value;
-	const value = tmp.endsWith(".0") ? tmp.slice(0, tmp.length - 2) : tmp;
 	return (
 		<div className={className}>
 			<div className={customClass}></div>
@@ -64,7 +59,7 @@ const MiniBanner = (props: {
 			>
 				<p className={namestyle}>{props.name}</p>
 				{!props.isRank ? (
-					<p className={valuestyle}>{value}</p>
+					<p className={valuestyle}>{props.value}</p>
 				) : (
 					<>
 						<Tooltip
