@@ -22,7 +22,7 @@ const useOtherUser = (username: string) => {
 	const otheruser = useQuery({
 		queryKey: ["otheruser", username],
 		queryFn: getUser,
-		enabled: username !== "profile",
+		enabled: username !== undefined && username && username !== "profile",
 	});
 	return otheruser;
 };
