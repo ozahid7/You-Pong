@@ -71,6 +71,16 @@ export class RoomService {
 
   //PUT LEFT
   async putRoom(name: string) {
+    const check = await this.prisma.room_Chat.findFirst({
+      where: {
+        name: name,
+      },
+    });
+    if (!check)
+    return {
+      message: "Can't find a room chat !",
+      Object: null,
+    };
     const result = await this.prisma.room_Chat.update({
       where: {
         name: name,
