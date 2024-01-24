@@ -26,6 +26,15 @@ interface Props {
   mainChannelRefetch: any;
 }
 
+var Infos = {
+  disabled: "",
+  role: "",
+  status: "offline",
+  selection: "",
+  show: true,
+  join: true,
+};
+
 const MembersEdit = ({
   Users,
   MainUser,
@@ -35,14 +44,6 @@ const MembersEdit = ({
   mainChannelRefetch,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  var Infos = {
-    disabled: "",
-    role: "",
-    status: "offline",
-    selection: "",
-    show: true,
-    join: true,
-  };
 
   return (
     <Fragment>
@@ -110,7 +111,7 @@ const MembersEdit = ({
                           ? (Infos.disabled = "btn-disabled")
                           : "";
                         return (
-                          <tr key={user.user.username}>
+                          <tr key={user.user.id_user}>
                             <th className="">
                               <div className={`avatar md:block xxs:hidden`}>
                                 <div className={`w-[60px] ${Infos.selection} `}>

@@ -1162,7 +1162,8 @@ export class ChannelUpdateService {
     setTimeout(async () => {
       const channel = await this.prisma.room_Chat.findUnique({
         where: {
-          id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+          id_channel_id_user: {  id_channel: id_channel,
+            id_user: user.id_user,},
           member_status:'MUTED',
         },
       });
