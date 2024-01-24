@@ -34,8 +34,6 @@ const PrivateModal = ({
   Channel_,
   Members,
   membersRefetch,
-  channelsRefetch,
-  mainChannelRefetch,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   var show: boolean = false;
@@ -74,10 +72,10 @@ const PrivateModal = ({
 
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
-    if (response.message === "Channel Updated Succefully") {
+    if (response?.message === "Channel Updated Succefully") {
       UsersRefetch();
       membersRefetch();
-    } else console.error(response.message);
+    }
   };
 
   const isUserInMembers = (user: User) => {
@@ -89,9 +87,8 @@ const PrivateModal = ({
       <div
         onClick={show ? undefined : onOpen}
         role="button"
-        className={`${
-          show ? "line-through" : ""
-        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
+        className={`${show ? "line-through" : ""
+          } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuUserPlus2 />
         <div className="h-fit w-fit">Invite</div>
@@ -119,10 +116,10 @@ const PrivateModal = ({
               <ModalBody className="w-[90%]">
                 <table className="table table-sm md:table-lg ">
                   <thead>
-                    <tr className="text-[20px] font-body shadow-sm">
+                    <tr className="text-[20px] font-nunito text-black shadow-sm">
                       <th></th>
                       <th>Name</th>
-                      <th>Type</th>
+                      <th className="md:block hidden">Type</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -138,7 +135,7 @@ const PrivateModal = ({
                           } else Infos.disabled = "";
                           user.id_user === MainUser?.uid
                             ? (Infos.selection =
-                                "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
                             : (Infos.selection = "");
                           user.status === "ONLINE"
                             ? (Infos.status = "online")
@@ -163,7 +160,7 @@ const PrivateModal = ({
                               <td className="font-body font-[600] text-[18px] text-[#424242] border-palette-green">
                                 {user.username}
                               </td>
-                              <td className="font-body font-[500] text-[18px] text-[#424242]">
+                              <td className="font-body font-[500] text-[18px] text-[#424242] sm:block hidden">
                                 {Infos.disabled === "btn-disabled" ? (
                                   <div className="flex flex-row w-fit p-2 text-palette-white bg-palette-orange font-[600] rounded-lg border-[2px] border-palette-white">
                                     MAIN
@@ -202,16 +199,7 @@ const PrivateModal = ({
                             </tr>
                           );
                         })
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan={100}
-                            className="text-center font-body text-[20px] font-[600]"
-                          >
-                            No users available
-                          </td>
-                        </tr>
-                      )}
+                      ) : ""}
                     </>
                   </tbody>
                 </table>
