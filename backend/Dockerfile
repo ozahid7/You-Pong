@@ -12,6 +12,7 @@ COPY prisma/ /backEnd/prisma
 COPY src/ /backEnd/src
 COPY tsconfig.build.json /backEnd/tsconfig.build.json
 COPY tsconfig.json /backEnd/tsconfig.json
+COPY .env /backEnd/.env
 RUN npm install dotenv --save
 RUN npm install -g npm@10.3.0 \
     && npm i

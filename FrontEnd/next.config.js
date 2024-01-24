@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  
+  env: {
+    NEXT_PUBLIC_HOST_IP: process.env.NEXT_PUBLIC_HOST_IP
+  },
   images: {
     remotePatterns: [
       { protocol: "http", hostname: `${process.env.NEXT_PUBLIC_HOST_IP}` },
