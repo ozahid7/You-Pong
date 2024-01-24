@@ -273,6 +273,13 @@ export class SocketService
                 this.server
                   .to(game.data.socket_opponent)
                   .emit('gameOver', { is_me: false });
+              const check = await this.prisma.match_History.findUnique({
+                where: {
+                  id_match: game.data.id_match,
+                },
+              });
+              if (!check)
+                return;
               const updated = await this.prisma.match_History.update({
                 where: {
                   id_match: game.data.id_match,
@@ -584,6 +591,13 @@ export class SocketService
                     .to(game.data.socket_opponent)
                     .emit('gameOver', { is_me: false });
                 }
+                const check = await this.prisma.match_History.findUnique({
+                  where: {
+                    id_match: game.data.id_match,
+                  },
+                });
+                if (!check)
+                  return;
                 const updated = await this.prisma.match_History.update({
                   where: {
                     id_match: game.data.id_match,
@@ -1213,6 +1227,13 @@ export class SocketService
       if (game && game !== undefined) {
         await this.removeGame(game.data.id_match);
         try {
+          const check = await this.prisma.match_History.findUnique({
+            where: {
+              id_match: game.data.id_match,
+            },
+          });
+          if (!check)
+            return;
           const updated = await this.prisma.match_History.update({
             where: {
               id_match: game.data.id_match,
