@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, Fragment } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -15,6 +15,8 @@ import {
   getMembers,
 } from "../data/api";
 import { useQuery } from "react-query";
+import { Menu } from "@headlessui/react";
+import { IconContext } from "react-icons";
 
 interface Props {
   user: Member;
@@ -31,9 +33,9 @@ export default function MuteDropDown({
   membersRefetch,
   channelsRefetch,
 }: Props) {
-  const muteRef1 = useRef<HTMLButtonElement>(null);
-  const muteRef5 = useRef<HTMLButtonElement>(null);
-  const muteRef15 = useRef<HTMLButtonElement>(null);
+  const muteRef1 = useRef<HTMLDivElement>(null);
+  const muteRef5 = useRef<HTMLDivElement>(null);
+  const muteRef15 = useRef<HTMLDivElement>(null);
 
   const Handle_1Minute = async () => {
     const success = await MuteMember(
@@ -85,56 +87,125 @@ export default function MuteDropDown({
     }
   };
   return (
-    <Popover
-      placement="bottom"
-      showArrow
-      aria-label="Mute"
-    >
-      <PopoverTrigger>
-        <div
-          role="button"
-          className="py-2 z-10 px-4 min-w-[140px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
-          onClick={HandleUnmute}
-        >
-          <LuBellOff />
-          <p>
-            {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-          </p>
-        </div>
-      </PopoverTrigger>
-      <PopoverContent>
+    <Menu>
+      <Menu.Button
+        role="button"
+        className="py-2 z-10 px-4 w-full min-w-[140px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
+        onClick={HandleUnmute}>
+        <LuBellOff />
+        <p>
+          {user.member_status === "MUTED" ? "Unmute" : "Mute"}
+        </p>
+      </Menu.Button>
+      <Menu.Items
+        className="flex flex-col border-2 border-palette-green divide-y rounded-md h-auto outline-none drop-shadow-lg z-[1000] bg-palette-white top-full w-[90%] absolute gap-1"
+        unmount={false}>
         {user.member_status !== "MUTED" ? (
-          <ul className="menu bg-base-200 w-40 rounded-box gap-1 ">
-            <li onClick={Handle_1Minute}>
-              <button
-                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+          <Fragment>
+            <Menu.Item
+              key="1minute"
+              as="div"
+              onClick={Handle_1Minute}
+            >
+              <div
+                role="button"
+                className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef1}
               >
-                <LuTimer />1 Minute
-              </button>
-            </li>
-            <li onClick={Handle_5Minutes}>
-              <button
-                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                <LuTimer className="text-palette-orange " size={20} />
+                <p>
+                  1 Minute
+                </p>
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              key="5minutes"
+              as="div"
+              onClick={Handle_5Minutes}
+            >
+              <div
+                role="button"
+                className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef5}
               >
-                <LuTimer />5 Minutes
-              </button>
-            </li>
-            <li onClick={Handle_15Minutes}>
-              <button
-                className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+                <LuTimer className="text-palette-orange " size={20} />
+                <p>
+                  5 Minutes
+                </p>
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              key="15minutes"
+              as="div"
+              onClick={Handle_15Minutes}
+            >
+              <div
+                role="button"
+                className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef15}
               >
-                <LuTimer />
-                15 Minutes
-              </button>
-            </li>
-          </ul>
-        ) : (
-          <div>{user.user.username} is Unmuted</div>
-        )}
-      </PopoverContent>
-    </Popover>
+                <LuTimer className="text-palette-orange " size={20} />
+                <p>
+                  15 Minutes
+                </p>
+              </div>
+            </Menu.Item>
+          </Fragment>
+        ) :
+          ""}
+      </Menu.Items>
+    </Menu>
   );
 }
+
+{/* <Popover
+placement="bottom"
+showArrow
+aria-label="Mute"
+>
+<PopoverTrigger>
+  <div
+    role="button"
+    className="py-2 z-10 px-4 min-w-[140px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
+    onClick={HandleUnmute}
+  >
+    <LuBellOff />
+    <p>
+      {user.member_status === "MUTED" ? "Unmute" : "Mute"}
+    </p>
+  </div>
+</PopoverTrigger>
+<PopoverContent>
+  {user.member_status !== "MUTED" ? (
+    <ul className="menu bg-base-200 w-40 rounded-box gap-1 ">
+      <li onClick={Handle_1Minute}>
+        <button
+          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+          ref={muteRef1}
+        >
+          <LuTimer />1 Minute
+        </button>
+      </li>
+      <li onClick={Handle_5Minutes}>
+        <button
+          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+          ref={muteRef5}
+        >
+          <LuTimer />5 Minutes
+        </button>
+      </li>
+      <li onClick={Handle_15Minutes}>
+        <button
+          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
+          ref={muteRef15}
+        >
+          <LuTimer />
+          15 Minutes
+        </button>
+      </li>
+    </ul>
+  ) : (
+    <div>{user.user.username} is Unmuted</div>
+  )}
+</PopoverContent>
+</Popover> */}
