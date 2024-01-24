@@ -48,7 +48,7 @@ export default function MuteDropDown({
       channelsRefetch();
       const timeoutId = setTimeout(membersRefetch(), 60000);
       return clearTimeout(timeoutId), onClose();
-    } else console.error(success?.message);
+    }
   };
   const Handle_5Minutes = async () => {
     const success = await MuteMember(
@@ -59,7 +59,7 @@ export default function MuteDropDown({
     if (success?.message === "Channel Updated Succefully") {
       membersRefetch();
       onClose();
-    } else console.error(success?.message);
+    }
   };
   const Handle_15Minutes = async () => {
     const success = await MuteMember(
@@ -70,7 +70,7 @@ export default function MuteDropDown({
     if (success?.message === "Channel Updated Succefully") {
       membersRefetch();
       onClose();
-    } else console.error(success?.message);
+    }
   };
 
   const HandleUnmute = async () => {
@@ -83,7 +83,7 @@ export default function MuteDropDown({
         channelsRefetch();
         membersRefetch();
         onClose();
-      } else console.error(success?.message);
+      }
     }
   };
   return (
@@ -157,55 +157,3 @@ export default function MuteDropDown({
     </Menu>
   );
 }
-
-{/* <Popover
-placement="bottom"
-showArrow
-aria-label="Mute"
->
-<PopoverTrigger>
-  <div
-    role="button"
-    className="py-2 z-10 px-4 min-w-[140px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-orange hover:bg-palette-green hover:text-white"
-    onClick={HandleUnmute}
-  >
-    <LuBellOff />
-    <p>
-      {user.member_status === "MUTED" ? "Unmute" : "Mute"}
-    </p>
-  </div>
-</PopoverTrigger>
-<PopoverContent>
-  {user.member_status !== "MUTED" ? (
-    <ul className="menu bg-base-200 w-40 rounded-box gap-1 ">
-      <li onClick={Handle_1Minute}>
-        <button
-          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
-          ref={muteRef1}
-        >
-          <LuTimer />1 Minute
-        </button>
-      </li>
-      <li onClick={Handle_5Minutes}>
-        <button
-          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
-          ref={muteRef5}
-        >
-          <LuTimer />5 Minutes
-        </button>
-      </li>
-      <li onClick={Handle_15Minutes}>
-        <button
-          className="flex flex-row gap-2 items-center  bg-palette-green text-palette-white hover:bg-palette-white hover:text-palette-green hover:border-palette-green w-full h-full text-[16px] font-russo"
-          ref={muteRef15}
-        >
-          <LuTimer />
-          15 Minutes
-        </button>
-      </li>
-    </ul>
-  ) : (
-    <div>{user.user.username} is Unmuted</div>
-  )}
-</PopoverContent>
-</Popover> */}

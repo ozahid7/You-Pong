@@ -72,10 +72,10 @@ const PrivateModal = ({
 
   const joinPrivateChannel = async (id_friend: string) => {
     const response = await joinPrivate(Channel_.id_channel, id_friend);
-    if (response.message === "Channel Updated Succefully") {
+    if (response?.message === "Channel Updated Succefully") {
       UsersRefetch();
       membersRefetch();
-    } else console.error(response.message);
+    }
   };
 
   const isUserInMembers = (user: User) => {

@@ -23,7 +23,7 @@ const SimpleJoinButton = ({ obj, close, refetch, joinRefetch, socket }: Props) =
       joinRefetch();
       socket.emit("joinChannel", obj.id_channel);
       close();
-    } else console.error(success?.message);
+    }
   };
 
   return (

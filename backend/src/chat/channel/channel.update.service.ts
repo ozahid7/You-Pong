@@ -647,7 +647,7 @@ export class ChannelUpdateService {
         message: "Can't find a room chat !",
         Object: null,
       };
-    if (owner.user_role === 'MEMBER')
+    if (owner.user_role !== 'OWNER')
       return {
         message: "You can't set a member as admin !",
         Object: null,

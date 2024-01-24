@@ -106,14 +106,14 @@ const MembersEdit = ({
                         user.user.status === "ONLINE"
                           ? (Infos.status = "online")
                           : (Infos.status = "offline");
-                        user.user_role === "OWNER" && Infos.show === false
+                        user.user_role !== "MEMBER" && Infos.show === false
                           ? (Infos.disabled = "btn-disabled")
                           : "";
                         return (
                           <tr key={user.user.username}>
                             <th className="">
-                              <div className={`avatar ${Infos.status} md:block xxs:hidden`}>
-                                <div className={`w-[60px] ${Infos.selection}`}>
+                              <div className={`avatar md:block xxs:hidden`}>
+                                <div className={`w-[60px] ${Infos.selection} `}>
                                   <Image
                                     src={user.user.avatar || groups}
                                     width={60}

@@ -37,8 +37,6 @@ const GroupDropdown = ({
     if (success?.message === "Channel Updated Succefully") {
       channelsRefetch();
       joinRefetch();
-    } else {
-      console.error(success?.message);
     }
   };
 

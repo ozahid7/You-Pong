@@ -47,7 +47,7 @@ const JoinDropDown = ({
       channelsRefetch();
       queryClient.invalidateQueries("users");
       onClose();
-    } else console.error(kick?.message);
+    }
   };
 
   const HandleBan = async () => {
@@ -59,7 +59,7 @@ const JoinDropDown = ({
       if (Ban.message === "Channel Updated Succefully") {
         membersRefetch();
         channelsRefetch();
-      } else console.error(Ban.message);
+      }
   };
 
   const HandleAdmin = async () => {
@@ -69,7 +69,7 @@ const JoinDropDown = ({
       : (admin = await SetMember(channel?.id_channel, user.user.id_user));
     if (admin?.message === "Channel Updated Succefully") {
       membersRefetch();
-    } else console.error(admin?.message);
+    }
   };
 
   return (

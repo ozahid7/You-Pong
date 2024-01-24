@@ -90,9 +90,9 @@ const Chat = ({
   };
 
   user?.status === "ONLINE"
-    ? (text = "text-[#00993D]")
+    ? (text = "text-green-500")
     : user?.status === "OFFLINE"
-      ? (text = "text-[#686868]")
+      ? (text = "text-red-500")
       : (text = "text-yellow-500");
 
   return (
@@ -114,9 +114,9 @@ const Chat = ({
                 {user?.username}
               </div>
               <div
-                className={`${text} text-[#00993D] font-[700] text-[15px] md:text-[12px] lg:text-[12px] xl:text-[15px] mb-1 font-orbitron md:block hidden`}
+                className={`${text} text-[#00993D] font-[700] text-[15px] md:text-[12px] lg:text-[12px] xl:text-[15px] mb-1 font-body md:block hidden`}
               >
-                {user?.status}
+                {user?.status.toLowerCase()}
               </div>
             </div>
           </div>
