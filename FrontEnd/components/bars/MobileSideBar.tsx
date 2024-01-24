@@ -78,7 +78,7 @@ export const renderFriends = (
 };
 
 const MobileSideBar = () => {
-	const { viewed, viewedChat, requests } = useGlobalContext();
+	const { viewedChat, requests } = useGlobalContext();
 
 	return (
 		<aside className=" w-full fixed bottom-0 flex sm:hidden items-end">

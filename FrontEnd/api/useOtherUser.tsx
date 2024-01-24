@@ -24,6 +24,7 @@ const useOtherUser = (username: string, isNotBlocked: boolean) => {
 			username !== undefined &&
 			username &&
 			username !== "profile" &&
+			username !== "Unknown" &&
 			isNotBlocked,
 	});
 	return otheruser;

@@ -18,8 +18,6 @@ import { useUser } from "@/api/getHero";
 interface globalContextProps {
 	data: inviteReturn;
 	setData: any;
-	viewed: boolean;
-	setViewed: any;
 	viewedChat: boolean;
 	setViewedChat: any;
 	requests: number;
@@ -79,7 +77,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
 				if (requests > 0) setRequests(--requests);
-				if (requests === 0) setViewed(true);
 				friends.refetch();
 			});
 		if (globalSocket.listeners("status").length === 0)
@@ -153,8 +150,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 			value={{
 				data,
 				setData,
-				viewed,
-				setViewed,
 				viewedChat,
 				setViewedChat,
 				requests,

@@ -108,12 +108,14 @@ export default function game_({ params }: pageProps) {
 			game = new Game(ref.current, map, globalSocket, mode, cloneData);
 			if (!interval) {
 				setTimeout(() => {
-					interval = game.emitToUpdateFrame_First();
+					if (game) interval = game.emitToUpdateFrame_First();
 				}, 8000);
 			} else {
 				clearInterval(interval);
-				game.stopIntervall();
-				interval = game.emitToUpdateFrame();
+				if (game) {
+					game.stopIntervall();
+					interval = game.emitToUpdateFrame();
+				}
 			}
 		}
 		return () => {
@@ -125,19 +127,18 @@ export default function game_({ params }: pageProps) {
 		if (game) {
 			if (globalSocket.listeners("renderBall").length === 0)
 				globalSocket.on("renderBall", (data: ball, x: number) => {
-					game.updateBallPosition(data, x);
+					if (game) game.updateBallPosition(data, x);
 				});
 			if (globalSocket.listeners("renderPaddle").length === 0)
 				globalSocket.on("renderPaddle", (data: player) => {
-					game.updatePlayerPosition(data);
+					if (game) game.updatePlayerPosition(data);
 				});
 			if (globalSocket.listeners("renderOpponent").length === 0)
 				globalSocket.on("renderOpponent", (data: opponent) => {
-					game.updateOpponentPosition(data);
+					if (game) game.updateOpponentPosition(data);
 				});
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
-					setShowMessage(true);
 					setShowMessage(true);
 					setTimeout(() => {
 						setShowMessage(false);
@@ -147,11 +148,13 @@ export default function game_({ params }: pageProps) {
 					game.init();
 					interval = null;
 					game.destroy();
+					game = null;
 					return;
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", (obj) => {
 					if (!obj.is_me) {
+						console.log(obj.is_me);
 						setScores({ player: 7, opponent: 0 });
 						setShowMessage(true);
 						setTimeout(() => {
@@ -163,6 +166,7 @@ export default function game_({ params }: pageProps) {
 					game.init();
 					interval = null;
 					game.destroy();
+					game = null;
 					return;
 				});
 			if (globalSocket.listeners("updateScore").length === 0)

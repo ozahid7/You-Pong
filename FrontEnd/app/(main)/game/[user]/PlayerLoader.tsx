@@ -11,6 +11,8 @@ import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { Socket, io } from "socket.io-client";
 import { cancelGame, refuseGame } from "@/utils/game";
 import { useGameContext } from "./GameProvider";
+import { Toast } from "react-toastify/dist/components";
+import { toast } from "react-toastify";
 
 const PlayerLoader = (props: {
 	isOpen: boolean;
@@ -37,21 +39,34 @@ const PlayerLoader = (props: {
 	const { setGameSocket, setSubmit } = useGameContext();
 	let editedLevel2;
 	let editedLevel1;
+	const style =
+		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
 
 	useEffect(() => {
 		if (otheruser.data && otheruser.data !== undefined) {
-			props.setToStart(true);
-			setIsmatched(true);
-			setTimeout(() => {
-				props.showLoader(false);
-				props.showCounter(true);
-			}, 2000);
-			setUserInfo(otheruser.data);
-			props.setotheruser({
-				avatar: otheruser.data.avatar,
-				username: otheruser.data.username,
-			});
-			otheruser.setData(undefined);
+			if (otheruser.data.id_match === undefined) {
+				toast.update("toast_id", {
+					render: () => (
+						<div className={style}>Something went Wrong 😔</div>
+					),
+					type: toast.TYPE.INFO,
+					autoClose: 3000,
+					toastId: "wrong",
+				});
+			} else {
+				props.setToStart(true);
+				setIsmatched(true);
+				setTimeout(() => {
+					props.showLoader(false);
+					props.showCounter(true);
+				}, 2000);
+				setUserInfo(otheruser.data);
+				props.setotheruser({
+					avatar: otheruser.data.avatar,
+					username: otheruser.data.username,
+				});
+				otheruser.setData(undefined);
+			}
 		}
 	}, [otheruser, otheruser.data]);
 
