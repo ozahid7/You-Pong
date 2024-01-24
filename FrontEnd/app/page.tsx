@@ -17,8 +17,6 @@ function Home() {
 	useLayoutEffect(() => {
 		if (typeof window !== "undefined") {
 			Loged = localStorage.getItem("isLoged") === "true" ? true : false;
-			console.log(Loged);
-
 			if (Loged) {
 				redirect(myRoutes.dashboard);
 			}
