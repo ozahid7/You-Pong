@@ -208,9 +208,8 @@ const PlayerCard = (props: {
 										id_receiver: otheruser.data.uid,
 										is_message: false,
 									});
-									Block.mutateAsync().then(() => {
-										router.push(myRoutes.dashboard);
-									});
+									Block.mutate();
+									router.push(myRoutes.dashboard);
 								}}
 								size={100}
 								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-red-600 cursor-pointer"
