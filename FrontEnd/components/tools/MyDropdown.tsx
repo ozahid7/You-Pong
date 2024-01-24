@@ -27,7 +27,6 @@ const MyDropdown = (props: {
 	Refetch?: any;
 }) => {
 	const router = useRouter();
-	const user = useUser(true, undefined);
 	const otheruser = useOtherUser(props.user);
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
@@ -41,6 +40,7 @@ const MyDropdown = (props: {
 				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
+				globalSocket.disconnect();
 				router.push("/");
 				query.removeQueries();
 			})

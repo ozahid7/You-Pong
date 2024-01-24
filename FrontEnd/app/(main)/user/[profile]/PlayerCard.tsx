@@ -1,6 +1,6 @@
 "use client";
 
-import { MiniBanner, MyCard } from "@/components";
+import { MiniBanner, MyCard, MyToolTip } from "@/components";
 import React, { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
 import { FaUserClock, FaUserMinus, FaUserPlus } from "react-icons/fa";
@@ -20,9 +20,8 @@ import { BsController } from "react-icons/bs";
 
 import useOtherUser from "@/api/useOtherUser";
 import { UseQueryResult } from "@tanstack/react-query";
-import { UserInfo, UserToShow } from "@/types/Api";
+import { UserInfo } from "@/types/Api";
 import { notify } from "@/utils/game";
-import { useQueryClient } from "react-query";
 import { Tooltip } from "react-tooltip";
 
 const PlayerCard = (props: {
@@ -40,7 +39,7 @@ const PlayerCard = (props: {
 	const iconsStyle =
 		"z-10 h-[16%] w-[16%] bg-palette-white p-[7px] rounded-lg shadow-md absolute sm:bottom-6 xl:w-[12%] xl:h-[12%] h:right-3 bottom-4 right-1 text-palette-green cursor-pointer";
 	const directIconStyle =
-		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg drop-shadow-md absolute  xl:w-[12%] xl:h-[12%] h:right-3  right-1  cursor-pointer";
+		"z-10 h-[16%] w-[16%] bg-palette-white p-[5px] rounded-lg shadow-md absolute  xl:w-[12%] xl:h-[12%] h:right-3  right-1  cursor-pointer";
 	const router = useRouter();
 	const [color, setColor] = useState("");
 	const [subcolor, setSubColor] = useState("");
@@ -113,6 +112,8 @@ const PlayerCard = (props: {
 
 	const pendingIcon = (
 		<FaUserClock
+			data-tooltip-content="cancel"
+			data-tooltip-id="cancel"
 			onClick={() => {
 				globalSocket.emit("removeRequest", {
 					id_receiver: otheruser.data.uid,
@@ -129,6 +130,8 @@ const PlayerCard = (props: {
 	);
 	const addIcon = (
 		<FaUserPlus
+			data-tooltip-content="add"
+			data-tooltip-id="add"
 			onClick={() => {
 				Add.mutateAsync().then(() => {
 					otheruser.refetch();
@@ -143,6 +146,8 @@ const PlayerCard = (props: {
 
 	const removeIcon = (
 		<FaUserMinus
+			data-tooltip-content="remove"
+			data-tooltip-id="remove"
 			onClick={() => {
 				Remove.mutateAsync().then(() => {
 					otheruser.refetch();
@@ -176,9 +181,18 @@ const PlayerCard = (props: {
 							alt="avatar"
 						/>
 					</div>
+					<MyToolTip id="settings" />
+					<MyToolTip id="block" />
+					<MyToolTip id="direct" />
+					<MyToolTip id="play" />
+					<MyToolTip id="add" />
+					<MyToolTip id="remove" />
+					<MyToolTip id="cancel" />
 					<div className="w-[62%]  h-full pr-1 sm:pr-0 flex flex-col items-center justify-center pt-1 sm:pt-2 relative">
 						{props.isMe ? (
 							<MdOutlineSettings
+								data-tooltip-content="settings"
+								data-tooltip-id="settings"
 								onClick={() => {
 									router.push("/settings");
 								}}
@@ -187,6 +201,8 @@ const PlayerCard = (props: {
 							/>
 						) : (
 							<HiBan
+								data-tooltip-content="block"
+								data-tooltip-id="block"
 								onClick={() => {
 									globalSocket.emit("removeRequest", {
 										id_receiver: otheruser.data.uid,
@@ -204,6 +220,8 @@ const PlayerCard = (props: {
 						{!props.isMe && (
 							<>
 								<LuMessageSquarePlus
+									data-tooltip-content="direct"
+									data-tooltip-id="direct"
 									size={100}
 									strokeWidth={2.5}
 									className={`${directIconStyle} sm:bottom-[70px] bottom-14 text-palette-orange`}
@@ -212,6 +230,8 @@ const PlayerCard = (props: {
 									}}
 								/>
 								<BsController
+									data-tooltip-content="play"
+									data-tooltip-id="play"
 									size={100}
 									strokeWidth={0.5}
 									className={`${directIconStyle} sm:bottom-[117px] bottom-24 text-palette-green`}
