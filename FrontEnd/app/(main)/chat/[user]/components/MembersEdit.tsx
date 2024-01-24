@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -16,6 +16,9 @@ import { Background } from "../../../../../components";
 import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
 import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Props {
   Users: Member[];
@@ -44,6 +47,16 @@ const MembersEdit = ({
   mainChannelRefetch,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [clicked, setClicked] = useState<string>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+
+    if (clicked !== null) {
+      router.push(`/user/${clicked}`);
+    };
+
+  }, [clicked]);
 
   return (
     <Fragment>
@@ -102,7 +115,7 @@ const MembersEdit = ({
                         } else Infos.disabled = "";
                         user.user.id_user === MainUser?.uid
                           ? (Infos.selection =
-                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                            "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
                           : (Infos.selection = "");
                         user.user.status === "ONLINE"
                           ? (Infos.status = "online")
@@ -114,12 +127,15 @@ const MembersEdit = ({
                           <tr key={user.user.id_user}>
                             <th className="">
                               <div className={`avatar md:block xxs:hidden`}>
-                                <div className={`w-[60px] ${Infos.selection} `}>
+                                <div className={`w-[60px] ${Infos.selection} cursor-pointer`}>
                                   <Image
                                     src={user.user.avatar || groups}
                                     width={60}
                                     height={60}
                                     className="border-[2px] border-palette-green p-[0.5]"
+                                    onClick={
+                                      () => setClicked(user.user.username)
+                                    }
                                     alt="image"
                                   />
                                 </div>
