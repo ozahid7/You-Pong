@@ -64,6 +64,10 @@ const ProfileSettings = ({
 		}
 	};
 
+	useEffect(() => {
+		if (userName.length === 0) setUserName(username);
+	}, [userName]);
+
 	const UpdateInfos = async () => {
 		setLoader(true);
 		if (selectedFile !== avatar) photo = await setFile(file);
@@ -104,7 +108,6 @@ const ProfileSettings = ({
 					setLoader(false);
 				}
 			} catch (error) {
-				console.log("error setting", error);
 				// setMessage("Something went wrong!!");
 				setCurrentPass("");
 				setConfirmPass("");
@@ -129,7 +132,7 @@ const ProfileSettings = ({
 			? setInvalidUser(true)
 			: setInvalidUser(false);
 		const regex = /^[a-zA-Z0-9_ -]+$/;
-		!regex.test(userName) ? setInvalidUser(true) : setInvalidUser(false);
+		!regex.test(userName) ? setInvalidUser(true) : "";
 		newPass !== confirmPass || (newPass.length < 8 && newPass.length > 0)
 			? setInvalidNewPass(true)
 			: setInvalidNewPass(false);
@@ -158,7 +161,7 @@ const ProfileSettings = ({
 			closemodal={() => {
 				setIsOpen(false);
 				setNewPass("");
-				setUserName("");
+				setUserName(username);
 				setSubmit(false);
 				setCurrentPass("");
 				setConfirmPass("");

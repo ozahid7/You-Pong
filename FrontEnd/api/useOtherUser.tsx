@@ -2,7 +2,7 @@ import { endPoints, UserToShow } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
 
-const useOtherUser = (username: string) => {
+const useOtherUser = (username: string, isNotBlocked: boolean) => {
 	const getUser = async () => {
 		try {
 			const response = await useAxios<UserToShow>(
@@ -13,16 +13,18 @@ const useOtherUser = (username: string) => {
 				}
 			);
 			return response;
-		} catch (error) {
-			console.log("get user error = :", error);
-		}
+		} catch (error) {}
 		return null;
 	};
 
 	const otheruser = useQuery({
 		queryKey: ["otheruser", username],
 		queryFn: getUser,
-		enabled: username !== undefined && username && username !== "profile",
+		enabled:
+			username !== undefined &&
+			username &&
+			username !== "profile" &&
+			isNotBlocked,
 	});
 	return otheruser;
 };

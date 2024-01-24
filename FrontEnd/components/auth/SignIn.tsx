@@ -33,10 +33,8 @@ const SignIn = (props: {
 				endPoints.signin,
 				toSend
 			);
-			console.log("response = ", response);
 			router.replace(myRoutes.dashboard);
 		} catch (error) {
-			console.log("error = ", error);
 			setIsLoading(false);
 			setIsInvalidEmail(true);
 			setIsInvalidPass(true);

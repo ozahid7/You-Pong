@@ -50,7 +50,7 @@ const PlayerCard = (props: {
 	const Remove = removeuser(props.uid, props.username);
 	const Decline = declineuser(props.uid);
 	const direct = todirect(props.uid);
-	const otheruser = useOtherUser(props.username);
+	const otheruser = useOtherUser(props.param, true);
 
 	useEffect(() => {
 		if (props.isMe && props.user.isFetched && props.user.data)

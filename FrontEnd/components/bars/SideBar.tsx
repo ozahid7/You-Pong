@@ -119,16 +119,13 @@ const SideBar = () => {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				router.push("/");
 				globalSocket.disconnect();
 				query.removeQueries();
 			})
-			.catch((e) => {
-				console.log(".catch error", e);
-			});
+			.catch((e) => {});
 	};
 
 	return (
