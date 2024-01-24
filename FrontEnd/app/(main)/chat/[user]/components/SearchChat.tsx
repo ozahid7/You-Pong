@@ -34,8 +34,6 @@ const SearchChat = ({ object, onResultIdChange, main, direct }: Props) => {
       newFriendArr = [...newFriendArr, ...filteredDirect];
     }
 
-    console.log("search channels:", newFriendArr);
-
     setFriendArr(newFriendArr);
   }, [Input]);
 

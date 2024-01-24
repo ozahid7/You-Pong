@@ -58,7 +58,11 @@ export default function MuteDropDown({
     );
     if (success?.message === "Channel Updated Succefully") {
       membersRefetch();
+      channelsRefetch();
+      const timeoutId = setTimeout(membersRefetch(), 300000);
+      clearTimeout(timeoutId);
       onClose();
+      return ;
     }
   };
   const Handle_15Minutes = async () => {
@@ -69,7 +73,11 @@ export default function MuteDropDown({
     );
     if (success?.message === "Channel Updated Succefully") {
       membersRefetch();
+      channelsRefetch();
+      const timeoutId = setTimeout(membersRefetch(), 900000);
+      clearTimeout(timeoutId);
       onClose();
+      return;
     }
   };
 
@@ -105,12 +113,12 @@ export default function MuteDropDown({
             <Menu.Item
               key="1minute"
               as="div"
-              onClick={Handle_1Minute}
             >
               <div
                 role="button"
                 className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef1}
+                onClick={Handle_1Minute}
               >
                 <LuTimer className="text-palette-orange " size={20} />
                 <p>
@@ -121,12 +129,12 @@ export default function MuteDropDown({
             <Menu.Item
               key="5minutes"
               as="div"
-              onClick={Handle_5Minutes}
             >
               <div
                 role="button"
                 className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef5}
+                onClick={Handle_5Minutes}
               >
                 <LuTimer className="text-palette-orange " size={20} />
                 <p>
@@ -137,12 +145,12 @@ export default function MuteDropDown({
             <Menu.Item
               key="15minutes"
               as="div"
-              onClick={Handle_15Minutes}
             >
               <div
                 role="button"
                 className="flex flex-row gap-2 items-center  bg-palette-white text-palette-green hover:bg-palette-green hover:text-palette-white hover:border-palette-white w-full h-full text-[16px] font-russo rounded-sm"
                 ref={muteRef15}
+                onClick={Handle_15Minutes}
               >
                 <LuTimer className="text-palette-orange " size={20} />
                 <p>

@@ -111,7 +111,6 @@ export default function game_({ params }: pageProps) {
 					interval = game.emitToUpdateFrame_First();
 				}, 8000);
 			} else {
-				console.log("hello from else");
 				clearInterval(interval);
 				game.stopIntervall();
 				interval = game.emitToUpdateFrame();

@@ -129,11 +129,9 @@ const ChatEdit = ({ channels, users, channelsRefetch, MainUser }: HomePage) => {
       }
     }
     //////////////////////
-    console.log(setDataObj);
 
     result = await putData(setDataObj, channels?.id_channel);
     if (result?.message === "Channel Updated Succefully") {
-      console.log(result.message);
       channelsRefetch();
       onClose();
     } else {
