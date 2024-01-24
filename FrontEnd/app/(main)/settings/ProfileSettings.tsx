@@ -64,6 +64,10 @@ const ProfileSettings = ({
 		}
 	};
 
+	useEffect(() => {
+		if (userName.length === 0) setUserName(username);
+	}, [userName]);
+
 	const UpdateInfos = async () => {
 		setLoader(true);
 		if (selectedFile !== avatar) photo = await setFile(file);
@@ -149,7 +153,6 @@ const ProfileSettings = ({
 		setInvalidNewPass(false);
 		setInvalidUser(false);
 		setInvalidCurrentPass(false);
-		setUserName(username);
 	};
 
 	return (
