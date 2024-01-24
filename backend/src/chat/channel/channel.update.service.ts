@@ -110,23 +110,36 @@ export class ChannelUpdateService {
         message: "Can't upsert a room chat !",
         Object: null,
       };
-    const result = await this.prisma.channel.update({
+
+    const check = await this.prisma.channel.findFirst({
       where: {
         id_channel: id_channel,
         type: 'PRIVATE',
-      },
-      include: { users: true, rooms: true },
-      data: {
-        users: {
-          connect: { id_user: id_friend },
+      }
+    });
+    if (!check){
+      return {
+        message: "Can't update channel !",
+        Object: null,
+      };
+    }
+      const result = await this.prisma.channel.update({
+        where: {
+          id_channel: id_channel,
+          type: 'PRIVATE',
         },
-        rooms: {
-          connect: {
-            id_channel_id_user: { id_channel: id_channel, id_user: id_friend },
+        include: { users: true, rooms: true },
+        data: {
+          users: {
+            connect: { id_user: id_friend },
+          },
+          rooms: {
+            connect: {
+              id_channel_id_user: { id_channel: id_channel, id_user: id_friend },
+            },
           },
         },
-      },
-    });
+      });
     return {
       message: 'Channel Updated Succefully',
       Object: result,
@@ -540,6 +553,18 @@ export class ChannelUpdateService {
         message: "Can't update a channel !",
         Object: null,
       };
+    const check = await this.prisma.room_Chat.findFirst({
+      where: {
+        id_channel: result.id_channel,
+        id_user: user.id_user,
+        lefted: false,
+      },
+    });
+    if (!check)
+    return {
+      message: "Can't update a room_chat !",
+      Object: null,
+    };
     const room = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -637,6 +662,18 @@ export class ChannelUpdateService {
         message: "You can't set yourself as a admin !",
         Object: null,
       };
+    const check = await this.prisma.room_Chat.findFirst({
+      where: {
+        id_channel: channel.id_channel,
+        id_user: user.id_user,
+        lefted: false,
+      },
+    });
+    if (!check)
+    return {
+      message: "Can't find a room chat !",
+      Object: null,
+    };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -737,6 +774,18 @@ export class ChannelUpdateService {
         message: "You can't set yourself as a member!",
         Object: null,
       };
+      const check = await this.prisma.room_Chat.findFirst({
+        where: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+          lefted: false,
+        },
+      });
+      if (!check)
+      return {
+        message: "Can't find a room chat !",
+        Object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -835,6 +884,18 @@ export class ChannelUpdateService {
     if (member.name === admin.name)
       return {
         message: "You can't ban yourself !",
+        Object: null,
+      };
+      const check = await this.prisma.room_Chat.findFirst({
+        where: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+          lefted: false,
+        },
+      });
+      if (!check)
+      return {
+        message: "Can't find a room chat !",
         Object: null,
       };
     const result = await this.prisma.room_Chat.update({
@@ -1073,6 +1134,18 @@ export class ChannelUpdateService {
         message: "You can't mute a member too much !",
         Object: null,
       };
+      const check = await this.prisma.room_Chat.findFirst({
+        where: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+          lefted: false,
+        },
+      });
+      if (!check)
+      return {
+        message: "Can't find a room chat !",
+        Object: null,
+      };
     const result = await this.prisma.room_Chat.update({
       where: {
         id_channel_id_user: {
@@ -1090,6 +1163,7 @@ export class ChannelUpdateService {
       const channel = await this.prisma.room_Chat.findUnique({
         where: {
           id_channel_id_user: { id_channel: id_channel, id_user: id_user },
+          member_status:'MUTED',
         },
       });
       if (channel) {
@@ -1099,7 +1173,7 @@ export class ChannelUpdateService {
               id_channel: channel.id_channel,
               id_user: user.id_user,
             },
-            lefted: false,
+            member_status:'MUTED',
           },
           data: {
             member_status: 'NONE',
@@ -1188,6 +1262,18 @@ export class ChannelUpdateService {
     if (member.name === admin.name)
       return {
         message: "You can't unmute yourself !",
+        Object: null,
+      };
+      const check = await this.prisma.room_Chat.findFirst({
+        where: {
+          id_channel: channel.id_channel,
+          id_user: user.id_user,
+          lefted: false,
+        },
+      });
+      if (!check)
+      return {
+        message: "Can't find a room chat !",
         Object: null,
       };
     const result = await this.prisma.room_Chat.update({
