@@ -30,11 +30,8 @@ const page = () => {
 				endPoints.userTfaSendCode,
 				{ code: "0" }
 			);
-			console.log("disable response = ", response);
 			queryClient.invalidateQueries({ queryKey: ["user"] });
-		} catch (error) {
-			console.log("error = ", error);
-		}
+		} catch (error) {}
 	};
 
 	const enableTfa = async () => {
@@ -44,10 +41,7 @@ const page = () => {
 				endPoints.tfaSwitch
 			);
 			setPath(response.img as string);
-			console.log("enable response = ", response);
-		} catch (error) {
-			console.log("error = ", error);
-		}
+		} catch (error) {}
 	};
 
 	useEffect(() => {
@@ -145,11 +139,15 @@ const page = () => {
 				<ProfileSettings
 					isOpen={showProfileSetting}
 					setIsOpen={setShowProfileSetting}
-					closeModal={() => { }}
+					closeModal={() => {}}
 					user={user}
-					setUpdated={() => { }}
+					setUpdated={() => {}}
 				/>
-				<HowToPlay isOpen={showHowToPlay} setIsOpen={setshowHowToPlay} closeModal={() => { }} />
+				<HowToPlay
+					isOpen={showHowToPlay}
+					setIsOpen={setshowHowToPlay}
+					closeModal={() => {}}
+				/>
 			</div>
 		);
 };

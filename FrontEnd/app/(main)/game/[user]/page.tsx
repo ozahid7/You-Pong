@@ -111,7 +111,6 @@ export default function game_({ params }: pageProps) {
 					interval = game.emitToUpdateFrame_First();
 				}, 8000);
 			} else {
-				console.log("hello from else");
 				clearInterval(interval);
 				game.stopIntervall();
 				interval = game.emitToUpdateFrame();
@@ -138,7 +137,6 @@ export default function game_({ params }: pageProps) {
 				});
 			if (globalSocket.listeners("endGame").length === 0)
 				globalSocket.on("endGame", () => {
-					console.log("endgame");
 					setShowMessage(true);
 					setShowMessage(true);
 					setTimeout(() => {
@@ -153,7 +151,6 @@ export default function game_({ params }: pageProps) {
 				});
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", (obj) => {
-					console.log("gameOver");
 					if (!obj.is_me) {
 						setScores({ player: 7, opponent: 0 });
 						setShowMessage(true);

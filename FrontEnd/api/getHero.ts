@@ -12,7 +12,6 @@ export const useUser = (tfaVerified: boolean, setChecked: any) => {
 			return response.userInfo;
 		} catch (error) {
 			localStorage.removeItem("isLoged");
-			console.log("get hero error = :", error);
 			if (setChecked !== undefined) setChecked(true);
 			redirect(myRoutes.root);
 		}

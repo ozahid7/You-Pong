@@ -25,9 +25,10 @@ const MyDropdown = (props: {
 	uid?: string;
 	status?: string;
 	Refetch?: any;
+	isNotBlocked?: boolean;
 }) => {
 	const router = useRouter();
-	const otheruser = useOtherUser(props.user);
+	const otheruser = useOtherUser(props.user, props.isNotBlocked);
 	const block = blockuser(props.uid, props.Refetch, props.user);
 	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
@@ -37,16 +38,13 @@ const MyDropdown = (props: {
 		await axios
 			.get(apiUrl, { withCredentials: true })
 			.then((response) => {
-				console.log("data posted successfuly : ");
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				globalSocket.disconnect();
 				router.push("/");
 				query.removeQueries();
 			})
-			.catch((e) => {
-				console.log(".catch error", e);
-			});
+			.catch((e) => {});
 	};
 	const handelClick = (e: string) => {
 		if (e === "/user/") router.push(e + props.user);

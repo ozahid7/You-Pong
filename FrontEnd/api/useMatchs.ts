@@ -10,9 +10,7 @@ export const useMatchs = (uid: string) => {
 				endPoints.getMatchs + "?id_user=" + uid
 			);
 			return response.Object;
-		} catch (error) {
-			console.log("matchs response = ", error);
-		}
+		} catch (error) {}
 		return null;
 	};
 	return useQuery({ queryKey: ["matchs", uid], queryFn: getHistory });

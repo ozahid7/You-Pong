@@ -31,10 +31,8 @@ const SignUp = (props: {
 				endPoints.signup,
 				toSend
 			);
-			console.log("response = ", response);
 			handleShowSignIn();
 		} catch (error) {
-			console.log("error = ", error);
 			setIsInvalidEmail(true);
 			setIsLoading(false);
 			setMessage("Email is already in use !");

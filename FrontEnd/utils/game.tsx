@@ -48,7 +48,6 @@ export const notify = (
 };
 
 export const inviteGame = (info: infoGame, socket: Socket) => {
-	console.log(" from invite = ");
 	socket.emit("invite", info);
 };
 
@@ -57,21 +56,17 @@ export const acceptGame = (
 	socket: Socket,
 	router: AppRouterInstance
 ) => {
-	console.log("from accept ");
 	toast.dismiss();
 	socket.emit("accept", info);
 	router.push(myRoutes.game + "/" + info.mode + info.map);
 };
 
 export const refuseGame = (info: infoGame, socket: Socket) => {
-	console.log("from refuse");
 	toast.dismiss();
 	socket.emit("refuse", info);
 };
 
 export const cancelGame = (info: infoGame, socket: Socket) => {
-	console.log("from cancel");
-
 	socket.emit("cancel", info);
 };
 

@@ -11,9 +11,7 @@ const useFriends = () => {
 				endPoints.getFriend
 			);
 			return response.Object;
-		} catch (error) {
-			console.log("error get Friends : ", error);
-		}
+		} catch (error) {}
 		return null;
 	};
 

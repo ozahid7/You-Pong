@@ -33,7 +33,7 @@ const Banner = ({
 }: BannerProps) => {
 	const start = isGreen ? "from-[#508286]" : "from-[#E97152]";
 	const router = useRouter();
-	const otheruser = useOtherUser(opponent);
+	const otheruser = useOtherUser(opponent, true);
 	const end = isGreen ? "to-[#9DBBBD]" : "to-[#F3947B]";
 	const customClass = `w-[6%] sm:w-[3%] max-w-[20px] min-w-[14px] max-h-[100px] sm:min-h-full   ${
 		isGreen ? "bg-palette-green" : "bg-palette-orange"

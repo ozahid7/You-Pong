@@ -10,9 +10,7 @@ export const useAchiv = (uid: string) => {
 				endPoints.getAchiv + "?id_user=" + uid
 			);
 			return response.Object;
-		} catch (error) {
-			console.log("achiv response = ", error);
-		}
+		} catch (error) {}
 		return null;
 	};
 	return useQuery({ queryKey: ["achiv", uid], queryFn: getAchiv });
