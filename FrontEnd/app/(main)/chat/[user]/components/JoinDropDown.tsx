@@ -18,6 +18,7 @@ import {
   UnBanMember,
   getMembers,
 } from "../data/api";
+import { useQueryClient } from "react-query";
 
 interface Props {
   disable: string;
@@ -37,12 +38,14 @@ const JoinDropDown = ({
   mainChannelRefetch,
 }: Props) => {
   const { onClose, onOpenChange, onOpen, isOpen } = useDisclosure();
+  const queryClient = useQueryClient();
 
   const HandleKick = async () => {
     const kick = await KickMember(channel?.id_channel, user.user.id_user);
     if (kick?.message === "Channel Updated Succefully") {
       membersRefetch();
       channelsRefetch();
+      queryClient.invalidateQueries("users");
       onClose();
     } else console.error(kick?.message);
   };

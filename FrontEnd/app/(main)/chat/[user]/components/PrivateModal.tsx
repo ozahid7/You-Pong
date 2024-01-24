@@ -34,8 +34,6 @@ const PrivateModal = ({
   Channel_,
   Members,
   membersRefetch,
-  channelsRefetch,
-  mainChannelRefetch,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   var show: boolean = false;
@@ -89,9 +87,8 @@ const PrivateModal = ({
       <div
         onClick={show ? undefined : onOpen}
         role="button"
-        className={`${
-          show ? "line-through" : ""
-        } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
+        className={`${show ? "line-through" : ""
+          } py-2 z-10 px-4 min-w-[150px] cursor-pointer border-b border-palette-grey font-body font-bold flex items-center space-x-4 text-palette-green hover:bg-palette-orange hover:text-white`}
       >
         <LuUserPlus2 />
         <div className="h-fit w-fit">Invite</div>
@@ -138,7 +135,7 @@ const PrivateModal = ({
                           } else Infos.disabled = "";
                           user.id_user === MainUser?.uid
                             ? (Infos.selection =
-                                "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
+                              "ring ring-palette-orange ring-offset-base-100 ring-offset-2")
                             : (Infos.selection = "");
                           user.status === "ONLINE"
                             ? (Infos.status = "online")
