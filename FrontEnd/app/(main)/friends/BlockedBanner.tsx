@@ -13,6 +13,7 @@ const BlockedBanner = (props: {
 	uid: string;
 	SetInvalidData: any;
 	friends: any;
+	isNotBlocked: boolean;
 }) => {
 	const [enabled, setEnabled] = useState(true);
 	const unblock = unblockuser(props.uid, props.userName);
@@ -31,6 +32,7 @@ const BlockedBanner = (props: {
 						placement="left-0"
 						user={props.userName}
 						setDataInvalid={props.SetInvalidData}
+						isNotBlocked={props.isNotBlocked}
 					/>
 					<div className="flex flex-col">
 						<span

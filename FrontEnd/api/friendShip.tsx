@@ -18,9 +18,7 @@ export const blockuser = (uid: string, refetch?: any, username?: string) => {
 				query.removeQueries({ queryKey: ["otheruser", username] });
 			refetch();
 			return response;
-		} catch (error) {
-			console.log("error : ", error);
-		}
+		} catch (error) {}
 	};
 	return useMutation({ mutationFn: blockUser });
 };
@@ -33,9 +31,7 @@ export const searchusers = () => {
 				friendsEndPoint.search
 			);
 			return response.Object;
-		} catch (error) {
-			console.log("search error = ", error);
-		}
+		} catch (error) {}
 		return null;
 	};
 	return useQuery({ queryKey: ["search"], queryFn: searchUsers });
@@ -51,9 +47,7 @@ export const adduser = (uid: string, username?: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
-		} catch (error) {
-			console.log("add user error = ", error);
-		}
+		} catch (error) {}
 	};
 	return useMutation({ mutationFn: addUser });
 };
@@ -68,16 +62,13 @@ export const removeuser = (uid: string, username?: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
-		} catch (error) {
-			console.log("remove user error =", error);
-		}
+		} catch (error) {}
 	};
 
 	return useMutation({ mutationFn: removeUser });
 };
 
 export const unblockuser = (uid: string, username?: string) => {
-	console.log("username = ", username);
 	const query = useQueryClient();
 	const unblockUser = async () => {
 		try {
@@ -88,9 +79,7 @@ export const unblockuser = (uid: string, username?: string) => {
 			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
-		} catch (error) {
-			console.log("unblock error : ", error);
-		}
+		} catch (error) {}
 	};
 	return useMutation({ mutationFn: unblockUser });
 };
@@ -105,9 +94,7 @@ export const acceptuser = (uid: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
-		} catch (error) {
-			console.log("accept user error = ", error);
-		}
+		} catch (error) {}
 	};
 	return useMutation({ mutationFn: acceptkUser });
 };
@@ -122,9 +109,7 @@ export const declineuser = (uid: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["friends"] });
 			return response;
-		} catch (error) {
-			console.log("accept user error = ", error);
-		}
+		} catch (error) {}
 	};
 
 	return useMutation({
@@ -141,12 +126,9 @@ export const todirect = (uid: string) => {
 				"post",
 				chatEndPoint.direct + "?id_friend=" + uid
 			);
-			console.log("todirect response = ", response);
 			router.push("/chat" + "/" + uid);
 			return response;
-		} catch (error) {
-			console.log("to direct error = ", error);
-		}
+		} catch (error) {}
 	};
 
 	return useMutation({

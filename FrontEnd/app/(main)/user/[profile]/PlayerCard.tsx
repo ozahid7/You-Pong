@@ -50,7 +50,7 @@ const PlayerCard = (props: {
 	const Remove = removeuser(props.uid, props.username);
 	const Decline = declineuser(props.uid);
 	const direct = todirect(props.uid);
-	const otheruser = useOtherUser(props.username);
+	const otheruser = useOtherUser(props.param, true);
 
 	useEffect(() => {
 		if (props.isMe && props.user.isFetched && props.user.data)
@@ -208,8 +208,9 @@ const PlayerCard = (props: {
 										id_receiver: otheruser.data.uid,
 										is_message: false,
 									});
-									Block.mutate();
-									router.push(myRoutes.dashboard);
+									Block.mutateAsync().then(() => {
+										router.push(myRoutes.dashboard);
+									});
 								}}
 								size={100}
 								className="z-10 h-[12%] w-[12%] absolute top-2 right-1 text-red-600 cursor-pointer"

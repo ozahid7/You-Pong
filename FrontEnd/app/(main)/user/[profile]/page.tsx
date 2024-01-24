@@ -16,7 +16,7 @@ interface pageProps {
 }
 
 const page = ({ params }: pageProps) => {
-	const { data, isLoading, isFetching } = useOtherUser(params.profile);
+	const { data, isLoading, isFetching } = useOtherUser(params.profile, true);
 	const user = useUser(true, undefined);
 	const isMe = !data || data === undefined ? true : false;
 	const querQlient = useQueryClient();

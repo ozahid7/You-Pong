@@ -54,7 +54,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		: globalSocket.emit("outChat");
 
 	useEffect(() => {
-		console.log("from socket provider");
 		//notification
 		if (globalSocket.listeners("addNotif").length === 0)
 			globalSocket.on("addNotif", (obj) => {
@@ -65,7 +64,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 				if (!obj.is_message) {
 					notify(obj.username, obj.avatar, false, 5000, message);
 					setRequests(++requests);
-					console.log("requests from add ", requests);
 					// friends.refetch();
 				} else if (obj.is_message) {
 					SetIsMessage((prevCount) => prevCount + 1);
@@ -80,7 +78,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
-				console.log("requests  from remove  = ", requests);
 				if (requests > 0) setRequests(--requests);
 				if (requests === 0) setViewed(true);
 				friends.refetch();
@@ -92,19 +89,16 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 		if (globalSocket.listeners("invitation").length === 0)
 			globalSocket.on("invitation", (obj: inviteReturn) => {
-				console.log("from invitation", obj);
 				setData(obj);
 				notify(obj.username, obj.avatar, true, 10000, "", obj.info);
 			});
 		if (globalSocket.listeners("accepted").length === 0)
 			globalSocket.on("accepted", (obj: inviteReturn) => {
-				console.log("from accepted ......", obj);
 				setData(obj);
 			});
 
 		if (globalSocket.listeners("refused").length === 0)
 			globalSocket.on("refused", (obj: inviteReturn) => {
-				console.log("refused obj = ", obj);
 				setData(undefined);
 				notify(
 					obj.username,
@@ -119,7 +113,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 
 		if (globalSocket.listeners("canceled").length === 0)
 			globalSocket.on("canceled", (obj: inviteReturn) => {
-				console.log("from cancled = ", obj);
 				setData(undefined);
 				toast.update("toast_id", {
 					render: () => (
@@ -136,14 +129,12 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		//Random game accepted
 		if (globalSocket.listeners("acceptedGame").length === 0)
 			globalSocket.on("acceptedGame", (obj: inviteReturn) => {
-				console.log("from acceptedGame ", obj);
 				setData(obj);
 			});
 
 		//Random game Cancled
 		if (globalSocket.listeners("canceledGame").length === 0)
 			globalSocket.on("canceledGame", (obj: inviteReturn) => {
-				console.log("canceledGame = ", obj);
 				setData(undefined);
 				toast.update("toast_id", {
 					render: () => (

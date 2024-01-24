@@ -75,7 +75,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		if (globalSocket && path.slice(0, 5) !== "/game" && toEmit && updated) {
-			console.log("emit from provider");
 			globalSocket.emit("online");
 			me.refetch();
 		}
@@ -87,14 +86,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 				"get",
 				endPoints.getTfaStatus
 			);
-			console.log("tfa response =", response?.message);
 			if (response.message === "False") setTfaVerified(true);
 			response.message === "False"
 				? setTfaStatus(false)
 				: setTfaStatus(true);
 		} catch (error) {
 			setTfaVerified(true);
-			console.log("error : ", error);
 		}
 		return null;
 	};

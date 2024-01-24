@@ -177,6 +177,7 @@ const CustomTabs = (props: {
 										status={e.status}
 										uid={e.id_user}
 										SetInvalidData={setInvalidData}
+										isNotBlocked={false}
 									/>
 								))
 							)}

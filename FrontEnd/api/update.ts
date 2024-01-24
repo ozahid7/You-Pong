@@ -18,9 +18,7 @@ export const updateProfile = (
 				newAvatar: newAvatar,
 			});
 			return res;
-		} catch (error) {
-			console.log("error = ", error);
-		}
+		} catch (error) {}
 	};
 
 	return useMutation({ mutationFn: updateInfo });
