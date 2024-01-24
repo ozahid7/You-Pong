@@ -1,0 +1,59 @@
+version: '3'
+services:
+  database:
+    container_name: database
+    image: postgres
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_v:/var/lib/postgresql/data
+    networks:
+      backDb:
+        ipv4_address: 172.20.0.5
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  backend:
+    container_name: backEnd
+    build: ./backend
+    ports:
+      - 4000:4000
+    expose:
+      - 5432
+    networks:
+      backDb:
+        ipv4_address: 172.20.0.4
+    depends_on:
+      - database
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    container_name: frontEnd
+    build: ./FrontEnd/
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      backDb:
+        ipv4_address: 172.20.0.3
+
+networks:
+  backDb:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+volumes:
+  postgres_v:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /goinfre/${USER}/Desktop/db
