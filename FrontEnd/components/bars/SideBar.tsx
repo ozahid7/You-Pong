@@ -108,10 +108,9 @@ const SideBar = () => {
 	const router = useRouter();
 	const user = useUser(true, undefined);
 	const { username, avatar } = user.data;
-	const friends = useFriends();
-	const { globalSocket, setTfaVerified } = useGlobalSocket();
+	const { globalSocket } = useGlobalSocket();
 	const query = useQueryClient();
-	const { requests, viewedChat, setRequests, viewed } = useGlobalContext();
+	const { requests, viewedChat } = useGlobalContext();
 
 	const handleLogout = async () => {
 		const apiUrl = `${apiHost}user/signout`;
@@ -124,7 +123,7 @@ const SideBar = () => {
 				localStorage.removeItem("isLoged");
 				globalSocket.emit("offline");
 				router.push("/");
-				setTfaVerified(false);
+				globalSocket.disconnect();
 				query.removeQueries();
 			})
 			.catch((e) => {
