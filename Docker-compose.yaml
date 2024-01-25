@@ -53,8 +53,3 @@ networks:
         - subnet: 172.20.0.0/16
 volumes:
   postgres_v:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /goinfre/${USER}/You-Pong/db
