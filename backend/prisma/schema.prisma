@@ -1,0 +1,186 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+//							   ********    CONFIGURATION    ********
+
+//GENERATE PRISMA
+generator client {
+	provider = "prisma-client-js"
+}
+
+//DATABASE
+datasource db {
+	provider = "postgresql"
+	url = env("DATABASE_URL")
+}
+
+//							   ********    ENUMS    ********
+
+//USER_STATUS (online, offline, ingame)
+enum user_status {
+	ONLINE
+	OFFLINE
+	INGAME
+}
+
+//USER_RANK (pandora, bios, freax, commodore)
+enum user_rank {
+	PANDORA
+	BIOS
+	FREAX
+	COMMODORE
+}
+
+//CHANNEL_TYPE (private, public, protected, direct)
+enum channel_type {
+	PRIVATE
+	PUBLIC
+	PROTECTED
+	DIRECT
+}
+
+//MEMBER_STATUS (muted, banned)
+enum member_status {
+	MUTED
+	BANNED
+	NONE
+}
+
+//USER_ROLE (admin, member, owner)
+enum user_role {
+	ADMIN
+	MEMBER
+	OWNER
+}
+
+//NOTIFICATION (invitaion, game, message)
+enum notification {
+	INVITATION
+	GAME
+	MESSAGE
+}
+
+//STATE (accepted, refused, pending, blocked)
+enum state {
+	ACCEPTED
+	REFUSED
+	PENDING
+	BLOCKED
+}
+
+//							   ********    MODELS    ********
+
+//USER MODEL
+model User {
+	id_user String @id @default(uuid())
+	username String @unique
+	firstname String?
+	lastname String?
+	avatar String?
+	hash String?
+	email String @unique
+	two_fact_auth String?
+	tfaIsEnable Boolean @default(false)
+	victory Int @default(0)
+	defeats Int @default(0)
+	level Float @default(0.0)
+	rank user_rank @default(BIOS)
+	status user_status @default(OFFLINE)
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
+	rooms Room_Chat[] @relation(name: "users")
+	blocked_user User[] @relation("blocking_users")
+	blocked_from User[] @relation("blocking_users")
+	friend_user User[] @relation("friend_users")
+	friend_from User[] @relation("friend_users")
+	channels Channel[] @relation("channels")
+	bannedChannels Channel[] @relation("bannedChannels")
+	messages Message[]
+	friendship_friend Friendship[] @relation("friendship_friend")
+	friendship_user Friendship[] @relation("friendship_user")
+	matchs_player Match_History[] @relation("matchs_player")
+	matchs_opponent Match_History[] @relation("matchs_opponent")
+	achievements Achievement[]
+	@@map("user")
+}
+
+//CHANNEL MODEL
+model Channel {
+	id_channel String @id @default(uuid())
+	name String @default(uuid())
+	description String?
+	avatar String?
+	hash String?
+	type channel_type @default(PUBLIC)
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
+	users User[] @relation("channels")
+	bannedUsers User[] @relation("bannedChannels")
+	rooms Room_Chat[] @relation(name: "room")
+	messages Message[]@relation(name: "message")
+}
+
+//ROOM_CHAT MODEL
+model Room_Chat {
+	name String @unique @id @default(uuid())
+	user_role user_role @default(OWNER)
+	member_status member_status @default(NONE)
+	time_muted DateTime?
+	joined_at DateTime @default(now())
+	lefted Boolean @default(false)
+	lefted_at DateTime?
+	id_user String
+	user User @relation(name:"users", fields: [id_user], references: [id_user])
+	id_channel String
+	channel Channel @relation(name: "room", fields: [id_channel],references: [id_channel])
+	messages Message[]
+	@@unique([id_channel, id_user])
+}
+
+//MESSAGE MODEL
+model Message {
+	id_message String @id @default(uuid())
+	content String
+	created_at DateTime @default(now())
+	id_sender String
+	user User @relation(fields: [id_sender], references: [id_user])
+	name_room String
+	room Room_Chat @relation(fields: [name_room], references: [name])
+	id_channel String
+	channel Channel @relation(name: "message",fields: [id_channel], references: [id_channel])
+}
+
+//MATCH_HISTORY MODEL
+model Match_History {
+	id_match String @id @default(uuid())
+	id_player String
+	player User @relation("matchs_player", fields: [id_player], references: [id_user])
+	id_opponent String
+	opponent User @relation("matchs_opponent", fields: [id_opponent], references: [id_user])
+	player_score Int? @default(3)
+	opponent_score Int? @default(0)
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
+}
+
+// FRIENDSHIP MODEL
+model Friendship {
+	id_friendship String @id @default(uuid())
+	id_user String
+	user User @relation("friendship_user", fields: [id_user], references: [id_user])
+	id_friend String
+	friend User @relation("friendship_friend", fields: [id_friend], references: [id_user])
+	state state @default(PENDING)
+	blocker_User String?
+}
+
+//ACHIEVEMENT MODEL
+model Achievement {
+	id_achievement String @id @default(uuid())
+	title String
+	description String
+	avatar String
+	users User[]
+	created_at DateTime @default(now())
+	updated_at DateTime @updatedAt
+}
