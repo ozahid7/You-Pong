@@ -11,10 +11,10 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
   app.enableCors({
     credentials: true,
-    origin: `http://${process.env.HOST_IP}:3000`,
+    origin: `http://${process.env.HOST_IP}:${process.env.FRONT_PORT}`,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
   });
   app.use(cookieParser());
-  await app.listen(4000);
+  await app.listen(`${process.env.BACKEND_PORT}`);
 }
 bootstrap();

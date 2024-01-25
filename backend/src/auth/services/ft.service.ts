@@ -16,12 +16,12 @@ export class FtService
 		const tfaStatus = await this.TfaUserService.getTfaStatus(user);
 		if (tfaStatus == false) {
 			await this.authService.genCookie(res, user.id_user, 'access_token')
-			res.redirect(`http://${process.env.HOST_IP}:3000/user/profile`);
+			res.redirect(`http://${process.env.HOST_IP}:${process.env.FRONT_PORT}/user/profile`);
 		}
 		// generate tfa Cookie
 		else {
 			await this.authService.genCookie(res, user.id_user, 'tfa');
-			res.redirect(`http://${process.env.HOST_IP}:3000/user/profile`);
+			res.redirect(`http://${process.env.HOST_IP}:${process.env.FRONT_PORT}/user/profile`);
 		}
 	}
 }

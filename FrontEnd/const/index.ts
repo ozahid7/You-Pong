@@ -23,7 +23,7 @@ export const myRoutes = {
 	notfound: "/user",
 };
 
-export const socketurl = `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000`;
+export const socketurl = `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}`;
 export const defaultavatar = "/defaultavatar.png";
 
 //render react icons
@@ -45,7 +45,7 @@ export const menuUserElements = [
 	{ href: "block", label: "Block", icon: renderIcon(LuUserX) },
 ];
 
-export const apiHost = `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/`;
+export const apiHost = `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/`;
 
 export const menuGroupsElements = [
 	{ label: "Members", icon: renderIcon(LuUsers), name: "Members" },
