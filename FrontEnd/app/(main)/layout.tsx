@@ -3,10 +3,8 @@ import { SideBar, NavBar, MobileSideBar } from "@/components";
 import "../globals.css";
 import "../input.css";
 import UserContextProvider from "@/providers/UserContextProvider";
-import { Button } from "@nextui-org/react";
 import "react-toastify/dist/ReactToastify.css";
 import InviteProvider from "@/providers/SocketProvider";
-import { notify } from "@/utils/game";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 interface lyoutProps {

@@ -5,7 +5,6 @@ import CustomTabs from "./CustomTabs";
 import { useEffect, useState } from "react";
 import useFriends from "@/api/useFriends";
 import Loader from "@/components/tools/Loader";
-import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 
 const page = () => {

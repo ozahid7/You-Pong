@@ -26,7 +26,6 @@ function MyDialog({
 }: MyDialogProps) {
 	const classname = twMerge("flex justify-center", customClass);
 	const dialogRef = useRef();
-	const ref = useRef();
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			{(ref) => (

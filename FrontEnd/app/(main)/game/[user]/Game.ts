@@ -14,7 +14,6 @@ import { Socket } from "socket.io-client";
 import { ball, opponent, player } from "./GameProvider";
 import { inviteReturn } from "@/types/game";
 import { Positions } from "@/types";
-import { color } from "framer-motion";
 
 export interface Scores {
 	player: number;

@@ -19,7 +19,6 @@ const SignIn = (props: {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
-	const test = true;
 	const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 	const signIn = async () => {

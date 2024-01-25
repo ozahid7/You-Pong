@@ -1,7 +1,6 @@
 import { MyDialog } from "@/components";
-import { myRoutes } from "@/const";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Message = (props: {
 	isOpen: boolean;

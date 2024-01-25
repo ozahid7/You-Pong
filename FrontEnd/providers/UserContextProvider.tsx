@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import { TwoFactor } from "@/components";
 import { redirect, usePathname } from "next/navigation";
 import { myRoutes, socketurl } from "@/const";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAxios } from "@/utils";
-import { endPoints, tfaSwitch, UserInfo } from "@/types/Api";
+import { endPoints, UserInfo } from "@/types/Api";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Loader from "@/components/tools/Loader";
 import { useUser } from "@/api/getHero";
@@ -24,8 +24,6 @@ export const GlobalContext = createContext<myContextProps | undefined>(
 	undefined
 );
 
-let oneTime: boolean = false;
-
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	let loged: boolean = false;
 	if (typeof window !== "undefined") {
@@ -34,7 +32,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [checked, setchecked] = useState(false);
 
 	const [tfaVerified, setTfaVerified] = useState(false);
-	const query = useQueryClient();
 	const [isLoged, setIsLoged] = useState(false);
 	const [updated, setUpdated] = useState(false);
 	const [userData, setUserData] = useState(undefined);
@@ -42,7 +39,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 	const [globalSocket, setGlobalSocket] = useState<Socket>(null);
 	const [toEmit, setToEmit] = useState(false);
 	const path = usePathname();
-	let i: number = 0;
 
 	const me = useUser(tfaVerified, setchecked);
 

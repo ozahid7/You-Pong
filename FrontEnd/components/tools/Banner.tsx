@@ -2,7 +2,7 @@ import useOtherUser from "@/api/useOtherUser";
 import { defaultavatar, myRoutes } from "@/const";
 import { notify } from "@/utils/game";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import { BsController } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 

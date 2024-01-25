@@ -1,7 +1,6 @@
 import { Scores } from "@/app/(main)/game/[user]/Game";
 import { defaultavatar } from "@/const";
-import { useGlobalContext } from "@/providers/SocketProvider";
-import React, { ReactNode } from "react";
+import React from "react";
 
 const ScoreCard = (props: {
 	type?: string;

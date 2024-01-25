@@ -3,11 +3,9 @@ import { Map, CustomButton, Mode, MyDialog } from "@/components";
 import { myRoutes } from "@/const";
 import { UserInfo } from "@/types/Api";
 import { inviteGame, notify } from "@/utils/game";
-import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { MdCancelPresentation } from "react-icons/md";
-import { toast } from "react-toastify";
 import { Socket } from "socket.io-client";
 
 export default function GameSettings(props: {
@@ -26,8 +24,6 @@ export default function GameSettings(props: {
 	user: UseQueryResult<UserInfo, Error>;
 }) {
 	const router = useRouter();
-	const style =
-		"text-[16px] text-center drop-shadow-sm font-orbitron text-palette-orange";
 
 	return (
 		<>

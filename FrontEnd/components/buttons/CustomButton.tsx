@@ -1,6 +1,5 @@
 "use client";
 import { CustomButtonProps } from "@/types";
-import CircularProgress from "@mui/joy/CircularProgress";
 
 import { twMerge } from "tailwind-merge";
 import React from "react";
