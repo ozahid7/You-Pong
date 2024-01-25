@@ -5,13 +5,11 @@ import React, { useEffect, useState } from "react";
 import { useAxios } from "@/utils";
 import { UserInfo, endPoints } from "@/types/Api";
 import { setFile } from "../chat/[user]/data/api";
-import { UseQueryResult, useQueryClient } from "@tanstack/react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { useRouter } from "next/navigation";
-import { defaultavatar, myRoutes, socketurl } from "@/const";
-import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { Socket, io } from "socket.io-client";
-import { setGlobal } from "next/dist/trace";
+import { defaultavatar, myRoutes } from "@/const";
+import { Socket } from "socket.io-client";
 
 interface ProfileSettingsProps {
 	isOpen: boolean;

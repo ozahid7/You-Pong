@@ -1,25 +1,17 @@
-import React, {
-	ReactNode,
-	createContext,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useGlobalSocket } from "./UserContextProvider";
 import { inviteReturn } from "@/types/game";
 import { notify } from "@/utils/game";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { myRoutes } from "@/const";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import useFriends from "@/api/useFriends";
 import { useUser } from "@/api/getHero";
 
 interface globalContextProps {
 	data: inviteReturn;
 	setData: any;
-	viewed: boolean;
-	setViewed: any;
 	viewedChat: boolean;
 	setViewedChat: any;
 	requests: number;
@@ -36,7 +28,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 	const { globalSocket, tfaVerified } = useGlobalSocket();
 	const [data, setData] = useState<inviteReturn>();
 	const query = useQueryClient();
-	const [viewed, setViewed] = useState(true);
 	const [viewedChat, setViewedChat] = useState(true);
 	const [id, setID] = useState<string>("");
 	const [isMessage, SetIsMessage] = useState<number>(0);
@@ -79,7 +70,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 		if (globalSocket.listeners("removeNotif").length === 0)
 			globalSocket.on("removeNotif", (obj) => {
 				if (requests > 0) setRequests(--requests);
-				if (requests === 0) setViewed(true);
 				friends.refetch();
 			});
 		if (globalSocket.listeners("status").length === 0)
@@ -153,8 +143,6 @@ function InviteProvider({ children }: { children: React.ReactNode }) {
 			value={{
 				data,
 				setData,
-				viewed,
-				setViewed,
 				viewedChat,
 				setViewedChat,
 				requests,

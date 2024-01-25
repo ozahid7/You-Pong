@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { searchUsers } from "@/types/Api";
 import Link from "next/link";
 import { UseQueryResult } from "@tanstack/react-query";
-import { input } from "@nextui-org/theme";
 
 const SearchBar = (props: { search: UseQueryResult<searchUsers, Error> }) => {
 	const [FriendArr, setFriendArr] = useState<searchUsers>(null);

@@ -1,4 +1,3 @@
-import { myRoutes } from "@/const";
 import { chatEndPoint, friendsEndPoint, searchBarReturn } from "@/types/Api";
 import { useAxios } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

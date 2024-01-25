@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import FriendBanner from "./FriendBanner";
 import { MyToolTip } from "@/components";
@@ -9,7 +9,6 @@ import MiniLoader from "@/components/tools/MiniLoader";
 import { FriendArr, user } from "@/types/Api";
 import { defaultavatar } from "@/const";
 import { UseQueryResult } from "@tanstack/react-query";
-import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useGlobalContext } from "@/providers/SocketProvider";
 
 const CustomTabs = (props: {

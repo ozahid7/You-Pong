@@ -16,9 +16,7 @@ import {
 } from "react-icons/lu";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/providers/SocketProvider";
-import useFriends from "@/api/useFriends";
 
 export const RenderSideBarElements = (
 	index: number,

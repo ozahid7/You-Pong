@@ -6,7 +6,7 @@ import { LuGamepad, LuSettings } from "react-icons/lu";
 import { TbUserSquare } from "react-icons/tb";
 import { useAxios } from "@/utils";
 import { endPoints, tfaEnable, tfaSwitch } from "@/types/Api";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import MiniLoader from "@/components/tools/MiniLoader";
 import ProfileSettings from "./ProfileSettings";
 import { useUser } from "@/api/getHero";

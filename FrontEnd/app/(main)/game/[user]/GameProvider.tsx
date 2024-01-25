@@ -1,8 +1,6 @@
 "use client";
-import { useUser } from "@/api/getHero";
-import { socketurl } from "@/const";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Socket, io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 interface gameContextProps {
 	gameSocket: Socket;
