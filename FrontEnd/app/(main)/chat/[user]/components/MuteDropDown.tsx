@@ -1,22 +1,11 @@
-import React, { useRef, useState, Fragment } from "react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  useDisclosure,
-  Button,
-} from "@nextui-org/react";
+import React, { useRef, Fragment } from "react";
 import { LuBellOff, LuTimer } from "react-icons/lu";
 import { Channel, Member } from "@/types";
 import {
   MuteMember,
   UnMuteMember,
-  fetchData_getMembers,
-  getMembers,
 } from "../data/api";
-import { useQuery } from "react-query";
 import { Menu } from "@headlessui/react";
-import { IconContext } from "react-icons";
 
 interface Props {
   user: Member;
@@ -62,7 +51,7 @@ export default function MuteDropDown({
       const timeoutId = setTimeout(membersRefetch(), 300000);
       clearTimeout(timeoutId);
       onClose();
-      return ;
+      return;
     }
   };
   const Handle_15Minutes = async () => {

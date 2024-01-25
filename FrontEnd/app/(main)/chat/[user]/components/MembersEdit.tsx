@@ -7,17 +7,13 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
-  Button,
 } from "@nextui-org/react";
-import { IconContext } from "react-icons";
 import { LuUsers } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../../components";
-import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
+import { Channel, Member, User_Hero } from "@/types";
 import groups from "../../../../../public/groups.svg";
 import { JoinDropDown } from ".";
-import { redirect } from "next/navigation";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface Props {

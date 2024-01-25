@@ -11,23 +11,14 @@ import {
   Card,
   CardBody,
   useDisclosure,
-  Button,
-  Link,
 } from "@nextui-org/react";
-import { IconContext } from "react-icons";
-import { LuSettings, LuUser } from "react-icons/lu";
+import { LuSettings } from "react-icons/lu";
 import groups from "../../../../../public/groups.svg";
 import Image from "next/image";
 import { GroupsInput } from ".";
 import { Background, Submit } from "@/components";
 import { Channel, Member, User_Hero } from "@/types";
-import { putData, setData, setFile, getChannel } from "../data/api";
-
-export const getRandomNumber = () => {
-  const min = 20;
-  const max = 100;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+import { putData, setFile } from "../data/api";
 
 interface HomePage {
   channels: Channel;

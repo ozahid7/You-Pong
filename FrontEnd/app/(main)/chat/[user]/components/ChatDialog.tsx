@@ -1,18 +1,13 @@
 "use client";
-import { Bubble, Channel, Member, Message, User_Hero } from "@/types";
+import { Channel, Member, Message, User_Hero } from "@/types";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import {
   fetchData_Messages,
   fetchData_getMembers,
-  getMembers,
-  getMessages,
 } from "../data/api";
-import { log } from "console";
 import { useQuery } from "react-query";
-import Loader from "@/components/tools/Loader";
 import { v4 as uuidv4 } from "uuid";
 import ShowMessages, { formatDate } from "./ShowMessages";
-import { useGlobalContext } from "@/providers/SocketProvider";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { Socket } from "socket.io-client";
 
@@ -39,7 +34,7 @@ const ChatDialog = ({ main, socket, channel, channels, refetchDirect }: Props) =
     }
   );
 
-  const { data, refetch: MessagesRefetch } = useQuery<Message[], Error>(
+  const { data } = useQuery<Message[], Error>(
     ["messages", channel?.id_channel],
     () => fetchData_Messages(channel?.id_channel),
     {
@@ -80,6 +75,7 @@ const ChatDialog = ({ main, socket, channel, channels, refetchDirect }: Props) =
   useEffect(() => {
     if (shouldScrollToBottom && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+
       // Reset the scroll trigger //
       shouldScrollToBottom = false;
     }

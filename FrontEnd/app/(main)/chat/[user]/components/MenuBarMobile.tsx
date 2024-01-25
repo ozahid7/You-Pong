@@ -1,4 +1,3 @@
-import { ChatHeading } from "@/components";
 import React from "react";
 import { FiMenu as Icon } from "react-icons/fi";
 

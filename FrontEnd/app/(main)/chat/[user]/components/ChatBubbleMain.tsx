@@ -1,6 +1,6 @@
 import { Message, User_Hero } from "@/types";
 import Image from "next/image";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 
 interface Props {
   main: User_Hero;

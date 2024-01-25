@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import {
   Modal,
   ModalContent,
@@ -9,14 +9,12 @@ import {
   useDisclosure,
   Button,
 } from "@nextui-org/react";
-import { IconContext } from "react-icons";
-import { LuPlus, LuUserCheck2, LuUserPlus2, LuUsers } from "react-icons/lu";
+import { LuPlus, LuUserCheck2, LuUserPlus2 } from "react-icons/lu";
 import Image from "next/image";
 import { Background } from "../../../../../components";
-import { Channel, Member, Room_Chat, User, User_Hero } from "@/types";
+import { Channel, Member, User, User_Hero } from "@/types";
 import groups from "../../../../../public/groups.svg";
-import { JoinDropDown } from ".";
-import { fetchData_Channel, fetchData_users, joinPrivate } from "../data/api";
+import { fetchData_users, joinPrivate } from "../data/api";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 

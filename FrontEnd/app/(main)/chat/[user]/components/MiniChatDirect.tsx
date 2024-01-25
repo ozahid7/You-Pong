@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Channel, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { fetchData_Channel, getChannel } from "../data/api";
+import { fetchData_Channel } from "../data/api";
 import { useQuery } from "react-query";
 import Loader from "@/components/tools/Loader";
 import { useGlobalContext } from "@/providers/SocketProvider";

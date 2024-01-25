@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Channel, User_Hero, whichChannel } from "@/types";
-import { Avatar } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { Channel, whichChannel } from "@/types";
 import Image from "next/image";
 import { useGlobalContext } from "@/providers/SocketProvider";
-import { usePathname } from "next/navigation";
 
 interface HomeProps {
   channel: Channel;

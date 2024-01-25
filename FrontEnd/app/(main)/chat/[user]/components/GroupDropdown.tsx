@@ -1,19 +1,14 @@
 "use client";
-import React, { Fragment } from "react";
+import React from "react";
 import { IconContext } from "react-icons";
-import { LuSettings2, LuUser, LuLogOut } from "react-icons/lu";
-import { Channel, Member, User, User_Hero } from "@/types";
-import { Button, Modal } from "@nextui-org/react";
+import { LuLogOut } from "react-icons/lu";
+import { Channel, Member, User_Hero } from "@/types";
 import { ChatEdit, MembersEdit, PrivateModal } from ".";
 import { FiChevronDown } from "react-icons/fi";
 import {
   fetchData_getMainUser,
   fetchData_getMembers,
-  getChannel,
-  getMainUser,
-  getMembers,
   leaveChannel,
-  userChannels,
 } from "../data/api";
 import { useQuery } from "react-query";
 import { Menu } from "@headlessui/react";

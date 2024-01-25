@@ -7,7 +7,6 @@ import JoinModal from "./JoinModal";
 import MembersEdit from "./MembersEdit";
 import MiniChat from "./MiniChat";
 import SearchChat from "./SearchChat";
-import MyButton from "./MyButton";
 import GroupsInput from "./GroupsInput";
 import JoinDropDown from "./JoinDropDown";
 import MuteDropDown from "./MuteDropDown";
@@ -32,7 +31,6 @@ export {
   MembersEdit,
   MiniChat,
   SearchChat,
-  MyButton,
   GroupsInput,
   JoinDropDown,
   MuteDropDown,

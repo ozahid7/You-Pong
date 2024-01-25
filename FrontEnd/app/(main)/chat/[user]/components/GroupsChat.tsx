@@ -1,22 +1,17 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { ChatDialog, GroupDropdown } from ".";
-import { Channel, Member, Message, User_Hero, whichChannel } from "@/types";
-import { Avatar } from "@nextui-org/react";
+import { Channel, Member, User_Hero, whichChannel } from "@/types";
 import { fetchData_Channel, fetchData_getMembers } from "../data/api";
-import { User } from "@/types";
-import { MyDropdown } from "@/components";
 import { useQuery } from "react-query";
 import { TbSend, TbSendOff } from "react-icons/tb";
 import Loader from "@/components/tools/Loader";
 import { Menu } from "@headlessui/react";
-import { IconContext } from "react-icons";
 import {
   MdOutlineFaceRetouchingOff,
   MdOutlineFaceUnlock,
 } from "react-icons/md";
-import { useGlobalContext } from "@/providers/SocketProvider";
 
 interface EmojiProps {
   onEmojiSelect: any;
@@ -54,8 +49,8 @@ export const EmojiDropDown = ({ onEmojiSelect, disable }: EmojiProps) => {
                 <div
                   role="button"
                   className={` ${active
-                      ? "bg-palette-orange text-white"
-                      : "text-palette-green"
+                    ? "bg-palette-orange text-white"
+                    : "text-palette-green"
                     } rounded-md`}
                   onClick={() => onEmojiSelect(emoji)}
                 >
@@ -79,12 +74,6 @@ interface obj {
   channelsRefetch: any;
   joinRefetch: any;
   data: Channel[];
-}
-
-interface Chat {
-  view: boolean;
-  id_channel: string;
-  id_sender: string;
 }
 
 const GroupsChat = ({
@@ -163,12 +152,15 @@ const GroupsChat = ({
     }
 
   const handleButtonClick = () => {
-    if (messageRef?.current.value === "") return;
+    if (messageRef?.current.value === "" ||
+      messageRef?.current.value.trim().length < 1
+    )
+      return;
     if (socket) {
       var message = {
         id_channel: channels.id_channel,
         id_sender: MainUser.uid,
-        content: messageRef?.current.value.trim(),
+        content: messageRef?.current.value,
       };
       socket.emit("newMessage", message);
       messageRef.current.value = null;
