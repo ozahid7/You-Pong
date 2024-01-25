@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 
 export const userChannels = async () => {
   try {
-    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/user/channels`);
+    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/user/channels`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -17,7 +17,7 @@ export const userChannels = async () => {
 export const getUsers = async (id_channel: string) => {
   try {
     const response = await axios.get(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/users?id_channel=${id_channel}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/users?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -27,11 +27,11 @@ export const getUsers = async (id_channel: string) => {
   }
 };
 
-// http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/join/name
+// http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/join/name
 export const joinChannel = async (id_channel: string, password: string) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/join?id_channel=${id_channel}&password=${password}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/join?id_channel=${id_channel}&password=${password}`
     );
     return response.data;
   } catch (error) {
@@ -41,11 +41,11 @@ export const joinChannel = async (id_channel: string, password: string) => {
   }
 };
 
-// http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/join/name
+// http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/join/name
 export const joinPrivate = async (id_channel: string, id_friend: string) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/joinPrivate/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/joinPrivate/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -55,11 +55,11 @@ export const joinPrivate = async (id_channel: string, id_friend: string) => {
   }
 };
 
-// http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/leave/name
+// http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/leave/name
 export const leaveChannel = async (id_channel: string) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/leave/?id_channel=${id_channel}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/leave/?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const MuteMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/mute/?id_channel=${id_channel}&id_friend=${id_friend}&time=${time}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/mute/?id_channel=${id_channel}&id_friend=${id_friend}&time=${time}`
     );
     return response.data;
   } catch (error) {
@@ -92,7 +92,7 @@ export const UnMuteMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/unmute/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/unmute/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -108,7 +108,7 @@ export const KickMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/kick/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/kick/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -124,7 +124,7 @@ export const BanMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/ban/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/ban/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -140,7 +140,7 @@ export const UnBanMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/unban/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/unban/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -156,7 +156,7 @@ export const SetAdmin = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/admin/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/admin/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -172,7 +172,7 @@ export const SetMember = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/member/?id_channel=${id_channel}&id_friend=${id_friend}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/member/?id_channel=${id_channel}&id_friend=${id_friend}`
     );
     return response.data;
   } catch (error) {
@@ -184,7 +184,7 @@ export const SetMember = async (
 
 export const getChannels = async () => {
   try {
-    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel`);
+    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -196,7 +196,7 @@ export const getChannels = async () => {
 export const getChannel = async (id_channel: string) => {
   try {
     const response = await axios.get(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/myChannel/${id_channel}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/myChannel/${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -210,7 +210,7 @@ export const getChannel = async (id_channel: string) => {
 export const getMembers = async (id_channel: string) => {
   try {
     const response = await axios.get(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/members/?id_channel=${id_channel}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/members/?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {
@@ -231,7 +231,7 @@ export const setData = async (data: Channel) => {
     };
 
     const response = await axios.post(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel`,
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel`,
       obj
     );
     return response.data;
@@ -253,7 +253,7 @@ export const putData = async (data: Channel, id_channel: string) => {
     };
 
     const response = await axios.put(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/channel/update/?id_channel=${id_channel}`,
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/channel/update/?id_channel=${id_channel}`,
       obj
     );
     return response.data;
@@ -270,7 +270,7 @@ export const setFile = async (file: File | null) => {
     if (file !== null) formData.append("avatar", file);
 
     const response = await axios.post(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/upload`,
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/upload`,
       formData,
       {
         headers: {
@@ -288,7 +288,7 @@ export const setFile = async (file: File | null) => {
 
 export const getFile = async (pathname: string) => {
   try {
-    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/file/${pathname}`);
+    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/file/${pathname}`);
 
     return response.data;
   } catch (error) {
@@ -300,7 +300,7 @@ export const getFile = async (pathname: string) => {
 
 export const getMainUser = async () => {
   try {
-    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/user/GetHero`);
+    const response = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/user/GetHero`);
     return response.data;
   } catch (error) {
     // Handle errors here
@@ -312,7 +312,7 @@ export const getMainUser = async () => {
 export const getMessages = async (id_channel: string) => {
   try {
     const response = await axios.get(
-      `http://${process.env.NEXT_PUBLIC_HOST_IP}:4000/chat/message/?id_channel=${id_channel}`
+      `http://${process.env.NEXT_PUBLIC_HOST_IP}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/chat/message/?id_channel=${id_channel}`
     );
     return response.data;
   } catch (error) {

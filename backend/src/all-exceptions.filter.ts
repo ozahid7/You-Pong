@@ -11,6 +11,6 @@ export class AllExceptionFilter implements ExceptionFilter {
       .clearCookie('_intra_42_session_production')
       .clearCookie('access_token')
       .status(201)
-      .redirect(`http://${process.env.HOST_IP}:3000/`)
+      .redirect(`http://${process.env.HOST_IP}:${process.env.FRONT_PORT}/`)
     }
 }
