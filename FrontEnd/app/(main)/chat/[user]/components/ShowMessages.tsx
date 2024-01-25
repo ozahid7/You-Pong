@@ -1,6 +1,6 @@
 import { Channel, Member, Message, User_Hero } from "@/types";
-import React, { useEffect, useMemo } from "react";
-import ChatBubbleMain, { formatPrismaDate } from "./ChatBubbleMain";
+import React, { useMemo } from "react";
+import ChatBubbleMain from "./ChatBubbleMain";
 import ChatBubbleSender from "./ChatBubbleSender";
 import { v4 as uuidv4 } from "uuid";
 

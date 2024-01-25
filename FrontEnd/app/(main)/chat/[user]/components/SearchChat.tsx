@@ -1,9 +1,8 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { LuSearch } from "react-icons/lu";
 import { Channel, User, User_Hero } from "@/types";
-import { GroupsChat } from ".";
 import { getChannel } from "../data/api";
 
 interface Props {

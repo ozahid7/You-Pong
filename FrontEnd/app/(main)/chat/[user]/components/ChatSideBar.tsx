@@ -1,17 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-
-import { SlHome } from "react-icons/sl";
-import { BsInfoSquare, BsEnvelopeAt } from "react-icons/bs";
-import { FaTshirt, FaRedhat } from "react-icons/fa";
-
-import { usePathname } from "next/navigation";
+import React from "react";
 
 export default function Sidebar({ show, setter, children }) {
-  // Define our base class
   const className =
     "bg-palette-grey w-[80%] md:w-full transition-[margin-left] ease-in-out duration-500 fixed md:static top-0  left-0 z-40 h-full ";
-  // Append class based on state of sidebar visiblity
+  // sidebar visiblity
   const appendClass = show ? " ml-0" : " ml-[-92%] md:ml-0";
 
   // Overlay to prevent clicks in background, also serves as our close button

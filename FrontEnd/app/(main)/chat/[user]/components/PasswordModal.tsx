@@ -1,6 +1,5 @@
 import { Channel } from "@/types";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,

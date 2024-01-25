@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, Fragment, useRef } from "react";
+import React, { Fragment } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { Background } from "../../../../../components";
-import { Channel, QueryProp } from "@/types";
+import { QueryProp } from "@/types";
 import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import groups from "../../../../../public/groups.svg";
 import { PasswordModal, SimpleJoinButton } from ".";

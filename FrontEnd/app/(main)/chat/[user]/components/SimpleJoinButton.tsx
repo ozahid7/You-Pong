@@ -1,10 +1,7 @@
 import { Channel } from "@/types";
-import { Button } from "@nextui-org/react";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { joinChannel } from "../data/api";
 import { IoEnterOutline } from "react-icons/io5";
-import { useQuery } from "react-query";
-import Loader from "@/components/tools/Loader";
 import { Socket } from "socket.io-client";
 
 interface Props {

@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { LuMoreHorizontal, LuSend, LuSendHorizonal } from "react-icons/lu";
+import React, { useRef } from "react";
 import { ChatDialog } from ".";
-import { Channel, Member, User, User_Hero, whichChannel } from "@/types";
+import { Channel, User, User_Hero, whichChannel } from "@/types";
 import { Avatar } from "@nextui-org/react";
-import { fetchData_Channel, getChannel, getMembers } from "../data/api";
+import { fetchData_Channel } from "../data/api";
 import { useQuery } from "react-query";
 import { TbSend } from "react-icons/tb";
 import Loader from "@/components/tools/Loader";
@@ -39,7 +38,7 @@ const Chat = ({
   const addEmoji = (emoji: string) => {
     if (messageRef.current) {
       messageRef.current.value += emoji;
-      messageRef.current.focus(); // Optional: bring focus back to input after emoji selection
+      messageRef.current.focus();
     }
   };
 
@@ -70,12 +69,13 @@ const Chat = ({
     : null;
 
   const handleButtonClick = () => {
-    if (messageRef?.current.value === "") return;
+    if (messageRef?.current.value === "" ||
+      messageRef?.current.value.trim().length < 1) return;
     if (socket) {
       const message = {
         id_channel: channel.id_channel,
         id_sender: main.uid,
-        content: messageRef?.current.value.trim(),
+        content: messageRef?.current.value,
       };
       socket?.emit("newMessage", message);
       messageRef.current.value = null;
