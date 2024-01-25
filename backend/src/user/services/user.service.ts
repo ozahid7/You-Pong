@@ -1,11 +1,8 @@
-import {
-  ForbiddenException,
-  Injectable,
-  Res,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Response } from 'express';
 import { FindUserService } from './find.service';
+import { use } from 'passport';
 
 export enum relation {
   PENDING,
@@ -81,7 +78,6 @@ export class UserService {
     });
 
     if (!user) throw new ForbiddenException('Username not Found!');
-
     let user_relation: relation = relation.NONE;
     if (
       id_user &&
@@ -106,20 +102,16 @@ export class UserService {
     )
       user_relation = relation.ACCEPTED;
 
-
-    user.blocked_from.forEach((element) => {
-      if (element.id_user === id_user) {
-        throw new ForbiddenException('Username not Found!');
-      }
-    });
-    user.blocked_user.forEach((element) => {
-      if (element.id_user === id_user) {
-        throw new ForbiddenException('Username not Found!');
-      }
-    });
+    const blockedFrom = user.blocked_from.find(
+      (element) => element.id_user === id_user,
+    );
+    const blocked = user.blocked_user.find(
+      (element) => element.id_user === id_user,
+    );
+    if (blocked !== undefined || blockedFrom !== undefined) return null;
 
     return {
-      avatar:  user.avatar,
+      avatar: user.avatar,
       username: user.username,
       level: user.level,
       rank: user.rank,

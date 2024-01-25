@@ -14,6 +14,7 @@ export const blockuser = (uid: string, refetch?: any, username?: string) => {
 			);
 			query.invalidateQueries({ queryKey: ["search"] });
 			query.invalidateQueries({ queryKey: ["friends"] });
+			console.log(username);
 			if (username !== undefined)
 				query.removeQueries({ queryKey: ["otheruser", username] });
 			refetch();

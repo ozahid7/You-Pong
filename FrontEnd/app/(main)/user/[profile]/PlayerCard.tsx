@@ -161,11 +161,13 @@ const PlayerCard = (props: {
 
 	const [Icon, setIcon] = useState<any>(FaUserClock);
 	useEffect(() => {
-		props.user_relation === 2
-			? setIcon(addIcon)
-			: props.user_relation === 0
-			? setIcon(pendingIcon)
-			: setIcon(removeIcon);
+		if (otheruser.data) {
+			otheruser.data.user_relation === 2
+				? setIcon(addIcon)
+				: otheruser.data.user_relation === 0
+				? setIcon(pendingIcon)
+				: setIcon(removeIcon);
+		}
 	}, [otheruser.isFetched]);
 	return (
 		<div className="flex justify-center  z-0 w-[90%] md:w-full overflow-hidden min-h-[180px] max-w-[600px] h:min-h-[204px] h-[20%] md:h-[30%] h:h-[24%]">

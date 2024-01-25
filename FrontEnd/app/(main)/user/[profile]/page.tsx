@@ -10,6 +10,8 @@ import useOtherUser from "@/api/useOtherUser";
 import { useUser } from "@/api/getHero";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import NotFound from "./notFound";
 
 interface pageProps {
 	params: { profile: string };
@@ -21,6 +23,7 @@ const page = ({ params }: pageProps) => {
 	const isMe = !data || data === undefined ? true : false;
 	const querQlient = useQueryClient();
 	const toShow = !isMe ? data : user.data;
+	const router = useRouter();
 	const { globalSocket } = useGlobalSocket();
 
 	const {
@@ -39,6 +42,8 @@ const page = ({ params }: pageProps) => {
 	} = toShow;
 
 	if (isLoading || (!data && !user.data)) return <Loader />;
+	if (params.profile !== "profile" && !data && !isFetching)
+		return <NotFound />;
 	else
 		return (
 			<div className="w-full 2xl:w-[92%] xl:min-h-[88vh] pb-24 h-auto  flex flex-col xl:flex-row">
