@@ -153,7 +153,6 @@ export default function game_({ params }: pageProps) {
 			if (globalSocket.listeners("gameOver").length === 0)
 				globalSocket.on("gameOver", (obj) => {
 					if (!obj.is_me) {
-						console.log(obj.is_me);
 						setScores({ player: 7, opponent: 0 });
 						setShowMessage(true);
 						setTimeout(() => {

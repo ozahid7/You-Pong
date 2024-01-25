@@ -8,7 +8,7 @@ import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import { useUser } from "@/api/getHero";
-import NotFound from "./notFound";
+import NotFound from "./NotFound";
 
 interface pageProps {
 	params: { profile: string };
