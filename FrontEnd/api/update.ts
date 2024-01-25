@@ -1,7 +1,6 @@
-import { myRoutes } from "@/const";
 import { endPoints } from "@/types/Api";
 import { useAxios } from "@/utils";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export const updateProfile = (
 	newUsername: string,

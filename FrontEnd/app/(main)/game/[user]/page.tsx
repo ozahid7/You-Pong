@@ -10,7 +10,6 @@ import { myRoutes } from "@/const";
 import { OtherUser } from "@/utils/game";
 import Loader from "@/components/tools/Loader";
 import GameProvider, {
-	Info,
 	ball,
 	opponent,
 	player,

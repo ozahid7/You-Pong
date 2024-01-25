@@ -5,13 +5,10 @@ import { useGlobalContext } from "@/providers/SocketProvider";
 import { inviteReturn } from "@/types/game";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { defaultavatar, myRoutes, socketurl } from "@/const";
+import { defaultavatar, myRoutes } from "@/const";
 import { MdCancelPresentation } from "react-icons/md";
-import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { Socket, io } from "socket.io-client";
-import { cancelGame, refuseGame } from "@/utils/game";
-import { useGameContext } from "./GameProvider";
-import { Toast } from "react-toastify/dist/components";
+import { Socket } from "socket.io-client";
+import { cancelGame } from "@/utils/game";
 import { toast } from "react-toastify";
 
 const PlayerLoader = (props: {
@@ -36,7 +33,6 @@ const PlayerLoader = (props: {
 	const otheruser = useGlobalContext();
 	const { setData } = otheruser;
 	const [userInfo, setUserInfo] = useState<inviteReturn>();
-	const { setGameSocket, setSubmit } = useGameContext();
 	let editedLevel2;
 	let editedLevel1;
 	const style =

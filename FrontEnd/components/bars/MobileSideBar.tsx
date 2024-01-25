@@ -1,16 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { IoGameControllerOutline } from "react-icons/io5";
 
 import {
 	LuLayoutDashboard,
 	LuUsers,
-	LuBell,
 	LuMessageSquare,
 	LuSettings,
-	LuLogOut,
 } from "react-icons/lu";
 import { myRoutes } from "@/const";
 import { useGlobalContext } from "@/providers/SocketProvider";

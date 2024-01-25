@@ -6,7 +6,6 @@ import { LuMessageSquarePlus } from "react-icons/lu";
 import MiniLoader from "@/components/tools/MiniLoader";
 import { menuUserElements } from "@/const";
 import { blockuser, todirect } from "@/api/friendShip";
-import { useGlobalContext } from "@/providers/SocketProvider";
 import { useGlobalSocket } from "@/providers/UserContextProvider";
 
 const FriendBanner = (props: {

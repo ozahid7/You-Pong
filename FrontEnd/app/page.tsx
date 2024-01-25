@@ -1,15 +1,13 @@
 "use client";
 import { CustomButton, SignIn, SignUp } from "@/components";
 import "./globals.css";
-import { landing_page_description, myRoutes, socketurl } from "@/const";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { landing_page_description, myRoutes } from "@/const";
+import { useLayoutEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import Loadable from "next/dist/shared/lib/loadable.shared-runtime";
 import Loader from "@/components/tools/Loader";
 
 function Home() {
 	const [valid, setValid] = useState(false);
-	const [isLogedin, setIsLogedIn] = useState(false);
 	const [showSignup, setSignUp] = useState(false);
 	const [showSingIn, setSingIn] = useState(false);
 	let Loged: boolean = false;

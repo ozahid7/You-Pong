@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import AchievementCard from "./AchievementCard";
 import HistoryCard from "./HistoryCard";
 import PlayerCard from "./PlayerCard";
@@ -8,9 +8,6 @@ import NewGameCard from "./NewGameCard";
 import Loader from "@/components/tools/Loader";
 import useOtherUser from "@/api/useOtherUser";
 import { useUser } from "@/api/getHero";
-import { useGlobalSocket } from "@/providers/UserContextProvider";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import NotFound from "./notFound";
 
 interface pageProps {
@@ -21,10 +18,7 @@ const page = ({ params }: pageProps) => {
 	const { data, isLoading, isFetching } = useOtherUser(params.profile, true);
 	const user = useUser(true, undefined);
 	const isMe = !data || data === undefined ? true : false;
-	const querQlient = useQueryClient();
 	const toShow = !isMe ? data : user.data;
-	const router = useRouter();
-	const { globalSocket } = useGlobalSocket();
 
 	const {
 		username,

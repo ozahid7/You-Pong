@@ -1,5 +1,4 @@
 "use client";
-import { color } from "framer-motion";
 import React, { useState } from "react";
 
 interface Props {
