@@ -21,6 +21,7 @@ services:
     build: ./backend
     ports:
       - 4000:4000
+      - 5555:5555
     expose:
       - 5432
     networks:
