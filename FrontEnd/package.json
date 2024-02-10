@@ -13,6 +13,7 @@
         "@emotion/styled": "^11.11.0",
         "@headlessui/react": "^0.0.0-insiders.3b961a6",
         "@mui/joy": "^5.0.0-beta.15",
+        "@netlify/plugin-nextjs": "^4.41.3",
         "@nextui-org/button": "^2.0.26",
         "@nextui-org/react": "^2.2.9",
         "@nextui-org/system": "^2.0.15",
@@ -48,6 +49,7 @@
         "tailwind-merge": "^2.0.0",
         "utf-8-validate": "^5.0.10",
         "uuid": "^9.0.1",
+        "yarn": "^1.22.21",
         "zustand": "^4.4.7"
     },
     "devDependencies": {
